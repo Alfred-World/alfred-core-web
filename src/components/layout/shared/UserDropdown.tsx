@@ -1,8 +1,7 @@
 'use client'
 
 // React Imports
-import { useRef, useState, useEffect } from 'react'
-import type { MouseEvent } from 'react'
+import { useRef, useState, type MouseEvent } from 'react'
 
 // Next Imports
 import { useRouter } from 'next/navigation'
@@ -21,8 +20,8 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 
-// OIDC Imports
-import { logout, getUserProfile } from '@/libs/oidc-config'
+// NextAuth Imports
+import { useSession, signOut } from 'next-auth/react'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
@@ -37,16 +36,9 @@ const BadgeContentSpan = styled('span')({
   boxShadow: '0 0 0 2px var(--mui-palette-background-paper)'
 })
 
-interface UserInfo {
-  id: string
-  email: string
-  name?: string
-}
-
 const UserDropdown = () => {
   // States
   const [open, setOpen] = useState(false)
-  const [user, setUser] = useState<UserInfo | null>(null)
 
   // Refs
   const anchorRef = useRef<HTMLDivElement>(null)
@@ -54,19 +46,7 @@ const UserDropdown = () => {
   // Hooks
   const router = useRouter()
   const { settings } = useSettings()
-
-  // Load user info from OIDC
-  useEffect(() => {
-    const loadUser = async () => {
-      const profile = await getUserProfile()
-      
-      if (profile) {
-        setUser(profile)
-      }
-    }
-
-    loadUser()
-  }, [])
+  const { data: session } = useSession()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
@@ -86,12 +66,19 @@ const UserDropdown = () => {
 
   const handleUserLogout = async () => {
     try {
-      // Sign out using OIDC
-      await logout()
+      // First, sign out from NextAuth (clears local session cookie)
+      await signOut({ redirect: false })
+      
+      // Then redirect to Identity Service logout endpoint for full SSO logout
+      const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URL || 'https://gateway.test'
+      const postLogoutRedirectUri = encodeURIComponent(window.location.origin)
+      window.location.href = `${gatewayUrl}/connect/logout?post_logout_redirect_uri=${postLogoutRedirectUri}`
     } catch (error) {
       console.error('Logout error:', error)
     }
   }
+
+  const user = session?.user
 
   return (
     <>
@@ -105,6 +92,7 @@ const UserDropdown = () => {
         <Avatar
           ref={anchorRef}
           alt={user?.name || user?.email || ''}
+          src={user?.image || undefined}
           onClick={handleDropdownOpen}
           className='cursor-pointer bs-[38px] is-[38px]'
         />
@@ -128,7 +116,7 @@ const UserDropdown = () => {
               <ClickAwayListener onClickAway={e => handleDropdownClose(e as MouseEvent | TouchEvent)}>
                 <MenuList>
                   <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                    <Avatar alt={user?.name || user?.email || ''} />
+                    <Avatar alt={user?.name || user?.email || ''} src={user?.image || undefined} />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
                         {user?.name || user?.email || 'User'}

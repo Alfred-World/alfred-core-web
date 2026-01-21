@@ -13,6 +13,7 @@ import AppReactToastify from '@/libs/styles/AppReactToastify'
 // Util Imports
 import { getMode, getSettingsFromCookie, getSystemMode } from '@core/utils/serverHelpers'
 import QueryProvider from '@/providers/query-provider'
+import { NextAuthProvider } from '@/providers/next-auth-provider'
 
 type Props = ChildrenType & {
   direction: Direction
@@ -35,10 +36,12 @@ const Providers = async (props: Props) => {
     <VerticalNavProvider>
       <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
         <ThemeProvider direction={direction} systemMode={systemMode}>
-          <QueryProvider>
-            <ReduxProvider>{children}</ReduxProvider>
-            <AppReactToastify direction={direction} hideProgressBar />
-          </QueryProvider>
+            <NextAuthProvider>
+              <QueryProvider>
+                <ReduxProvider>{children}</ReduxProvider>
+                <AppReactToastify direction={direction} hideProgressBar />
+              </QueryProvider>
+            </NextAuthProvider>
         </ThemeProvider>
       </SettingsProvider>
     </VerticalNavProvider>
