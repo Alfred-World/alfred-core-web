@@ -78,18 +78,17 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Return previous token if the access token has not expired yet
-      if (token.expiresAt && Date.now() / 1000 < token.expiresAt) {
+      // Add buffer time (e.g., 10 seconds) to avoid edge cases
+      if (token.expiresAt && Date.now() / 1000 < token.expiresAt - 10) {
         return token
       }
 
-      // Access token has expired, try to update it (RefreshToken rotation not implemented in this MVP step)
-      return {
-          ...token,
-          error: "RefreshAccessTokenError",
-      }
+      // Access token has expired, try to update it
+      return await refreshAccessToken(token)
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken
+      session.error = token.error // Allow client to handle refresh error (e.g., force logout)
       if (token.sub && session.user) {
         session.user.id = token.sub
       }
@@ -100,6 +99,52 @@ export const authOptions: NextAuthOptions = {
   // Debug mode - disabled for cleaner logs
   debug: false,
 }
+
+/**
+ * Helper function to refresh the access token
+ */
+async function refreshAccessToken(token: JWT): Promise<JWT> {
+  try {
+    if (!token.refreshToken) {
+      throw new Error("No refresh token available");
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        client_id: process.env.OIDC_CLIENT_ID!,
+        client_secret: process.env.OIDC_CLIENT_SECRET!,
+        grant_type: "refresh_token",
+        refresh_token: token.refreshToken,
+      }),
+    })
+
+    const refreshedTokens = await response.json()
+
+    if (!response.ok) {
+      throw refreshedTokens
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fallback to old refresh token if new one not provided
+      expiresAt: Date.now() / 1000 + refreshedTokens.expires_in,
+      error: undefined, // Clear error if successful
+    }
+  } catch (error) {
+    console.error("Error refreshing access token", error)
+
+    return {
+      ...token,
+      error: "RefreshAccessTokenError",
+    }
+  }
+}
+
 
 const handler = NextAuth(authOptions)
 

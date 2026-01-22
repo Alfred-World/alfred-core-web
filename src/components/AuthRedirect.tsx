@@ -22,9 +22,6 @@ const AuthRedirect = () => {
     const returnUrl = `${APP_URL}${pathname}`
     const ssoLoginUrl = `${SSO_URL}/login?returnUrl=${encodeURIComponent(returnUrl)}`
 
-    console.log('[Core SSO] Redirecting to SSO login:', ssoLoginUrl)
-    console.log('[Core SSO] Return URL will be:', returnUrl)
-
     // Redirect to SSO login page
     window.location.href = ssoLoginUrl
   }, [pathname])
