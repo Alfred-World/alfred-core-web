@@ -1,8 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useSession, signIn } from 'next-auth/react'
 import { usePathname, useSearchParams } from 'next/navigation'
+
+// Component Imports
+import FullPageLoader from '@/components/FullPageLoader'
 
 interface AuthGuardProps {
   children: React.ReactNode
@@ -16,34 +19,19 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const { status } = useSession()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const hasTriggeredSignIn = useRef(false)
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      const url = pathname + searchParams.toString()
+    if (status === 'unauthenticated' && !hasTriggeredSignIn.current) {
+      hasTriggeredSignIn.current = true
+      const url = pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '')
       signIn('alfred-identity', { callbackUrl: url })
     }
   }, [status, pathname, searchParams])
 
-  if (status === 'loading') {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-4" />
-          <p className="text-textSecondary">Checking authentication...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (status === 'unauthenticated') {
-      return (
-      <div className="flex items-center justify-center min-h-screen">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary mx-auto mb-4" />
-            <p className="text-textSecondary">Redirecting to login...</p>
-          </div>
-      </div>
-      )
+  // Show loader during auth check or OAuth redirect
+  if (status === 'loading' || status === 'unauthenticated') {
+    return <FullPageLoader />
   }
 
   return <>{children}</>
