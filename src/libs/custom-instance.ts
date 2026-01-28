@@ -58,47 +58,34 @@ export const AXIOS_INSTANCE = axios.create({
   }
 })
 
-// Token cache for synchronous access (updated by OIDC events)
+// Token cache for synchronous access
 let cachedToken: string | null = null
 
-// Initialize token from OIDC session on module load
+// Initialize token from NextAuth session
 if (typeof window !== 'undefined') {
-  // Dynamically import to avoid SSR issues
-  import('./oidc-config').then(async ({ getAccessToken, getUserManager }) => {
-    // Get initial token
-    cachedToken = await getAccessToken()
-    
-    // Listen for token updates
-    const um = getUserManager()
-    
-    um.events.addUserLoaded(async (user) => {
-      cachedToken = user.access_token
-      console.log('[API] Token updated from OIDC')
-    })
-    
-    um.events.addUserUnloaded(() => {
-      cachedToken = null
-      console.log('[API] Token cleared')
-    })
-    
-    um.events.addAccessTokenExpired(() => {
-      cachedToken = null
-      console.log('[API] Token expired')
-    })
-  }).catch((err) => {
-    console.warn('[API] Failed to initialize OIDC token:', err)
+  import('next-auth/react').then(async ({ getSession }) => {
+    const session = await getSession()
+    if (session?.accessToken) {
+      cachedToken = session.accessToken
+      // console.log('[API] Token initialized from NextAuth')
+    }
+  }).catch(err => {
+    console.warn('[API] Failed to initialize session:', err)
   })
 }
 
 // Add request interceptor for OIDC token
 AXIOS_INSTANCE.interceptors.request.use(async config => {
-  // Try to get fresh token if cached is null
+  // If no token cached, try to get it from session
   if (typeof window !== 'undefined' && !cachedToken) {
     try {
-      const { getAccessToken } = await import('./oidc-config')
-      cachedToken = await getAccessToken()
+      const { getSession } = await import('next-auth/react')
+      const session = await getSession()
+      if (session?.accessToken) {
+        cachedToken = session.accessToken
+      }
     } catch {
-      // Ignore errors, proceed without token
+      // Ignore errors
     }
   }
 
@@ -142,10 +129,10 @@ export const customInstance = <T>(
     .catch((error: AxiosError) => {
       const responseData = error.response?.data as
         | {
-            success?: boolean
-            message?: string
-            errors?: Array<{ message: string; code?: string }>
-          }
+          success?: boolean
+          message?: string
+          errors?: Array<{ message: string; code?: string }>
+        }
         | undefined
 
       // If BE already returned error format, use it
