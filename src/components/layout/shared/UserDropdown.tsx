@@ -27,6 +27,9 @@ import { signOut, useSession } from 'next-auth/react'
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
 
+// SSO Imports
+import { getSsoLogoutUrl } from '@/libs/sso-config'
+
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
   width: 8,
@@ -67,13 +70,24 @@ const UserDropdown = () => {
 
   const handleUserLogout = async () => {
     try {
-      // Sign out from the app
-      await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
+      // First, clear local NextAuth session
+      await signOut({ redirect: false })
+
+      // Redirect to Gateway SSO logout
+      // This will clear SSO cookie and redirect to SSO app signout page
+      // SSO app signout page will auto-signout and redirect back to core.test
+      const ssoUrl = process.env.NEXT_PUBLIC_SSO_URL || 'https://sso.test'
+      const finalRedirectUrl = `${window.location.origin}/login?logout=true`
+      // Use /signout page (auto-submit, no confirmation needed)
+      const ssoLogoutUrl = `${ssoUrl}/signout?callbackUrl=${encodeURIComponent(finalRedirectUrl)}`
+
+      // First clear Gateway SSO cookie, then redirect to SSO app logout
+      const gatewayLogoutUrl = getSsoLogoutUrl(ssoLogoutUrl)
+      window.location.href = gatewayLogoutUrl
     } catch (error) {
       console.error(error)
-
-      // Show above error in a toast like following
-      // toastService.error((err as Error).message)
+      // Fallback: direct redirect to login
+      window.location.href = `${window.location.origin}/login?logout=true`
     }
   }
 

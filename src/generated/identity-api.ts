@@ -602,6 +602,14 @@ token?: string;
 returnUrl?: string;
 };
 
+export type GetIdentityAuthCheckSsoParams = {
+returnUrl?: string;
+};
+
+export type GetIdentityAuthValidateTokenParams = {
+token?: string;
+};
+
 export type GetConnectAuthorizeParams = {
 
 /**
@@ -1453,6 +1461,205 @@ export function useGetIdentityAuthSession<TData = Awaited<ReturnType<typeof getI
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getGetIdentityAuthSessionQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * Flow:
+1. App redirects browser to: gateway.test/identity/auth/check-sso?returnUrl=https://sso.test/...
+2. This endpoint checks the AlfredSession cookie
+3. If authenticated: generate one-time token and redirect back with token
+4. If not authenticated: redirect back with error param
+ * @summary Check SSO session and redirect back to app with auth data
+Used for cross-domain SSO - browser redirects here, we check cookie, and redirect back with token
+ */
+export const getIdentityAuthCheckSso = (
+    params?: GetIdentityAuthCheckSsoParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/identity/auth/check-sso`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetIdentityAuthCheckSsoQueryKey = (params?: GetIdentityAuthCheckSsoParams,) => {
+    return [
+    `/identity/auth/check-sso`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetIdentityAuthCheckSsoQueryOptions = <TData = Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError = unknown>(params?: GetIdentityAuthCheckSsoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetIdentityAuthCheckSsoQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>> = ({ signal }) => getIdentityAuthCheckSso(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn,   staleTime: 10000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdentityAuthCheckSsoQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>>
+export type GetIdentityAuthCheckSsoQueryError = unknown
+
+
+export function useGetIdentityAuthCheckSso<TData = Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError = unknown>(
+ params: undefined |  GetIdentityAuthCheckSsoParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAuthCheckSso>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAuthCheckSso>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAuthCheckSso<TData = Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError = unknown>(
+ params?: GetIdentityAuthCheckSsoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAuthCheckSso>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAuthCheckSso>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAuthCheckSso<TData = Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError = unknown>(
+ params?: GetIdentityAuthCheckSsoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Check SSO session and redirect back to app with auth data
+Used for cross-domain SSO - browser redirects here, we check cookie, and redirect back with token
+ */
+
+export function useGetIdentityAuthCheckSso<TData = Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError = unknown>(
+ params?: GetIdentityAuthCheckSsoParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthCheckSso>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetIdentityAuthCheckSsoQueryOptions(params,options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey ;
+
+  return query;
+}
+
+
+
+
+
+/**
+ * @summary Validate SSO token and return user data without consuming it
+Used by frontend to get user data from sso_token before creating local session
+ */
+export const getIdentityAuthValidateToken = (
+    params?: GetIdentityAuthValidateTokenParams,
+ options?: SecondParameter<typeof customInstance>,signal?: AbortSignal
+) => {
+      
+      
+      return customInstance<void>(
+      {url: `/identity/auth/validate-token`, method: 'GET',
+        params, signal
+    },
+      options);
+    }
+  
+
+
+
+export const getGetIdentityAuthValidateTokenQueryKey = (params?: GetIdentityAuthValidateTokenParams,) => {
+    return [
+    `/identity/auth/validate-token`, ...(params ? [params]: [])
+    ] as const;
+    }
+
+    
+export const getGetIdentityAuthValidateTokenQueryOptions = <TData = Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError = unknown>(params?: GetIdentityAuthValidateTokenParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getGetIdentityAuthValidateTokenQueryKey(params);
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>> = ({ signal }) => getIdentityAuthValidateToken(params, requestOptions, signal);
+
+      
+
+      
+
+   return  { queryKey, queryFn,   staleTime: 10000,  ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdentityAuthValidateTokenQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>>
+export type GetIdentityAuthValidateTokenQueryError = unknown
+
+
+export function useGetIdentityAuthValidateToken<TData = Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError = unknown>(
+ params: undefined |  GetIdentityAuthValidateTokenParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAuthValidateToken>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAuthValidateToken>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAuthValidateToken<TData = Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError = unknown>(
+ params?: GetIdentityAuthValidateTokenParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAuthValidateToken>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAuthValidateToken>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAuthValidateToken<TData = Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError = unknown>(
+ params?: GetIdentityAuthValidateTokenParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+/**
+ * @summary Validate SSO token and return user data without consuming it
+Used by frontend to get user data from sso_token before creating local session
+ */
+
+export function useGetIdentityAuthValidateToken<TData = Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError = unknown>(
+ params?: GetIdentityAuthValidateTokenParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAuthValidateToken>>, TError, TData>>, request?: SecondParameter<typeof customInstance>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getGetIdentityAuthValidateTokenQueryOptions(params,options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
