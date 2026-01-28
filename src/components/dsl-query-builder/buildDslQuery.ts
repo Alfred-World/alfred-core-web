@@ -1,35 +1,14 @@
-// Build DSL query string from filter conditions
+import { dsl } from '@/utils/dslQueryBuilder'
 import type { FilterCondition, FieldConfig } from './types'
 import { getOperatorConfig } from './operators'
-
-function formatValue(value: string | number | boolean | null, dataType: string, operator: string): string {
-    if (value === null || value === undefined || value === '') {
-        return ''
-    }
-
-    // Special operators that don't need value formatting (parentheses)
-    if (operator === '@isnull' || operator === '@notnull') {
-        return ''
-    }
-
-    // String and Date values need quotes
-    if (dataType === 'string' || dataType === 'date') {
-        return `"${value}"`
-    }
-
-    // Boolean values
-    if (dataType === 'bool') {
-        return value === true || value === 'true' ? 'true' : 'false'
-    }
-
-    // Numeric values
-    return String(value)
-}
 
 /**
  * Check if a condition has a valid value (required for operators that need values)
  */
-function hasValidValue(condition: FilterCondition, operatorConfig: { requiresValue: boolean; requiresSecondValue?: boolean } | undefined): boolean {
+function hasValidValue(
+    condition: FilterCondition,
+    operatorConfig: { requiresValue: boolean; requiresSecondValue?: boolean } | undefined
+): boolean {
     // Operators that don't require values are always valid
     if (!operatorConfig?.requiresValue) {
         return true
@@ -54,88 +33,127 @@ function hasValidValue(condition: FilterCondition, operatorConfig: { requiresVal
     return true
 }
 
-function buildSingleCondition(condition: FilterCondition, fieldConfig: FieldConfig | undefined): string {
-    if (!fieldConfig) return ''
-
-    const operator = condition.operator
-    const dataType = fieldConfig.dataType
-    const operatorConfig = getOperatorConfig(dataType, operator)
-
-    // Skip conditions that require values but don't have them
-    if (!hasValidValue(condition, operatorConfig)) {
-        return ''
-    }
-
-    // Handle operators that don't require values
-    if (!operatorConfig?.requiresValue) {
-        return `${condition.field} ${operator}()`
-    }
-
-    // Handle @between operator
-    if (operator === '@between') {
-        const val1 = formatValue(condition.value, dataType, operator)
-        const val2 = formatValue(condition.secondValue ?? null, dataType, operator)
-
-        return `${condition.field} @between(${val1}, ${val2})`
-    }
-
-    // Handle @in, @nin operators (multi-value)
-    if (operator === '@in' || operator === '@nin') {
-        const values = String(condition.value)
-            .split(',')
-            .map(v => v.trim())
-            .filter(v => v !== '') // Filter out empty values
-            .map(v => formatValue(v, dataType, operator))
-            .join(', ')
-
-        // If no valid values after filtering, skip this condition
-        if (!values) return ''
-
-        return `${condition.field} ${operator}(${values})`
-    }
-
-    // Handle @contains, @ncontains, @startswith, @endswith
-    if (operator.startsWith('@')) {
-        const formattedValue = formatValue(condition.value, dataType, operator)
-
-        return `${condition.field} ${operator}(${formattedValue})`
-    }
-
-    // Handle comparison operators (==, !=, >, >=, <, <=)
-    const formattedValue = formatValue(condition.value, dataType, operator)
-
-    return `${condition.field} ${operator} ${formattedValue}`
-}
-
 export function buildDslQuery(conditions: FilterCondition[], fields: FieldConfig[]): string {
     if (!conditions || conditions.length === 0) return ''
 
     const fieldMap = new Map(fields.map(f => [f.key, f]))
-    const validParts: { logicalOperator?: 'AND' | 'OR'; condition: string }[] = []
+    const query = dsl()
+    let hasConditions = false
 
-    // First pass: build all valid conditions
-    conditions.forEach(condition => {
+    conditions.forEach((condition, _index) => {
         const fieldConfig = fieldMap.get(condition.field)
-        const conditionStr = buildSingleCondition(condition, fieldConfig)
 
-        if (conditionStr) {
-            validParts.push({
-                logicalOperator: condition.logicalOperator,
-                condition: conditionStr
-            })
-        }
-    })
+        if (!fieldConfig) return
 
-    // Second pass: join with logical operators
-    const parts: string[] = []
+        const operatorConfig = getOperatorConfig(fieldConfig.dataType, condition.operator)
 
-    validParts.forEach((part, index) => {
-        if (index > 0 && part.logicalOperator) {
-            parts.push(part.logicalOperator)
+        // Skip invalid conditions
+        if (!hasValidValue(condition, operatorConfig)) {
+            return
         }
 
-        parts.push(part.condition)
+        // Add logical operator if not the first valid condition
+        if (hasConditions) {
+            if (condition.logicalOperator === 'OR') {
+                query.or()
+            } else {
+                query.and()
+            }
+        }
+
+        // Add condition based on type
+        const field = condition.field
+        const op = condition.operator
+        const val = condition.value
+        const val2 = condition.secondValue
+
+        switch (fieldConfig.dataType) {
+            case 'string':
+                const sb = query.string(field)
+
+                switch (op) {
+                    case '==': sb.eq(val as string); break
+                    case '!=': sb.neq(val as string); break
+                    case '@contains': sb.contains(val as string); break
+                    case '@ncontains': sb.ncontains(val as string); break
+                    case '@startswith': sb.startswith(val as string); break
+                    case '@endswith': sb.endswith(val as string); break
+                    case '@in': sb.in(parseMultiValue(val)); break
+                    case '@nin': sb.nin(parseMultiValue(val)); break
+                    case '@isnull': sb.isNull(); break
+                    case '@notnull': sb.notNull(); break
+                }
+
+                break
+
+            case 'int':
+            case 'long':
+                const nb = query.number(field)
+                const numVal = Number(val)
+
+                switch (op) {
+                    case '==': nb.eq(numVal); break
+                    case '!=': nb.neq(numVal); break
+                    case '>': nb.gt(numVal); break
+                    case '>=': nb.gte(numVal); break
+                    case '<': nb.lt(numVal); break
+                    case '<=': nb.lte(numVal); break
+                    case '@between': nb.between(Number(val), Number(val2)); break
+                    case '@in': nb.in(parseMultiNumber(val)); break
+                    case '@nin': nb.nin(parseMultiNumber(val)); break
+                    case '@isnull': nb.isNull(); break
+                    case '@notnull': nb.notNull(); break
+                }
+
+                break
+
+            case 'date':
+                const db = query.date(field)
+
+                switch (op) {
+                    case '==': db.eq(val as string); break
+                    case '!=': db.neq(val as string); break
+                    case '>': db.gt(val as string); break
+                    case '>=': db.gte(val as string); break
+                    case '<': db.lt(val as string); break
+                    case '<=': db.lte(val as string); break
+                    case '@between': db.between(val as string, val2 as string); break
+                    case '@in': db.in(parseMultiValue(val)); break
+                    case '@nin': db.nin(parseMultiValue(val)); break
+                    case '@isnull': db.isNull(); break
+                    case '@notnull': db.notNull(); break
+                }
+
+                break
+
+            case 'bool':
+                const bb = query.bool(field)
+                const boolVal = val === 'true' || val === true
+
+                switch (op) {
+                    case '==': bb.eq(boolVal); break
+                    case '!=': bb.neq(boolVal); break
+                    case '@isnull': bb.isNull(); break
+                    case '@notnull': bb.notNull(); break
+                }
+
+                break
+        }
+
+        hasConditions = true
     })
 
-    return parts.join(' ')
+    return query.build()
 }
+
+function parseMultiValue(val: any): string[] {
+    return String(val)
+        .split(',')
+        .map(v => v.trim())
+        .filter(v => v !== '')
+}
+
+function parseMultiNumber(val: any): number[] {
+    return parseMultiValue(val).map(Number).filter(n => !isNaN(n))
+}
+

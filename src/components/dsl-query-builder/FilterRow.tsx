@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, memo } from 'react'
 
 import {
     Box,
@@ -25,20 +25,23 @@ interface FilterRowProps {
     onChange: (id: string, updates: Partial<FilterCondition>) => void
     onRemove: (id: string) => void
     onAddAfter: (id: string, logicalOperator: 'AND' | 'OR') => void
+    canRemove?: boolean
 }
 
-export function FilterRow({
+export const FilterRow = memo(function FilterRow({
     condition,
     fields,
     showOrButton,
     onChange,
     onRemove,
-    onAddAfter
+    onAddAfter,
+    canRemove = true
 }: FilterRowProps) {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-    // Get the field config for the selected field
+    // ... existing useMemo hooks for selectedFieldConfig, availableOperators, operatorConfig
+
     const selectedFieldConfig = useMemo(() => {
         return fields.find(f => f.key === condition.field)
     }, [fields, condition.field])
@@ -293,18 +296,20 @@ export function FilterRow({
                                 </Button>
                             )}
                         </Box>
-                        <IconButton
-                            size="small"
-                            onClick={() => onRemove(condition.id)}
-                            sx={{
-                                color: 'error.main',
-                                '&:hover': {
-                                    bgcolor: 'action.hover'
-                                }
-                            }}
-                        >
-                            <i className='tabler-x' />
-                        </IconButton>
+                        {canRemove && (
+                            <IconButton
+                                size="small"
+                                onClick={() => onRemove(condition.id)}
+                                sx={{
+                                    color: 'error.main',
+                                    '&:hover': {
+                                        bgcolor: 'action.hover'
+                                    }
+                                }}
+                            >
+                                <i className='tabler-x' />
+                            </IconButton>
+                        )}
                     </Box>
                 </Box>
             ) : (
@@ -350,20 +355,22 @@ export function FilterRow({
                         )}
                     </Box>
 
-                    <IconButton
-                        size="small"
-                        onClick={() => onRemove(condition.id)}
-                        sx={{
-                            color: 'error.main',
-                            '&:hover': {
-                                bgcolor: 'action.hover'
-                            }
-                        }}
-                    >
-                        <i className='tabler-x' />
-                    </IconButton>
+                    {canRemove && (
+                        <IconButton
+                            size="small"
+                            onClick={() => onRemove(condition.id)}
+                            sx={{
+                                color: 'error.main',
+                                '&:hover': {
+                                    bgcolor: 'action.hover'
+                                }
+                            }}
+                        >
+                            <i className='tabler-x' />
+                        </IconButton>
+                    )}
                 </Box>
             )}
         </Box>
     )
-}
+})

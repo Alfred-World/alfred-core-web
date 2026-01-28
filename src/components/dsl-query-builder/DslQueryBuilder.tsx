@@ -162,32 +162,12 @@ export function DslQueryBuilder({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [restoredFromUrl, hasCalledInitialLoad])
 
+
     // Sync with URL when conditions change (only if syncWithUrl is true)
-    useEffect(() => {
-        if (!syncWithUrl) return
-
-        const serialized = serializeConditions(conditions)
-
-        // Only update URL if serialized value actually changed
-        if (serialized === lastSerializedRef.current) return
-
-        lastSerializedRef.current = serialized
-
-        const params = new URLSearchParams(searchParamsRef.current.toString())
-
-        if (serialized) {
-            params.set(urlParamName, serialized)
-        } else {
-            params.delete(urlParamName)
-        }
-
-        const newUrl = `${pathnameRef.current}?${params.toString()}`
-
-        routerRef.current.replace(newUrl, { scroll: false })
-    }, [conditions, syncWithUrl, urlParamName])
+    // REMOVED auto-sync useEffect to prevent URL updates while typing
 
     // Build current DSL query
-    const currentDslQuery = buildDslQuery(conditions, fields)
+    const currentDslQuery = useMemo(() => buildDslQuery(conditions, fields), [conditions, fields])
 
     const handleConditionChange = useCallback((id: string, updates: Partial<FilterCondition>) => {
         setConditions(prev => prev.map(c => (c.id === id ? { ...c, ...updates } : c)))
@@ -237,40 +217,96 @@ export function DslQueryBuilder({
         if (onChange) {
             onChange(conditions, dslQuery)
         }
-    }, [conditions, fields, onSearch, onChange])
+
+        // Sync with URL on explicit search
+        if (syncWithUrl) {
+            const serialized = serializeConditions(conditions)
+
+            // We force update the URL even if serialized is same, to ensure router pushes new state if needed
+            // But checking lastSerializedRef detects if we really need to update URL params
+
+            const params = new URLSearchParams(searchParamsRef.current.toString())
+
+            if (serialized) {
+                params.set(urlParamName, serialized)
+            } else {
+                params.delete(urlParamName)
+            }
+
+            const newUrl = `${pathnameRef.current}?${params.toString()}`
+
+            routerRef.current.replace(newUrl, { scroll: false })
+
+            lastSerializedRef.current = serialized
+        }
+    }, [conditions, fields, onSearch, onChange, syncWithUrl, urlParamName])
 
     const handleReset = useCallback(() => {
+        if (onReset) onReset()
+
+        // Clear URL params if sync is enabled
+        if (syncWithUrl) {
+            // Use window.location.search to get the most up-to-date params
+            // incase onReset() triggered a URL update (e.g. resetting page)
+            const params = new URLSearchParams(window.location.search)
+
+            params.delete(urlParamName)
+
+            const newUrl = `${pathnameRef.current}?${params.toString()}`
+
+            routerRef.current.replace(newUrl, { scroll: false })
+
+            // Allow URL updates again
+            lastSerializedRef.current = ''
+        }
+
         const firstField = fields[0]
 
         if (!firstField) {
             setConditions([])
+        } else {
+            const operators = getOperatorsForDataType(firstField.dataType)
 
-            // Clear URL params
-            if (syncWithUrl) {
-                const params = new URLSearchParams(searchParams.toString())
-
-                params.delete(urlParamName)
-                router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+            const initialCondition: FilterCondition = {
+                id: generateId(),
+                field: firstField.key,
+                operator: operators[0]?.value || '==',
+                value: '',
+                logicalOperator: undefined
             }
 
-            if (onReset) onReset()
+            setConditions([initialCondition])
+        }
+    }, [fields, onReset, syncWithUrl, urlParamName])
 
-            return
+    // Group conditions for rendering
+    const groupedConditions = useMemo(() => {
+        const groups: FilterCondition[][] = []
+        let currentGroup: FilterCondition[] = []
+
+        conditions.forEach((condition, index) => {
+            if (index === 0) {
+                currentGroup.push(condition)
+            } else if (condition.logicalOperator === 'OR') {
+                // Save current group and start new one
+                if (currentGroup.length > 0) {
+                    groups.push(currentGroup)
+                }
+
+                currentGroup = [condition]
+            } else {
+                // AND - add to current group
+                currentGroup.push(condition)
+            }
+        })
+
+        // Push last group
+        if (currentGroup.length > 0) {
+            groups.push(currentGroup)
         }
 
-        const operators = getOperatorsForDataType(firstField.dataType)
-
-        const initialCondition: FilterCondition = {
-            id: generateId(),
-            field: firstField.key,
-            operator: operators[0]?.value || '==',
-            value: ''
-        }
-
-        setConditions([initialCondition])
-
-        if (onReset) onReset()
-    }, [fields, onReset, syncWithUrl, urlParamName, searchParams, pathname, router])
+        return groups
+    }, [conditions])
 
     if (fields.length === 0) {
         return (
@@ -315,131 +351,104 @@ export function DslQueryBuilder({
 
                 {/* Filter Rows - Grouped by AND/OR */}
                 <Box sx={{ pt: 1 }}>
-                    {(() => {
-                        // Group conditions: consecutive AND conditions are grouped together
-                        // OR starts a new group
-                        const groups: FilterCondition[][] = []
-                        let currentGroup: FilterCondition[] = []
-
-                        conditions.forEach((condition, index) => {
-                            if (index === 0) {
-                                currentGroup.push(condition)
-                            } else if (condition.logicalOperator === 'OR') {
-                                // Save current group and start new one
-                                if (currentGroup.length > 0) {
-                                    groups.push(currentGroup)
-                                }
-
-                                currentGroup = [condition]
-                            } else {
-                                // AND - add to current group
-                                currentGroup.push(condition)
-                            }
-                        })
-
-                        // Push last group
-                        if (currentGroup.length > 0) {
-                            groups.push(currentGroup)
-                        }
-
-                        return groups.map((group, groupIndex) => (
-                            <Box key={`group-${groupIndex}`}>
-                                {/* OR separator between groups */}
-                                {groupIndex > 0 && (
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            py: 1.5,
-                                            gap: 2
-                                        }}
-                                    >
-                                        <Box
-                                            sx={{
-                                                px: 2,
-                                                py: 0.5,
-                                                bgcolor: 'warning.main',
-                                                color: 'warning.contrastText',
-                                                borderRadius: 1,
-                                                fontSize: '0.75rem',
-                                                fontWeight: 600,
-                                                letterSpacing: '0.5px'
-                                            }}
-                                        >
-                                            OR
-                                        </Box>
-                                        <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider' }} />
-                                    </Box>
-                                )}
-
-                                {/* AND Group Container - with left border for visual grouping */}
+                    {groupedConditions.map((group, groupIndex) => (
+                        <Box key={`group-${groupIndex}`}>
+                            {/* OR separator between groups */}
+                            {groupIndex > 0 && (
                                 <Box
                                     sx={{
-                                        position: 'relative',
-                                        pl: group.length > 1 ? { xs: 1.5, sm: 3 } : 0,
-                                        ml: group.length > 1 ? { xs: 0.5, sm: 1 } : 0,
-                                        '&::before': group.length > 1 ? {
-                                            content: '""',
-                                            position: 'absolute',
-                                            left: 0,
-                                            top: 8,
-                                            bottom: 8,
-                                            width: '3px',
-                                            bgcolor: 'primary.main',
-                                            borderRadius: '4px'
-                                        } : {}
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        py: 1.5,
+                                        gap: 2
                                     }}
                                 >
-                                    {group.map((condition, indexInGroup) => {
-                                        // Find global index
-                                        const globalIndex = conditions.findIndex(c => c.id === condition.id)
-                                        const isLastGlobal = globalIndex === conditions.length - 1
+                                    <Box
+                                        sx={{
+                                            px: 2,
+                                            py: 0.5,
+                                            bgcolor: 'warning.main',
+                                            color: 'warning.contrastText',
+                                            borderRadius: 1,
+                                            fontSize: '0.75rem',
+                                            fontWeight: 600,
+                                            letterSpacing: '0.5px'
+                                        }}
+                                    >
+                                        OR
+                                    </Box>
+                                    <Box sx={{ flex: 1, height: '1px', bgcolor: 'divider' }} />
+                                </Box>
+                            )}
 
-                                        // Show Or button only on the last row globally
-                                        const showOrButton = isLastGlobal
+                            {/* AND Group Container - with left border for visual grouping */}
+                            <Box
+                                sx={{
+                                    position: 'relative',
+                                    pl: group.length > 1 ? { xs: 1.5, sm: 3 } : 0,
+                                    ml: group.length > 1 ? { xs: 0.5, sm: 1 } : 0,
+                                    '&::before': group.length > 1 ? {
+                                        content: '""',
+                                        position: 'absolute',
+                                        left: 0,
+                                        top: 8,
+                                        bottom: 8,
+                                        width: '3px',
+                                        bgcolor: 'primary.main',
+                                        borderRadius: '4px'
+                                    } : {}
+                                }}
+                            >
+                                {group.map((condition, indexInGroup) => {
+                                    // Find global index
+                                    const globalIndex = conditions.findIndex(c => c.id === condition.id)
+                                    const isLastGlobal = globalIndex === conditions.length - 1
 
-                                        return (
-                                            <Box key={condition.id}>
-                                                {/* AND label between conditions in same group */}
-                                                {indexInGroup > 0 && (
+                                    // Show Or button only on the last row globally
+                                    const showOrButton = isLastGlobal
+
+                                    return (
+                                        <Box key={condition.id}>
+                                            {/* AND label between conditions in same group */}
+                                            {indexInGroup > 0 && (
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        py: 0.5,
+                                                        pl: 0
+                                                    }}
+                                                >
                                                     <Box
                                                         sx={{
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            py: 0.5,
-                                                            pl: 0
+                                                            px: 1.5,
+                                                            py: 0.25,
+                                                            bgcolor: 'action.selected',
+                                                            borderRadius: 0.5,
+                                                            fontSize: '0.7rem',
+                                                            fontWeight: 500,
+                                                            color: 'text.secondary'
                                                         }}
                                                     >
-                                                        <Box
-                                                            sx={{
-                                                                px: 1.5,
-                                                                py: 0.25,
-                                                                bgcolor: 'action.selected',
-                                                                borderRadius: 0.5,
-                                                                fontSize: '0.7rem',
-                                                                fontWeight: 500,
-                                                                color: 'text.secondary'
-                                                            }}
-                                                        >
-                                                            AND
-                                                        </Box>
+                                                        AND
                                                     </Box>
-                                                )}
-                                                <FilterRow
-                                                    condition={condition}
-                                                    fields={fields}
-                                                    showOrButton={showOrButton}
-                                                    onChange={handleConditionChange}
-                                                    onRemove={handleRemoveCondition}
-                                                    onAddAfter={handleAddCondition}
-                                                />
-                                            </Box>
-                                        )
-                                    })}
-                                </Box>
+                                                </Box>
+                                            )}
+                                            <FilterRow
+                                                condition={condition}
+                                                fields={fields}
+                                                showOrButton={showOrButton}
+                                                onChange={handleConditionChange}
+                                                onRemove={handleRemoveCondition}
+                                                onAddAfter={handleAddCondition}
+                                                canRemove={conditions.length > 1}
+                                            />
+                                        </Box>
+                                    )
+                                })}
                             </Box>
-                        ))
-                    })()}
+                        </Box>
+                    ))}
                 </Box>
 
                 {/* Expression Preview */}

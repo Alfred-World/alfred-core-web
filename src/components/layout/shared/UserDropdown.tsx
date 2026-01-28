@@ -1,7 +1,8 @@
 'use client'
 
 // React Imports
-import { useRef, useState, type MouseEvent } from 'react'
+import { useRef, useState } from 'react'
+import type { MouseEvent } from 'react'
 
 // Next Imports
 import { useRouter } from 'next/navigation'
@@ -20,8 +21,8 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 
-// NextAuth Imports
-import { useSession, signOut } from 'next-auth/react'
+// Third-party Imports
+import { signOut, useSession } from 'next-auth/react'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
@@ -45,8 +46,8 @@ const UserDropdown = () => {
 
   // Hooks
   const router = useRouter()
-  const { settings } = useSettings()
   const { data: session } = useSession()
+  const { settings } = useSettings()
 
   const handleDropdownOpen = () => {
     !open ? setOpen(true) : setOpen(false)
@@ -66,19 +67,15 @@ const UserDropdown = () => {
 
   const handleUserLogout = async () => {
     try {
-      // First, sign out from NextAuth (clears local session cookie)
-      await signOut({ redirect: false })
-      
-      // Then redirect to Identity Service logout endpoint for full SSO logout
-      const gatewayUrl = process.env.NEXT_PUBLIC_GATEWAY_URL || 'https://gateway.test'
-      const postLogoutRedirectUri = encodeURIComponent(window.location.origin)
-      window.location.href = `${gatewayUrl}/connect/logout?post_logout_redirect_uri=${postLogoutRedirectUri}`
+      // Sign out from the app
+      await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
     } catch (error) {
-      console.error('Logout error:', error)
+      console.error(error)
+
+      // Show above error in a toast like following
+      // toastService.error((err as Error).message)
     }
   }
-
-  const user = session?.user
 
   return (
     <>
@@ -91,8 +88,8 @@ const UserDropdown = () => {
       >
         <Avatar
           ref={anchorRef}
-          alt={user?.name || user?.email || ''}
-          src={user?.image || undefined}
+          alt={session?.user?.name || ''}
+          src={session?.user?.image || ''}
           onClick={handleDropdownOpen}
           className='cursor-pointer bs-[38px] is-[38px]'
         />
@@ -116,12 +113,12 @@ const UserDropdown = () => {
               <ClickAwayListener onClickAway={e => handleDropdownClose(e as MouseEvent | TouchEvent)}>
                 <MenuList>
                   <div className='flex items-center plb-2 pli-6 gap-2' tabIndex={-1}>
-                    <Avatar alt={user?.name || user?.email || ''} src={user?.image || undefined} />
+                    <Avatar alt={session?.user?.name || ''} src={session?.user?.image || ''} />
                     <div className='flex items-start flex-col'>
                       <Typography className='font-medium' color='text.primary'>
-                        {user?.name || user?.email || 'User'}
+                        {session?.user?.name || ''}
                       </Typography>
-                      <Typography variant='caption'>{user?.email || ''}</Typography>
+                      <Typography variant='caption'>{session?.user?.email || ''}</Typography>
                     </div>
                   </div>
                   <Divider className='mlb-1' />

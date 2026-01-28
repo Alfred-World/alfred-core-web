@@ -58,39 +58,12 @@ export const AXIOS_INSTANCE = axios.create({
   }
 })
 
-// Token cache for synchronous access
-let cachedToken: string | null = null
+// Add request interceptor for auth token
+AXIOS_INSTANCE.interceptors.request.use(config => {
+  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
 
-// Initialize token from NextAuth session
-if (typeof window !== 'undefined') {
-  import('next-auth/react').then(async ({ getSession }) => {
-    const session = await getSession()
-    if (session?.accessToken) {
-      cachedToken = session.accessToken
-      // console.log('[API] Token initialized from NextAuth')
-    }
-  }).catch(err => {
-    console.warn('[API] Failed to initialize session:', err)
-  })
-}
-
-// Add request interceptor for OIDC token
-AXIOS_INSTANCE.interceptors.request.use(async config => {
-  // If no token cached, try to get it from session
-  if (typeof window !== 'undefined' && !cachedToken) {
-    try {
-      const { getSession } = await import('next-auth/react')
-      const session = await getSession()
-      if (session?.accessToken) {
-        cachedToken = session.accessToken
-      }
-    } catch {
-      // Ignore errors
-    }
-  }
-
-  if (cachedToken) {
-    config.headers.Authorization = `Bearer ${cachedToken}`
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
 
   return config
