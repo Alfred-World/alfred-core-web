@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation'
 
 import { APP_URL, getSsoCheckUrl } from '@/libs/sso-config'
 
+import Loading from './Loading'
+
 /**
  * AuthRedirect - Redirects to Gateway SSO check instead of login
  * 
@@ -33,14 +35,7 @@ const AuthRedirect = () => {
     window.location.href = ssoCheckUrl
   }, [pathname])
 
-  return (
-    <div className='flex items-center justify-center min-h-screen'>
-      <div className='flex flex-col items-center gap-4'>
-        <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary' />
-        <p className='text-gray-500'>Checking authentication...</p>
-      </div>
-    </div>
-  )
+  return <Loading />
 }
 
 export default AuthRedirect
