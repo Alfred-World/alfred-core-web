@@ -5,6 +5,7 @@ import { useMemo, memo } from 'react'
 import {
     Box,
     Button,
+    ButtonGroup,
     FormControl,
     IconButton,
     MenuItem,
@@ -275,41 +276,32 @@ export const FilterRow = memo(function FilterRow({
                     </Box>
 
                     {/* Row 3: Actions */}
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box sx={{ display: 'flex', gap: 1 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                        <ButtonGroup variant="outlined" size="small" sx={{ height: 40, borderColor: 'primary.main' }}>
                             <Button
-                                variant="contained"
-                                size="small"
                                 onClick={() => onAddAfter(condition.id, 'AND')}
-                                sx={{ minWidth: 'auto', px: 2, fontSize: '0.75rem', bgcolor: 'grey.600', '&:hover': { bgcolor: 'grey.700' } }}
+                                sx={{ px: 2, fontSize: '0.75rem', fontWeight: 600, color: 'primary.main', borderColor: 'primary.main' }}
                             >
                                 And
                             </Button>
                             {showOrButton && (
                                 <Button
-                                    variant="outlined"
-                                    size="small"
                                     onClick={() => onAddAfter(condition.id, 'OR')}
-                                    sx={{ minWidth: 'auto', px: 2, fontSize: '0.75rem', borderColor: 'grey.400', color: 'text.primary', '&:hover': { borderColor: 'grey.600', bgcolor: 'action.hover' } }}
+                                    sx={{ px: 2, fontSize: '0.75rem', fontWeight: 600, color: 'primary.main', borderColor: 'primary.main' }}
                                 >
                                     Or
                                 </Button>
                             )}
-                        </Box>
-                        {canRemove && (
-                            <IconButton
-                                size="small"
-                                onClick={() => onRemove(condition.id)}
-                                sx={{
-                                    color: 'error.main',
-                                    '&:hover': {
-                                        bgcolor: 'action.hover'
-                                    }
-                                }}
-                            >
-                                <i className='tabler-x' />
-                            </IconButton>
-                        )}
+                            {canRemove && (
+                                <Button
+                                    onClick={() => onRemove(condition.id)}
+                                    color="error"
+                                    sx={{ px: 1.5, minWidth: 'auto', borderColor: 'primary.main' }}
+                                >
+                                    <i className='tabler-x' style={{ fontSize: '1.2rem' }} />
+                                </Button>
+                            )}
+                        </ButtonGroup>
                     </Box>
                 </Box>
             ) : (
@@ -334,41 +326,31 @@ export const FilterRow = memo(function FilterRow({
                         {renderValueInput()}
                     </Box>
 
-                    <Box sx={{ display: 'flex', gap: 0.5 }}>
+                    <ButtonGroup variant="outlined" size="small" sx={{ height: 40, borderColor: 'primary.main' }}>
                         <Button
-                            variant="contained"
-                            size="small"
                             onClick={() => onAddAfter(condition.id, 'AND')}
-                            sx={{ minWidth: 'auto', px: 1.5, py: 0.5, fontSize: '0.75rem', bgcolor: 'grey.600', '&:hover': { bgcolor: 'grey.700' } }}
+                            sx={{ px: 2, fontSize: '0.75rem', fontWeight: 600, color: 'primary.main', borderColor: 'primary.main' }}
                         >
                             And
                         </Button>
                         {showOrButton && (
                             <Button
-                                variant="outlined"
-                                size="small"
                                 onClick={() => onAddAfter(condition.id, 'OR')}
-                                sx={{ minWidth: 'auto', px: 1.5, py: 0.5, fontSize: '0.75rem', borderColor: 'grey.400', color: 'text.primary', '&:hover': { borderColor: 'grey.600', bgcolor: 'action.hover' } }}
+                                sx={{ px: 2, fontSize: '0.75rem', fontWeight: 600, color: 'primary.main', borderColor: 'primary.main' }}
                             >
                                 Or
                             </Button>
                         )}
-                    </Box>
-
-                    {canRemove && (
-                        <IconButton
-                            size="small"
-                            onClick={() => onRemove(condition.id)}
-                            sx={{
-                                color: 'error.main',
-                                '&:hover': {
-                                    bgcolor: 'action.hover'
-                                }
-                            }}
-                        >
-                            <i className='tabler-x' />
-                        </IconButton>
-                    )}
+                        {canRemove && (
+                            <Button
+                                onClick={() => onRemove(condition.id)}
+                                color="error"
+                                sx={{ px: 1.5, minWidth: 'auto', borderColor: 'primary.main' }}
+                            >
+                                <i className='tabler-x' style={{ fontSize: '1.2rem' }} />
+                            </Button>
+                        )}
+                    </ButtonGroup>
                 </Box>
             )}
         </Box>

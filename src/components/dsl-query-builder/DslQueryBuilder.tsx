@@ -322,8 +322,18 @@ export function DslQueryBuilder({
         <Card>
             {/* Header */}
             <CardHeader
-                title={title}
-                titleTypographyProps={{ variant: 'subtitle1', fontWeight: 500 }}
+                title={
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                        <Box
+                            component="i"
+                            className="tabler-filter"
+                            sx={{ color: 'primary.main', fontSize: '1.25rem' }}
+                        />
+                        <Typography variant="subtitle1" fontWeight={500}>
+                            {title}
+                        </Typography>
+                    </Box>
+                }
             />
             <Divider />
 
@@ -473,14 +483,14 @@ export function DslQueryBuilder({
 
                 {/* Search and Reset Buttons */}
                 <Box sx={{ display: 'flex', gap: 1, mt: 2, justifyContent: 'flex-end' }}>
-                    <Button variant="outlined" size="small" onClick={handleReset} startIcon={<i className="ri-refresh-line" />}>
+                    <Button variant="outlined" size="small" onClick={handleReset} startIcon={<i className="tabler-refresh" />}>
                         Reset
                     </Button>
                     <Button
                         variant="contained"
                         size="small"
                         onClick={handleSearch}
-                        startIcon={<i className="ri-search-line" />}
+                        startIcon={<i className="tabler-search" />}
                         color="primary"
                     >
                         Search
