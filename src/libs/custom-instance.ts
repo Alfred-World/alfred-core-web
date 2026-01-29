@@ -66,6 +66,30 @@ export const AXIOS_INSTANCE = axios.create({
   }
 })
 
+// Track if we're currently refreshing the session
+let isRefreshing = false
+let refreshPromise: Promise<unknown> | null = null
+
+/**
+ * Force refresh the NextAuth session to get new tokens
+ */
+async function forceRefreshSession() {
+  if (isRefreshing && refreshPromise) {
+    return refreshPromise
+  }
+
+  isRefreshing = true
+  refreshPromise = fetch('/api/auth/session', {
+    method: 'GET',
+    credentials: 'include'
+  }).finally(() => {
+    isRefreshing = false
+    refreshPromise = null
+  })
+
+  return refreshPromise
+}
+
 // Request interceptor to add Authorization header from NextAuth session
 AXIOS_INSTANCE.interceptors.request.use(async config => {
   // Only run on client side
@@ -75,10 +99,51 @@ AXIOS_INSTANCE.interceptors.request.use(async config => {
     if (session?.accessToken) {
       config.headers.Authorization = `Bearer ${session.accessToken}`
     }
+
+    // Check if session has error (token refresh failed)
+    if (session?.error === 'RefreshAccessTokenError') {
+      // Session is invalid, redirect to login
+      window.location.href = '/login?error=session_expired'
+      throw new axios.Cancel('Session expired, redirecting to login')
+    }
   }
 
   return config
 })
+
+// Response interceptor to handle 401 and retry with refreshed token
+AXIOS_INSTANCE.interceptors.response.use(
+  response => response,
+  async (error: AxiosError) => {
+    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }
+
+    // If 401 and we haven't retried yet, try to refresh session
+    if (error.response?.status === 401 && !originalRequest._retry && typeof window !== 'undefined') {
+      originalRequest._retry = true
+
+      // Force refresh the session
+      await forceRefreshSession()
+
+      // Get fresh session
+      const session = await getSession()
+
+      if (session?.accessToken) {
+        // Retry with new token
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${session.accessToken}`
+        }
+        return AXIOS_INSTANCE(originalRequest)
+      }
+
+      // Still no token after refresh, redirect to login
+      window.location.href = '/login?error=session_expired'
+      throw new axios.Cancel('Session expired, redirecting to login')
+    }
+
+    return Promise.reject(error)
+  }
+)
 
 /**
  * Custom instance for Orval - returns unified ApiReturn type automatically
@@ -111,6 +176,11 @@ export const customInstance = <T>(
       return data as ToApiReturn<T>
     })
     .catch((error: AxiosError) => {
+      // Handle cancelled requests
+      if (axios.isCancel(error)) {
+        throw error
+      }
+
       const responseData = error.response?.data as
         | {
           success?: boolean
