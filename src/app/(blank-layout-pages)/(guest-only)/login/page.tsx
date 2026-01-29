@@ -61,38 +61,18 @@ export default function SSOLoginPage() {
 
         // Check for sso_token from redirect flow
         const ssoToken = searchParams.get('sso_token')
-        const ssoError = searchParams.get('sso_error')
 
         if (ssoToken) {
-          // We have an SSO token from check-sso redirect
-          setStatusMessage('Validating SSO session...')
-
-          try {
-            // Use generated API function via sso-config for type safety
-            const response = await validateSsoToken(ssoToken)
-
-            if (response.success && response.result) {
-              const user = response.result as { userId: string; email: string; fullName?: string; userName?: string }
-              const result = await signIn('sso-session', {
-                redirect: false,
-                userId: user.userId.toString(),
-                email: user.email,
-                name: user.fullName || user.userName || user.email,
-              })
-
-              if (result?.ok) {
-                await update()
-                router.replace(rawCallbackUrl)
-                return
-              }
-            }
-          } catch (error) {
-            // Silent error
-          }
+          // We have an SSO token - this means user has valid SSO session
+          // But we need to go through OAuth flow to get access tokens for API calls
+          // The SSO cookie is already set, so OAuth will auto-approve
+          setStatusMessage('Getting access tokens...')
+        } else {
+          setStatusMessage('Redirecting to login...')
         }
 
-        // No SSO token or token exchange failed - trigger OAuth flow
-        setStatusMessage('Redirecting to login...')
+        // Always use OAuth flow to get tokens
+        // If user already has SSO cookie, OAuth will auto-approve
         signIn('alfred-identity', { callbackUrl })
       }
     }
@@ -166,7 +146,7 @@ export default function SSOLoginPage() {
             size="large"
             fullWidth
             endIcon={<i className='tabler-arrow-right' style={{ fontSize: 18 }} />}
-            onClick={() => signIn('alfred-identity', { callbackUrl: '/dashboards/crm' })}
+            onClick={() => signIn('alfred-identity', { callbackUrl: `${appUrl}/dashboards/crm?t=${Date.now()}` })}
             sx={{
               py: 1.5,
               fontSize: '1rem',

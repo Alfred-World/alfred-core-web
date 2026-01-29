@@ -12,7 +12,7 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "build:icons": "tsx src/assets/iconify-icons/bundle-icons-css.ts",
     "postinstall": "npm run build:icons",
-    "generate": "NODE_TLS_REJECT_UNAUTHORIZED=0 dotenv -e .env -- orval && eslint src/generated --ext .ts --fix",
+    "generate": "dotenv -e .env -- orval && eslint src/generated --ext .ts --fix",
     "clean": "rm -rf .next",
     "clear": "rm -rf node_modules .next"
   },

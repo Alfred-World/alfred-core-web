@@ -74,14 +74,15 @@ const UserDropdown = () => {
       await signOut({ redirect: false })
 
       // Redirect to Gateway SSO logout
-      // This will clear SSO cookie and redirect to SSO app signout page
-      // SSO app signout page will auto-signout and redirect back to core.test
+      // Gateway will clear SSO cookie and then redirect to sso.test/login with force_logout
+      // This will clear sso.test's NextAuth session and redirect back to core.test
       const ssoUrl = process.env.NEXT_PUBLIC_SSO_URL || 'https://sso.test'
       const finalRedirectUrl = `${window.location.origin}/login?logout=true`
-      // Use /signout page (auto-submit, no confirmation needed)
-      const ssoLogoutUrl = `${ssoUrl}/signout?callbackUrl=${encodeURIComponent(finalRedirectUrl)}`
 
-      // First clear Gateway SSO cookie, then redirect to SSO app logout
+      // Use /api/auth/force-logout to clear sso.test session and redirect back
+      const ssoLogoutUrl = `${ssoUrl}/api/auth/force-logout?callbackUrl=${encodeURIComponent(finalRedirectUrl)}`
+
+      // First clear Gateway SSO cookie, then redirect to SSO app to clear its session
       const gatewayLogoutUrl = getSsoLogoutUrl(ssoLogoutUrl)
       window.location.href = gatewayLogoutUrl
     } catch (error) {

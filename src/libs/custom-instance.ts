@@ -1,5 +1,6 @@
 import type { AxiosError, AxiosRequestConfig } from 'axios'
 import axios from 'axios'
+import { getSession } from 'next-auth/react'
 
 /**
  * Base interface for API return types with common properties.
@@ -42,9 +43,16 @@ export type ToApiReturn<T> = T extends { result?: infer R | null } ? ApiReturn<N
 
 /**
  * Axios instance with base configuration
+ * 
+ * Authentication flow:
+ * 1. User logs in via SSO OAuth flow -> NextAuth stores tokens in session
+ * 2. Request interceptor gets token from NextAuth session
+ * 3. Token is added to Authorization header for API calls
+ * 4. Token refresh is handled automatically by NextAuth
  */
 export const AXIOS_INSTANCE = axios.create({
   baseURL: process.env.NEXT_PUBLIC_GATEWAY_URL,
+  withCredentials: true, // Send cookies with requests
   paramsSerializer: params => {
     const searchParams = new URLSearchParams()
 
@@ -58,12 +66,15 @@ export const AXIOS_INSTANCE = axios.create({
   }
 })
 
-// Add request interceptor for auth token
-AXIOS_INSTANCE.interceptors.request.use(config => {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null
+// Request interceptor to add Authorization header from NextAuth session
+AXIOS_INSTANCE.interceptors.request.use(async config => {
+  // Only run on client side
+  if (typeof window !== 'undefined') {
+    const session = await getSession()
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    if (session?.accessToken) {
+      config.headers.Authorization = `Bearer ${session.accessToken}`
+    }
   }
 
   return config
