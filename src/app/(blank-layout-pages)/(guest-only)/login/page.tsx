@@ -1,8 +1,10 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+
 import { useRouter, useSearchParams } from 'next/navigation'
+
+import { signIn, useSession } from 'next-auth/react'
 import { CircularProgress, Box, Typography, Button } from '@mui/material'
 
 import { validateSsoToken } from '@/libs/sso-config'
@@ -42,7 +44,8 @@ export default function SSOLoginPage() {
     if (isLogoutRedirect) {
       setIsLoggedOut(true)
       setStatusMessage('You have been logged out successfully.')
-      return
+      
+return
     }
 
     // Prevent double trigger in React StrictMode
@@ -53,7 +56,8 @@ export default function SSOLoginPage() {
 
       if (status === 'authenticated') {
         router.replace(rawCallbackUrl)
-        return
+        
+return
       }
 
       if (status === 'unauthenticated') {

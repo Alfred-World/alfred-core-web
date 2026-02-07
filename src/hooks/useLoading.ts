@@ -10,6 +10,7 @@ export const useLoading = (initialState: boolean = false) => {
 
   const withLoading = useCallback(async <T>(asyncFn: () => Promise<T>): Promise<T> => {
     setIsLoading(true)
+
     try {
       return await asyncFn()
     } finally {

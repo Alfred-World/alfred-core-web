@@ -84,9 +84,11 @@ const UserDropdown = () => {
 
       // First clear Gateway SSO cookie, then redirect to SSO app to clear its session
       const gatewayLogoutUrl = getSsoLogoutUrl(ssoLogoutUrl)
+
       window.location.href = gatewayLogoutUrl
     } catch (error) {
       console.error(error)
+
       // Fallback: direct redirect to login
       window.location.href = `${window.location.origin}/login?logout=true`
     }

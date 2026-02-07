@@ -133,7 +133,8 @@ AXIOS_INSTANCE.interceptors.response.use(
           ...originalRequest.headers,
           Authorization: `Bearer ${session.accessToken}`
         }
-        return AXIOS_INSTANCE(originalRequest)
+        
+return AXIOS_INSTANCE(originalRequest)
       }
 
       // Still no token after refresh, redirect to login
@@ -164,7 +165,7 @@ export const customInstance = <T>(
   config: AxiosRequestConfig,
   options?: AxiosRequestConfig
 ): Promise<ToApiReturn<T>> => {
-  // eslint-disable-next-line import/no-named-as-default-member
+   
   const source = axios.CancelToken.source()
 
   const promise = AXIOS_INSTANCE({

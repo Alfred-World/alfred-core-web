@@ -47,8 +47,10 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 
     // Calculate new expiresAt
     let expiresAt = Date.now() / 1000 + refreshedTokens.expires_in
+
     if (refreshedTokens.access_token) {
       const decoded = parseJwt(refreshedTokens.access_token)
+
       if (decoded && decoded.exp) {
         expiresAt = decoded.exp
       }
@@ -63,7 +65,8 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     }
   } catch (error) {
     console.error('Error refreshing access token', error)
-    return {
+    
+return {
       ...token,
       error: 'RefreshAccessTokenError',
     }
@@ -94,6 +97,7 @@ export const authOptions: NextAuthOptions = {
         }
       },
     },
+
     // Credentials provider for SSO session-based silent authentication
     CredentialsProvider({
       id: 'sso-session',
@@ -109,7 +113,9 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.userId || !credentials?.email) {
           return null
         }
-        return {
+
+        
+return {
           id: credentials.userId,
           email: credentials.email,
           name: credentials.name || credentials.email,
@@ -141,6 +147,7 @@ export const authOptions: NextAuthOptions = {
 
         // Try to get exact exp from token
         const decoded = parseJwt(account.access_token!)
+
         if (decoded && decoded.exp) {
           expiresAt = decoded.exp
         }
@@ -173,10 +180,13 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.accessToken = token.accessToken as string
       session.error = token.error as string | undefined
+
       if (token.sub && session.user) {
         session.user.id = token.sub
       }
-      return session
+
+      
+return session
     },
   },
 

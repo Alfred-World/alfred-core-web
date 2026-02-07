@@ -66,7 +66,7 @@ const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
         logoTextRef.current.classList.remove('hidden')
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [isHovered, layout, isBreakpointReached])
 
   return (

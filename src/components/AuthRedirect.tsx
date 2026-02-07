@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+
 import { usePathname } from 'next/navigation'
 
 import { APP_URL, getSsoCheckUrl } from '@/libs/sso-config'

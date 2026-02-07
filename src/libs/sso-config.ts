@@ -38,7 +38,9 @@ export const OAUTH_CLIENT_ID = process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID || 'core_
 export const getSsoCheckUrl = (returnUrl: string) => {
   // Get URL path from generated QueryKey
   const [urlPath] = getGetIdentityAuthCheckSsoQueryKey({ returnUrl })
-  return `${GATEWAY_URL}${urlPath}?returnUrl=${encodeURIComponent(returnUrl)}`
+
+  
+return `${GATEWAY_URL}${urlPath}?returnUrl=${encodeURIComponent(returnUrl)}`
 }
 
 /**
