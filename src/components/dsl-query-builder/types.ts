@@ -1,6 +1,7 @@
 // DSL Query Builder Types
 
-export type DataType = 'string' | 'int' | 'long' | 'date' | 'bool'
+export type { DataType } from '@/types/field'
+import type { DataType } from '@/types/field'
 
 /**
  * Enum option for fields that have predefined values
@@ -11,9 +12,14 @@ export interface EnumOption {
     value: number | string // Actual value to send in query (e.g. 0)
 }
 
-export interface FieldConfig<TData = any> {
-    name: string // Display name (used as column header)
-    key: string // Field key for query and data access
+/**
+ * Filter field configuration for DslQueryBuilder.
+ * Describes a filterable field (name, key, data type, enum options).
+ * Table column configuration is separate — see ColumnConfig in AdvancedTable.
+ */
+export interface FieldConfig {
+    name: string // Display name (used in filter dropdown)
+    key: string // Field key for query
     dataType: DataType
 
     /**
@@ -21,30 +27,6 @@ export interface FieldConfig<TData = any> {
      * When provided, a dropdown will be shown instead of free text input
      */
     enumOptions?: EnumOption[]
-
-    // ============================================================
-    // Table Column Properties (for AdvancedTable auto-generation)
-    // ============================================================
-
-    /** Enable sorting on this column. Default: true */
-    enableSorting?: boolean
-
-    /** Hide from table but still filterable. Default: false */
-    hidden?: boolean
-
-    /** Column width (CSS value, e.g. 100, '150px', '20%') */
-    width?: number | string
-
-    /** Text alignment. Default: 'left' */
-    align?: 'left' | 'center' | 'right'
-
-    /**
-     * Custom cell renderer function
-     * @param value - The cell value
-     * @param row - The entire row data
-     * @returns React node to render
-     */
-    renderCell?: (value: any, row: TData) => React.ReactNode
 }
 
 export interface FilterCondition {

@@ -6,12 +6,27 @@ import { Box, Grid, Typography } from '@mui/material'
 
 import { DslQueryBuilder, type FieldConfig, type FilterCondition } from '@/components/dsl-query-builder'
 import { useUrlPagination, useUrlSorting } from '@/components/UrlPagination'
-import { AdvancedTable } from '@/components/AdvancedTable'
+import { AdvancedTable, type ColumnConfig } from '@/components/AdvancedTable'
 import { useGetApplications } from '@/generated'
 import type { ApplicationDto } from '@/generated'
 
-// Unified field config - used by both DslQueryBuilder (filter) and AdvancedTable (columns)
-const subSiteFields: FieldConfig<ApplicationDto>[] = [
+// Filter field config for DslQueryBuilder (filterable fields only)
+const filterFields: FieldConfig[] = [
+    { name: 'ID', key: 'id', dataType: 'int' },
+    { name: 'Display Name', key: 'displayName', dataType: 'string' },
+    { name: 'Client ID', key: 'clientId', dataType: 'string' },
+    { name: 'Redirect URIs', key: 'redirectUris', dataType: 'string' },
+    { name: 'Post Logout Redirect URIs', key: 'postLogoutRedirectUris', dataType: 'string' },
+    { name: 'Permissions', key: 'permissions', dataType: 'string' },
+    { name: 'Application Type', key: 'applicationType', dataType: 'string' },
+    { name: 'Client Type', key: 'clientType', dataType: 'string' },
+    { name: 'Is Active', key: 'isActive', dataType: 'bool' },
+    { name: 'Created At', key: 'createdAt', dataType: 'date' },
+    { name: 'Updated At', key: 'updatedAt', dataType: 'date' }
+]
+
+// Column config for AdvancedTable (visible columns with custom rendering)
+const subSiteColumns: ColumnConfig<ApplicationDto>[] = [
     { name: 'ID', key: 'id', dataType: 'int' },
     { name: 'Display Name', key: 'displayName', dataType: 'string' },
     { name: 'Client ID', key: 'clientId', dataType: 'string', enableSorting: false },
@@ -21,8 +36,7 @@ const subSiteFields: FieldConfig<ApplicationDto>[] = [
     { name: 'Application Type', key: 'applicationType', dataType: 'string', enableSorting: false },
     { name: 'Client Type', key: 'clientType', dataType: 'string', enableSorting: false },
     { name: 'Is Active', key: 'isActive', dataType: 'bool', enableSorting: false },
-    { name: 'Created At', key: 'createdAt', dataType: 'date' },
-    { name: 'Updated At', key: 'updatedAt', dataType: 'date', hidden: true }
+    { name: 'Created At', key: 'createdAt', dataType: 'date' }
 ]
 
 export default function SubSitesFilterDemo() {
@@ -73,7 +87,7 @@ export default function SubSitesFilterDemo() {
                 {/* Filter Builder */}
                 <Grid size={{ xs: 12 }}>
                     <DslQueryBuilder
-                        fields={subSiteFields}
+                        fields={filterFields}
                         onChange={handleChange}
                         onSearch={handleSearch}
                         onReset={handleReset}
@@ -83,10 +97,10 @@ export default function SubSitesFilterDemo() {
                     />
                 </Grid>
 
-                {/* SubSites Table - uses same fields config */}
+                {/* SubSites Table */}
                 <Grid size={{ xs: 12 }}>
                     <AdvancedTable<ApplicationDto>
-                        fields={subSiteFields}
+                        columns={subSiteColumns}
                         data={result?.items || []}
                         total={result?.total || 0}
                         page={page}

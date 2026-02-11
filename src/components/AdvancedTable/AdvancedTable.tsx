@@ -45,7 +45,7 @@ import { TableSkeleton } from './TableSkeleton'
 import CustomTextField from '@core/components/mui/TextField'
 
 // Type Imports
-import type { FieldConfig } from '@/components/dsl-query-builder/types'
+import type { DataType } from '@/types/field'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
@@ -57,6 +57,46 @@ import { DEFAULT_PAGE_SIZE_OPTIONS } from '@/constants/pagination'
 const Icon = styled('i')({})
 
 // ============================================================
+// COLUMN CONFIG
+// ============================================================
+
+/**
+ * Table column configuration for AdvancedTable.
+ * Describes how a data column should be rendered (header, width, sorting, custom renderer).
+ * Filter field configuration is separate — see FieldConfig in dsl-query-builder.
+ */
+export interface ColumnConfig<TData = unknown> {
+    /** Column header display name */
+    name: string
+
+    /** Data accessor key (property name on TData) */
+    key: string
+
+    /** Data type — used for default cell rendering (date formatting, bool display, etc.) */
+    dataType: DataType
+
+    /** Enable sorting on this column. Default: false */
+    enableSorting?: boolean
+
+    /** Hide column from table. Default: false */
+    hidden?: boolean
+
+    /** Column width (CSS value, e.g. 100, '150px', '20%') */
+    width?: number | string
+
+    /** Text alignment. Default: 'left' */
+    align?: 'left' | 'center' | 'right'
+
+    /**
+     * Custom cell renderer function
+     * @param value - The cell value
+     * @param row - The entire row data
+     * @returns React node to render
+     */
+    renderCell?: (value: any, row: TData) => React.ReactNode
+}
+
+// ============================================================
 // TYPES
 // ============================================================
 
@@ -66,17 +106,17 @@ export interface AdvancedTableProps<TData> {
     data: TData[]
 
     /**
-     * Field configurations - auto-generates columns from these
+     * Column configurations - auto-generates columns from these
      * Use this for simple tables where you don't need custom column definitions
      */
-    fields?: FieldConfig<TData>[]
+    columns?: ColumnConfig<TData>[]
 
     /**
      * Column definitions from TanStack Table
      * Use this when you need full control over column rendering
-     * If both fields and columns are provided, columns takes precedence
+     * If both columns (ColumnConfig) and tanstackColumns are provided, tanstackColumns takes precedence
      */
-    columns?: ColumnDef<TData, any>[]
+    tanstackColumns?: ColumnDef<TData, any>[]
 
     /** Total number of records (for server-side pagination) */
     total: number
@@ -175,10 +215,10 @@ function TablePagination<TData>({
 // ============================================================
 
 /**
- * Generates TanStack Table columns from FieldConfig array
+ * Generates TanStack Table columns from ColumnConfig array
  */
 function generateColumnsFromFields<TData>(
-    fields: FieldConfig<TData>[],
+    fields: ColumnConfig<TData>[],
     columnHelper: ReturnType<typeof createColumnHelper<TData>>
 ): ColumnDef<TData, any>[] {
     return fields
@@ -230,8 +270,8 @@ function generateColumnsFromFields<TData>(
 
 export function AdvancedTable<TData>({
     data,
-    fields,
-    columns: userColumns,
+    columns,
+    tanstackColumns,
     total,
     page,
     pageSize,
@@ -254,24 +294,24 @@ export function AdvancedTable<TData>({
     const columnHelper = createColumnHelper<TData>()
 
     const generatedColumns = useMemo<ColumnDef<TData, any>[]>(() => {
-        // If userColumns provided, use them directly
-        if (userColumns && userColumns.length > 0) {
-            return userColumns
+        // If tanstackColumns provided, use them directly
+        if (tanstackColumns && tanstackColumns.length > 0) {
+            return tanstackColumns
         }
 
-        // If fields provided, generate columns from them
-        if (fields && fields.length > 0) {
-            return generateColumnsFromFields(fields, columnHelper)
+        // If columns provided, generate columns from them
+        if (columns && columns.length > 0) {
+            return generateColumnsFromFields(columns, columnHelper)
         }
 
-        // No columns or fields provided
+        // No columns provided
         return []
-    }, [userColumns, fields, columnHelper])
+    }, [tanstackColumns, columns, columnHelper])
 
     // ============================================================
     // Build columns with optional selection column
     // ============================================================
-    const columns = useMemo<ColumnDef<TData, any>[]>(() => {
+    const tableColumns = useMemo<ColumnDef<TData, any>[]>(() => {
         if (!enableRowSelection) return generatedColumns
 
         const selectionColumn: ColumnDef<TData, any> = {
@@ -328,7 +368,7 @@ export function AdvancedTable<TData>({
     // ============================================================
     const tableOptions: TableOptions<TData> = {
         data,
-        columns,
+        columns: tableColumns,
         pageCount: Math.ceil(total / pageSize),
         state: {
             pagination: {
@@ -605,13 +645,13 @@ export function AdvancedTable<TData>({
                     {isLoading ? (
                         <TableSkeleton
                             rowCount={Math.min(pageSize, 10)}
-                            columnCount={enableRowSelection ? columns.length - 1 : columns.length}
+                            columnCount={enableRowSelection ? tableColumns.length - 1 : tableColumns.length}
                             showCheckbox={enableRowSelection}
                         />
                     ) : data.length === 0 ? (
                         <tbody>
                             <tr>
-                                <td colSpan={columns.length} className='text-center'>
+                                <td colSpan={tableColumns.length} className='text-center'>
                                     No data available
                                 </td>
                             </tr>
