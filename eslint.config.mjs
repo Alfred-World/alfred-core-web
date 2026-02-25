@@ -6,7 +6,7 @@ import tseslint from 'typescript-eslint';
 const eslintConfig = [
   // Ignores
   {
-    ignores: ['**/node_modules/**', '**/.next/**', 'next-env.d.ts', 'src/generated/**'],
+    ignores: ['**/node_modules/**', '**/.next/**', 'next-env.d.ts'],
   },
 
   // Next.js config
@@ -15,9 +15,9 @@ const eslintConfig = [
   // Prettier config
   eslintConfigPrettier,
 
-  // Custom rules for TypeScript files
+  // Generated files - only enforce type import separation
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['src/generated/**/*.ts'],
     plugins: {
       '@typescript-eslint': tseslint.plugin,
     },
@@ -29,6 +29,25 @@ const eslintConfig = [
           fixStyle: 'separate-type-imports',
         },
       ],
+    },
+  },
+
+  // Custom rules for TypeScript files (excluding generated)
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['src/generated/**'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin,
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
+      ],
+      'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       '@typescript-eslint/ban-ts-comment': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': [
@@ -46,8 +65,9 @@ const eslintConfig = [
     },
   },
 
-  // Custom rules for all files
+  // Custom rules for all files (excluding generated)
   {
+    ignores: ['src/generated/**'],
     rules: {
       'jsx-a11y/alt-text': 'off',
       'react/display-name': 'off',
