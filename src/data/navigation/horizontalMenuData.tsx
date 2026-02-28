@@ -8,7 +8,7 @@ const horizontalMenuData = (): HorizontalMenuDataType[] => [
       {
         label: 'crm',
         icon: 'tabler-chart-pie-2',
-        href: '/dashboards/crm'
+        href: '/dashboards'
       }
     ]
   },

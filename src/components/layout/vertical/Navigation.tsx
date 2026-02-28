@@ -38,9 +38,8 @@ const StyledBoxForShadow = styled('div')(({ theme }) => ({
   width: 'calc(100% + 15px)',
   height: theme.mixins.toolbar.minHeight,
   transition: 'opacity .15s ease-in-out',
-  background: `linear-gradient(var(--mui-palette-background-paper) ${
-    theme.direction === 'rtl' ? '95%' : '5%'
-  }, rgb(var(--mui-palette-background-paperChannel) / 0.85) 30%, rgb(var(--mui-palette-background-paperChannel) / 0.5) 65%, rgb(var(--mui-palette-background-paperChannel) / 0.3) 75%, transparent)`,
+  background: `linear-gradient(var(--mui-palette-background-paper) ${theme.direction === 'rtl' ? '95%' : '5%'
+    }, rgb(var(--mui-palette-background-paperChannel) / 0.85) 30%, rgb(var(--mui-palette-background-paperChannel) / 0.5) 65%, rgb(var(--mui-palette-background-paperChannel) / 0.3) 75%, transparent)`,
   '&.scrolled': {
     opacity: 1
   }
@@ -68,6 +67,7 @@ const Navigation = (props: Props) => {
 
   const isDark = currentMode === 'dark'
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const scrollMenu = (container: any, isPerfectScrollbar: boolean) => {
     container = isBreakpointReached || !isPerfectScrollbar ? container.target : container
 
@@ -93,19 +93,19 @@ const Navigation = (props: Props) => {
   }, [settings.layout])
 
   return (
-     
+
     // Sidebar Vertical Menu
     <VerticalNav
       customStyles={navigationCustomStyles(verticalNavOptions, theme)}
       collapsedWidth={71}
       backgroundColor='var(--mui-palette-background-paper)'
-       
+
       // The following condition adds the data-dark attribute to the VerticalNav component
       // when semiDark is enabled and the mode or systemMode is light
       {...(isSemiDark &&
         !isDark && {
-          'data-dark': ''
-        })}
+        'data-dark': ''
+      })}
     >
       {/* Nav Header including Logo & nav toggle icons  */}
       <NavHeader>

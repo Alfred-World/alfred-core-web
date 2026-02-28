@@ -10,9 +10,7 @@
 import { AXIOS_INSTANCE } from './custom-instance'
 import {
   getIdentityAuthValidateToken,
-  getGetIdentityAuthCheckSsoQueryKey,
-  getGetConnectLogoutQueryKey,
-  type GetIdentityAuthValidateTokenParams,
+  getGetIdentityAuthCheckSsoQueryKey
 } from '@/generated/identity-api'
 
 /**
@@ -39,8 +37,8 @@ export const getSsoCheckUrl = (returnUrl: string) => {
   // Get URL path from generated QueryKey
   const [urlPath] = getGetIdentityAuthCheckSsoQueryKey({ returnUrl })
 
-  
-return `${GATEWAY_URL}${urlPath}?returnUrl=${encodeURIComponent(returnUrl)}`
+
+  return `${GATEWAY_URL}${urlPath}?returnUrl=${encodeURIComponent(returnUrl)}`
 }
 
 /**

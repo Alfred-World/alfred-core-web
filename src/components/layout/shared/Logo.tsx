@@ -11,7 +11,7 @@ import styled from '@emotion/styled'
 import type { VerticalNavContextProps } from '@menu/contexts/verticalNavContext'
 
 // Component Imports
-import VuexyLogo from '@core/svg/Logo'
+import AlfredLogo from '@core/svg/Logo'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -66,12 +66,12 @@ const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
         logoTextRef.current.classList.remove('hidden')
       }
     }
-     
+
   }, [isHovered, layout, isBreakpointReached])
 
   return (
     <div className='flex items-center'>
-      <VuexyLogo className='text-2xl text-primary' />
+      <AlfredLogo className='text-2xl text-primary' />
       <LogoText
         color={color}
         ref={logoTextRef}

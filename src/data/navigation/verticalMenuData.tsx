@@ -14,7 +14,7 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
       {
         label: 'crm',
         icon: 'tabler-circle',
-        href: '/dashboards/crm'
+        href: '/dashboards'
       }
     ]
   }

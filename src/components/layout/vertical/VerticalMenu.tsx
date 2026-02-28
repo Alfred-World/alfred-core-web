@@ -31,6 +31,7 @@ type RenderExpandIconProps = {
 }
 
 type Props = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scrollMenu: (container: any, isPerfectScrollbar: boolean) => void
 }
 

@@ -1,12 +1,12 @@
-import nextConfig from 'eslint-config-next';
-import eslintConfigPrettier from 'eslint-config-prettier';
-import tseslint from 'typescript-eslint';
+import nextConfig from 'eslint-config-next'
+import eslintConfigPrettier from 'eslint-config-prettier'
+import tseslint from 'typescript-eslint'
 
 /** @type {import('eslint').Linter.Config[]} */
 const eslintConfig = [
   // Ignores
   {
-    ignores: ['**/node_modules/**', '**/.next/**', 'next-env.d.ts'],
+    ignores: ['**/node_modules/**', '**/.next/**', 'next-env.d.ts']
   },
 
   // Next.js config
@@ -19,17 +19,18 @@ const eslintConfig = [
   {
     files: ['src/generated/**/*.ts'],
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
+      '@typescript-eslint': tseslint.plugin
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': [
         'error',
         {
           prefer: 'type-imports',
-          fixStyle: 'separate-type-imports',
-        },
+          fixStyle: 'separate-type-imports'
+        }
       ],
-    },
+      'react-hooks/immutability': 'off'
+    }
   },
 
   // Custom rules for TypeScript files (excluding generated)
@@ -37,32 +38,32 @@ const eslintConfig = [
     files: ['**/*.ts', '**/*.tsx'],
     ignores: ['src/generated/**'],
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
+      '@typescript-eslint': tseslint.plugin
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': [
         'error',
         {
           prefer: 'type-imports',
-          fixStyle: 'separate-type-imports',
-        },
+          fixStyle: 'separate-type-imports'
+        }
       ],
       'import/consistent-type-specifier-style': ['error', 'prefer-top-level'],
       '@typescript-eslint/ban-ts-comment': 'off',
-      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_',
-        },
+          caughtErrorsIgnorePattern: '^_'
+        }
       ],
       '@typescript-eslint/no-non-null-assertion': 'off',
       '@typescript-eslint/no-unused-expressions': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-var-requires': 'off',
-    },
+      '@typescript-eslint/no-var-requires': 'off'
+    }
   },
 
   // Custom rules for all files (excluding generated)
@@ -89,43 +90,43 @@ const eslintConfig = [
           beforeLineComment: true,
           allowBlockStart: true,
           allowObjectStart: true,
-          allowArrayStart: true,
-        },
+          allowArrayStart: true
+        }
       ],
       'padding-line-between-statements': [
         'error',
         {
           blankLine: 'any',
           prev: 'export',
-          next: 'export',
+          next: 'export'
         },
         {
           blankLine: 'always',
           prev: ['const', 'let', 'var'],
-          next: '*',
+          next: '*'
         },
         {
           blankLine: 'any',
           prev: ['const', 'let', 'var'],
-          next: ['const', 'let', 'var'],
+          next: ['const', 'let', 'var']
         },
         {
           blankLine: 'always',
           prev: '*',
-          next: ['function', 'multiline-const', 'multiline-block-like'],
+          next: ['function', 'multiline-const', 'multiline-block-like']
         },
         {
           blankLine: 'always',
           prev: ['function', 'multiline-const', 'multiline-block-like'],
-          next: '*',
-        },
+          next: '*'
+        }
       ],
       'newline-before-return': 'error',
       'import/newline-after-import': [
         'error',
         {
-          count: 1,
-        },
+          count: 1
+        }
       ],
       'import/order': [
         'error',
@@ -135,44 +136,44 @@ const eslintConfig = [
             {
               pattern: 'react',
               group: 'external',
-              position: 'before',
+              position: 'before'
             },
             {
               pattern: 'next/**',
               group: 'external',
-              position: 'before',
+              position: 'before'
             },
             {
               pattern: '~/**',
               group: 'external',
-              position: 'before',
+              position: 'before'
             },
             {
               pattern: '@/**',
-              group: 'internal',
-            },
+              group: 'internal'
+            }
           ],
           pathGroupsExcludedImportTypes: ['react', 'type'],
-          'newlines-between': 'always-and-inside-groups',
-        },
+          'newlines-between': 'always-and-inside-groups'
+        }
       ],
-      'import/no-deprecated': 'warn',
+      'import/no-deprecated': 'warn'
     },
     settings: {
       react: {
-        version: 'detect',
+        version: 'detect'
       },
       'import/parsers': {
-        '@typescript-eslint/parser': ['.ts', '.tsx'],
+        '@typescript-eslint/parser': ['.ts', '.tsx']
       },
       'import/resolver': {
         node: {},
         typescript: {
-          project: './tsconfig.json',
-        },
-      },
-    },
-  },
-];
+          project: './tsconfig.json'
+        }
+      }
+    }
+  }
+]
 
-export default eslintConfig;
+export default eslintConfig

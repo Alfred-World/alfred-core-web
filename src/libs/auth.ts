@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'development') {
 function parseJwt(token: string) {
   try {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
-  } catch (e) {
+  } catch (_e) {
     return null
   }
 }
@@ -65,8 +65,8 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     }
   } catch (error) {
     console.error('Error refreshing access token', error)
-    
-return {
+
+    return {
       ...token,
       error: 'RefreshAccessTokenError',
     }
@@ -114,8 +114,8 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-        
-return {
+
+        return {
           id: credentials.userId,
           email: credentials.email,
           name: credentials.name || credentials.email,
@@ -185,8 +185,8 @@ return {
         session.user.id = token.sub
       }
 
-      
-return session
+
+      return session
     },
   },
 

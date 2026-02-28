@@ -10,9 +10,10 @@ import {
     MenuItem,
     Pagination,
     Select,
-    Typography,
-    type SelectChangeEvent
+    Typography
+
 } from '@mui/material'
+import type { SelectChangeEvent } from '@mui/material';
 
 // Constants
 import { DEFAULT_PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE } from '@/constants/pagination'
@@ -270,6 +271,7 @@ export function useUrlSorting(defaultSort = '', sortParamName = 'sort') {
 
     // Update URL when sorting changes
     const setSorting = useCallback(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (updaterOrValue: any) => {
             // Handle both functional updates and direct values
             // TanStack table passes an updater function
@@ -301,7 +303,7 @@ export function useUrlSorting(defaultSort = '', sortParamName = 'sort') {
 
             if (newSorting && newSorting.length > 0) {
                 // Convert SortingState back to API string
-                const sortString = newSorting.map((s: any) => (s.desc ? `-${s.id}` : s.id)).join(',')
+                const sortString = newSorting.map((s: { id: string; desc: boolean }) => (s.desc ? `-${s.id}` : s.id)).join(',')
 
                 params.set(sortParamName, sortString)
             } else {

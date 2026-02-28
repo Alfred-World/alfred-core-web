@@ -146,14 +146,14 @@ export function buildDslQuery(conditions: FilterCondition[], fields: FieldConfig
     return query.build()
 }
 
-function parseMultiValue(val: any): string[] {
+function parseMultiValue(val: unknown): string[] {
     return String(val)
         .split(',')
         .map(v => v.trim())
         .filter(v => v !== '')
 }
 
-function parseMultiNumber(val: any): number[] {
+function parseMultiNumber(val: unknown): number[] {
     return parseMultiValue(val).map(Number).filter(n => !isNaN(n))
 }
 

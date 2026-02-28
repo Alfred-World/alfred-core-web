@@ -1,7 +1,8 @@
 'use client'
 
 // React Imports
-import { useState, useMemo, type ReactNode } from 'react'
+import { useState, useMemo } from 'react'
+import type { ReactNode } from 'react';
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -66,6 +67,7 @@ const Icon = styled('i')({})
  * Filter field configuration is separate — see FieldConfig in dsl-query-builder.
  */
 export interface ColumnConfig<TData = unknown> {
+
     /** Column header display name */
     name: string
 
@@ -93,7 +95,7 @@ export interface ColumnConfig<TData = unknown> {
      * @param row - The entire row data
      * @returns React node to render
      */
-    renderCell?: (value: any, row: TData) => React.ReactNode
+    renderCell?: (value: unknown, row: TData) => React.ReactNode
 }
 
 // ============================================================
@@ -116,7 +118,7 @@ export interface AdvancedTableProps<TData> {
      * Use this when you need full control over column rendering
      * If both columns (ColumnConfig) and tanstackColumns are provided, tanstackColumns takes precedence
      */
-    tanstackColumns?: ColumnDef<TData, any>[]
+    tanstackColumns?: ColumnDef<TData, unknown>[]
 
     /** Total number of records (for server-side pagination) */
     total: number
@@ -220,15 +222,17 @@ function TablePagination<TData>({
 function generateColumnsFromFields<TData>(
     fields: ColumnConfig<TData>[],
     columnHelper: ReturnType<typeof createColumnHelper<TData>>
-): ColumnDef<TData, any>[] {
+): ColumnDef<TData, unknown>[] {
     return fields
         .filter(field => !field.hidden)
         .map(field => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             return columnHelper.accessor(field.key as any, {
                 id: field.key,
                 header: field.name,
                 enableSorting: field.enableSorting !== false, // Default true
                 cell: ({ row }) => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const value = (row.original as any)[field.key]
 
                     // Use custom renderer if provided
@@ -293,7 +297,7 @@ export function AdvancedTable<TData>({
     // ============================================================
     const columnHelper = createColumnHelper<TData>()
 
-    const generatedColumns = useMemo<ColumnDef<TData, any>[]>(() => {
+    const generatedColumns = useMemo<ColumnDef<TData, unknown>[]>(() => {
         // If tanstackColumns provided, use them directly
         if (tanstackColumns && tanstackColumns.length > 0) {
             return tanstackColumns
@@ -311,10 +315,10 @@ export function AdvancedTable<TData>({
     // ============================================================
     // Build columns with optional selection column
     // ============================================================
-    const tableColumns = useMemo<ColumnDef<TData, any>[]>(() => {
+    const tableColumns = useMemo<ColumnDef<TData, unknown>[]>(() => {
         if (!enableRowSelection) return generatedColumns
 
-        const selectionColumn: ColumnDef<TData, any> = {
+        const selectionColumn: ColumnDef<TData, unknown> = {
             id: 'select',
             header: ({ table }) => (
                 <Checkbox

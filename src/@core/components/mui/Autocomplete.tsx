@@ -16,10 +16,11 @@ const CustomAutocomplete = forwardRef(
     ChipComponent extends ElementType
   >(
     props: AutocompleteProps<T, Multiple, DisableClearable, FreeSolo, ChipComponent>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ref: any
   ) => {
     return (
-       
+
       <Autocomplete
         {...props}
         ref={ref}

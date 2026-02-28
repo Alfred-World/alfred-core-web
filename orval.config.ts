@@ -31,5 +31,16 @@ export default defineConfig({
             client: commonOutputConfig.client,
             override: commonOutputConfig.override
         }
+    },
+
+    // Core Service API (contains Assets, Files, etc.)
+    core: {
+        input: `${gatewayUrl}/api/core/swagger/v1/swagger.json`,
+        output: {
+            mode: 'single',
+            target: 'src/generated/core-api.ts',
+            client: commonOutputConfig.client,
+            override: commonOutputConfig.override
+        }
     }
 })
