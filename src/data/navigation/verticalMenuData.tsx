@@ -17,6 +17,21 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
         href: '/dashboards'
       }
     ]
+  },
+  {
+    label: 'Brands',
+    icon: 'tabler-building-store',
+    href: '/brands'
+  },
+  {
+    label: 'Categories',
+    icon: 'tabler-category',
+    href: '/categories'
+  },
+  {
+    label: 'Units',
+    icon: 'tabler-ruler-measure',
+    href: '/units'
   }
 ]
 
