@@ -1,5 +1,3 @@
-import type { AxiosError, AxiosRequestConfig } from 'axios'
-import axios from 'axios'
 import { getSession } from 'next-auth/react'
 
 /**
@@ -41,30 +39,8 @@ export type ApiReturn<T> = ApiReturnSuccess<T> | ApiReturnFailure
  */
 export type ToApiReturn<T> = T extends { result?: infer R | null } ? ApiReturn<NonNullable<R>> : ApiReturn<T>
 
-/**
- * Axios instance with base configuration
- * 
- * Authentication flow:
- * 1. User logs in via SSO OAuth flow -> NextAuth stores tokens in session
- * 2. Request interceptor gets token from NextAuth session
- * 3. Token is added to Authorization header for API calls
- * 4. Token refresh is handled automatically by NextAuth
- */
-export const AXIOS_INSTANCE = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_GATEWAY_URL,
-  withCredentials: true, // Send cookies with requests
-  paramsSerializer: params => {
-    const searchParams = new URLSearchParams()
-
-    Object.entries(params || {}).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        searchParams.append(key, String(value))
-      }
-    })
-
-    return searchParams.toString()
-  }
-})
+/** Gateway base URL */
+export const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || 'https://gateway.test'
 
 // Track if we're currently refreshing the session
 let isRefreshing = false
@@ -90,68 +66,43 @@ async function forceRefreshSession() {
   return refreshPromise
 }
 
-// Request interceptor to add Authorization header from NextAuth session
-AXIOS_INSTANCE.interceptors.request.use(async config => {
-  // Only run on client side
-  if (typeof window !== 'undefined') {
-    const session = await getSession()
+/**
+ * Get authorization headers from NextAuth session.
+ * Redirects to login if session is expired.
+ */
+async function getAuthHeaders(): Promise<Record<string, string>> {
+  if (typeof window === 'undefined') return {}
 
-    if (session?.accessToken) {
-      config.headers.Authorization = `Bearer ${session.accessToken}`
-    }
+  const session = await getSession()
 
-    // Check if session has error (token refresh failed)
-    if (session?.error === 'RefreshAccessTokenError') {
-      // Session is invalid, redirect to login
-      window.location.href = '/login?error=session_expired'
-      throw new axios.Cancel('Session expired, redirecting to login')
-    }
+  if (session?.error === 'RefreshAccessTokenError') {
+    window.location.href = '/login?error=session_expired'
+    throw new Error('Session expired, redirecting to login')
   }
 
-  return config
-})
-
-// Response interceptor to handle 401 and retry with refreshed token
-AXIOS_INSTANCE.interceptors.response.use(
-  response => response,
-  async (error: AxiosError) => {
-    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean }
-
-    // If 401 and we haven't retried yet, try to refresh session
-    if (error.response?.status === 401 && !originalRequest._retry && typeof window !== 'undefined') {
-      originalRequest._retry = true
-
-      // Force refresh the session
-      await forceRefreshSession()
-
-      // Get fresh session
-      const session = await getSession()
-
-      if (session?.accessToken) {
-        // Retry with new token
-        originalRequest.headers = {
-          ...originalRequest.headers,
-          Authorization: `Bearer ${session.accessToken}`
-        }
-        
-return AXIOS_INSTANCE(originalRequest)
-      }
-
-      // Still no token after refresh, redirect to login
-      window.location.href = '/login?error=session_expired'
-      throw new axios.Cancel('Session expired, redirecting to login')
-    }
-
-    return Promise.reject(error)
+  if (session?.accessToken) {
+    return { Authorization: `Bearer ${session.accessToken}` }
   }
-)
+
+  return {}
+}
 
 /**
- * Custom instance for Orval - returns unified ApiReturn type automatically
- * No need to wrap API calls, just use directly:
+ * Custom fetch mutator for Orval (pure fetch, no axios).
+ *
+ * Authentication flow:
+ * 1. User logs in via SSO OAuth flow -> NextAuth stores tokens in session
+ * 2. Before each request, token is fetched from NextAuth session
+ * 3. Token is added to Authorization header
+ * 4. On 401, session is refreshed and request is retried once
+ *
+ * Error handling:
+ * - On 2xx: returns parsed JSON body as T
+ * - On 4xx/5xx with JSON body: returns error body as T
+ *   (which has { success: false, errors: [...] })
+ * - On network error (no response): re-throws
  *
  * @example
- *
  * const response = await postApiAuthLogin({ identity, password })
  *
  * if (!response.success) {
@@ -159,62 +110,49 @@ return AXIOS_INSTANCE(originalRequest)
  *   return
  * }
  * console.log(response.result.accessToken)
- *
  */
-export const customInstance = <T>(
-  config: AxiosRequestConfig,
-  options?: AxiosRequestConfig
-): Promise<ToApiReturn<T>> => {
-   
-  const source = axios.CancelToken.source()
+export const customFetch = async <T>(url: string, options?: RequestInit): Promise<T> => {
+  const authHeaders = await getAuthHeaders()
 
-  const promise = AXIOS_INSTANCE({
-    ...config,
+  const fullUrl = url.startsWith('http') ? url : `${GATEWAY_URL}${url}`
+
+  const response = await fetch(fullUrl, {
     ...options,
-    cancelToken: source.token
+    credentials: 'include',
+    headers: {
+      ...options?.headers,
+      ...authHeaders
+    }
   })
-    .then(({ data }) => {
-      return data as ToApiReturn<T>
-    })
-    .catch((error: AxiosError) => {
-      // Handle cancelled requests
-      if (axios.isCancel(error)) {
-        throw error
+
+  // Handle 401: refresh session and retry once
+  if (response.status === 401 && typeof window !== 'undefined') {
+    await forceRefreshSession()
+    const freshAuthHeaders = await getAuthHeaders()
+
+    const retryResponse = await fetch(fullUrl, {
+      ...options,
+      credentials: 'include',
+      headers: {
+        ...options?.headers,
+        ...freshAuthHeaders
       }
-
-      const responseData = error.response?.data as
-        | {
-          success?: boolean
-          message?: string
-          errors?: Array<{ message: string; code?: string }>
-        }
-        | undefined
-
-      // If BE already returned error format, use it
-      if (responseData && responseData.success === false && responseData.errors) {
-        return responseData as ToApiReturn<T>
-      }
-
-      // Create unified error response
-      const errorResponse: ApiReturnFailure = {
-        success: false,
-        errors: [
-          {
-            message: responseData?.message || error.message || 'An unexpected error occurred',
-            code: error.code || 'UNKNOWN_ERROR'
-          }
-        ]
-      }
-
-      return errorResponse as ToApiReturn<T>
     })
 
-  // @ts-expect-error adding cancel method to promise
-  promise.cancel = () => {
-    source.cancel('Query was cancelled')
+    if (retryResponse.status === 401) {
+      window.location.href = '/login?error=session_expired'
+      throw new Error('Session expired, redirecting to login')
+    }
+
+    return retryResponse.json() as Promise<T>
   }
 
-  return promise
+  // For non-2xx responses, still return the JSON body so react-query
+  // can use success/errors for type narrowing
+  return response.json() as Promise<T>
 }
 
-export default customInstance
+// Error type for react-query
+export type ErrorType<Error> = Error
+
+export default customFetch

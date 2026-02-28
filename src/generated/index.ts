@@ -1,1 +1,1 @@
-export * from './identity-api';
+export * from './identity-api'

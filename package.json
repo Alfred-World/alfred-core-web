@@ -53,7 +53,6 @@
     "@tiptap/react": "3.19.0",
     "@tiptap/starter-kit": "3.19.0",
     "apexcharts": "5.3.6",
-    "axios": "^1.13.4",
     "bootstrap-icons": "1.13.1",
     "classnames": "2.5.1",
     "cmdk": "1.1.1",
