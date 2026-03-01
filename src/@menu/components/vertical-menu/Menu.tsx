@@ -2,7 +2,7 @@
 
 // React Imports
 import { createContext, forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { ForwardRefRenderFunction, MenuHTMLAttributes, MutableRefObject, ReactElement, ReactNode } from 'react'
+import type { ForwardRefRenderFunction, MenuHTMLAttributes, RefObject, ReactElement, ReactNode } from 'react'
 
 // Next Imports
 import { usePathname } from 'next/navigation'
@@ -75,7 +75,7 @@ export type VerticalMenuContextProps = {
   /**
    * @ignore
    */
-  openSubmenusRef?: MutableRefObject<OpenSubmenu[]>
+  openSubmenusRef?: RefObject<OpenSubmenu[]>
 
   /**
    * @ignore

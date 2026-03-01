@@ -1,6 +1,6 @@
 // React Imports
 import { forwardRef, useEffect, useState } from 'react'
-import type { ForwardRefRenderFunction, HTMLAttributes, MutableRefObject } from 'react'
+import type { ForwardRefRenderFunction, HTMLAttributes, RefObject } from 'react'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -48,7 +48,7 @@ const SubMenuContent: ForwardRefRenderFunction<HTMLDivElement, SubMenuContentPro
   const [mounted, setMounted] = useState(false)
 
   // Refs
-  const SubMenuContentRef = ref as MutableRefObject<HTMLDivElement>
+  const SubMenuContentRef = ref as RefObject<HTMLDivElement>
 
   useEffect(() => {
     if (mounted) {

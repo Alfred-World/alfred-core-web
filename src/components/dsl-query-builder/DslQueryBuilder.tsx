@@ -12,7 +12,7 @@ import { buildDslQuery } from './buildDslQuery'
 import { getOperatorsForDataType } from './operators'
 
 // Generate unique ID
-const generateId = () => `filter_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
+const generateId = () => `filter_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`
 
 // Serialize conditions to JSON string (URLSearchParams will handle encoding)
 function serializeConditions(conditions: FilterCondition[]): string {

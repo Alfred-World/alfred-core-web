@@ -66,6 +66,24 @@ const eslintConfig = [
     }
   },
 
+  // Type-aware rules — warn on any @deprecated symbol (function, method, class, React prop…)
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['src/generated/**'],
+    plugins: {
+      '@typescript-eslint': tseslint.plugin
+    },
+    languageOptions: {
+      parserOptions: {
+        project: true,
+        tsconfigRootDir: import.meta.dirname
+      }
+    },
+    rules: {
+      '@typescript-eslint/no-deprecated': 'warn'
+    }
+  },
+
   // Custom rules for all files (excluding generated)
   {
     ignores: ['src/generated/**'],

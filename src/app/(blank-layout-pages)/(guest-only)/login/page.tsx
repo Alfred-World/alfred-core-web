@@ -305,7 +305,7 @@ export default function SSOLoginPage() {
 
         <div className='login-fade-in-d4' style={{ paddingTop: 8 }}>
           <Button
-            className='login-btn-pulse'
+            className={isSigningIn ? undefined : 'login-btn-pulse'}
             variant='contained'
             fullWidth
             disabled={isSigningIn}
@@ -326,12 +326,16 @@ export default function SSOLoginPage() {
               fontFamily: 'inherit',
               position: 'relative',
               overflow: 'hidden',
-              transition: 'all 0.3s',
+              transition: 'background-color 0.3s, box-shadow 0.3s',
               '&:hover': {
                 bgcolor: '#675dd8',
                 background: 'linear-gradient(90deg, #7367f0 0%, #8e85f3 45%, #a69ff6 50%, #8e85f3 55%, #7367f0 100%)',
                 backgroundSize: '200% 100%',
-              }
+              },
+              '&.Mui-disabled': {
+                bgcolor: '#7367f0',
+                color: 'rgba(255,255,255,0.85)',
+              },
             }}
           >
             {isSigningIn ? 'Redirecting to SSO...' : 'Log in with Alfred SSO'}

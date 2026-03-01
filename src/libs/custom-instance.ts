@@ -1,4 +1,6 @@
-import { getSession } from 'next-auth/react'
+import { getSession, signOut } from 'next-auth/react'
+
+import type { Session } from 'next-auth'
 
 /**
  * Base interface for API return types with common properties.
@@ -42,41 +44,73 @@ export type ToApiReturn<T> = T extends { result?: infer R | null } ? ApiReturn<N
 /** Gateway base URL */
 export const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || 'https://gateway.test'
 
+// ─── Session caching to reduce /api/auth/session calls ────────────────────────
+let cachedSession: Session | null = null
+let sessionCacheTime = 0
+const SESSION_CACHE_TTL = 60_000 // 60 seconds
+
 // Track if we're currently refreshing the session
 let isRefreshing = false
-let refreshPromise: Promise<unknown> | null = null
+let refreshPromise: Promise<Session | null> | null = null
 
 /**
- * Force refresh the NextAuth session to get new tokens
+ * Get session from cache or fetch fresh one.
+ * Caches for 60s to avoid excessive /api/auth/session calls.
  */
-async function forceRefreshSession() {
+async function getCachedSession(): Promise<Session | null> {
+  if (typeof window === 'undefined') return null
+
+  const now = Date.now()
+
+  // Return cached session if still valid
+  if (cachedSession && now - sessionCacheTime < SESSION_CACHE_TTL) {
+    return cachedSession
+  }
+
+  // Reuse in-flight request if already refreshing
   if (isRefreshing && refreshPromise) {
     return refreshPromise
   }
 
   isRefreshing = true
-  refreshPromise = fetch('/api/auth/session', {
-    method: 'GET',
-    credentials: 'include'
-  }).finally(() => {
+  refreshPromise = getSession().then(session => {
+    cachedSession = session
+    sessionCacheTime = Date.now()
     isRefreshing = false
     refreshPromise = null
+
+    return session
+  }).catch(() => {
+    isRefreshing = false
+    refreshPromise = null
+
+    return null
   })
 
   return refreshPromise
 }
 
 /**
- * Get authorization headers from NextAuth session.
- * Redirects to login if session is expired.
+ * Force refresh the session (clears cache)
+ */
+async function forceRefreshSession(): Promise<Session | null> {
+  cachedSession = null
+  sessionCacheTime = 0
+
+  return getCachedSession()
+}
+
+/**
+ * Get authorization headers from cached session.
+ * Redirects to login if session has refresh error.
  */
 async function getAuthHeaders(): Promise<Record<string, string>> {
-  if (typeof window === 'undefined') return {}
-
-  const session = await getSession()
+  const session = await getCachedSession()
 
   if (session?.error === 'RefreshAccessTokenError') {
-    window.location.href = '/login?error=session_expired'
+    // Clear cache and redirect
+    cachedSession = null
+    await signOut({ callbackUrl: '/login?error=session_expired' })
     throw new Error('Session expired, redirecting to login')
   }
 
@@ -140,7 +174,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     })
 
     if (retryResponse.status === 401) {
-      window.location.href = '/login?error=session_expired'
+      await signOut({ callbackUrl: '/login?error=session_expired' })
       throw new Error('Session expired, redirecting to login')
     }
 

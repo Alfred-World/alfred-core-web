@@ -32,6 +32,16 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     label: 'Units',
     icon: 'tabler-ruler-measure',
     href: '/units'
+  },
+  {
+    label: 'Assets',
+    icon: 'tabler-package',
+    href: '/assets'
+  },
+  {
+    label: 'Commodities',
+    icon: 'tabler-chart-line',
+    href: '/commodities'
   }
 ]
 

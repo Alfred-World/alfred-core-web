@@ -898,6 +898,53 @@ export interface AssetLogDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface AttachmentDto {
+  id?: string
+  targetId?: string
+  targetType?: string
+  fileName?: string
+  contentType?: string
+  fileSize?: number
+  purpose?: string
+  downloadUrl?: string
+  createdAt?: string
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface AttachmentDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: AttachmentDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface AttachmentDtoListApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: AttachmentDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 export interface BrandCategoryDto {
   id?: string
   name?: string
@@ -1116,6 +1163,66 @@ export interface CategoryTreeNodeDtoListApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface CommodityDto {
+  id?: string
+  code?: string
+  name?: string
+  assetClass?: string
+  /** @nullable */
+  defaultUnitId?: string | null
+  /** @nullable */
+  defaultUnitName?: string | null
+  /** @nullable */
+  defaultUnitCode?: string | null
+  /** @nullable */
+  description?: string | null
+  createdAt?: string
+}
+
+export interface CommodityDtoPageResult {
+  items?: CommodityDto[]
+  page?: number
+  pageSize?: number
+  total?: number
+  readonly totalPages?: number
+  readonly hasPrevPage?: boolean
+  readonly hasNextPage?: boolean
+  /** @nullable */
+  readonly prevPage?: number | null
+  /** @nullable */
+  readonly nextPage?: number | null
+}
+
+/**
+ * Paginated API response (unified with error support).
+Same discriminated union pattern as ApiResponse.
+ */
+export interface CommodityDtoApiPagedResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: CommodityDtoPageResult | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface CommodityDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: CommodityDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 export interface ConvertResultDto {
   fromValue?: number
   fromUnitCode?: string
@@ -1198,6 +1305,30 @@ export interface CreateCategoryRequest {
   formSchema?: string
 }
 
+export interface CreateCommodityRequest {
+  code?: string
+  name?: string
+  assetClass?: string
+  /** @nullable */
+  defaultUnitId?: string | null
+  /** @nullable */
+  description?: string | null
+}
+
+export interface CreateInvestmentTransactionRequest {
+  transactionType?: string
+  transactionDate?: string
+  quantity?: number
+  unitId?: string
+  pricePerUnit?: number
+  totalAmount?: number
+  feeAmount?: number
+  /** @nullable */
+  financeTxnId?: string | null
+  /** @nullable */
+  notes?: string | null
+}
+
 export type UnitCategory = (typeof UnitCategory)[keyof typeof UnitCategory]
 
 export const UnitCategory = {
@@ -1264,6 +1395,28 @@ export interface DownloadUrlResultDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface FileUploadResultDto {
+  objectKey?: string
+  fileName?: string
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface FileUploadResultDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: FileUploadResultDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 /**
  * Request to generate a presigned download URL
  */
@@ -1288,6 +1441,73 @@ export interface GenerateUploadUrlRequest {
    * @nullable
    */
   folder?: string | null
+}
+
+export interface InvestmentTransactionDto {
+  id?: string
+  commodityId?: string
+  /** @nullable */
+  commodityName?: string | null
+  transactionType?: string
+  transactionDate?: string
+  quantity?: number
+  unitId?: string
+  /** @nullable */
+  unitName?: string | null
+  /** @nullable */
+  unitCode?: string | null
+  pricePerUnit?: number
+  totalAmount?: number
+  feeAmount?: number
+  /** @nullable */
+  financeTxnId?: string | null
+  /** @nullable */
+  notes?: string | null
+  createdAt?: string
+}
+
+export interface InvestmentTransactionDtoPageResult {
+  items?: InvestmentTransactionDto[]
+  page?: number
+  pageSize?: number
+  total?: number
+  readonly totalPages?: number
+  readonly hasPrevPage?: boolean
+  readonly hasNextPage?: boolean
+  /** @nullable */
+  readonly prevPage?: number | null
+  /** @nullable */
+  readonly nextPage?: number | null
+}
+
+/**
+ * Paginated API response (unified with error support).
+Same discriminated union pattern as ApiResponse.
+ */
+export interface InvestmentTransactionDtoApiPagedResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: InvestmentTransactionDtoPageResult | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface InvestmentTransactionDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: InvestmentTransactionDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
 }
 
 export interface UnitCountByCategoryDto {
@@ -1473,6 +1693,15 @@ export interface UpdateCategoryRequest {
   /** @nullable */
   parentId?: string | null
   formSchema?: string
+}
+
+export interface UpdateCommodityRequest {
+  name?: string
+  assetClass?: string
+  /** @nullable */
+  defaultUnitId?: string | null
+  /** @nullable */
+  description?: string | null
 }
 
 export interface UpdateUnitRequest {
@@ -1790,6 +2019,18 @@ Available views depend on the endpoint (e.g., "list", "detail", "minimal").
   view?: string
 }
 
+export type PostApiV1AttachmentsBody = {
+  file?: Blob
+  targetId?: string
+  targetType?: string
+  purpose?: string
+}
+
+export type GetApiV1AttachmentsParams = {
+  targetId?: string
+  targetType?: string
+}
+
 export type GetApiV1BrandsParams = {
   /**
    * Page number (1-based)
@@ -1847,6 +2088,63 @@ export type GetApiV1CategoriesTreeParams = {
   type?: CategoryType
   page?: number
   pageSize?: number
+}
+
+export type GetApiV1CommoditiesParams = {
+  /**
+   * Page number (1-based)
+   */
+  page?: number
+  /**
+   * Number of items per page
+   */
+  pageSize?: number
+  /**
+ * Filter expression using DSL syntax
+Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
+ */
+  filter?: string
+  /**
+ * Sort expression (comma-separated)
+Example: "name,-createdAt" (ascending by name, descending by createdAt)
+ */
+  sort?: string
+  /**
+ * View name to determine which fields to return.
+Available views depend on the endpoint (e.g., "list", "detail", "minimal").
+ */
+  view?: string
+}
+
+export type GetApiV1CommoditiesCommodityIdTransactionsParams = {
+  /**
+   * Page number (1-based)
+   */
+  page?: number
+  /**
+   * Number of items per page
+   */
+  pageSize?: number
+  /**
+ * Filter expression using DSL syntax
+Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
+ */
+  filter?: string
+  /**
+ * Sort expression (comma-separated)
+Example: "name,-createdAt" (ascending by name, descending by createdAt)
+ */
+  sort?: string
+  /**
+ * View name to determine which fields to return.
+Available views depend on the endpoint (e.g., "list", "detail", "minimal").
+ */
+  view?: string
+}
+
+export type PostApiV1FilesUploadBody = {
+  file?: Blob
+  folder?: string
 }
 
 export type GetApiV1UnitsParams = {
@@ -7591,6 +7889,291 @@ export const useDeleteApiV1AssetsAssetIdLogsLogId = <TError = ErrorType<ApiError
 }
 
 /**
+ * @summary Upload a file and attach it to a target entity.
+ */
+export const getPostApiV1AttachmentsUrl = () => {
+  return `/api/v1/attachments`
+}
+
+export const postApiV1Attachments = async (
+  postApiV1AttachmentsBody: PostApiV1AttachmentsBody,
+  options?: RequestInit
+): Promise<AttachmentDtoApiResponse> => {
+  const formData = new FormData()
+  if (postApiV1AttachmentsBody.file !== undefined) {
+    formData.append(`file`, postApiV1AttachmentsBody.file)
+  }
+  if (postApiV1AttachmentsBody.targetId !== undefined) {
+    formData.append(`targetId`, postApiV1AttachmentsBody.targetId)
+  }
+  if (postApiV1AttachmentsBody.targetType !== undefined) {
+    formData.append(`targetType`, postApiV1AttachmentsBody.targetType)
+  }
+  if (postApiV1AttachmentsBody.purpose !== undefined) {
+    formData.append(`purpose`, postApiV1AttachmentsBody.purpose)
+  }
+
+  return customFetch<AttachmentDtoApiResponse>(getPostApiV1AttachmentsUrl(), {
+    ...options,
+    method: 'POST',
+    body: formData
+  })
+}
+
+export const getPostApiV1AttachmentsMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1Attachments>>,
+    TError,
+    { data: PostApiV1AttachmentsBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1Attachments>>,
+  TError,
+  { data: PostApiV1AttachmentsBody },
+  TContext
+> => {
+  const mutationKey = ['postApiV1Attachments']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1Attachments>>,
+    { data: PostApiV1AttachmentsBody }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1Attachments(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AttachmentsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Attachments>>>
+export type PostApiV1AttachmentsMutationBody = PostApiV1AttachmentsBody
+export type PostApiV1AttachmentsMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Upload a file and attach it to a target entity.
+ */
+export const usePostApiV1Attachments = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1Attachments>>,
+      TError,
+      { data: PostApiV1AttachmentsBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1Attachments>>,
+  TError,
+  { data: PostApiV1AttachmentsBody },
+  TContext
+> => {
+  return useMutation(getPostApiV1AttachmentsMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary List all attachments for a target entity. URLs are presigned (time-limited).
+ */
+export const getGetApiV1AttachmentsUrl = (params?: GetApiV1AttachmentsParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0 ? `/api/v1/attachments?${stringifiedParams}` : `/api/v1/attachments`
+}
+
+export const getApiV1Attachments = async (
+  params?: GetApiV1AttachmentsParams,
+  options?: RequestInit
+): Promise<AttachmentDtoListApiResponse> => {
+  return customFetch<AttachmentDtoListApiResponse>(getGetApiV1AttachmentsUrl(params), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AttachmentsQueryKey = (params?: GetApiV1AttachmentsParams) => {
+  return [`/api/v1/attachments`, ...(params ? [params] : [])] as const
+}
+
+export const getGetApiV1AttachmentsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AttachmentsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AttachmentsQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Attachments>>> = ({ signal }) =>
+    getApiV1Attachments(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1Attachments>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AttachmentsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Attachments>>>
+export type GetApiV1AttachmentsQueryError = ErrorType<unknown>
+
+export function useGetApiV1Attachments<
+  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+  TError = ErrorType<unknown>
+>(
+  params: undefined | GetApiV1AttachmentsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1Attachments>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1Attachments>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1Attachments<
+  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AttachmentsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1Attachments>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1Attachments>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1Attachments<
+  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AttachmentsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary List all attachments for a target entity. URLs are presigned (time-limited).
+ */
+
+export function useGetApiV1Attachments<
+  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AttachmentsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AttachmentsQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Delete an attachment (removes DB record and R2 object).
+ */
+export const getDeleteApiV1AttachmentsIdUrl = (id: string) => {
+  return `/api/v1/attachments/${id}`
+}
+
+export const deleteApiV1AttachmentsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteApiV1AttachmentsIdUrl(id), {
+    ...options,
+    method: 'DELETE'
+  })
+}
+
+export const getDeleteApiV1AttachmentsIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, TError, { id: string }, TContext>
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteApiV1AttachmentsId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, { id: string }> = props => {
+    const { id } = props ?? {}
+
+    return deleteApiV1AttachmentsId(id, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteApiV1AttachmentsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>>
+
+export type DeleteApiV1AttachmentsIdMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Delete an attachment (removes DB record and R2 object).
+ */
+export const useDeleteApiV1AttachmentsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>,
+      TError,
+      { id: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteApiV1AttachmentsIdMutationOptions(options), queryClient)
+}
+
+/**
  * @summary Get paginated list of brands with optional DSL filtering and sorting.
  */
 export const getGetApiV1BrandsUrl = (params?: GetApiV1BrandsParams) => {
@@ -8880,6 +9463,1004 @@ export function useGetApiV1CategoriesCountsByType<
 }
 
 /**
+ * @summary Get paginated list of commodities with optional DSL filtering and sorting.
+ */
+export const getGetApiV1CommoditiesUrl = (params?: GetApiV1CommoditiesParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0 ? `/api/v1/commodities?${stringifiedParams}` : `/api/v1/commodities`
+}
+
+export const getApiV1Commodities = async (
+  params?: GetApiV1CommoditiesParams,
+  options?: RequestInit
+): Promise<CommodityDtoApiPagedResponse> => {
+  return customFetch<CommodityDtoApiPagedResponse>(getGetApiV1CommoditiesUrl(params), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1CommoditiesQueryKey = (params?: GetApiV1CommoditiesParams) => {
+  return [`/api/v1/commodities`, ...(params ? [params] : [])] as const
+}
+
+export const getGetApiV1CommoditiesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  params?: GetApiV1CommoditiesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1CommoditiesQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Commodities>>> = ({ signal }) =>
+    getApiV1Commodities(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1Commodities>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1CommoditiesQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Commodities>>>
+export type GetApiV1CommoditiesQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetApiV1Commodities<
+  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  params: undefined | GetApiV1CommoditiesParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1Commodities>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1Commodities>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1Commodities<
+  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  params?: GetApiV1CommoditiesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1Commodities>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1Commodities>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1Commodities<
+  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  params?: GetApiV1CommoditiesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of commodities with optional DSL filtering and sorting.
+ */
+
+export function useGetApiV1Commodities<
+  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  params?: GetApiV1CommoditiesParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1CommoditiesQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Create a new commodity.
+ */
+export const getPostApiV1CommoditiesUrl = () => {
+  return `/api/v1/commodities`
+}
+
+export const postApiV1Commodities = async (
+  createCommodityRequest: CreateCommodityRequest,
+  options?: RequestInit
+): Promise<CommodityDtoApiResponse> => {
+  return customFetch<CommodityDtoApiResponse>(getPostApiV1CommoditiesUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(createCommodityRequest)
+  })
+}
+
+export const getPostApiV1CommoditiesMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1Commodities>>,
+    TError,
+    { data: CreateCommodityRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1Commodities>>,
+  TError,
+  { data: CreateCommodityRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1Commodities']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1Commodities>>,
+    { data: CreateCommodityRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1Commodities(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1CommoditiesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Commodities>>>
+export type PostApiV1CommoditiesMutationBody = CreateCommodityRequest
+export type PostApiV1CommoditiesMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Create a new commodity.
+ */
+export const usePostApiV1Commodities = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1Commodities>>,
+      TError,
+      { data: CreateCommodityRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1Commodities>>,
+  TError,
+  { data: CreateCommodityRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1CommoditiesMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Get a single commodity by ID.
+ */
+export const getGetApiV1CommoditiesIdUrl = (id: string) => {
+  return `/api/v1/commodities/${id}`
+}
+
+export const getApiV1CommoditiesId = async (id: string, options?: RequestInit): Promise<CommodityDtoApiResponse> => {
+  return customFetch<CommodityDtoApiResponse>(getGetApiV1CommoditiesIdUrl(id), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1CommoditiesIdQueryKey = (id: string) => {
+  return [`/api/v1/commodities/${id}`] as const
+}
+
+export const getGetApiV1CommoditiesIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1CommoditiesIdQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CommoditiesId>>> = ({ signal }) =>
+    getApiV1CommoditiesId(id, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1CommoditiesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1CommoditiesId>>>
+export type GetApiV1CommoditiesIdQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetApiV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  id: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1CommoditiesId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1CommoditiesId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a single commodity by ID.
+ */
+
+export function useGetApiV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1CommoditiesIdQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Update an existing commodity.
+ */
+export const getPutApiV1CommoditiesIdUrl = (id: string) => {
+  return `/api/v1/commodities/${id}`
+}
+
+export const putApiV1CommoditiesId = async (
+  id: string,
+  updateCommodityRequest: UpdateCommodityRequest,
+  options?: RequestInit
+): Promise<CommodityDtoApiResponse> => {
+  return customFetch<CommodityDtoApiResponse>(getPutApiV1CommoditiesIdUrl(id), {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(updateCommodityRequest)
+  })
+}
+
+export const getPutApiV1CommoditiesIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+    TError,
+    { id: string; data: UpdateCommodityRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+  TError,
+  { id: string; data: UpdateCommodityRequest },
+  TContext
+> => {
+  const mutationKey = ['putApiV1CommoditiesId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+    { id: string; data: UpdateCommodityRequest }
+  > = props => {
+    const { id, data } = props ?? {}
+
+    return putApiV1CommoditiesId(id, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PutApiV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1CommoditiesId>>>
+export type PutApiV1CommoditiesIdMutationBody = UpdateCommodityRequest
+export type PutApiV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Update an existing commodity.
+ */
+export const usePutApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+      TError,
+      { id: string; data: UpdateCommodityRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+  TError,
+  { id: string; data: UpdateCommodityRequest },
+  TContext
+> => {
+  return useMutation(getPutApiV1CommoditiesIdMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Delete a commodity by ID.
+ */
+export const getDeleteApiV1CommoditiesIdUrl = (id: string) => {
+  return `/api/v1/commodities/${id}`
+}
+
+export const deleteApiV1CommoditiesId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteApiV1CommoditiesIdUrl(id), {
+    ...options,
+    method: 'DELETE'
+  })
+}
+
+export const getDeleteApiV1CommoditiesIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, TError, { id: string }, TContext>
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteApiV1CommoditiesId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, { id: string }> = props => {
+    const { id } = props ?? {}
+
+    return deleteApiV1CommoditiesId(id, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteApiV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>>
+
+export type DeleteApiV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Delete a commodity by ID.
+ */
+export const useDeleteApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>,
+      TError,
+      { id: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteApiV1CommoditiesIdMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Get paginated list of investment transactions for a commodity.
+ */
+export const getGetApiV1CommoditiesCommodityIdTransactionsUrl = (
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams
+) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/commodities/${commodityId}/transactions?${stringifiedParams}`
+    : `/api/v1/commodities/${commodityId}/transactions`
+}
+
+export const getApiV1CommoditiesCommodityIdTransactions = async (
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  options?: RequestInit
+): Promise<InvestmentTransactionDtoApiPagedResponse> => {
+  return customFetch<InvestmentTransactionDtoApiPagedResponse>(
+    getGetApiV1CommoditiesCommodityIdTransactionsUrl(commodityId, params),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1CommoditiesCommodityIdTransactionsQueryKey = (
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams
+) => {
+  return [`/api/v1/commodities/${commodityId}/transactions`, ...(params ? [params] : [])] as const
+}
+
+export const getGetApiV1CommoditiesCommodityIdTransactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId, params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>> = ({ signal }) =>
+    getApiV1CommoditiesCommodityIdTransactions(commodityId, params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!commodityId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1CommoditiesCommodityIdTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>
+>
+export type GetApiV1CommoditiesCommodityIdTransactionsQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetApiV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  params: undefined | GetApiV1CommoditiesCommodityIdTransactionsParams,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get paginated list of investment transactions for a commodity.
+ */
+
+export function useGetApiV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1CommoditiesCommodityIdTransactionsQueryOptions(commodityId, params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Create a new investment transaction for a commodity.
+ */
+export const getPostApiV1CommoditiesCommodityIdTransactionsUrl = (commodityId: string) => {
+  return `/api/v1/commodities/${commodityId}/transactions`
+}
+
+export const postApiV1CommoditiesCommodityIdTransactions = async (
+  commodityId: string,
+  createInvestmentTransactionRequest: CreateInvestmentTransactionRequest,
+  options?: RequestInit
+): Promise<InvestmentTransactionDtoApiResponse> => {
+  return customFetch<InvestmentTransactionDtoApiResponse>(
+    getPostApiV1CommoditiesCommodityIdTransactionsUrl(commodityId),
+    {
+      ...options,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+      body: JSON.stringify(createInvestmentTransactionRequest)
+    }
+  )
+}
+
+export const getPostApiV1CommoditiesCommodityIdTransactionsMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+    TError,
+    { commodityId: string; data: CreateInvestmentTransactionRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+  TError,
+  { commodityId: string; data: CreateInvestmentTransactionRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1CommoditiesCommodityIdTransactions']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+    { commodityId: string; data: CreateInvestmentTransactionRequest }
+  > = props => {
+    const { commodityId, data } = props ?? {}
+
+    return postApiV1CommoditiesCommodityIdTransactions(commodityId, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1CommoditiesCommodityIdTransactionsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>
+>
+export type PostApiV1CommoditiesCommodityIdTransactionsMutationBody = CreateInvestmentTransactionRequest
+export type PostApiV1CommoditiesCommodityIdTransactionsMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Create a new investment transaction for a commodity.
+ */
+export const usePostApiV1CommoditiesCommodityIdTransactions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+      TError,
+      { commodityId: string; data: CreateInvestmentTransactionRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+  TError,
+  { commodityId: string; data: CreateInvestmentTransactionRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1CommoditiesCommodityIdTransactionsMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Get a single investment transaction by ID.
+ */
+export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl = (
+  commodityId: string,
+  transactionId: string
+) => {
+  return `/api/v1/commodities/${commodityId}/transactions/${transactionId}`
+}
+
+export const getApiV1CommoditiesCommodityIdTransactionsTransactionId = async (
+  commodityId: string,
+  transactionId: string,
+  options?: RequestInit
+): Promise<InvestmentTransactionDtoApiResponse> => {
+  return customFetch<InvestmentTransactionDtoApiResponse>(
+    getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl(commodityId, transactionId),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryKey = (
+  commodityId: string,
+  transactionId: string
+) => {
+  return [`/api/v1/commodities/${commodityId}/transactions/${transactionId}`] as const
+}
+
+export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  transactionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryKey(commodityId, transactionId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>> = ({
+    signal
+  }) =>
+    getApiV1CommoditiesCommodityIdTransactionsTransactionId(commodityId, transactionId, { signal, ...requestOptions })
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(commodityId && transactionId),
+    staleTime: 10000,
+    ...queryOptions
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+>
+export type GetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  transactionId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  transactionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  transactionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get a single investment transaction by ID.
+ */
+
+export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  commodityId: string,
+  transactionId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOptions(
+    commodityId,
+    transactionId,
+    options
+  )
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Delete an investment transaction by ID.
+ */
+export const getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl = (
+  commodityId: string,
+  transactionId: string
+) => {
+  return `/api/v1/commodities/${commodityId}/transactions/${transactionId}`
+}
+
+export const deleteApiV1CommoditiesCommodityIdTransactionsTransactionId = async (
+  commodityId: string,
+  transactionId: string,
+  options?: RequestInit
+): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(
+    getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl(commodityId, transactionId),
+    {
+      ...options,
+      method: 'DELETE'
+    }
+  )
+}
+
+export const getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+    TError,
+    { commodityId: string; transactionId: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError,
+  { commodityId: string; transactionId: string },
+  TContext
+> => {
+  const mutationKey = ['deleteApiV1CommoditiesCommodityIdTransactionsTransactionId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+    { commodityId: string; transactionId: string }
+  > = props => {
+    const { commodityId, transactionId } = props ?? {}
+
+    return deleteApiV1CommoditiesCommodityIdTransactionsTransactionId(commodityId, transactionId, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+>
+
+export type DeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Delete an investment transaction by ID.
+ */
+export const useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+      TError,
+      { commodityId: string; transactionId: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  TError,
+  { commodityId: string; transactionId: string },
+  TContext
+> => {
+  return useMutation(getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationOptions(options), queryClient)
+}
+
+/**
  * @summary Generate a presigned URL for direct file upload to Cloudflare R2.
 Flow: FE calls this → gets presigned URL → FE PUTs file directly to R2.
  */
@@ -9112,6 +10693,97 @@ export const useDeleteApiV1Files = <TError = ErrorType<ApiErrorResponse>, TConte
   queryClient?: QueryClient
 ): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1Files>>, TError, { data: DeleteFileRequest }, TContext> => {
   return useMutation(getDeleteApiV1FilesMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Upload a file to R2 via server-side proxy (avoids browser CORS on direct R2 uploads).
+Accepts multipart/form-data with a 'file' field and optional 'folder' field.
+ */
+export const getPostApiV1FilesUploadUrl = () => {
+  return `/api/v1/files/upload`
+}
+
+export const postApiV1FilesUpload = async (
+  postApiV1FilesUploadBody: PostApiV1FilesUploadBody,
+  options?: RequestInit
+): Promise<FileUploadResultDtoApiResponse> => {
+  const formData = new FormData()
+  if (postApiV1FilesUploadBody.file !== undefined) {
+    formData.append(`file`, postApiV1FilesUploadBody.file)
+  }
+  if (postApiV1FilesUploadBody.folder !== undefined) {
+    formData.append(`folder`, postApiV1FilesUploadBody.folder)
+  }
+
+  return customFetch<FileUploadResultDtoApiResponse>(getPostApiV1FilesUploadUrl(), {
+    ...options,
+    method: 'POST',
+    body: formData
+  })
+}
+
+export const getPostApiV1FilesUploadMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+    TError,
+    { data: PostApiV1FilesUploadBody },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+  TError,
+  { data: PostApiV1FilesUploadBody },
+  TContext
+> => {
+  const mutationKey = ['postApiV1FilesUpload']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+    { data: PostApiV1FilesUploadBody }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1FilesUpload(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1FilesUploadMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1FilesUpload>>>
+export type PostApiV1FilesUploadMutationBody = PostApiV1FilesUploadBody
+export type PostApiV1FilesUploadMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Upload a file to R2 via server-side proxy (avoids browser CORS on direct R2 uploads).
+Accepts multipart/form-data with a 'file' field and optional 'folder' field.
+ */
+export const usePostApiV1FilesUpload = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+      TError,
+      { data: PostApiV1FilesUploadBody },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+  TError,
+  { data: PostApiV1FilesUploadBody },
+  TContext
+> => {
+  return useMutation(getPostApiV1FilesUploadMutationOptions(options), queryClient)
 }
 
 /**
