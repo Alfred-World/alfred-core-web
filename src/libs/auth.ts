@@ -26,7 +26,10 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       throw new Error('No refresh token available')
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/token`, {
+    // Use internal gateway URL for server-side requests in Docker, fallback to public URL
+    const gatewayUrl = process.env.INTERNAL_GATEWAY_URL || process.env.NEXT_PUBLIC_GATEWAY_URL
+
+    const response = await fetch(`${gatewayUrl}/connect/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -79,8 +82,16 @@ export const authOptions: NextAuthOptions = {
       id: 'alfred-identity',
       name: 'Alfred Identity',
       type: 'oauth',
-      wellKnown: `${process.env.NEXT_PUBLIC_GATEWAY_URL}/.well-known/openid-configuration`,
-      authorization: { params: { scope: 'openid profile email offline_access' } },
+      // Use public URL for authorization (browser redirect)
+      authorization: {
+        url: `${process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/authorize`,
+        params: { scope: 'openid profile email offline_access' }
+      },
+      // Use internal URL for server-side token exchange
+      token: `${process.env.INTERNAL_GATEWAY_URL || process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/token`,
+      userinfo: `${process.env.INTERNAL_GATEWAY_URL || process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/userinfo`,
+      jwks_endpoint: `${process.env.INTERNAL_GATEWAY_URL || process.env.NEXT_PUBLIC_GATEWAY_URL}/.well-known/jwks.json`,
+      issuer: process.env.NEXT_PUBLIC_GATEWAY_URL,
       idToken: true,
       checks: ['pkce', 'state'],
       clientId: process.env.OIDC_CLIENT_ID!,
