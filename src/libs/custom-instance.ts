@@ -1,6 +1,7 @@
 import { getSession, signOut } from 'next-auth/react'
 
 import type { Session } from 'next-auth'
+import { NEXT_PUBLIC_GATEWAY_URL } from './env'
 
 /**
  * Base interface for API return types with common properties.
@@ -41,8 +42,8 @@ export type ApiReturn<T> = ApiReturnSuccess<T> | ApiReturnFailure
  */
 export type ToApiReturn<T> = T extends { result?: infer R | null } ? ApiReturn<NonNullable<R>> : ApiReturn<T>
 
-/** Gateway base URL */
-export const GATEWAY_URL = process.env.NEXT_PUBLIC_GATEWAY_URL || 'https://gateway.test'
+/** Gateway base URL — validated at build time via env.ts */
+export const GATEWAY_URL = NEXT_PUBLIC_GATEWAY_URL
 
 // ─── Session caching to reduce /api/auth/session calls ────────────────────────
 let cachedSession: Session | null = null

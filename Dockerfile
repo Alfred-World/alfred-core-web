@@ -2,20 +2,23 @@
 # Build Stage
 # ============================================
 FROM node:24-alpine AS base
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN npm install -g pnpm@10
 
 FROM base AS builder
 WORKDIR /app
 
-# Copy all source first (postinstall needs src/assets/iconify-icons/)
+# 1) Copy only dependency manifests first → cached pnpm install layer
+COPY package.json pnpm-lock.yaml .npmrc ./
+RUN --mount=type=cache,id=pnpm-core-web,target=/pnpm/store \
+    pnpm install --frozen-lockfile --ignore-scripts
+
+# 2) Copy source code (after deps are installed)
 COPY . .
 
-# Install dependencies (postinstall runs build:icons)
-RUN pnpm install --frozen-lockfile
+# 2.5) Run postinstall scripts (build:icons needs source files)
+RUN pnpm run build:icons
 
-# Build-time env vars (NEXT_PUBLIC_*) must be available at build time
+# 3) Build-time env vars (NEXT_PUBLIC_* are inlined into the JS bundle)
 ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_GATEWAY_URL
 ARG NEXT_PUBLIC_SSO_URL
@@ -25,6 +28,8 @@ ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_GATEWAY_URL=$NEXT_PUBLIC_GATEWAY_URL
 ENV NEXT_PUBLIC_SSO_URL=$NEXT_PUBLIC_SSO_URL
 ENV NEXT_PUBLIC_OIDC_CLIENT_ID=$NEXT_PUBLIC_OIDC_CLIENT_ID
+# Alias for backwards-compat with sso-config.ts
+ENV NEXT_PUBLIC_OAUTH_CLIENT_ID=$NEXT_PUBLIC_OIDC_CLIENT_ID
 
 RUN pnpm build
 
@@ -36,12 +41,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Copy standalone output
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
-# Install curl for healthcheck
 RUN apk --no-cache add curl
 
 EXPOSE 3000

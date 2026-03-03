@@ -165,7 +165,7 @@ export default function SSOLoginPage() {
   const [isSigningIn, setIsSigningIn] = useState(false)
 
   const rawCallbackUrl = searchParams.get('callbackUrl') || '/dashboards'
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://core.test'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL!
 
   const callbackUrl = rawCallbackUrl.startsWith('http')
     ? rawCallbackUrl

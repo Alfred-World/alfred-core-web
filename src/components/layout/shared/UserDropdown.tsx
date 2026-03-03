@@ -76,7 +76,7 @@ const UserDropdown = () => {
       // Redirect to Gateway SSO logout
       // Gateway will clear SSO cookie and then redirect to sso.test/login with force_logout
       // This will clear sso.test's NextAuth session and redirect back to core.test
-      const ssoUrl = process.env.NEXT_PUBLIC_SSO_URL || 'https://sso.test'
+      const ssoUrl = process.env.NEXT_PUBLIC_SSO_URL!
       const finalRedirectUrl = `${window.location.origin}/login?logout=true`
 
       // Use /api/auth/force-logout to clear sso.test session and redirect back
