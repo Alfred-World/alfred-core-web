@@ -71,6 +71,13 @@ export interface ActivityLogDtoApiPagedResponse {
 }
 
 /**
+ * Admin-only: force-reset a user's password without requiring their old password.
+ */
+export interface AdminResetPasswordRequest {
+  newPassword?: string
+}
+
+/**
  * Non-generic API error response for use when no result type is needed.
 Convenience type for error-only responses (e.g. global exception handler).
  */
@@ -408,6 +415,66 @@ export interface PermissionDtoListApiResponse {
   errors?: ApiError[] | null
 }
 
+/**
+ * Current user profile response
+ */
+export interface ProfileResponse {
+  id?: string
+  fullName?: string
+  email?: string
+  userName?: string
+  /** @nullable */
+  phoneNumber?: string | null
+  /** @nullable */
+  avatar?: string | null
+  twoFactorEnabled?: boolean
+  emailConfirmed?: boolean
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface ProfileResponseApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** Current user profile response */
+  result?: ProfileResponse | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Returns how many recovery codes remain unused vs the total generated.
+ */
+export interface RecoveryCodeStatusResponse {
+  remainingCount?: number
+  totalCount?: number
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface RecoveryCodeStatusResponseApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** Returns how many recovery codes remain unused vs the total generated. */
+  result?: RecoveryCodeStatusResponse | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 export interface ResetPasswordRequest {
   email?: string
   token?: string
@@ -500,6 +567,41 @@ export interface RotateSigningKeyResultApiResponse {
   /** @nullable */
   message?: string | null
   result?: RotateSigningKeyResult | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * An active session (refresh token) for the current user
+ */
+export interface SessionDto {
+  id?: string
+  /** @nullable */
+  device?: string | null
+  /** @nullable */
+  ipAddress?: string | null
+  /** @nullable */
+  location?: string | null
+  createdAt?: string
+  /** @nullable */
+  expiresAt?: string | null
+  isCurrentSession?: boolean
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SessionDtoIEnumerableApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: SessionDto[] | null
   /** @nullable */
   errors?: ApiError[] | null
 }
@@ -660,6 +762,17 @@ export interface StringIEnumerableApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface TokenResponseDto {
+  /** @nullable */
+  access_token?: string | null
+  /** @nullable */
+  refresh_token?: string | null
+  /** @nullable */
+  id_token?: string | null
+  token_type?: string
+  expires_in?: number
+}
+
 /**
  * Request model for updating an OAuth2 client application
  */
@@ -689,6 +802,20 @@ export interface UpdateApplicationRequest {
 
 export interface UpdateApplicationStatusRequest {
   isActive?: boolean
+}
+
+/**
+ * Request to update current user's profile
+ */
+export interface UpdateProfileRequest {
+  fullName?: string
+  /** @nullable */
+  phoneNumber?: string | null
+  /**
+   * Base64 encoded image or URL. Null to keep existing.
+   * @nullable
+   */
+  avatar?: string | null
 }
 
 export interface UpdateRoleRequest {
@@ -1936,7 +2063,7 @@ Available views depend on the endpoint (e.g., "list", "detail", "minimal").
   view?: string
 }
 
-export type GetIdentityUsersParams = {
+export type GetIdentityMgmtUsersParams = {
   /**
    * Page number (1-based)
    */
@@ -1962,7 +2089,7 @@ Available views depend on the endpoint (e.g., "list", "detail", "minimal").
   view?: string
 }
 
-export type GetIdentityUsersUserIdActivitiesParams = {
+export type GetIdentityMgmtUsersUserIdActivitiesParams = {
   page?: number
   pageSize?: number
 }
@@ -2184,6 +2311,500 @@ export type GetApiV1UnitsConvertParams = {
 }
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
+
+/**
+ * @summary [TEST] Always returns 401 — used to verify FE redirect behavior.
+Remove this endpoint after testing.
+ */
+export const getGetIdentityAccountTest401Url = () => {
+  return `/identity/account/test-401`
+}
+
+export const getIdentityAccountTest401 = async (options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getGetIdentityAccountTest401Url(), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetIdentityAccountTest401QueryKey = () => {
+  return [`/identity/account/test-401`] as const
+}
+
+export const getGetIdentityAccountTest401QueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+  TError = ErrorType<unknown>
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountTest401>>, TError, TData>>
+  request?: SecondParameter<typeof customFetch>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityAccountTest401QueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityAccountTest401>>> = ({ signal }) =>
+    getIdentityAccountTest401({ signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdentityAccountTest401QueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityAccountTest401>>>
+export type GetIdentityAccountTest401QueryError = ErrorType<unknown>
+
+export function useGetIdentityAccountTest401<
+  TData = Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+  TError = ErrorType<unknown>
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountTest401>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccountTest401>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccountTest401<
+  TData = Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountTest401>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccountTest401>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccountTest401<
+  TData = Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountTest401>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary [TEST] Always returns 401 — used to verify FE redirect behavior.
+Remove this endpoint after testing.
+ */
+
+export function useGetIdentityAccountTest401<
+  TData = Awaited<ReturnType<typeof getIdentityAccountTest401>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountTest401>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetIdentityAccountTest401QueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get current user's profile
+ */
+export const getGetIdentityAccountMeUrl = () => {
+  return `/identity/account/me`
+}
+
+export const getIdentityAccountMe = async (options?: RequestInit): Promise<ProfileResponseApiResponse> => {
+  return customFetch<ProfileResponseApiResponse>(getGetIdentityAccountMeUrl(), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetIdentityAccountMeQueryKey = () => {
+  return [`/identity/account/me`] as const
+}
+
+export const getGetIdentityAccountMeQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityAccountMe>>,
+  TError = ErrorType<ApiErrorResponse>
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountMe>>, TError, TData>>
+  request?: SecondParameter<typeof customFetch>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityAccountMeQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityAccountMe>>> = ({ signal }) =>
+    getIdentityAccountMe({ signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getIdentityAccountMe>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdentityAccountMeQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityAccountMe>>>
+export type GetIdentityAccountMeQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetIdentityAccountMe<
+  TData = Awaited<ReturnType<typeof getIdentityAccountMe>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountMe>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccountMe>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccountMe>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccountMe<
+  TData = Awaited<ReturnType<typeof getIdentityAccountMe>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountMe>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccountMe>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccountMe>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccountMe<
+  TData = Awaited<ReturnType<typeof getIdentityAccountMe>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountMe>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get current user's profile
+ */
+
+export function useGetIdentityAccountMe<
+  TData = Awaited<ReturnType<typeof getIdentityAccountMe>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountMe>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetIdentityAccountMeQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Update current user's profile (full name, phone number, avatar)
+ */
+export const getPutIdentityAccountProfileUrl = () => {
+  return `/identity/account/profile`
+}
+
+export const putIdentityAccountProfile = async (
+  updateProfileRequest: UpdateProfileRequest,
+  options?: RequestInit
+): Promise<ProfileResponseApiResponse> => {
+  return customFetch<ProfileResponseApiResponse>(getPutIdentityAccountProfileUrl(), {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(updateProfileRequest)
+  })
+}
+
+export const getPutIdentityAccountProfileMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putIdentityAccountProfile>>,
+    TError,
+    { data: UpdateProfileRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putIdentityAccountProfile>>,
+  TError,
+  { data: UpdateProfileRequest },
+  TContext
+> => {
+  const mutationKey = ['putIdentityAccountProfile']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putIdentityAccountProfile>>,
+    { data: UpdateProfileRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return putIdentityAccountProfile(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PutIdentityAccountProfileMutationResult = NonNullable<Awaited<ReturnType<typeof putIdentityAccountProfile>>>
+export type PutIdentityAccountProfileMutationBody = UpdateProfileRequest
+export type PutIdentityAccountProfileMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Update current user's profile (full name, phone number, avatar)
+ */
+export const usePutIdentityAccountProfile = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putIdentityAccountProfile>>,
+      TError,
+      { data: UpdateProfileRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof putIdentityAccountProfile>>,
+  TError,
+  { data: UpdateProfileRequest },
+  TContext
+> => {
+  return useMutation(getPutIdentityAccountProfileMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Get all active sessions (devices) for the current user
+ */
+export const getGetIdentityAccountSessionsUrl = () => {
+  return `/identity/account/sessions`
+}
+
+export const getIdentityAccountSessions = async (options?: RequestInit): Promise<SessionDtoIEnumerableApiResponse> => {
+  return customFetch<SessionDtoIEnumerableApiResponse>(getGetIdentityAccountSessionsUrl(), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetIdentityAccountSessionsQueryKey = () => {
+  return [`/identity/account/sessions`] as const
+}
+
+export const getGetIdentityAccountSessionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountSessions>>, TError, TData>>
+  request?: SecondParameter<typeof customFetch>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityAccountSessionsQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityAccountSessions>>> = ({ signal }) =>
+    getIdentityAccountSessions({ signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdentityAccountSessionsQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityAccountSessions>>>
+export type GetIdentityAccountSessionsQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetIdentityAccountSessions<
+  TData = Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountSessions>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccountSessions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccountSessions<
+  TData = Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountSessions>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccountSessions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccountSessions<
+  TData = Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountSessions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get all active sessions (devices) for the current user
+ */
+
+export function useGetIdentityAccountSessions<
+  TData = Awaited<ReturnType<typeof getIdentityAccountSessions>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccountSessions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetIdentityAccountSessionsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Revoke a specific session (device) — takes immediate effect via Redis
+ */
+export const getDeleteIdentityAccountSessionsIdUrl = (id: string) => {
+  return `/identity/account/sessions/${id}`
+}
+
+export const deleteIdentityAccountSessionsId = async (
+  id: string,
+  options?: RequestInit
+): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteIdentityAccountSessionsIdUrl(id), {
+    ...options,
+    method: 'DELETE'
+  })
+}
+
+export const getDeleteIdentityAccountSessionsIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteIdentityAccountSessionsId>>,
+    TError,
+    { id: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteIdentityAccountSessionsId>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['deleteIdentityAccountSessionsId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteIdentityAccountSessionsId>>,
+    { id: string }
+  > = props => {
+    const { id } = props ?? {}
+
+    return deleteIdentityAccountSessionsId(id, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteIdentityAccountSessionsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteIdentityAccountSessionsId>>
+>
+
+export type DeleteIdentityAccountSessionsIdMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Revoke a specific session (device) — takes immediate effect via Redis
+ */
+export const useDeleteIdentityAccountSessionsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteIdentityAccountSessionsId>>,
+      TError,
+      { id: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<Awaited<ReturnType<typeof deleteIdentityAccountSessionsId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteIdentityAccountSessionsIdMutationOptions(options), queryClient)
+}
 
 /**
  * @summary Change current user's password
@@ -2461,6 +3082,203 @@ export const usePostIdentityAccount2faDisable = <TError = ErrorType<ApiErrorResp
   queryClient?: QueryClient
 ): UseMutationResult<Awaited<ReturnType<typeof postIdentityAccount2faDisable>>, TError, void, TContext> => {
   return useMutation(getPostIdentityAccount2faDisableMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary View recovery codes status (remaining count of unused codes)
+ */
+export const getGetIdentityAccount2faRecoveryCodesUrl = () => {
+  return `/identity/account/2fa/recovery-codes`
+}
+
+export const getIdentityAccount2faRecoveryCodes = async (
+  options?: RequestInit
+): Promise<RecoveryCodeStatusResponseApiResponse> => {
+  return customFetch<RecoveryCodeStatusResponseApiResponse>(getGetIdentityAccount2faRecoveryCodesUrl(), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetIdentityAccount2faRecoveryCodesQueryKey = () => {
+  return [`/identity/account/2fa/recovery-codes`] as const
+}
+
+export const getGetIdentityAccount2faRecoveryCodesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+  TError = ErrorType<ApiErrorResponse>
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>, TError, TData>>
+  request?: SecondParameter<typeof customFetch>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityAccount2faRecoveryCodesQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>> = ({ signal }) =>
+    getIdentityAccount2faRecoveryCodes({ signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetIdentityAccount2faRecoveryCodesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>
+>
+export type GetIdentityAccount2faRecoveryCodesQueryError = ErrorType<ApiErrorResponse>
+
+export function useGetIdentityAccount2faRecoveryCodes<
+  TData = Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccount2faRecoveryCodes<
+  TData = Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+          TError,
+          Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetIdentityAccount2faRecoveryCodes<
+  TData = Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary View recovery codes status (remaining count of unused codes)
+ */
+
+export function useGetIdentityAccount2faRecoveryCodes<
+  TData = Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>,
+  TError = ErrorType<ApiErrorResponse>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityAccount2faRecoveryCodes>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetIdentityAccount2faRecoveryCodesQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Regenerate 10 new single-use recovery codes. All existing codes are invalidated immediately.
+ */
+export const getPostIdentityAccount2faRecoveryCodesRegenerateUrl = () => {
+  return `/identity/account/2fa/recovery-codes/regenerate`
+}
+
+export const postIdentityAccount2faRecoveryCodesRegenerate = async (
+  options?: RequestInit
+): Promise<StringIEnumerableApiResponse> => {
+  return customFetch<StringIEnumerableApiResponse>(getPostIdentityAccount2faRecoveryCodesRegenerateUrl(), {
+    ...options,
+    method: 'POST'
+  })
+}
+
+export const getPostIdentityAccount2faRecoveryCodesRegenerateMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postIdentityAccount2faRecoveryCodesRegenerate>>,
+    TError,
+    void,
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postIdentityAccount2faRecoveryCodesRegenerate>>,
+  TError,
+  void,
+  TContext
+> => {
+  const mutationKey = ['postIdentityAccount2faRecoveryCodesRegenerate']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postIdentityAccount2faRecoveryCodesRegenerate>>,
+    void
+  > = () => {
+    return postIdentityAccount2faRecoveryCodesRegenerate(requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostIdentityAccount2faRecoveryCodesRegenerateMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postIdentityAccount2faRecoveryCodesRegenerate>>
+>
+
+export type PostIdentityAccount2faRecoveryCodesRegenerateMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Regenerate 10 new single-use recovery codes. All existing codes are invalidated immediately.
+ */
+export const usePostIdentityAccount2faRecoveryCodesRegenerate = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postIdentityAccount2faRecoveryCodesRegenerate>>,
+      TError,
+      void,
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postIdentityAccount2faRecoveryCodesRegenerate>>,
+  TError,
+  void,
+  TContext
+> => {
+  return useMutation(getPostIdentityAccount2faRecoveryCodesRegenerateMutationOptions(options), queryClient)
 }
 
 /**
@@ -4283,7 +5101,7 @@ export const getPostConnectTokenUrl = () => {
 export const postConnectToken = async (
   postConnectTokenBody: PostConnectTokenBody,
   options?: RequestInit
-): Promise<void> => {
+): Promise<TokenResponseDto> => {
   const formUrlEncoded = new URLSearchParams()
   if (postConnectTokenBody.grant_type !== undefined) {
     formUrlEncoded.append(`grant_type`, postConnectTokenBody.grant_type)
@@ -4310,7 +5128,7 @@ export const postConnectToken = async (
     formUrlEncoded.append(`scope`, postConnectTokenBody.scope)
   }
 
-  return customFetch<void>(getPostConnectTokenUrl(), {
+  return customFetch<TokenResponseDto>(getPostConnectTokenUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', ...options?.headers },
@@ -4318,7 +5136,7 @@ export const postConnectToken = async (
   })
 }
 
-export const getPostConnectTokenMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+export const getPostConnectTokenMutationOptions = <TError = ErrorType<ProblemDetails>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
     Awaited<ReturnType<typeof postConnectToken>>,
     TError,
@@ -4353,12 +5171,12 @@ export const getPostConnectTokenMutationOptions = <TError = ErrorType<unknown>, 
 
 export type PostConnectTokenMutationResult = NonNullable<Awaited<ReturnType<typeof postConnectToken>>>
 export type PostConnectTokenMutationBody = PostConnectTokenBody
-export type PostConnectTokenMutationError = ErrorType<unknown>
+export type PostConnectTokenMutationError = ErrorType<ProblemDetails>
 
 /**
  * @summary OAuth2/OIDC Token Endpoint
  */
-export const usePostConnectToken = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostConnectToken = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
       Awaited<ReturnType<typeof postConnectToken>>,
@@ -5921,7 +6739,7 @@ export const useDeleteIdentityRolesIdPermissions = <TError = ErrorType<ApiErrorR
 /**
  * @summary Get paginated list of users
  */
-export const getGetIdentityUsersUrl = (params?: GetIdentityUsersParams) => {
+export const getGetIdentityMgmtUsersUrl = (params?: GetIdentityMgmtUsersParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -5932,62 +6750,62 @@ export const getGetIdentityUsersUrl = (params?: GetIdentityUsersParams) => {
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/identity/users?${stringifiedParams}` : `/identity/users`
+  return stringifiedParams.length > 0 ? `/identity/mgmt/users?${stringifiedParams}` : `/identity/mgmt/users`
 }
 
-export const getIdentityUsers = async (
-  params?: GetIdentityUsersParams,
+export const getIdentityMgmtUsers = async (
+  params?: GetIdentityMgmtUsersParams,
   options?: RequestInit
 ): Promise<UserDtoApiPagedResponse> => {
-  return customFetch<UserDtoApiPagedResponse>(getGetIdentityUsersUrl(params), {
+  return customFetch<UserDtoApiPagedResponse>(getGetIdentityMgmtUsersUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetIdentityUsersQueryKey = (params?: GetIdentityUsersParams) => {
-  return [`/identity/users`, ...(params ? [params] : [])] as const
+export const getGetIdentityMgmtUsersQueryKey = (params?: GetIdentityMgmtUsersParams) => {
+  return [`/identity/mgmt/users`, ...(params ? [params] : [])] as const
 }
 
-export const getGetIdentityUsersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getIdentityUsers>>,
+export const getGetIdentityMgmtUsersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetIdentityUsersParams,
+  params?: GetIdentityMgmtUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetIdentityUsersQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityMgmtUsersQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityUsers>>> = ({ signal }) =>
-    getIdentityUsers(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityMgmtUsers>>> = ({ signal }) =>
+    getIdentityMgmtUsers(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getIdentityUsers>>,
+    Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetIdentityUsersQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityUsers>>>
-export type GetIdentityUsersQueryError = ErrorType<ApiErrorResponse>
+export type GetIdentityMgmtUsersQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityMgmtUsers>>>
+export type GetIdentityMgmtUsersQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetIdentityUsers<
-  TData = Awaited<ReturnType<typeof getIdentityUsers>>,
+export function useGetIdentityMgmtUsers<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetIdentityUsersParams,
+  params: undefined | GetIdentityMgmtUsersParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsers>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsers>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsers>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsers>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsers>>
         >,
         'initialData'
       >
@@ -5995,18 +6813,18 @@ export function useGetIdentityUsers<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsers<
-  TData = Awaited<ReturnType<typeof getIdentityUsers>>,
+export function useGetIdentityMgmtUsers<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetIdentityUsersParams,
+  params?: GetIdentityMgmtUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsers>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsers>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsers>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsers>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsers>>
         >,
         'initialData'
       >
@@ -6014,13 +6832,13 @@ export function useGetIdentityUsers<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsers<
-  TData = Awaited<ReturnType<typeof getIdentityUsers>>,
+export function useGetIdentityMgmtUsers<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetIdentityUsersParams,
+  params?: GetIdentityMgmtUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -6029,18 +6847,18 @@ export function useGetIdentityUsers<
  * @summary Get paginated list of users
  */
 
-export function useGetIdentityUsers<
-  TData = Awaited<ReturnType<typeof getIdentityUsers>>,
+export function useGetIdentityMgmtUsers<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsers>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetIdentityUsersParams,
+  params?: GetIdentityMgmtUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetIdentityUsersQueryOptions(params, options)
+  const queryOptions = getGetIdentityMgmtUsersQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6052,60 +6870,63 @@ export function useGetIdentityUsers<
 /**
  * @summary Get user by ID
  */
-export const getGetIdentityUsersUserIdUrl = (userId: string) => {
-  return `/identity/users/${userId}`
+export const getGetIdentityMgmtUsersUserIdUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}`
 }
 
-export const getIdentityUsersUserId = async (userId: string, options?: RequestInit): Promise<UserDtoApiResponse> => {
-  return customFetch<UserDtoApiResponse>(getGetIdentityUsersUserIdUrl(userId), {
+export const getIdentityMgmtUsersUserId = async (
+  userId: string,
+  options?: RequestInit
+): Promise<UserDtoApiResponse> => {
+  return customFetch<UserDtoApiResponse>(getGetIdentityMgmtUsersUserIdUrl(userId), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetIdentityUsersUserIdQueryKey = (userId: string) => {
-  return [`/identity/users/${userId}`] as const
+export const getGetIdentityMgmtUsersUserIdQueryKey = (userId: string) => {
+  return [`/identity/mgmt/users/${userId}`] as const
 }
 
-export const getGetIdentityUsersUserIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+export const getGetIdentityMgmtUsersUserIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetIdentityUsersUserIdQueryKey(userId)
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityMgmtUsersUserIdQueryKey(userId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityUsersUserId>>> = ({ signal }) =>
-    getIdentityUsersUserId(userId, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>> = ({ signal }) =>
+    getIdentityMgmtUsersUserId(userId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!userId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+    Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetIdentityUsersUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityUsersUserId>>>
-export type GetIdentityUsersUserIdQueryError = ErrorType<ApiErrorResponse>
+export type GetIdentityMgmtUsersUserIdQueryResult = NonNullable<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>>
+export type GetIdentityMgmtUsersUserIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetIdentityUsersUserId<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+export function useGetIdentityMgmtUsersUserId<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   userId: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsersUserId>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>
         >,
         'initialData'
       >
@@ -6113,18 +6934,18 @@ export function useGetIdentityUsersUserId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsersUserId<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+export function useGetIdentityMgmtUsersUserId<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsersUserId>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>
         >,
         'initialData'
       >
@@ -6132,13 +6953,13 @@ export function useGetIdentityUsersUserId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsersUserId<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+export function useGetIdentityMgmtUsersUserId<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -6147,18 +6968,18 @@ export function useGetIdentityUsersUserId<
  * @summary Get user by ID
  */
 
-export function useGetIdentityUsersUserId<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserId>>,
+export function useGetIdentityMgmtUsersUserId<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetIdentityUsersUserIdQueryOptions(userId, options)
+  const queryOptions = getGetIdentityMgmtUsersUserIdQueryOptions(userId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6170,41 +6991,41 @@ export function useGetIdentityUsersUserId<
 /**
  * @summary Assign roles to a user
  */
-export const getPostIdentityUsersUserIdRolesUrl = (userId: string) => {
-  return `/identity/users/${userId}/roles`
+export const getPostIdentityMgmtUsersUserIdRolesUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}/roles`
 }
 
-export const postIdentityUsersUserIdRoles = async (
+export const postIdentityMgmtUsersUserIdRoles = async (
   userId: string,
-  postIdentityUsersUserIdRolesBody: string[],
+  postIdentityMgmtUsersUserIdRolesBody: string[],
   options?: RequestInit
 ): Promise<BooleanApiResponse> => {
-  return customFetch<BooleanApiResponse>(getPostIdentityUsersUserIdRolesUrl(userId), {
+  return customFetch<BooleanApiResponse>(getPostIdentityMgmtUsersUserIdRolesUrl(userId), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(postIdentityUsersUserIdRolesBody)
+    body: JSON.stringify(postIdentityMgmtUsersUserIdRolesBody)
   })
 }
 
-export const getPostIdentityUsersUserIdRolesMutationOptions = <
+export const getPostIdentityMgmtUsersUserIdRolesMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postIdentityUsersUserIdRoles>>,
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdRoles>>,
     TError,
     { userId: string; data: string[] },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdRoles>>,
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdRoles>>,
   TError,
   { userId: string; data: string[] },
   TContext
 > => {
-  const mutationKey = ['postIdentityUsersUserIdRoles']
+  const mutationKey = ['postIdentityMgmtUsersUserIdRoles']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6212,30 +7033,30 @@ export const getPostIdentityUsersUserIdRolesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postIdentityUsersUserIdRoles>>,
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdRoles>>,
     { userId: string; data: string[] }
   > = props => {
     const { userId, data } = props ?? {}
 
-    return postIdentityUsersUserIdRoles(userId, data, requestOptions)
+    return postIdentityMgmtUsersUserIdRoles(userId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostIdentityUsersUserIdRolesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdRoles>>
+export type PostIdentityMgmtUsersUserIdRolesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdRoles>>
 >
-export type PostIdentityUsersUserIdRolesMutationBody = string[]
-export type PostIdentityUsersUserIdRolesMutationError = ErrorType<ApiErrorResponse>
+export type PostIdentityMgmtUsersUserIdRolesMutationBody = string[]
+export type PostIdentityMgmtUsersUserIdRolesMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Assign roles to a user
  */
-export const usePostIdentityUsersUserIdRoles = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostIdentityMgmtUsersUserIdRoles = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postIdentityUsersUserIdRoles>>,
+      Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdRoles>>,
       TError,
       { userId: string; data: string[] },
       TContext
@@ -6244,52 +7065,52 @@ export const usePostIdentityUsersUserIdRoles = <TError = ErrorType<ApiErrorRespo
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdRoles>>,
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdRoles>>,
   TError,
   { userId: string; data: string[] },
   TContext
 > => {
-  return useMutation(getPostIdentityUsersUserIdRolesMutationOptions(options), queryClient)
+  return useMutation(getPostIdentityMgmtUsersUserIdRolesMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Revoke roles from a user
  */
-export const getDeleteIdentityUsersUserIdRolesUrl = (userId: string) => {
-  return `/identity/users/${userId}/roles`
+export const getDeleteIdentityMgmtUsersUserIdRolesUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}/roles`
 }
 
-export const deleteIdentityUsersUserIdRoles = async (
+export const deleteIdentityMgmtUsersUserIdRoles = async (
   userId: string,
-  deleteIdentityUsersUserIdRolesBody: string[],
+  deleteIdentityMgmtUsersUserIdRolesBody: string[],
   options?: RequestInit
 ): Promise<BooleanApiResponse> => {
-  return customFetch<BooleanApiResponse>(getDeleteIdentityUsersUserIdRolesUrl(userId), {
+  return customFetch<BooleanApiResponse>(getDeleteIdentityMgmtUsersUserIdRolesUrl(userId), {
     ...options,
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(deleteIdentityUsersUserIdRolesBody)
+    body: JSON.stringify(deleteIdentityMgmtUsersUserIdRolesBody)
   })
 }
 
-export const getDeleteIdentityUsersUserIdRolesMutationOptions = <
+export const getDeleteIdentityMgmtUsersUserIdRolesMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteIdentityUsersUserIdRoles>>,
+    Awaited<ReturnType<typeof deleteIdentityMgmtUsersUserIdRoles>>,
     TError,
     { userId: string; data: string[] },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteIdentityUsersUserIdRoles>>,
+  Awaited<ReturnType<typeof deleteIdentityMgmtUsersUserIdRoles>>,
   TError,
   { userId: string; data: string[] },
   TContext
 > => {
-  const mutationKey = ['deleteIdentityUsersUserIdRoles']
+  const mutationKey = ['deleteIdentityMgmtUsersUserIdRoles']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6297,30 +7118,30 @@ export const getDeleteIdentityUsersUserIdRolesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteIdentityUsersUserIdRoles>>,
+    Awaited<ReturnType<typeof deleteIdentityMgmtUsersUserIdRoles>>,
     { userId: string; data: string[] }
   > = props => {
     const { userId, data } = props ?? {}
 
-    return deleteIdentityUsersUserIdRoles(userId, data, requestOptions)
+    return deleteIdentityMgmtUsersUserIdRoles(userId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteIdentityUsersUserIdRolesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteIdentityUsersUserIdRoles>>
+export type DeleteIdentityMgmtUsersUserIdRolesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteIdentityMgmtUsersUserIdRoles>>
 >
-export type DeleteIdentityUsersUserIdRolesMutationBody = string[]
-export type DeleteIdentityUsersUserIdRolesMutationError = ErrorType<ApiErrorResponse>
+export type DeleteIdentityMgmtUsersUserIdRolesMutationBody = string[]
+export type DeleteIdentityMgmtUsersUserIdRolesMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Revoke roles from a user
  */
-export const useDeleteIdentityUsersUserIdRoles = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteIdentityMgmtUsersUserIdRoles = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteIdentityUsersUserIdRoles>>,
+      Awaited<ReturnType<typeof deleteIdentityMgmtUsersUserIdRoles>>,
       TError,
       { userId: string; data: string[] },
       TContext
@@ -6329,27 +7150,27 @@ export const useDeleteIdentityUsersUserIdRoles = <TError = ErrorType<ApiErrorRes
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteIdentityUsersUserIdRoles>>,
+  Awaited<ReturnType<typeof deleteIdentityMgmtUsersUserIdRoles>>,
   TError,
   { userId: string; data: string[] },
   TContext
 > => {
-  return useMutation(getDeleteIdentityUsersUserIdRolesMutationOptions(options), queryClient)
+  return useMutation(getDeleteIdentityMgmtUsersUserIdRolesMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Ban a user
  */
-export const getPostIdentityUsersUserIdBanUrl = (userId: string) => {
-  return `/identity/users/${userId}/ban`
+export const getPostIdentityMgmtUsersUserIdBanUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}/ban`
 }
 
-export const postIdentityUsersUserIdBan = async (
+export const postIdentityMgmtUsersUserIdBan = async (
   userId: string,
   banUserRequest: BanUserRequest,
   options?: RequestInit
 ): Promise<BooleanApiResponse> => {
-  return customFetch<BooleanApiResponse>(getPostIdentityUsersUserIdBanUrl(userId), {
+  return customFetch<BooleanApiResponse>(getPostIdentityMgmtUsersUserIdBanUrl(userId), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -6357,24 +7178,24 @@ export const postIdentityUsersUserIdBan = async (
   })
 }
 
-export const getPostIdentityUsersUserIdBanMutationOptions = <
+export const getPostIdentityMgmtUsersUserIdBanMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postIdentityUsersUserIdBan>>,
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdBan>>,
     TError,
     { userId: string; data: BanUserRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdBan>>,
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdBan>>,
   TError,
   { userId: string; data: BanUserRequest },
   TContext
 > => {
-  const mutationKey = ['postIdentityUsersUserIdBan']
+  const mutationKey = ['postIdentityMgmtUsersUserIdBan']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6382,30 +7203,30 @@ export const getPostIdentityUsersUserIdBanMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postIdentityUsersUserIdBan>>,
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdBan>>,
     { userId: string; data: BanUserRequest }
   > = props => {
     const { userId, data } = props ?? {}
 
-    return postIdentityUsersUserIdBan(userId, data, requestOptions)
+    return postIdentityMgmtUsersUserIdBan(userId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostIdentityUsersUserIdBanMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdBan>>
+export type PostIdentityMgmtUsersUserIdBanMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdBan>>
 >
-export type PostIdentityUsersUserIdBanMutationBody = BanUserRequest
-export type PostIdentityUsersUserIdBanMutationError = ErrorType<ApiErrorResponse>
+export type PostIdentityMgmtUsersUserIdBanMutationBody = BanUserRequest
+export type PostIdentityMgmtUsersUserIdBanMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Ban a user
  */
-export const usePostIdentityUsersUserIdBan = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostIdentityMgmtUsersUserIdBan = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postIdentityUsersUserIdBan>>,
+      Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdBan>>,
       TError,
       { userId: string; data: BanUserRequest },
       TContext
@@ -6414,49 +7235,49 @@ export const usePostIdentityUsersUserIdBan = <TError = ErrorType<ApiErrorRespons
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdBan>>,
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdBan>>,
   TError,
   { userId: string; data: BanUserRequest },
   TContext
 > => {
-  return useMutation(getPostIdentityUsersUserIdBanMutationOptions(options), queryClient)
+  return useMutation(getPostIdentityMgmtUsersUserIdBanMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Unban a user
  */
-export const getPostIdentityUsersUserIdUnbanUrl = (userId: string) => {
-  return `/identity/users/${userId}/unban`
+export const getPostIdentityMgmtUsersUserIdUnbanUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}/unban`
 }
 
-export const postIdentityUsersUserIdUnban = async (
+export const postIdentityMgmtUsersUserIdUnban = async (
   userId: string,
   options?: RequestInit
 ): Promise<BooleanApiResponse> => {
-  return customFetch<BooleanApiResponse>(getPostIdentityUsersUserIdUnbanUrl(userId), {
+  return customFetch<BooleanApiResponse>(getPostIdentityMgmtUsersUserIdUnbanUrl(userId), {
     ...options,
     method: 'POST'
   })
 }
 
-export const getPostIdentityUsersUserIdUnbanMutationOptions = <
+export const getPostIdentityMgmtUsersUserIdUnbanMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postIdentityUsersUserIdUnban>>,
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdUnban>>,
     TError,
     { userId: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdUnban>>,
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdUnban>>,
   TError,
   { userId: string },
   TContext
 > => {
-  const mutationKey = ['postIdentityUsersUserIdUnban']
+  const mutationKey = ['postIdentityMgmtUsersUserIdUnban']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6464,30 +7285,30 @@ export const getPostIdentityUsersUserIdUnbanMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postIdentityUsersUserIdUnban>>,
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdUnban>>,
     { userId: string }
   > = props => {
     const { userId } = props ?? {}
 
-    return postIdentityUsersUserIdUnban(userId, requestOptions)
+    return postIdentityMgmtUsersUserIdUnban(userId, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostIdentityUsersUserIdUnbanMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdUnban>>
+export type PostIdentityMgmtUsersUserIdUnbanMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdUnban>>
 >
 
-export type PostIdentityUsersUserIdUnbanMutationError = ErrorType<ApiErrorResponse>
+export type PostIdentityMgmtUsersUserIdUnbanMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Unban a user
  */
-export const usePostIdentityUsersUserIdUnban = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostIdentityMgmtUsersUserIdUnban = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postIdentityUsersUserIdUnban>>,
+      Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdUnban>>,
       TError,
       { userId: string },
       TContext
@@ -6496,76 +7317,76 @@ export const usePostIdentityUsersUserIdUnban = <TError = ErrorType<ApiErrorRespo
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postIdentityUsersUserIdUnban>>,
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdUnban>>,
   TError,
   { userId: string },
   TContext
 > => {
-  return useMutation(getPostIdentityUsersUserIdUnbanMutationOptions(options), queryClient)
+  return useMutation(getPostIdentityMgmtUsersUserIdUnbanMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get user ban history
  */
-export const getGetIdentityUsersUserIdBanHistoryUrl = (userId: string) => {
-  return `/identity/users/${userId}/ban-history`
+export const getGetIdentityMgmtUsersUserIdBanHistoryUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}/ban-history`
 }
 
-export const getIdentityUsersUserIdBanHistory = async (
+export const getIdentityMgmtUsersUserIdBanHistory = async (
   userId: string,
   options?: RequestInit
 ): Promise<BanDtoListApiResponse> => {
-  return customFetch<BanDtoListApiResponse>(getGetIdentityUsersUserIdBanHistoryUrl(userId), {
+  return customFetch<BanDtoListApiResponse>(getGetIdentityMgmtUsersUserIdBanHistoryUrl(userId), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetIdentityUsersUserIdBanHistoryQueryKey = (userId: string) => {
-  return [`/identity/users/${userId}/ban-history`] as const
+export const getGetIdentityMgmtUsersUserIdBanHistoryQueryKey = (userId: string) => {
+  return [`/identity/mgmt/users/${userId}/ban-history`] as const
 }
 
-export const getGetIdentityUsersUserIdBanHistoryQueryOptions = <
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+export const getGetIdentityMgmtUsersUserIdBanHistoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetIdentityUsersUserIdBanHistoryQueryKey(userId)
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityMgmtUsersUserIdBanHistoryQueryKey(userId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>> = ({ signal }) =>
-    getIdentityUsersUserIdBanHistory(userId, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>> = ({ signal }) =>
+    getIdentityMgmtUsersUserIdBanHistory(userId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!userId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+    Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetIdentityUsersUserIdBanHistoryQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>
+export type GetIdentityMgmtUsersUserIdBanHistoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>
 >
-export type GetIdentityUsersUserIdBanHistoryQueryError = ErrorType<unknown>
+export type GetIdentityMgmtUsersUserIdBanHistoryQueryError = ErrorType<unknown>
 
-export function useGetIdentityUsersUserIdBanHistory<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+export function useGetIdentityMgmtUsersUserIdBanHistory<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>
         >,
         'initialData'
       >
@@ -6573,18 +7394,18 @@ export function useGetIdentityUsersUserIdBanHistory<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsersUserIdBanHistory<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+export function useGetIdentityMgmtUsersUserIdBanHistory<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>
         >,
         'initialData'
       >
@@ -6592,13 +7413,13 @@ export function useGetIdentityUsersUserIdBanHistory<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsersUserIdBanHistory<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+export function useGetIdentityMgmtUsersUserIdBanHistory<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -6607,18 +7428,18 @@ export function useGetIdentityUsersUserIdBanHistory<
  * @summary Get user ban history
  */
 
-export function useGetIdentityUsersUserIdBanHistory<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>,
+export function useGetIdentityMgmtUsersUserIdBanHistory<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdBanHistory>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdBanHistory>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetIdentityUsersUserIdBanHistoryQueryOptions(userId, options)
+  const queryOptions = getGetIdentityMgmtUsersUserIdBanHistoryQueryOptions(userId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6630,9 +7451,9 @@ export function useGetIdentityUsersUserIdBanHistory<
 /**
  * @summary Get user activity logs
  */
-export const getGetIdentityUsersUserIdActivitiesUrl = (
+export const getGetIdentityMgmtUsersUserIdActivitiesUrl = (
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams
 ) => {
   const normalizedParams = new URLSearchParams()
 
@@ -6645,71 +7466,71 @@ export const getGetIdentityUsersUserIdActivitiesUrl = (
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/identity/users/${userId}/activities?${stringifiedParams}`
-    : `/identity/users/${userId}/activities`
+    ? `/identity/mgmt/users/${userId}/activities?${stringifiedParams}`
+    : `/identity/mgmt/users/${userId}/activities`
 }
 
-export const getIdentityUsersUserIdActivities = async (
+export const getIdentityMgmtUsersUserIdActivities = async (
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams,
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams,
   options?: RequestInit
 ): Promise<ActivityLogDtoApiPagedResponse> => {
-  return customFetch<ActivityLogDtoApiPagedResponse>(getGetIdentityUsersUserIdActivitiesUrl(userId, params), {
+  return customFetch<ActivityLogDtoApiPagedResponse>(getGetIdentityMgmtUsersUserIdActivitiesUrl(userId, params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetIdentityUsersUserIdActivitiesQueryKey = (
+export const getGetIdentityMgmtUsersUserIdActivitiesQueryKey = (
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams
 ) => {
-  return [`/identity/users/${userId}/activities`, ...(params ? [params] : [])] as const
+  return [`/identity/mgmt/users/${userId}/activities`, ...(params ? [params] : [])] as const
 }
 
-export const getGetIdentityUsersUserIdActivitiesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+export const getGetIdentityMgmtUsersUserIdActivitiesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams,
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetIdentityUsersUserIdActivitiesQueryKey(userId, params)
+  const queryKey = queryOptions?.queryKey ?? getGetIdentityMgmtUsersUserIdActivitiesQueryKey(userId, params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>> = ({ signal }) =>
-    getIdentityUsersUserIdActivities(userId, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>> = ({ signal }) =>
+    getIdentityMgmtUsersUserIdActivities(userId, params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!userId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+    Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetIdentityUsersUserIdActivitiesQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>
+export type GetIdentityMgmtUsersUserIdActivitiesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>
 >
-export type GetIdentityUsersUserIdActivitiesQueryError = ErrorType<unknown>
+export type GetIdentityMgmtUsersUserIdActivitiesQueryError = ErrorType<unknown>
 
-export function useGetIdentityUsersUserIdActivities<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+export function useGetIdentityMgmtUsersUserIdActivities<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
-  params: undefined | GetIdentityUsersUserIdActivitiesParams,
+  params: undefined | GetIdentityMgmtUsersUserIdActivitiesParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>
         >,
         'initialData'
       >
@@ -6717,19 +7538,19 @@ export function useGetIdentityUsersUserIdActivities<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsersUserIdActivities<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+export function useGetIdentityMgmtUsersUserIdActivities<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams,
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
           TError,
-          Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>
+          Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>
         >,
         'initialData'
       >
@@ -6737,14 +7558,14 @@ export function useGetIdentityUsersUserIdActivities<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetIdentityUsersUserIdActivities<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+export function useGetIdentityMgmtUsersUserIdActivities<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams,
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -6753,25 +7574,110 @@ export function useGetIdentityUsersUserIdActivities<
  * @summary Get user activity logs
  */
 
-export function useGetIdentityUsersUserIdActivities<
-  TData = Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>,
+export function useGetIdentityMgmtUsersUserIdActivities<
+  TData = Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>,
   TError = ErrorType<unknown>
 >(
   userId: string,
-  params?: GetIdentityUsersUserIdActivitiesParams,
+  params?: GetIdentityMgmtUsersUserIdActivitiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityUsersUserIdActivities>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getIdentityMgmtUsersUserIdActivities>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetIdentityUsersUserIdActivitiesQueryOptions(userId, params, options)
+  const queryOptions = getGetIdentityMgmtUsersUserIdActivitiesQueryOptions(userId, params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
   }
 
   return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Admin force-reset a user's password (no old password required)
+ */
+export const getPostIdentityMgmtUsersUserIdResetPasswordUrl = (userId: string) => {
+  return `/identity/mgmt/users/${userId}/reset-password`
+}
+
+export const postIdentityMgmtUsersUserIdResetPassword = async (
+  userId: string,
+  adminResetPasswordRequest: AdminResetPasswordRequest,
+  options?: RequestInit
+): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getPostIdentityMgmtUsersUserIdResetPasswordUrl(userId), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(adminResetPasswordRequest)
+  })
+}
+
+export const getPostIdentityMgmtUsersUserIdResetPasswordMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdResetPassword>>,
+    TError,
+    { userId: string; data: AdminResetPasswordRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdResetPassword>>,
+  TError,
+  { userId: string; data: AdminResetPasswordRequest },
+  TContext
+> => {
+  const mutationKey = ['postIdentityMgmtUsersUserIdResetPassword']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdResetPassword>>,
+    { userId: string; data: AdminResetPasswordRequest }
+  > = props => {
+    const { userId, data } = props ?? {}
+
+    return postIdentityMgmtUsersUserIdResetPassword(userId, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostIdentityMgmtUsersUserIdResetPasswordMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdResetPassword>>
+>
+export type PostIdentityMgmtUsersUserIdResetPasswordMutationBody = AdminResetPasswordRequest
+export type PostIdentityMgmtUsersUserIdResetPasswordMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Admin force-reset a user's password (no old password required)
+ */
+export const usePostIdentityMgmtUsersUserIdResetPassword = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdResetPassword>>,
+      TError,
+      { userId: string; data: AdminResetPasswordRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postIdentityMgmtUsersUserIdResetPassword>>,
+  TError,
+  { userId: string; data: AdminResetPasswordRequest },
+  TContext
+> => {
+  return useMutation(getPostIdentityMgmtUsersUserIdResetPasswordMutationOptions(options), queryClient)
 }
 
 /**

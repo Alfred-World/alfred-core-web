@@ -1,7 +1,39 @@
 import { getSession, signOut } from 'next-auth/react'
 
 import type { Session } from 'next-auth'
+
 import { NEXT_PUBLIC_GATEWAY_URL } from './env'
+
+// ============================================================
+// Global redirect guard — prevents multiple redirect attempts
+// and keeps react-query in "loading" state during navigation
+// ============================================================
+let isRedirectingToLogin = false
+
+/**
+ * Sign out and redirect to login, returning a never-resolving promise.
+ * This keeps react-query in a "loading" state so AuthGuard/AuthRedirect
+ * won't fire while the browser is navigating away.
+ */
+async function redirectToLogin(): Promise<never> {
+  if (isRedirectingToLogin) {
+    return new Promise<never>(() => {})
+  }
+
+  isRedirectingToLogin = true
+
+  // Clear the NextAuth session cookie first, otherwise GuestOnlyRoute
+  // will see a valid session and redirect back to home (infinite loop)
+  try {
+    await signOut({ redirect: false })
+  } catch (_e) {
+    // signOut failure is non-critical, continue with redirect
+  }
+
+  window.location.href = '/login?error=session_expired'
+  
+return new Promise<never>(() => {})
+}
 
 /**
  * Base interface for API return types with common properties.
@@ -106,13 +138,12 @@ async function forceRefreshSession(): Promise<Session | null> {
  * Redirects to login if session has refresh error.
  */
 async function getAuthHeaders(): Promise<Record<string, string>> {
+  if (isRedirectingToLogin) return {}
+
   const session = await getCachedSession()
 
   if (session?.error === 'RefreshAccessTokenError') {
-    // Clear cache and redirect
-    cachedSession = null
-    await signOut({ callbackUrl: '/login?error=session_expired' })
-    throw new Error('Session expired, redirecting to login')
+    return redirectToLogin() as never
   }
 
   if (session?.accessToken) {
@@ -147,6 +178,11 @@ async function getAuthHeaders(): Promise<Record<string, string>> {
  * console.log(response.result.accessToken)
  */
 export const customFetch = async <T>(url: string, options?: RequestInit): Promise<T> => {
+  // If we're already redirecting to login, don't make any more API calls
+  if (isRedirectingToLogin) {
+    return new Promise<never>(() => {})
+  }
+
   const authHeaders = await getAuthHeaders()
 
   const fullUrl = url.startsWith('http') ? url : `${GATEWAY_URL}${url}`
@@ -160,10 +196,10 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     }
   })
 
-  // Handle 401: refresh session and retry once
+  // Handle 401: bust cache, re-fetch session, retry once
   if (response.status === 401 && typeof window !== 'undefined') {
-    await forceRefreshSession()
-    const freshAuthHeaders = await getAuthHeaders()
+    const freshAuthHeaders = await forceRefreshSession().then(() => getAuthHeaders())
+    const hasValidToken = 'Authorization' in freshAuthHeaders
 
     const retryResponse = await fetch(fullUrl, {
       ...options,
@@ -175,8 +211,13 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     })
 
     if (retryResponse.status === 401) {
-      await signOut({ callbackUrl: '/login?error=session_expired' })
-      throw new Error('Session expired, redirecting to login')
+      // If we still have a valid token, it's a permission error — return body for component to handle
+      if (hasValidToken) {
+        return retryResponse.json() as Promise<T>
+      }
+
+      // No valid token → session is truly expired
+      return redirectToLogin()
     }
 
     return retryResponse.json() as Promise<T>

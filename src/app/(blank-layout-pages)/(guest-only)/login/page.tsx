@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { signIn, useSession } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import { Box, Typography, Button } from '@mui/material'
 import GlobalStyles from '@mui/material/GlobalStyles'
 
@@ -157,7 +157,7 @@ const CardWrapper = ({ children }: { children: React.ReactNode }) => (
 )
 
 export default function SSOLoginPage() {
-  const { status } = useSession()
+  const { data: session, status } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
   const hasTriggeredRef = useRef(false)
@@ -184,6 +184,22 @@ export default function SSOLoginPage() {
     if (status === 'loading') return
 
     if (status === 'authenticated') {
+      // Session may still have an error (e.g. RefreshAccessTokenError) even though the
+      // cookie exists — this happens when the user arrives via AuthRedirect (which does
+      // NOT call signOut). If we just redirect to the dashboard here, AuthGuard will
+      // immediately render AuthRedirect again → infinite loop.
+      // Fix: sign out first to clear the stale session, then start a fresh OAuth flow.
+      if (session?.error) {
+        if (hasTriggeredRef.current) return
+        hasTriggeredRef.current = true
+        setPageState('processing')
+        signOut({ redirect: false }).then(() => {
+          signIn('alfred-identity', { callbackUrl })
+        })
+
+        return
+      }
+
       router.replace(rawCallbackUrl)
 
       return
@@ -200,7 +216,7 @@ export default function SSOLoginPage() {
 
       setPageState('login')
     }
-  }, [status, callbackUrl, rawCallbackUrl, router, searchParams, isLogoutRedirect, ssoToken])
+  }, [status, session, callbackUrl, rawCallbackUrl, router, searchParams, isLogoutRedirect, ssoToken])
 
   const handleSignIn = () => {
     setIsSigningIn(true)

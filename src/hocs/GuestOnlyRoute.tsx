@@ -10,12 +10,16 @@ import type { ChildrenType } from '@core/types'
 // Config Imports
 import themeConfig from '@configs/themeConfig'
 
-// Util Imports
+// Lib Imports
+import { authOptions } from '@/libs/auth'
 
 const GuestOnlyRoute = async ({ children }: ChildrenType) => {
-  const session = await getServerSession()
+  const session = await getServerSession(authOptions)
 
-  if (session) {
+  // Only redirect to home if session is valid AND has no error.
+  // When refresh token is invalid, session.error = 'RefreshAccessTokenError'
+  // — in that case, allow the user to see the login page.
+  if (session && !session.error) {
     redirect(themeConfig.homePageUrl)
   }
 

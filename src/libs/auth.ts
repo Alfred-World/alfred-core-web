@@ -3,6 +3,9 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
 import type { JWT } from 'next-auth/jwt'
 
+// Generated type
+import type { TokenResponseDto } from '@/generated'
+
 // Disable SSL verification for self-signed certificates in development
 if (process.env.NODE_ENV === 'development') {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -42,17 +45,30 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       }),
     })
 
-    const refreshedTokens = await response.json()
+    // Parse body safely — an empty or non-JSON response (network hiccup, 502, etc.)
+    // should be treated as transient, not as a permanent OAuth rejection.
+    const text = await response.text()
+    let refreshedTokens: TokenResponseDto
+
+    try {
+      refreshedTokens = JSON.parse(text)
+    } catch {
+      return token
+    }
 
     if (!response.ok) {
       throw refreshedTokens
     }
 
-    // Calculate new expiresAt
-    let expiresAt = Date.now() / 1000 + refreshedTokens.expires_in
+    const accessToken = refreshedTokens.access_token ?? undefined
+    const refreshToken = refreshedTokens.refresh_token ?? undefined
+    const expiresIn = refreshedTokens.expires_in ?? 900
 
-    if (refreshedTokens.access_token) {
-      const decoded = parseJwt(refreshedTokens.access_token)
+    // Calculate new expiresAt
+    let expiresAt = Date.now() / 1000 + expiresIn
+
+    if (accessToken) {
+      const decoded = parseJwt(accessToken)
 
       if (decoded && decoded.exp) {
         expiresAt = decoded.exp
@@ -61,17 +77,20 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
 
     return {
       ...token,
-      accessToken: refreshedTokens.access_token,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken,
+      accessToken: accessToken,
+      refreshToken: refreshToken ?? token.refreshToken,
       expiresAt: expiresAt,
       error: undefined,
     }
   } catch (error) {
-    console.error('Error refreshing access token', error)
+    const isOAuthError =
+      error !== null &&
+      typeof error === 'object' &&
+      'error' in (error as object)
 
     return {
       ...token,
-      error: 'RefreshAccessTokenError',
+      error: isOAuthError ? 'RefreshAccessTokenError' : undefined,
     }
   }
 }
@@ -82,11 +101,13 @@ export const authOptions: NextAuthOptions = {
       id: 'alfred-identity',
       name: 'Alfred Identity',
       type: 'oauth',
+
       // Use public URL for authorization (browser redirect)
       authorization: {
         url: `${process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/authorize`,
         params: { scope: 'openid profile email offline_access' }
       },
+
       // Use internal URL for server-side token exchange
       token: `${process.env.INTERNAL_GATEWAY_URL || process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/token`,
       userinfo: `${process.env.INTERNAL_GATEWAY_URL || process.env.NEXT_PUBLIC_GATEWAY_URL}/connect/userinfo`,
@@ -168,6 +189,7 @@ export const authOptions: NextAuthOptions = {
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           expiresAt: expiresAt,
+          error: undefined, // Clear any stale error from previous broken session
         }
       }
 
@@ -176,6 +198,11 @@ export const authOptions: NextAuthOptions = {
       const expiresAt = token.expiresAt as number
 
       if (token.expiresAt && now < expiresAt - 10) {
+        return token
+      }
+
+      // Already failed before — don't retry, show login
+      if (token.error === 'RefreshAccessTokenError') {
         return token
       }
 
