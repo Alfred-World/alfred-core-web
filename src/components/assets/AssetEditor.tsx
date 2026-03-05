@@ -111,6 +111,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
     eventType: 'Maintain',
     performedAt: new Date().toISOString().split('T')[0],
     cost: 0,
+    quantity: 1,
     note: '',
     nextDueDate: ''
   })
@@ -319,6 +320,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
           eventType: logForm.eventType,
           performedAt: logForm.performedAt,
           cost: logForm.cost,
+          quantity: logForm.quantity,
           note: logForm.note || null,
           nextDueDate: logForm.nextDueDate || null
         }
@@ -331,7 +333,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
       setLogForm({
         eventType: 'Maintain',
         performedAt: new Date().toISOString().split('T')[0],
-        cost: 0, note: '', nextDueDate: ''
+        cost: 0, quantity: 1, note: '', nextDueDate: ''
       })
     } catch { /* handled by React Query */ }
   }
@@ -1190,6 +1192,16 @@ return (
                                 Cost: <Box component='span' fontWeight={700} color='text.primary'>${log.cost?.toLocaleString()}</Box>
                               </Typography>
                             )}
+                            {(log.quantity ?? 1) !== 1 && (
+                              <Typography variant='caption' color='text.secondary'>
+                                Qty: <Box component='span' fontWeight={700} color='text.primary'>{log.quantity}</Box>
+                              </Typography>
+                            )}
+                            {(log.cost ?? 0) > 0 && (log.quantity ?? 1) > 1 && (
+                              <Typography variant='caption' color='text.secondary'>
+                                Unit price: <Box component='span' fontWeight={700} color='text.primary'>${((log.cost ?? 0) / (log.quantity ?? 1)).toLocaleString(undefined, { maximumFractionDigits: 2 })}</Box>
+                              </Typography>
+                            )}
                             {log.brandName && (
                               <Typography variant='caption' color='text.secondary'>
                                 Brand: <Box component='span' fontWeight={600}>{log.brandName}</Box>
@@ -1505,6 +1517,18 @@ return (
                 startAdornment: <InputAdornment position='start'>$</InputAdornment>
               }
             }}
+          />
+
+          {/* Quantity */}
+          <TextField
+            label='Quantity'
+            type='number'
+            size='small'
+            fullWidth
+            value={logForm.quantity}
+            onChange={e => setLogForm(f => ({ ...f, quantity: parseFloat(e.target.value) || 1 }))}
+            slotProps={{ inputLabel: { shrink: true } }}
+            helperText='Number of units (e.g. 2 water bottles, 1 gas cylinder)'
           />
 
           {/* Note */}

@@ -972,6 +972,7 @@ export interface AssetLogDto {
   brandName?: string | null
   performedAt?: string
   cost?: number
+  quantity?: number
   /** @nullable */
   note?: string | null
   /** @nullable */
@@ -1381,6 +1382,7 @@ export interface CreateAssetLogRequest {
   brandId?: string | null
   performedAt?: string
   cost?: number
+  quantity?: number
   /** @nullable */
   note?: string | null
   /** @nullable */
