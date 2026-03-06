@@ -2,7 +2,7 @@ import 'next-auth'
 
 declare module 'next-auth' {
   interface Session {
-    accessToken?: string
+    // accessToken is NOT exposed — kept in JWT cookie for BFF proxy only
     error?: string
     user: {
       id: string

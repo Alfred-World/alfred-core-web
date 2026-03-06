@@ -1,6 +1,4 @@
-import { getSession, signOut } from 'next-auth/react'
-
-import type { Session } from 'next-auth'
+import { signOut } from 'next-auth/react'
 
 import { NEXT_PUBLIC_GATEWAY_URL } from './env'
 
@@ -22,8 +20,6 @@ async function redirectToLogin(): Promise<never> {
 
   isRedirectingToLogin = true
 
-  // Clear the NextAuth session cookie first, otherwise GuestOnlyRoute
-  // will see a valid session and redirect back to home (infinite loop)
   try {
     await signOut({ redirect: false })
   } catch (_e) {
@@ -31,8 +27,8 @@ async function redirectToLogin(): Promise<never> {
   }
 
   window.location.href = '/login?error=session_expired'
-  
-return new Promise<never>(() => {})
+
+  return new Promise<never>(() => {})
 }
 
 /**
@@ -74,99 +70,25 @@ export type ApiReturn<T> = ApiReturnSuccess<T> | ApiReturnFailure
  */
 export type ToApiReturn<T> = T extends { result?: infer R | null } ? ApiReturn<NonNullable<R>> : ApiReturn<T>
 
-/** Gateway base URL — validated at build time via env.ts */
+/**
+ * Gateway base URL (public, build-time inlined).
+ * Used for browser redirect URLs (SSO check, logout, etc.) — NOT for API calls.
+ * API calls go through the BFF proxy at /api/gateway/[...path].
+ */
 export const GATEWAY_URL = NEXT_PUBLIC_GATEWAY_URL
 
-// ─── Session caching to reduce /api/auth/session calls ────────────────────────
-let cachedSession: Session | null = null
-let sessionCacheTime = 0
-const SESSION_CACHE_TTL = 60_000 // 60 seconds
-
-// Track if we're currently refreshing the session
-let isRefreshing = false
-let refreshPromise: Promise<Session | null> | null = null
-
 /**
- * Get session from cache or fetch fresh one.
- * Caches for 60s to avoid excessive /api/auth/session calls.
- */
-async function getCachedSession(): Promise<Session | null> {
-  if (typeof window === 'undefined') return null
-
-  const now = Date.now()
-
-  // Return cached session if still valid
-  if (cachedSession && now - sessionCacheTime < SESSION_CACHE_TTL) {
-    return cachedSession
-  }
-
-  // Reuse in-flight request if already refreshing
-  if (isRefreshing && refreshPromise) {
-    return refreshPromise
-  }
-
-  isRefreshing = true
-  refreshPromise = getSession().then(session => {
-    cachedSession = session
-    sessionCacheTime = Date.now()
-    isRefreshing = false
-    refreshPromise = null
-
-    return session
-  }).catch(() => {
-    isRefreshing = false
-    refreshPromise = null
-
-    return null
-  })
-
-  return refreshPromise
-}
-
-/**
- * Force refresh the session (clears cache)
- */
-async function forceRefreshSession(): Promise<Session | null> {
-  cachedSession = null
-  sessionCacheTime = 0
-
-  return getCachedSession()
-}
-
-/**
- * Get authorization headers from cached session.
- * Redirects to login if session has refresh error.
- */
-async function getAuthHeaders(): Promise<Record<string, string>> {
-  if (isRedirectingToLogin) return {}
-
-  const session = await getCachedSession()
-
-  if (session?.error === 'RefreshAccessTokenError') {
-    return redirectToLogin() as never
-  }
-
-  if (session?.accessToken) {
-    return { Authorization: `Bearer ${session.accessToken}` }
-  }
-
-  return {}
-}
-
-/**
- * Custom fetch mutator for Orval (pure fetch, no axios).
+ * Custom fetch mutator for Orval — BFF Proxy pattern.
  *
- * Authentication flow:
- * 1. User logs in via SSO OAuth flow -> NextAuth stores tokens in session
- * 2. Before each request, token is fetched from NextAuth session
- * 3. Token is added to Authorization header
- * 4. On 401, session is refreshed and request is retried once
+ * Authentication flow (2 legs):
+ *   Leg 1: Browser → Next.js proxy — HttpOnly session cookie (automatic, anti-XSS)
+ *   Leg 2: Next.js proxy → Gateway — JWT Authorization header (server-side only)
  *
- * Error handling:
- * - On 2xx: returns parsed JSON body as T
- * - On 4xx/5xx with JSON body: returns error body as T
- *   (which has { success: false, errors: [...] })
- * - On network error (no response): re-throws
+ * The browser NEVER sees the JWT access token. It is kept inside the
+ * encrypted NextAuth session cookie (HttpOnly, Secure).
+ *
+ * The proxy handles token refresh server-side. If the proxy returns 401,
+ * the token is truly invalid (refresh also failed) — redirect to login.
  *
  * @example
  * const response = await postApiAuthLogin({ identity, password })
@@ -175,56 +97,48 @@ async function getAuthHeaders(): Promise<Record<string, string>> {
  *   console.log(response.errors[0].message)
  *   return
  * }
- * console.log(response.result.accessToken)
+ * console.log(response.result)
  */
 export const customFetch = async <T>(url: string, options?: RequestInit): Promise<T> => {
-  // If we're already redirecting to login, don't make any more API calls
+  // Server-side (NextAuth callbacks, SSR): call gateway directly — no proxy needed
+  if (typeof window === 'undefined') {
+    const serverGatewayUrl = process.env.INTERNAL_GATEWAY_URL || GATEWAY_URL
+    const fullUrl = url.startsWith('http') ? url : `${serverGatewayUrl}${url}`
+
+    const response = await fetch(fullUrl, { ...options })
+
+    return response.json() as Promise<T>
+  }
+
   if (isRedirectingToLogin) {
     return new Promise<never>(() => {})
   }
 
-  const authHeaders = await getAuthHeaders()
+  // Client-side: route through BFF proxy — converts /core/users → /api/gateway/core/users
+  const proxyUrl = url.startsWith('http') ? url : `/api/gateway${url}`
 
-  const fullUrl = url.startsWith('http') ? url : `${GATEWAY_URL}${url}`
-
-  const response = await fetch(fullUrl, {
+  const response = await fetch(proxyUrl, {
     ...options,
-    credentials: 'include',
-    headers: {
-      ...options?.headers,
-      ...authHeaders
-    }
+    credentials: 'include', // Sends HttpOnly session cookie automatically
   })
 
-  // Handle 401: bust cache, re-fetch session, retry once
-  if (response.status === 401 && typeof window !== 'undefined') {
-    const freshAuthHeaders = await forceRefreshSession().then(() => getAuthHeaders())
-    const hasValidToken = 'Authorization' in freshAuthHeaders
+  // The proxy already handles token refresh server-side.
+  // If we still get 401, it means the session is truly expired.
+  if (response.status === 401) {
+    // Check if the response body indicates a permission error (vs session expired)
+    const body = await response.json() as T
+    const apiBody = body as { errors?: Array<{ code?: string }> }
+    const isPermissionError = apiBody.errors?.some(e => e.code !== 'UNAUTHORIZED')
 
-    const retryResponse = await fetch(fullUrl, {
-      ...options,
-      credentials: 'include',
-      headers: {
-        ...options?.headers,
-        ...freshAuthHeaders
-      }
-    })
-
-    if (retryResponse.status === 401) {
-      // If we still have a valid token, it's a permission error — return body for component to handle
-      if (hasValidToken) {
-        return retryResponse.json() as Promise<T>
-      }
-
-      // No valid token → session is truly expired
-      return redirectToLogin()
+    if (isPermissionError) {
+      return body
     }
 
-    return retryResponse.json() as Promise<T>
+    return redirectToLogin()
   }
 
-  // For non-2xx responses, still return the JSON body so react-query
-  // can use success/errors for type narrowing
+  // For all responses (including 4xx/5xx), return JSON body
+  // so react-query can use success/errors for type narrowing
   return response.json() as Promise<T>
 }
 

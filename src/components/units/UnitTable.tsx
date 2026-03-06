@@ -208,32 +208,32 @@ const UnitTable = ({ categoryFilter, onCategoryFilterChange, onCreateNew, onEdit
           <TableBody>
             {isLoading
               ? Array.from({ length: 5 }).map((_, i) => (
-                  <TableRow key={i}>
-                    {Array.from({ length: 6 }).map((__, j) => (
-                      <TableCell key={j}>
-                        <Skeleton variant='text' />
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
+                <TableRow key={i}>
+                  {Array.from({ length: 6 }).map((__, j) => (
+                    <TableCell key={j}>
+                      <Skeleton variant='text' />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
               : units.length === 0
                 ? (
-                    <TableRow>
-                      <TableCell colSpan={6} align='center' sx={{ py: 8 }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                          <i className='tabler-ruler-off' style={{ fontSize: 40, opacity: 0.3 }} />
-                          <Typography color='text.secondary'>No units found</Typography>
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                  )
+                  <TableRow>
+                    <TableCell colSpan={6} align='center' sx={{ py: 8 }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                        <i className='tabler-ruler-off' style={{ fontSize: 40, opacity: 0.3 }} />
+                        <Typography color='text.secondary'>No units found</Typography>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                )
                 : units.map((unit: UnitDto) => (
-                    <UnitRow
-                      key={unit.id}
-                      unit={unit}
-                      onMenuOpen={handleMenuOpen}
-                    />
-                  ))}
+                  <UnitRow
+                    key={unit.id}
+                    unit={unit}
+                    onMenuOpen={handleMenuOpen}
+                  />
+                ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -339,7 +339,7 @@ const UnitRow = ({ unit, onMenuOpen }: UnitRowProps) => {
       {/* Rate */}
       <TableCell align='right'>
         <Typography variant='body2' fontFamily='monospace'>
-          {unit.baseUnitId ? (unit.conversionRate ?? 1).toFixed(2) : '—'}
+          {unit.baseUnitId ? (unit.conversionRate ?? 1) : '—'}
         </Typography>
       </TableCell>
 
