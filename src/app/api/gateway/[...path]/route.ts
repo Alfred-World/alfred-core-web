@@ -1,5 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+
 import { getToken, encode } from 'next-auth/jwt';
 
 import { postConnectToken } from '@/generated';
@@ -52,10 +53,12 @@ const refreshResultCache = new Map<string, RefreshResult>();
 async function doRefreshAccessToken(refreshToken: string): Promise<RefreshResult | null> {
   // Case 2: another request already refreshed this exact RT recently — reuse result
   const cached = refreshResultCache.get(refreshToken);
+
   if (cached) return cached;
 
   // Case 1: another request is currently refreshing this RT — wait for it
   const existing = pendingRefreshes.get(refreshToken);
+
   if (existing) return existing;
 
   const task = (async (): Promise<RefreshResult | null> => {
@@ -69,12 +72,15 @@ async function doRefreshAccessToken(refreshToken: string): Promise<RefreshResult
 
       if (!data.access_token) {
         console.error('[proxy] doRefreshAccessToken: no access_token in response', data);
-        return null;
+        
+return null;
       }
 
       let expiresAt = Math.floor(Date.now() / 1000) + (data.expires_in || 900);
+
       try {
         const payload = JSON.parse(Buffer.from(data.access_token.split('.')[1], 'base64').toString());
+
         if (payload.exp) expiresAt = payload.exp;
       } catch { /* use calculated expiresAt */ }
 
@@ -91,7 +97,8 @@ async function doRefreshAccessToken(refreshToken: string): Promise<RefreshResult
       return result;
     } catch (err) {
       console.error('[proxy] doRefreshAccessToken: exception during token refresh', err);
-      return null;
+      
+return null;
     }
   })();
 
@@ -130,6 +137,7 @@ function buildResponseHeaders(response: Response): Headers {
 
   response.headers.forEach((value, key) => {
     const lower = key.toLowerCase();
+
     if (lower !== 'transfer-encoding' && lower !== 'connection') {
       headers.set(key, value);
     }

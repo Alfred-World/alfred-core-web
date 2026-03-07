@@ -1,7 +1,6 @@
 // Third-party Imports
 import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
-import type { JWT } from 'next-auth/jwt'
 
 // No generated API imports needed here — token refresh is handled by the BFF proxy.
 
