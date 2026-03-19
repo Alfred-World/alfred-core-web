@@ -125,6 +125,14 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
   // The proxy already handles token refresh server-side.
   // If we still get 401, it means the session is truly expired.
   if (response.status === 401) {
+    // Auth endpoints (login, token) use 401 for invalid credentials — not session expiry.
+    // Return the response body so the UI can display the actual error.
+    const isAuthEndpoint = url.includes('/auth/sso-login') || url.includes('/auth/token')
+
+    if (isAuthEndpoint) {
+      return response.json() as Promise<T>
+    }
+
     // Check if the response body indicates a permission error (vs session expired)
     const body = await response.json() as T
     const apiBody = body as { errors?: Array<{ code?: string }> }

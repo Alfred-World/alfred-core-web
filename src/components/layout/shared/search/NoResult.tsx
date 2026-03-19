@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 // Third-party Imports
 import classnames from 'classnames'
+import { NEXT_PUBLIC_SSO_URL } from '@/libs/env'
 
 type NoResultData = {
   label: string
@@ -18,7 +19,7 @@ const noResultData: NoResultData[] = [
   },
   {
     label: 'User Profile',
-    href: '/pages/user-profile',
+    href: `${NEXT_PUBLIC_SSO_URL}/settings/account`,
     icon: 'tabler-user'
   },
   {

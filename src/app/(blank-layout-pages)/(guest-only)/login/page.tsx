@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { signIn, signOut, useSession } from 'next-auth/react'
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography, Button, Alert } from '@mui/material'
 import GlobalStyles from '@mui/material/GlobalStyles'
 
 import Loading from '@/components/Loading'
@@ -164,7 +164,7 @@ export default function SSOLoginPage() {
   const [pageState, setPageState] = useState<PageState>('loading')
   const [isSigningIn, setIsSigningIn] = useState(false)
 
-  const rawCallbackUrl = searchParams.get('callbackUrl') || '/dashboards'
+  const rawCallbackUrl = searchParams.get('callbackUrl') || searchParams.get('returnUrl') || '/dashboards'
   const appUrl = process.env.NEXT_PUBLIC_APP_URL!
 
   const callbackUrl = rawCallbackUrl.startsWith('http')
@@ -173,8 +173,36 @@ export default function SSOLoginPage() {
 
   const isLogoutRedirect = searchParams.get('logout') === 'true'
   const ssoToken = searchParams.get('sso_token')
+  const authError = searchParams.get('error')
+  const authErrorDescription = searchParams.get('error_description')
+
+  const errorMessage =
+    authErrorDescription ||
+    (authError === 'invalid_client'
+      ? 'Client application is not registered or inactive. Please contact system administrator.'
+      : authError
+        ? 'Authentication failed. Please try again.'
+        : null)
 
   useEffect(() => {
+    if (authError) {
+      if (status === 'authenticated' && !hasTriggeredRef.current) {
+        hasTriggeredRef.current = true
+        setPageState('processing')
+        signOut({ redirect: false }).finally(() => {
+          setPageState('login')
+        })
+
+        return
+      }
+
+      if (status !== 'loading') {
+        setPageState('login')
+      }
+
+      return
+    }
+
     if (isLogoutRedirect) {
       setPageState('logged-out')
 
@@ -216,7 +244,7 @@ export default function SSOLoginPage() {
 
       setPageState('login')
     }
-  }, [status, session, callbackUrl, rawCallbackUrl, router, searchParams, isLogoutRedirect, ssoToken])
+  }, [status, session, callbackUrl, rawCallbackUrl, router, isLogoutRedirect, ssoToken, authError])
 
   const handleSignIn = () => {
     setIsSigningIn(true)
@@ -289,6 +317,12 @@ export default function SSOLoginPage() {
   return (
     <CardWrapper>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
+        {errorMessage && (
+          <Alert severity='error' sx={{ width: '100%', mb: 2 }}>
+            {errorMessage}
+          </Alert>
+        )}
+
         <Box
           className='login-fade-in'
           sx={{
