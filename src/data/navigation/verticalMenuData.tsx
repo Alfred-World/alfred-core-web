@@ -42,6 +42,11 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
     label: 'Commodities',
     icon: 'tabler-chart-line',
     href: '/commodities'
+  },
+  {
+    label: 'AI Chat',
+    icon: 'tabler-robot',
+    href: '/ai-chat'
   }
 ]
 

@@ -893,6 +893,20 @@ export interface UserDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+/**
+ * Result of a single AI-dispatched function execution.
+Frontend can render this as an Action Card (preview before saving).
+ */
+export interface ActionResultEntry {
+  functionName: string
+  isSuccess: boolean
+  /** @nullable */
+  message?: string | null
+  data?: unknown | null
+  /** @nullable */
+  error?: string | null
+}
+
 export interface AssetDto {
   id?: string
   name?: string
@@ -1291,6 +1305,60 @@ export interface CategoryTreeNodeDtoListApiResponse {
   errors?: ApiError[] | null
 }
 
+/**
+ * A single message entry in the conversation context.
+ */
+export interface ChatMessageEntry {
+  /** Message role: "user" or "assistant". */
+  role: string
+  /** Message text content. */
+  content: string
+}
+
+/**
+ * Chat response returned to the frontend.
+ */
+export interface ChatResponse {
+  /** Whether the AI processing succeeded. */
+  isSuccess?: boolean
+  /** Response type: "text" for a plain reply, "action" for function execution results. */
+  type: string
+  /**
+   * AI's text reply or summary of actions executed.
+   * @nullable
+   */
+  message?: string | null
+  /**
+   * Detailed results of executed functions (when Type is "action").
+Frontend can render these as Action Cards for user review.
+   * @nullable
+   */
+  actions?: ActionResultEntry[] | null
+  /**
+   * Error detail when IsSuccess is false.
+   * @nullable
+   */
+  error?: string | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface ChatResponseApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** Chat response returned to the frontend. */
+  result?: ChatResponse | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 export interface CommodityDto {
   id?: string
   code?: string
@@ -1637,6 +1705,27 @@ export interface InvestmentTransactionDtoApiResponse {
   result?: InvestmentTransactionDto | null
   /** @nullable */
   errors?: ApiError[] | null
+}
+
+/**
+ * Chat request sent from the frontend to the AI chat endpoint.
+Context is maintained on the frontend (in-memory) and sent with each request.
+When the user closes the browser or refreshes, context is lost — by design.
+ */
+export interface SendChatRequest {
+  /** Recent conversation messages kept in frontend memory.
+Sent to provide conversational context for the AI.
+The frontend should trim this to the most recent N messages. */
+  context?: ChatMessageEntry[]
+  /** The current user message or command. */
+  message: string
+  /**
+   * Optional base64-encoded image attachment (e.g., receipt, document, report photo).
+   * @nullable
+   */
+  imageBase64?: string | null
+  /** MIME type of the image attachment. Defaults to image/jpeg. */
+  imageMimeType?: string
 }
 
 export interface UnitCountByCategoryDto {
@@ -7793,6 +7882,77 @@ export function useGetWellKnownOpenidConfiguration<
   }
 
   return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Send a chat message to the AI assistant.
+The frontend manages conversation context in-memory and sends it along with each request.
+ */
+export const getPostApiV1AiChatUrl = () => {
+  return `/api/v1/ai/chat`
+}
+
+export const postApiV1AiChat = async (
+  sendChatRequest: SendChatRequest,
+  options?: RequestInit
+): Promise<ChatResponseApiResponse> => {
+  return customFetch<ChatResponseApiResponse>(getPostApiV1AiChatUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(sendChatRequest)
+  })
+}
+
+export const getPostApiV1AiChatMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AiChat>>,
+    TError,
+    { data: SendChatRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<Awaited<ReturnType<typeof postApiV1AiChat>>, TError, { data: SendChatRequest }, TContext> => {
+  const mutationKey = ['postApiV1AiChat']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AiChat>>,
+    { data: SendChatRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AiChat(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AiChatMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1AiChat>>>
+export type PostApiV1AiChatMutationBody = SendChatRequest
+export type PostApiV1AiChatMutationError = ErrorType<ApiErrorResponse>
+
+/**
+ * @summary Send a chat message to the AI assistant.
+The frontend manages conversation context in-memory and sends it along with each request.
+ */
+export const usePostApiV1AiChat = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AiChat>>,
+      TError,
+      { data: SendChatRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<Awaited<ReturnType<typeof postApiV1AiChat>>, TError, { data: SendChatRequest }, TContext> => {
+  return useMutation(getPostApiV1AiChatMutationOptions(options), queryClient)
 }
 
 /**

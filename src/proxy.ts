@@ -15,6 +15,7 @@ function isPrivatePath(pathname: string): boolean {
     || pathname.startsWith('/categories')
     || pathname.startsWith('/units')
     || pathname.startsWith('/commodities')
+    || pathname.startsWith('/ai-chat')
 }
 
 export async function proxy(request: NextRequest) {
