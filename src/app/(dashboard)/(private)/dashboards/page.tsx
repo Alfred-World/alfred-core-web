@@ -1,7 +1,9 @@
-const DashboardCRM = async () => {
-  return (
-    <></>
-  );
-};
+'use client'
 
-export default DashboardCRM;
+import AccountSalesDashboard from '../_components/AccountSalesDashboard'
+
+const DashboardCRM = () => {
+  return <AccountSalesDashboard />
+}
+
+export default DashboardCRM

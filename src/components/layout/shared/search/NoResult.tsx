@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 // Third-party Imports
 import classnames from 'classnames'
+
 import { NEXT_PUBLIC_SSO_URL } from '@/libs/env'
 
 type NoResultData = {

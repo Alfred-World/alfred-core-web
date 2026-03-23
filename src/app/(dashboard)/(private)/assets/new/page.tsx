@@ -1,6 +1,6 @@
 'use client'
 
-import AssetEditor from '@/components/assets/AssetEditor'
+import AssetEditor from '../_components/AssetEditor'
 
 const NewAssetPage = () => {
   return <AssetEditor />

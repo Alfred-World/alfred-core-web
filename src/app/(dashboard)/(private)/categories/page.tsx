@@ -1,4 +1,4 @@
-import { CategoryPage } from '@/components/categories'
+import CategoryPage from './_components/CategoryPage'
 
 const CategoriesPage = () => <CategoryPage />
 

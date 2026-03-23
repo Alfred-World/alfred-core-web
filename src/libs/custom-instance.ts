@@ -1,6 +1,17 @@
 import { signOut } from 'next-auth/react'
 
 import { NEXT_PUBLIC_GATEWAY_URL } from './env'
+import type { ApiErrorResponse } from '@/generated/core-api'
+
+const isApiEnvelopeFailure = (payload: unknown): payload is ApiErrorResponse => {
+  if (!payload || typeof payload !== 'object') {
+    return false
+  }
+
+  const candidate = payload as ApiErrorResponse
+
+  return candidate.success === false && Array.isArray(candidate.errors)
+}
 
 // ============================================================
 // Global redirect guard — prevents multiple redirect attempts
@@ -32,45 +43,6 @@ async function redirectToLogin(): Promise<never> {
 }
 
 /**
- * Base interface for API return types with common properties.
- */
-export interface ApiReturnBase {
-  success: boolean
-  message?: string
-}
-
-/**
- * Success return type with result data.
- * When success is true, result is guaranteed to be present.
- * @template T - The result type
- */
-export interface ApiReturnSuccess<T> extends ApiReturnBase {
-  success: true
-  result: T
-}
-
-/**
- * Failure return type with error information.
- * When success is false, errors array is guaranteed to be present.
- */
-export interface ApiReturnFailure extends ApiReturnBase {
-  success: false
-  errors: Array<{ message: string; code?: string }>
-}
-
-/**
- * Discriminated union type for API responses.
- * @template T - The success result type
- */
-export type ApiReturn<T> = ApiReturnSuccess<T> | ApiReturnFailure
-
-/**
- * Helper type to extract result type from generated API response
- * Converts SomeApiSuccessResponse to ApiReturn<ResultType>
- */
-export type ToApiReturn<T> = T extends { result?: infer R | null } ? ApiReturn<NonNullable<R>> : ApiReturn<T>
-
-/**
  * Gateway base URL (public, build-time inlined).
  * Used for browser redirect URLs (SSO check, logout, etc.) — NOT for API calls.
  * API calls go through the BFF proxy at /api/gateway/[...path].
@@ -100,14 +72,22 @@ export const GATEWAY_URL = NEXT_PUBLIC_GATEWAY_URL
  * console.log(response.result)
  */
 export const customFetch = async <T>(url: string, options?: RequestInit): Promise<T> => {
+  const requestMethod = (options?.method ?? 'GET').toUpperCase()
+  const shouldThrowHookError = requestMethod === 'GET'
+
   // Server-side (NextAuth callbacks, SSR): call gateway directly — no proxy needed
   if (typeof window === 'undefined') {
     const serverGatewayUrl = process.env.INTERNAL_GATEWAY_URL || GATEWAY_URL
     const fullUrl = url.startsWith('http') ? url : `${serverGatewayUrl}${url}`
 
     const response = await fetch(fullUrl, { ...options })
+    const body = await response.json() as T
 
-    return response.json() as Promise<T>
+    if (shouldThrowHookError && (!response.ok || isApiEnvelopeFailure(body))) {
+      throw body
+    }
+
+    return body
   }
 
   if (isRedirectingToLogin) {
@@ -139,15 +119,23 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     const isPermissionError = apiBody.errors?.some(e => e.code !== 'UNAUTHORIZED')
 
     if (isPermissionError) {
+      if (shouldThrowHookError && isApiEnvelopeFailure(body)) {
+        throw body
+      }
+
       return body
     }
 
     return redirectToLogin()
   }
 
-  // For all responses (including 4xx/5xx), return JSON body
-  // so react-query can use success/errors for type narrowing
-  return response.json() as Promise<T>
+  const body = await response.json() as T
+
+  if (shouldThrowHookError && (!response.ok || isApiEnvelopeFailure(body))) {
+    throw body
+  }
+
+  return body
 }
 
 // Error type for react-query

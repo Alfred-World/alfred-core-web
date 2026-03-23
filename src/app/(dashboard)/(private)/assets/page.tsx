@@ -1,6 +1,6 @@
 'use client'
 
-import AssetDirectory from '@/components/assets/AssetDirectory'
+import AssetDirectory from './_components/AssetDirectory'
 
 const AssetsPage = () => {
   return <AssetDirectory />

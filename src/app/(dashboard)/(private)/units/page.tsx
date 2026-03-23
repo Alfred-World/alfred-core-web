@@ -1,4 +1,4 @@
-import { UnitPage } from '@/components/units'
+import UnitPage from './_components/UnitPage'
 
 const UnitsPage = () => <UnitPage />
 

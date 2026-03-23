@@ -1,6 +1,6 @@
 'use client'
 
-import BrandEditor from '@/components/brands/BrandEditor'
+import BrandEditor from '../_components/BrandEditor'
 
 const NewBrandPage = () => {
   return <BrandEditor />

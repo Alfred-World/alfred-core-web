@@ -2,7 +2,7 @@
 
 import { use } from 'react'
 
-import AssetEditor from '@/components/assets/AssetEditor'
+import AssetEditor from '../../_components/AssetEditor'
 
 const EditAssetPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params)

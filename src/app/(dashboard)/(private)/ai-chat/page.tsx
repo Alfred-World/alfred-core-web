@@ -1,6 +1,6 @@
 'use client'
 
-import AiChatPanel from '@/components/ai-chat/AiChatPanel'
+import AiChatPanel from './_components/AiChatPanel'
 
 const AiChatPage = () => {
   return <AiChatPanel />

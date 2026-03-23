@@ -1,4 +1,4 @@
-import CommodityDirectory from '@/components/commodities/CommodityDirectory'
+import CommodityDirectory from './_components/CommodityDirectory'
 
 const CommoditiesPage = () => {
   return <CommodityDirectory />

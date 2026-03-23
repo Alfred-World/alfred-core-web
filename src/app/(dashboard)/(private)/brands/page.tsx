@@ -1,6 +1,6 @@
 'use client'
 
-import BrandDirectory from '@/components/brands/BrandDirectory'
+import BrandDirectory from './_components/BrandDirectory'
 
 const BrandsPage = () => {
   return <BrandDirectory />

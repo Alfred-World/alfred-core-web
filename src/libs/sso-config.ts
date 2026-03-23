@@ -12,7 +12,7 @@ import { NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_OAUTH_CLIENT_ID } from './env'
 import {
   getIdentityAuthValidateToken,
   getGetIdentityAuthCheckSsoQueryKey
-} from '@/generated'
+} from '@/generated/identity-api'
 
 /**
  * App base URL - used for post-logout redirect

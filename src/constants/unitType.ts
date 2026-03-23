@@ -1,7 +1,7 @@
 // ─── Unit Type Constants ───────────────────────────────────────────────────────
 // Re-export the generated enums from the API client (source of truth from backend)
 
-import { UnitCategory, UnitStatus } from '@generated/api'
+import { UnitCategory, UnitStatus } from '@generated/core-api'
 
 export type UnitCategoryValue = (typeof UnitCategory)[keyof typeof UnitCategory]
 export type UnitStatusValue = (typeof UnitStatus)[keyof typeof UnitStatus]

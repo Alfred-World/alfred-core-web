@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import { getToken, encode } from 'next-auth/jwt';
 
-import { postConnectToken } from '@/generated';
+import { postConnectToken } from '@/generated/identity-api';
 
 // ── Dev: allow self-signed certs (same as auth.ts) ──────────────────────────
 if (process.env.NODE_ENV === 'development') {

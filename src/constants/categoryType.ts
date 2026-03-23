@@ -1,7 +1,7 @@
 // ─── Category Type Constants ───────────────────────────────────────────────────
 // Re-export the generated enum from the API client (source of truth from backend)
 
-import { CategoryType } from '@generated/api'
+import { CategoryType } from '@generated/core-api'
 
 export type CategoryTypeValue = (typeof CategoryType)[keyof typeof CategoryType]
 

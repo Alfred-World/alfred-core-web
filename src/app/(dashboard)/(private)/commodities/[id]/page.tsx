@@ -1,6 +1,6 @@
 import { use } from 'react'
 
-import CommodityDetail from '@/components/commodities/CommodityDetail'
+import CommodityDetail from '../_components/CommodityDetail'
 
 const CommodityDetailPage = ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = use(params)

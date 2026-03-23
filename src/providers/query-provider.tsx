@@ -17,6 +17,10 @@ export default function QueryProvider({
                     queries: {
                         staleTime: 60 * 1000, // Old data considered fresh for 1 minute
                         refetchOnWindowFocus: false, // Disable automatic refetching when switching tabs
+                        retry: false, // Avoid repeated 4xx calls that trigger duplicate toasts
+                    },
+                    mutations: {
+                        retry: false,
                     },
                 },
             })

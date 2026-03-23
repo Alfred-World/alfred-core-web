@@ -27,11 +27,21 @@ const commonOutputConfig = {
 
 export default defineConfig({
     // Identity Service API (contains Auth, SSO endpoints)
-    gateway: {
-        input: `${gatewayUrl}/api-docs/v1.json`,
+    core: {
+        input: `${gatewayUrl}/api/core/swagger/v1/swagger.json`,
         output: {
             mode: 'single',
-            target: 'src/generated/api.ts',
+            target: 'src/generated/core-api.ts',
+            client: commonOutputConfig.client,
+            httpClient: commonOutputConfig.httpClient,
+            override: commonOutputConfig.override
+        }
+    },
+    identity: {
+        input: `${gatewayUrl}/api/identity/swagger/v1/swagger.json`,
+        output: {
+            mode: 'single',
+            target: 'src/generated/identity-api.ts',
             client: commonOutputConfig.client,
             httpClient: commonOutputConfig.httpClient,
             override: commonOutputConfig.override

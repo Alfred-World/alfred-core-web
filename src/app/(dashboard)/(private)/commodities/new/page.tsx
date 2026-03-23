@@ -1,4 +1,4 @@
-import CommodityEditor from '@/components/commodities/CommodityEditor'
+import CommodityEditor from '../_components/CommodityEditor'
 
 const NewCommodityPage = () => {
   return <CommodityEditor />
