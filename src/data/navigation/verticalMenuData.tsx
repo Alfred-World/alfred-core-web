@@ -68,6 +68,11 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
         href: '/account-sales/clones'
       },
       {
+        label: 'Source Accounts',
+        icon: 'tabler-user-shield',
+        href: '/account-sales/source-accounts'
+      },
+      {
         label: 'Orders & Warranty',
         icon: 'tabler-receipt-2',
         href: '/account-sales/orders'

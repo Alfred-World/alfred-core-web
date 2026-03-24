@@ -203,13 +203,23 @@ export const AccountProductType = {
   Cursor: 'Cursor',
   Canva: 'Canva',
   OpenAi: 'OpenAi',
-  Other: 'Other'
+  Other: 'Other',
+  Microsoft: 'Microsoft',
+  Apple: 'Apple',
+  Facebook: 'Facebook',
+  Amazon: 'Amazon'
 } as const
 
 export interface ProductSummaryDto {
   id?: string
   name?: string
   productType?: AccountProductType
+}
+
+export interface SourceAccountSummaryDto {
+  id?: string
+  accountType?: AccountProductType
+  username?: string
 }
 
 export type AccountCloneStatus = (typeof AccountCloneStatus)[keyof typeof AccountCloneStatus]
@@ -227,6 +237,7 @@ export const AccountCloneStatus = {
 export interface AccountCloneDto {
   id?: string
   product?: ProductSummaryDto
+  sourceAccount?: SourceAccountSummaryDto | null
   externalAccountId?: string
   username?: string
   password?: string
@@ -1003,6 +1014,8 @@ export interface CreateAccountCloneRequest {
   twoFaSecret?: string | null
   /** @nullable */
   extraInfo?: string | null
+  /** @nullable */
+  sourceAccountId?: string | null
 }
 
 export interface CreateAccountOrderRequest {
@@ -1126,6 +1139,20 @@ export interface CreateProductRequest {
   variants?: CreateProductVariantRequest[]
   /** @nullable */
   description?: string | null
+}
+
+export interface CreateSourceAccountRequest {
+  accountType?: AccountProductType
+  username?: string
+  password?: string
+  /** @nullable */
+  twoFaSecret?: string | null
+  /** @nullable */
+  recoveryEmail?: string | null
+  /** @nullable */
+  recoveryPhone?: string | null
+  /** @nullable */
+  notes?: string | null
 }
 
 export type UnitCategory = (typeof UnitCategory)[keyof typeof UnitCategory]
@@ -1282,6 +1309,25 @@ export interface GithubUserProfileDtoApiResponse {
   result?: GithubUserProfileDto | null
   /** @nullable */
   errors?: ApiError[] | null
+}
+
+export interface ProblemDetails {
+  /** @nullable */
+  type?: string | null
+  /** @nullable */
+  title?: string | null
+  /** @nullable */
+  status?: number | null
+  /** @nullable */
+  detail?: string | null
+  /** @nullable */
+  instance?: string | null
+  [key: string]: unknown
+}
+
+export type HttpValidationProblemDetails = ProblemDetails & {
+  errors?: { [key: string]: string[] }
+  [key: string]: unknown
 }
 
 export interface InvestmentTransactionDto {
@@ -1566,8 +1612,6 @@ export interface SellAccountResultDto {
   /** @nullable */
   twoFaSecret?: string | null
   /** @nullable */
-  otpCode?: string | null
-  /** @nullable */
   extraInfo?: string | null
 }
 
@@ -1638,6 +1682,74 @@ The frontend should trim this to the most recent N messages. */
   imageBase64?: string | null
   /** MIME type of the image attachment. Defaults to image/jpeg. */
   imageMimeType?: string
+}
+
+export interface SetSourceAccountActiveRequest {
+  isActive?: boolean
+}
+
+export interface SourceAccountDto {
+  id?: string
+  accountType?: AccountProductType
+  username?: string
+  password?: string
+  /** @nullable */
+  twoFaSecret?: string | null
+  /** @nullable */
+  recoveryEmail?: string | null
+  /** @nullable */
+  recoveryPhone?: string | null
+  /** @nullable */
+  notes?: string | null
+  isActive?: boolean
+  cloneCount?: number
+  createdAt?: string
+  /** @nullable */
+  updatedAt?: string | null
+}
+
+export interface SourceAccountDtoPageResult {
+  items?: SourceAccountDto[]
+  page?: number
+  pageSize?: number
+  total?: number
+  readonly totalPages?: number
+  readonly hasPrevPage?: boolean
+  readonly hasNextPage?: boolean
+  /** @nullable */
+  readonly prevPage?: number | null
+  /** @nullable */
+  readonly nextPage?: number | null
+}
+
+/**
+ * Paginated API response (unified with error support).
+Same discriminated union pattern as ApiResponse.
+ */
+export interface SourceAccountDtoApiPagedResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: SourceAccountDtoPageResult | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SourceAccountDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: SourceAccountDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
 }
 
 export interface UnitCountByCategoryDto {
@@ -1801,6 +1913,8 @@ export interface UpdateAccountCloneRequest {
   twoFaSecret?: string | null
   /** @nullable */
   extraInfo?: string | null
+  /** @nullable */
+  sourceAccountId?: string | null
 }
 
 export interface UpdateAccountCloneStatusRequest {
@@ -1873,6 +1987,20 @@ export interface UpdateProductRequest {
 
 export interface UpdateReferralCommissionSettingRequest {
   commissionPercent?: number
+}
+
+export interface UpdateSourceAccountRequest {
+  accountType?: AccountProductType
+  username?: string
+  password?: string
+  /** @nullable */
+  twoFaSecret?: string | null
+  /** @nullable */
+  recoveryEmail?: string | null
+  /** @nullable */
+  recoveryPhone?: string | null
+  /** @nullable */
+  notes?: string | null
 }
 
 export interface UpdateUnitRequest {
@@ -2097,6 +2225,32 @@ Available views depend on the endpoint (e.g., "list", "detail", "minimal").
 }
 
 export type GetApiV1AccountSalesProductsParams = {
+  /**
+   * Page number (1-based)
+   */
+  page?: number
+  /**
+   * Number of items per page
+   */
+  pageSize?: number
+  /**
+ * Filter expression using DSL syntax
+Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
+ */
+  filter?: string
+  /**
+ * Sort expression (comma-separated)
+Example: "name,-createdAt" (ascending by name, descending by createdAt)
+ */
+  sort?: string
+  /**
+ * View name to determine which fields to return.
+Available views depend on the endpoint (e.g., "list", "detail", "minimal").
+ */
+  view?: string
+}
+
+export type GetApiV1AccountSalesSourceAccountsParams = {
   /**
    * Page number (1-based)
    */
@@ -5312,6 +5466,564 @@ export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
   }
 
   return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getGetApiV1AccountSalesSourceAccountsUrl = (params?: GetApiV1AccountSalesSourceAccountsParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/account-sales/source-accounts?${stringifiedParams}`
+    : `/api/v1/account-sales/source-accounts`
+}
+
+export const getApiV1AccountSalesSourceAccounts = async (
+  params?: GetApiV1AccountSalesSourceAccountsParams,
+  options?: RequestInit
+): Promise<SourceAccountDtoApiPagedResponse> => {
+  return customFetch<SourceAccountDtoApiPagedResponse>(getGetApiV1AccountSalesSourceAccountsUrl(params), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesSourceAccountsQueryKey = (params?: GetApiV1AccountSalesSourceAccountsParams) => {
+  return [`/api/v1/account-sales/source-accounts`, ...(params ? [params] : [])] as const
+}
+
+export const getGetApiV1AccountSalesSourceAccountsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesSourceAccountsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesSourceAccountsQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>> = ({ signal }) =>
+    getApiV1AccountSalesSourceAccounts(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesSourceAccountsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>
+>
+export type GetApiV1AccountSalesSourceAccountsQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+  TError = ErrorType<unknown>
+>(
+  params: undefined | GetApiV1AccountSalesSourceAccountsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesSourceAccountsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesSourceAccountsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesSourceAccountsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesSourceAccountsQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getPostApiV1AccountSalesSourceAccountsUrl = () => {
+  return `/api/v1/account-sales/source-accounts`
+}
+
+export const postApiV1AccountSalesSourceAccounts = async (
+  createSourceAccountRequest: CreateSourceAccountRequest,
+  options?: RequestInit
+): Promise<SourceAccountDtoApiResponse> => {
+  return customFetch<SourceAccountDtoApiResponse>(getPostApiV1AccountSalesSourceAccountsUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(createSourceAccountRequest)
+  })
+}
+
+export const getPostApiV1AccountSalesSourceAccountsMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+    TError,
+    { data: CreateSourceAccountRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+  TError,
+  { data: CreateSourceAccountRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesSourceAccounts']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+    { data: CreateSourceAccountRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccountSalesSourceAccounts(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesSourceAccountsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>
+>
+export type PostApiV1AccountSalesSourceAccountsMutationBody = CreateSourceAccountRequest
+export type PostApiV1AccountSalesSourceAccountsMutationError = ErrorType<unknown>
+
+export const usePostApiV1AccountSalesSourceAccounts = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+      TError,
+      { data: CreateSourceAccountRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+  TError,
+  { data: CreateSourceAccountRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesSourceAccountsMutationOptions(options), queryClient)
+}
+
+export const getGetApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+  return `/api/v1/account-sales/source-accounts/${id}`
+}
+
+export const getApiV1AccountSalesSourceAccountsId = async (
+  id: string,
+  options?: RequestInit
+): Promise<SourceAccountDtoApiResponse> => {
+  return customFetch<SourceAccountDtoApiResponse>(getGetApiV1AccountSalesSourceAccountsIdUrl(id), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesSourceAccountsIdQueryKey = (id: string) => {
+  return [`/api/v1/account-sales/source-accounts/${id}`] as const
+}
+
+export const getGetApiV1AccountSalesSourceAccountsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesSourceAccountsIdQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>> = ({ signal }) =>
+    getApiV1AccountSalesSourceAccountsId(id, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesSourceAccountsIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>
+>
+export type GetApiV1AccountSalesSourceAccountsIdQueryError = ErrorType<ProblemDetails>
+
+export function useGetApiV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesSourceAccountsIdQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getPutApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+  return `/api/v1/account-sales/source-accounts/${id}`
+}
+
+export const putApiV1AccountSalesSourceAccountsId = async (
+  id: string,
+  updateSourceAccountRequest: UpdateSourceAccountRequest,
+  options?: RequestInit
+): Promise<SourceAccountDtoApiResponse> => {
+  return customFetch<SourceAccountDtoApiResponse>(getPutApiV1AccountSalesSourceAccountsIdUrl(id), {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(updateSourceAccountRequest)
+  })
+}
+
+export const getPutApiV1AccountSalesSourceAccountsIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+    TError,
+    { id: string; data: UpdateSourceAccountRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+  TError,
+  { id: string; data: UpdateSourceAccountRequest },
+  TContext
+> => {
+  const mutationKey = ['putApiV1AccountSalesSourceAccountsId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+    { id: string; data: UpdateSourceAccountRequest }
+  > = props => {
+    const { id, data } = props ?? {}
+
+    return putApiV1AccountSalesSourceAccountsId(id, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PutApiV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>
+>
+export type PutApiV1AccountSalesSourceAccountsIdMutationBody = UpdateSourceAccountRequest
+export type PutApiV1AccountSalesSourceAccountsIdMutationError = ErrorType<unknown>
+
+export const usePutApiV1AccountSalesSourceAccountsId = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+      TError,
+      { id: string; data: UpdateSourceAccountRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+  TError,
+  { id: string; data: UpdateSourceAccountRequest },
+  TContext
+> => {
+  return useMutation(getPutApiV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
+}
+
+export const getDeleteApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+  return `/api/v1/account-sales/source-accounts/${id}`
+}
+
+export const deleteApiV1AccountSalesSourceAccountsId = async (
+  id: string,
+  options?: RequestInit
+): Promise<SourceAccountDtoApiResponse> => {
+  return customFetch<SourceAccountDtoApiResponse>(getDeleteApiV1AccountSalesSourceAccountsIdUrl(id), {
+    ...options,
+    method: 'DELETE'
+  })
+}
+
+export const getDeleteApiV1AccountSalesSourceAccountsIdMutationOptions = <
+  TError = ErrorType<ProblemDetails>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+    TError,
+    { id: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  const mutationKey = ['deleteApiV1AccountSalesSourceAccountsId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+    { id: string }
+  > = props => {
+    const { id } = props ?? {}
+
+    return deleteApiV1AccountSalesSourceAccountsId(id, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteApiV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>
+>
+
+export type DeleteApiV1AccountSalesSourceAccountsIdMutationError = ErrorType<ProblemDetails>
+
+export const useDeleteApiV1AccountSalesSourceAccountsId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+      TError,
+      { id: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  return useMutation(getDeleteApiV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
+}
+
+export const getPatchApiV1AccountSalesSourceAccountsIdActiveUrl = (id: string) => {
+  return `/api/v1/account-sales/source-accounts/${id}/active`
+}
+
+export const patchApiV1AccountSalesSourceAccountsIdActive = async (
+  id: string,
+  setSourceAccountActiveRequest: SetSourceAccountActiveRequest,
+  options?: RequestInit
+): Promise<SourceAccountDtoApiResponse> => {
+  return customFetch<SourceAccountDtoApiResponse>(getPatchApiV1AccountSalesSourceAccountsIdActiveUrl(id), {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(setSourceAccountActiveRequest)
+  })
+}
+
+export const getPatchApiV1AccountSalesSourceAccountsIdActiveMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+    TError,
+    { id: string; data: SetSourceAccountActiveRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+  TError,
+  { id: string; data: SetSourceAccountActiveRequest },
+  TContext
+> => {
+  const mutationKey = ['patchApiV1AccountSalesSourceAccountsIdActive']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+    { id: string; data: SetSourceAccountActiveRequest }
+  > = props => {
+    const { id, data } = props ?? {}
+
+    return patchApiV1AccountSalesSourceAccountsIdActive(id, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PatchApiV1AccountSalesSourceAccountsIdActiveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>
+>
+export type PatchApiV1AccountSalesSourceAccountsIdActiveMutationBody = SetSourceAccountActiveRequest
+export type PatchApiV1AccountSalesSourceAccountsIdActiveMutationError = ErrorType<unknown>
+
+export const usePatchApiV1AccountSalesSourceAccountsIdActive = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+      TError,
+      { id: string; data: SetSourceAccountActiveRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+  TError,
+  { id: string; data: SetSourceAccountActiveRequest },
+  TContext
+> => {
+  return useMutation(getPatchApiV1AccountSalesSourceAccountsIdActiveMutationOptions(options), queryClient)
 }
 
 export const getPostApiV1AccountSalesWarrantyCheckUrl = () => {

@@ -706,7 +706,10 @@ const AccountSalesOrders = () => {
             />
             {sellMutation.data?.result && (
               <Alert severity='success'>
-                Issued: {sellMutation.data.result.username} | {sellMutation.data.result.password} | {sellMutation.data.result.otpCode}
+                Issued: {sellMutation.data.result.username} | {sellMutation.data.result.password}
+                {sellMutation.data.result.twoFaSecret && (
+                  <> | OTP: {generateSync({ secret: sellMutation.data.result.twoFaSecret.replace(/\s+/g, ''), guardrails: OTP_GUARDRAILS })}</>
+                )}
               </Alert>
             )}
           </Stack>
@@ -866,7 +869,10 @@ const AccountSalesOrders = () => {
           </Stack>
           {replaceMutation.data?.result && (
             <Alert severity='success' sx={{ mt: 1.5 }}>
-              New credential: {replaceMutation.data.result.username} | {replaceMutation.data.result.password} | {replaceMutation.data.result.otpCode}
+              New credential: {replaceMutation.data.result.username} | {replaceMutation.data.result.password}
+              {replaceMutation.data.result.twoFaSecret && (
+                <> | OTP: {generateSync({ secret: replaceMutation.data.result.twoFaSecret.replace(/\s+/g, ''), guardrails: OTP_GUARDRAILS })}</>
+              )}
             </Alert>
           )}
         </DialogContent>
