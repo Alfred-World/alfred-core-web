@@ -48,7 +48,7 @@ const MANUAL_STATUS_OPTIONS: AccountCloneStatus[] = ['Init', 'Pending', 'Verifie
 
 const canManualStatusUpdate = (status?: AccountCloneStatus | null) => {
   if (!status) return false
-  
+
   return MANUAL_STATUS_OPTIONS.includes(status)
 }
 
@@ -68,7 +68,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
 
   const [showPassword, setShowPassword] = useState(false)
   const [showSecret, setShowSecret] = useState(false)
-  
+
   const [isGithubLoading, setIsGithubLoading] = useState(false)
   const [openGithubModal, setOpenGithubModal] = useState(false)
   const [githubUsernameInput, setGithubUsernameInput] = useState('')
@@ -97,7 +97,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
       onSuccess: response => {
         if (!response.success || !response.result) {
           toast.error(response.errors?.[0]?.message || 'Failed to update account clone status')
-          
+
           return
         }
 
@@ -118,7 +118,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
     onSuccess: async response => {
       if (!response.success || !response.result) {
         toast.error(response.errors?.[0]?.message || 'Failed to update account clone')
-        
+
         return
       }
 
@@ -137,12 +137,13 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
     }
   })
 
-  const handleUpdateStatus = async () => {
+  const handleUpdateStatus = async (newStatus: AccountCloneStatus) => {
     if (!editTarget?.id) return
 
+    setTargetStatus(newStatus)
     await updateCloneStatusMutation.mutateAsync({
       accountCloneId: editTarget.id,
-      data: { status: targetStatus }
+      data: { status: newStatus }
     })
   }
 
@@ -159,7 +160,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
       if (!response.success || !response.result) {
         toast.error(response.errors?.[0]?.message || 'Failed to fetch GitHub profile')
         setForm(prev => ({ ...prev, externalAccountId: '' }))
-        
+
         return
       }
 
@@ -189,21 +190,21 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
     onClose()
   }
 
-  const flowSteps = [
-    { label: 'Init', id: 'Init', icon: 'tabler-check' },
-    { label: 'Pending', id: 'Pending', icon: 'tabler-dots' },
+  const flowSteps: { label: string; id: AccountCloneStatus; icon: string }[] = [
+    { label: 'Init', id: 'Init', icon: 'tabler-arrow-right' },
+    { label: 'Pending', id: 'Pending', icon: 'tabler-hourglass' },
     { label: 'Verified', id: 'Verified', icon: 'tabler-check' },
-    { label: 'Reject', id: 'RejectVerified', icon: 'tabler-slash' }
+    { label: 'Reject', id: 'RejectVerified', icon: 'tabler-x' }
   ]
 
-  const currentStatusIndex = flowSteps.findIndex(s => s.id === (editTarget?.status === 'RejectVerified' ? 'RejectVerified' : editTarget?.status === 'Verified' ? 'Verified' : editTarget?.status === 'Pending' ? 'Pending' : 'Init'))
+  const currentStatusIndex = flowSteps.findIndex(s => s.id === targetStatus)
 
   return (
     <>
-      <Dialog 
-        open={open} 
-        onClose={handleClose} 
-        fullWidth 
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
         maxWidth='sm'
         // eslint-disable-next-line @typescript-eslint/no-deprecated
         PaperProps={{
@@ -229,66 +230,96 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
         </DialogTitle>
         <DialogContent dividers sx={{ px: { xs: 2.5, sm: 4 }, pt: 2, pb: 4, borderColor: 'divider' }}>
           <Stack spacing={4}>
-            
+
             {/* Status Workflow Indicator */}
             <Box>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant='caption' fontWeight={700} sx={{ color: 'text.secondary', letterSpacing: '1px' }}>STATUS WORKFLOW</Typography>
-                
-                {canManualStatusUpdate(editTarget?.status) ? (
-                  <Stack direction='row' spacing={1} alignItems='center'>
-                    <TextField
-                      select
-                      size='small'
-                      label='Status'
-                      value={targetStatus}
-                      onChange={e => setTargetStatus(e.target.value as AccountCloneStatus)}
-                      sx={{ minWidth: 120 }}
-                    >
-                      {MANUAL_STATUS_OPTIONS.map(status => (
-                        <MenuItem key={status} value={status}>{status === 'RejectVerified' ? 'Reject' : status}</MenuItem>
-                      ))}
-                    </TextField>
-                    {targetStatus !== editTarget?.status && (
-                      <Button
-                        variant='contained'
-                        size='small'
-                        onClick={handleUpdateStatus}
-                        disabled={updateCloneStatusMutation.isPending}
-                        sx={{ minWidth: 0, px: 2, py: 1, borderRadius: 2 }}
-                      >
-                        {updateCloneStatusMutation.isPending ? <i className='tabler-loader animate-spin' /> : 'Apply'}
-                      </Button>
-                    )}
-                  </Stack>
-                ) : (
-                  <Chip size='small' label='System Controlled' variant='outlined' />
-                )}
+
+                <Chip 
+                  size='small' 
+                  label={targetStatus === 'RejectVerified' ? 'REJECTED' : `${targetStatus.toUpperCase()} STATE`} 
+                  sx={{ 
+                    bgcolor: targetStatus === 'Verified' ? alpha(theme.palette.success.main, 0.15) : 
+                            targetStatus === 'RejectVerified' ? alpha(theme.palette.error.main, 0.15) : 
+                            alpha(theme.palette.primary.main, 0.15),
+                    color: targetStatus === 'Verified' ? 'success.main' : 
+                          targetStatus === 'RejectVerified' ? 'error.main' : 
+                          'primary.main',
+                    fontWeight: 700,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    px: 1,
+                    letterSpacing: '0.5px'
+                  }} 
+                  icon={
+                    targetStatus === 'Verified' ? <i className='tabler-check' style={{ fontSize: 14 }} /> :
+                    targetStatus === 'RejectVerified' ? <i className='tabler-x' style={{ fontSize: 14 }} /> :
+                    <i className='tabler-circle-check' style={{ fontSize: 14 }} />
+                  }
+                />
               </Box>
 
               <Box sx={{ position: 'relative', pt: 1, pb: 2, px: 2 }}>
+                <style>{`
+                  @keyframes pulseNextStep {
+                    0% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); border-color: rgba(99, 102, 241, 0.8); }
+                    70% { box-shadow: 0 0 0 8px rgba(99, 102, 241, 0); border-color: rgba(99, 102, 241, 0.3); }
+                    100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); border-color: rgba(99, 102, 241, 0.3); }
+                  }
+                `}</style>
                 <Box sx={{ position: 'absolute', top: 20, left: 32, right: 32, height: 2, bgcolor: 'divider', zIndex: 0 }} />
                 <Box sx={{ position: 'absolute', top: 20, left: 32, right: 32, height: 2, bgcolor: 'primary.main', zIndex: 1, width: `${(Math.max(0, currentStatusIndex) / 3) * 100}%`, transition: 'width 0.4s ease' }} />
-                
+
                 <Stack direction='row' justifyContent='space-between' sx={{ position: 'relative', zIndex: 2 }}>
                   {flowSteps.map((step, idx) => {
                     const isActive = idx <= currentStatusIndex
                     const isCurrent = idx === currentStatusIndex
+                    
+                    // Logic: 
+                    // Normal flow: Init(0) -> Pending(1) -> Verified(2)
+                    // Reject(3): can be triggered from Init(0) or Pending(1)
+                    const isNextValidStep = (idx === currentStatusIndex + 1 && idx !== 3) || (idx === 3 && currentStatusIndex < 2)
+                    const clickable = canManualStatusUpdate(targetStatus) && isNextValidStep
 
                     return (
-                      <Box key={idx} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 48 }}>
-                        <Box sx={{ 
-                          width: 24, height: 24, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          bgcolor: isActive ? 'primary.main' : 'background.paper',
+                      <Box 
+                        key={idx} 
+                        sx={{ 
+                          display: 'flex', 
+                          flexDirection: 'column', 
+                          alignItems: 'center', 
+                          width: 48,
+                          cursor: clickable ? 'pointer' : 'not-allowed',
+                          opacity: isActive || clickable ? 1 : 0.4,
+                          transition: 'all 0.3s ease',
+                          '&:hover .step-icon': clickable ? {
+                            transform: 'scale(1.15)',
+                            borderColor: 'primary.main',
+                            boxShadow: `0 0 16px ${alpha(theme.palette.primary.main, 0.6)}`
+                          } : {}
+                        }}
+                        onClick={() => {
+                          if (clickable && !updateCloneStatusMutation.isPending) {
+                            void handleUpdateStatus(step.id)
+                          }
+                        }}
+                      >
+                        <Box className='step-icon' sx={{
+                          width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          bgcolor: isActive ? 'primary.main' : '#111827',
                           border: '2px solid',
-                          borderColor: isActive ? 'primary.main' : 'divider',
-                          color: '#fff',
-                          boxShadow: isActive ? `0 0 10px ${alpha(theme.palette.primary.main, 0.5)}` : 'none',
-                          mb: 1
+                          borderColor: isActive ? 'primary.main' : (clickable ? '#6366f1' : 'divider'),
+                          color: isActive ? '#fff' : (clickable ? '#818cf8' : 'text.disabled'),
+                          boxShadow: isActive ? `0 0 12px ${alpha(theme.palette.primary.main, 0.3)}` : 'none',
+                          animation: clickable ? 'pulseNextStep 2s infinite' : 'none',
+                          mb: 1.5,
+                          transition: 'all 0.3s ease',
+                          zIndex: 3
                         }}>
-                          {isActive ? <i className={step.icon} style={{ fontSize: 14 }} /> : <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'divider' }} />}
+                          <i className={step.icon} style={{ fontSize: 16 }} />
                         </Box>
-                        <Typography variant='caption' sx={{ fontSize: '0.65rem', fontWeight: isCurrent ? 700 : 500, color: isCurrent ? 'text.primary' : 'text.secondary', textTransform: 'uppercase' }}>
+                        <Typography variant='caption' sx={{ fontSize: '0.65rem', fontWeight: isCurrent || clickable ? 700 : 600, color: isActive ? 'text.primary' : (clickable ? '#818cf8' : 'text.disabled'), textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                           {step.label}
                         </Typography>
                       </Box>
@@ -317,8 +348,8 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
 
               <Box>
                 <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.75, display: 'block' }}>Username</Typography>
-                <TextField 
-                  value={form.username || ''} 
+                <TextField
+                  value={form.username || ''}
                   onChange={event => setForm(prev => ({ ...prev, username: event.target.value }))}
                   fullWidth
                 />
@@ -335,8 +366,8 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
                     input: {
                       endAdornment: isGithubProduct ? (
                         <InputAdornment position='end'>
-                          <Button 
-                            size='small' 
+                          <Button
+                            size='small'
                             color='primary'
                             onClick={() => setOpenGithubModal(true)}
                             sx={{ textTransform: 'none' }}
@@ -406,12 +437,13 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
             </Box>
           </Stack>
         </DialogContent>
-        <DialogActions sx={{ px: { xs: 2.5, sm: 4 }, py: 3, justifyContent: 'flex-end', gap: 2 }}>
-          <Button 
-            onClick={handleClose} 
+        <DialogActions sx={{ px: { xs: 2.5, sm: 4 }, py: 3,mt:{ xs: 2, sm: 3 },  justifyContent: 'space-between', alignItems: 'center' }}>
+          <Button
+            onClick={handleClose}
             color='inherit'
+            sx={{ fontWeight: 600, color: 'text.secondary', '&:hover': { color: 'text.primary' } }}
           >
-            Cancel
+            DISCARD
           </Button>
           <Button
             variant='contained'
@@ -431,11 +463,18 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
                 }
               })
             }}
-            startIcon={updateCloneMutation.isPending ? <i className='tabler-loader animate-spin' /> : <i className='tabler-device-floppy' />}
+            startIcon={updateCloneMutation.isPending ? <i className='tabler-loader animate-spin' /> : <i className='tabler-checks' />}
             color='primary'
-            sx={{ px: 3 }}
+            sx={{ 
+              px: { xs: 3, sm: 4 }, 
+              py: 1.2, 
+              borderRadius: 2, 
+              fontWeight: 700,
+              boxShadow: `0 8px 16px -4px ${alpha(theme.palette.primary.main, 0.4)}`,
+              letterSpacing: '0.5px'
+            }}
           >
-            Save Changes
+            Save
           </Button>
         </DialogActions>
       </Dialog>

@@ -5,18 +5,13 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
   // This is how you will normally render submenu
   {
     label: 'Dashboards',
-    suffix: {
-      label: '5',
-      color: 'error'
-    },
+
+    // suffix: {
+    //   label: '5',
+    //   color: 'error'
+    // },
     icon: 'tabler-smart-home',
-    children: [
-      {
-        label: 'crm',
-        icon: 'tabler-circle',
-        href: '/dashboards'
-      }
-    ]
+    href: '/dashboards'
   },
   {
     label: 'Brands',
@@ -76,6 +71,16 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
         label: 'Orders & Warranty',
         icon: 'tabler-receipt-2',
         href: '/account-sales/orders'
+      },
+      {
+        label: 'Commissions',
+        icon: 'tabler-coins',
+        href: '/account-sales/commissions'
+      },
+      {
+        label: 'Sales Bonus',
+        icon: 'tabler-trophy',
+        href: '/account-sales/bonus'
       }
     ]
   },

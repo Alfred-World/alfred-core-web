@@ -1,6 +1,6 @@
 'use client'
 
-import AccountSalesDashboard from '../../_components/AccountSalesDashboard'
+import AccountSalesDashboard from './_components/AccountSalesDashboard'
 
 const AccountSalesDashboardPage = () => {
   return <AccountSalesDashboard />

@@ -180,7 +180,7 @@ const AccountSalesClones = () => {
               fontWeight: 600
             }}
           >
-            Deploy New Node
+            New Account
           </Button>
         </Stack>
       </Box>

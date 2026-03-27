@@ -1,60 +1,43 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { alpha } from '@mui/material/styles'
-import Avatar from '@mui/material/Avatar'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
-import Chip from '@mui/material/Chip'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import MenuItem from '@mui/material/MenuItem'
-import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
-import Tab from '@mui/material/Tab'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableCell from '@mui/material/TableCell'
-import TableContainer from '@mui/material/TableContainer'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import Tabs from '@mui/material/Tabs'
 import TextField from '@mui/material/TextField'
-import Tooltip from '@mui/material/Tooltip'
-import Typography from '@mui/material/Typography'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
+
+import { customFetch } from '@/libs/custom-instance'
 
 import {
   getGetApiV1AccountSalesMembersQueryKey,
   useGetApiV1AccountSalesMembers,
   useGetApiV1AccountSalesOrders,
   useGetApiV1AccountSalesMembersSearch,
-  usePostApiV1AccountSalesMembers
+  usePostApiV1AccountSalesMembers,
+  useGetApiV1AccountSalesBonusProgressSoldByMemberId,
+  useGetApiV1AccountSalesBonusTransactionsSoldByMemberId,
+  usePostApiV1AccountSalesBonusTransactionsTransactionIdPay,
+  usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel,
+  usePostApiV1AccountSalesBonusTransactionsSettleTier
 } from '@/generated/core-api'
-import type { ApiErrorResponse, CreateMemberRequest, MemberSource } from '@/generated/core-api'
+import type {
+  ApiErrorResponse,
+  CreateMemberRequest,
+  MemberDto,
+  MemberSource
+} from '@/generated/core-api'
 import { dsl } from '@/utils/dslQueryBuilder'
-import { getInitials } from '@/utils/getInitials'
-
-const channelColor: Record<string, string> = {
-  Zalo: '#10b981',
-  Facebook: '#2563eb',
-  Tiktok: '#f97316',
-  Other: '#64748b'
-}
-
-type OrderCodeAware = {
-  orderCode?: string | null
-  id?: string
-}
-
-const getOrderCodeDisplay = (order: OrderCodeAware) => {
-  return order.orderCode || order.id?.slice(0, 10)
-}
 
 const getApiErrorMessage = (error: unknown, fallback: string) => {
   if (!error) {
@@ -70,15 +53,61 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
   return apiError.errors?.[0]?.message || fallback
 }
 
+import CustomerListSidebar from './CustomerListSidebar'
+import CustomerDetailPanel from './CustomerDetailPanel'
+
+type DetailTab = 'purchased' | 'referrals' | 'bonus-progress' | 'staff-notes'
+const VALID_TABS: DetailTab[] = ['purchased', 'referrals', 'bonus-progress', 'staff-notes']
+
 const AccountSalesCustomers = () => {
   const queryClient = useQueryClient()
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  const selectedMemberId = searchParams.get('member')
+
+  const detailTab = (VALID_TABS.includes(searchParams.get('tab') as DetailTab)
+    ? (searchParams.get('tab') as DetailTab)
+    : 'purchased')
+
+  const setSelectedMemberId = useCallback((id: string | null) => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (id) {
+      params.set('member', id)
+    } else {
+      params.delete('member')
+    }
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [router, pathname, searchParams])
+
+  const setDetailTab = useCallback((tab: DetailTab) => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    params.set('tab', tab)
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }, [router, pathname, searchParams])
 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
-  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null)
   const [openCreate, setOpenCreate] = useState(false)
   const [form, setForm] = useState<CreateMemberRequest>({ source: 'Zalo' })
-  const [detailTab, setDetailTab] = useState<'purchased' | 'referrals'>('purchased')
+  const [openEdit, setOpenEdit] = useState(false)
+  const [editForm, setEditForm] = useState<CreateMemberRequest>({ source: 'Zalo' })
+  const [ordersPage, setOrdersPage] = useState(1)
+  const [referralsPage, setReferralsPage] = useState(1)
+
+  const [payNoteDialog, setPayNoteDialog] = useState<{
+    open: boolean
+
+    /** null = use settle-tier flow (no prior transaction) */
+    transactionId: string | null
+    soldByMemberId?: string
+    tierId?: string
+    note: string
+  } | null>(null)
 
   const filter = useMemo(() => {
     if (!search.trim()) {
@@ -97,54 +126,95 @@ const AccountSalesCustomers = () => {
     { query: { enabled: search.trim().length >= 2 } }
   )
 
+  const isSearching = search.trim().length >= 2
+
   const members = useMemo(() => {
-    if (search.trim().length >= 2) {
+    if (isSearching) {
       return searchQuery.data?.result ?? []
     }
 
-    return membersQuery.data?.result?.items ?? []
-  }, [membersQuery.data?.result?.items, searchQuery.data?.result, search])
+    
+return membersQuery.data?.result?.items ?? []
+  }, [membersQuery.data?.result?.items, searchQuery.data?.result, isSearching])
 
   useEffect(() => {
     if (!selectedMemberId && members.length > 0 && members[0].id) {
       setSelectedMemberId(members[0].id)
     }
+
+  // setSelectedMemberId is stable (useCallback), safe to omit
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [members, selectedMemberId])
 
-  const selectedMember = useMemo(
-    () => members.find(x => x.id === selectedMemberId) ?? null,
-    [members, selectedMemberId]
-  )
+  // Reset tab pagination when selected member changes
+  useEffect(() => {
+    setOrdersPage(1)
+    setReferralsPage(1)
+  }, [selectedMemberId])
+
+  const memberInList = members.find(x => x.id === selectedMemberId) ?? null
+
+  type MemberDetailResult = {
+    success: boolean
+    result?: {
+      member: MemberDto
+      stats: { totalSpend: number; totalReferralCommission: number }
+    }
+  }
+
+  const memberDetailQuery = useQuery<MemberDetailResult>({
+    queryKey: ['account-sales', 'members', selectedMemberId, 'detail'],
+    queryFn: () => customFetch<MemberDetailResult>(`/api/v1/account-sales/members/${selectedMemberId}/detail`),
+    enabled: !!selectedMemberId
+  })
+
+  const selectedMember = memberInList ?? memberDetailQuery.data?.result?.member ?? null
+  const memberTotalSpend = memberDetailQuery.data?.result?.stats.totalSpend ?? 0
+  const totalReferralCommission = memberDetailQuery.data?.result?.stats.totalReferralCommission ?? 0
 
   const ordersQuery = useGetApiV1AccountSalesOrders(
     {
-      page: 1,
-      pageSize: 12,
+      page: ordersPage,
+      pageSize: 10,
       sort: '-purchaseDate',
       filter: selectedMemberId ? dsl().string('memberId').eq(selectedMemberId).build() : undefined,
       view: 'list'
     },
-    { query: { enabled: !!selectedMemberId } }
+    { query: { enabled: !!selectedMemberId && detailTab === 'purchased' } }
   )
 
   const referralOrdersQuery = useGetApiV1AccountSalesOrders(
     {
-      page: 1,
-      pageSize: 20,
+      page: referralsPage,
+      pageSize: 10,
       sort: '-purchaseDate',
       filter: selectedMemberId ? dsl().string('referrerMemberId').eq(selectedMemberId).build() : undefined,
       view: 'list'
     },
-    { query: { enabled: !!selectedMemberId } }
+    { query: { enabled: !!selectedMemberId && detailTab === 'referrals' } }
   )
+
+  const bonusProgressQuery = useGetApiV1AccountSalesBonusProgressSoldByMemberId(
+    selectedMemberId!,
+    { query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' } }
+  )
+
+  const bonusTxQuery = useGetApiV1AccountSalesBonusTransactionsSoldByMemberId(
+    selectedMemberId!,
+    { query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' } }
+  )
+
+  const payBonus = usePostApiV1AccountSalesBonusTransactionsTransactionIdPay()
+  const cancelBonus = usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel()
+  const settleTier = usePostApiV1AccountSalesBonusTransactionsSettleTier()
 
   const createMember = usePostApiV1AccountSalesMembers({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
           toast.error(response.errors?.[0]?.message || 'Failed to create member')
-
-          return
+          
+return
         }
 
         setOpenCreate(false)
@@ -155,21 +225,22 @@ const AccountSalesCustomers = () => {
   })
 
   const selectedOrders = ordersQuery.data?.result?.items ?? []
+  const totalOrders = ordersQuery.data?.result?.total ?? 0
+  const ordersTotalPages = ordersQuery.data?.result?.totalPages ?? 1
 
   const referralOrders = useMemo(
     () => referralOrdersQuery.data?.result?.items ?? [],
     [referralOrdersQuery.data?.result?.items]
   )
 
-  const totalReferralCommission = useMemo(
-    () => referralOrders.reduce((sum, o) => sum + (o.referralCommissionAmountSnapshot ?? 0), 0),
-    [referralOrders]
-  )
+  const totalReferrals = referralOrdersQuery.data?.result?.total ?? 0
+  const referralsTotalPages = referralOrdersQuery.data?.result?.totalPages ?? 1
 
   const customersApiErrorMessage = useMemo(() => {
     const error = membersQuery.error || searchQuery.error || ordersQuery.error || referralOrdersQuery.error
 
-    return getApiErrorMessage(error, 'Unable to load customer data from API.')
+    
+return getApiErrorMessage(error, 'Unable to load customer data from API.')
   }, [membersQuery.error, searchQuery.error, ordersQuery.error, referralOrdersQuery.error])
 
   useEffect(() => {
@@ -178,222 +249,125 @@ const AccountSalesCustomers = () => {
     }
   }, [membersQuery.isError, searchQuery.isError, ordersQuery.isError, referralOrdersQuery.isError, customersApiErrorMessage])
 
+  const cancelTx = async (txId: string) => {
+    try {
+      await cancelBonus.mutateAsync({ transactionId: txId, data: {} })
+      await bonusTxQuery.refetch()
+      toast.success('Bonus transaction cancelled')
+    } catch {
+      toast.error('Failed to cancel bonus transaction')
+    }
+  }
+
+  const handleEditMember = () => {
+    if (!selectedMember) return
+    setEditForm({
+      displayName: selectedMember.displayName ?? '',
+      source: selectedMember.source ?? 'Zalo',
+      sourceId: selectedMember.sourceId ?? '',
+      customerNote: selectedMember.customerNote ?? ''
+    })
+    setOpenEdit(true)
+  }
+
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', xl: '1.9fr 1fr' }, gap: 2.5 }}>
-      <Card sx={{ p: 2.5, border: '1px solid', borderColor: 'divider' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2.5, gap: 2 }}>
-          <Box>
-            <Typography variant='h4' fontWeight={800}>Customer Directory</Typography>
-            <Typography variant='body2' color='text.secondary'>Search and track members from Zalo, Facebook and TikTok.</Typography>
-          </Box>
-          <Button variant='contained' startIcon={<i className='tabler-user-plus' />} onClick={() => setOpenCreate(true)}>
-            Add New Member
-          </Button>
-        </Box>
-
-        <TextField
-          fullWidth
-          size='small'
-          placeholder='Quick find members by name, phone, or ID...'
-          value={search}
-          onChange={event => {
-            setSearch(event.target.value)
-            setPage(1)
-          }}
-          sx={{ mb: 2.5 }}
-          slotProps={{
-            input: {
-              startAdornment: <i className='tabler-search' style={{ fontSize: 16, marginInlineEnd: 8, opacity: 0.55 }} />
-            }
-          }}
+    <Box sx={{ 
+      display: 'grid', 
+      gridTemplateColumns: { xs: '1fr', lg: '350px 1fr' }, 
+      gap: { xs: 3, lg: 4 }, 
+      minHeight: '80vh' 
+    }}>
+      {/* Sidebar List */}
+      <Card sx={{ height: { xs: '60vh', lg: 'auto' }, overflowY: 'hidden', p: { xs: 2.5, md: 3 }, borderRadius: 3, display: 'flex', flexDirection: 'column' }}>
+        <CustomerListSidebar
+          members={members}
+          totalMembers={membersQuery.data?.result?.total ?? 0}
+          totalPages={membersQuery.data?.result?.totalPages ?? 1}
+          page={page}
+          setPage={setPage}
+          search={search}
+          setSearch={setSearch}
+          selectedMemberId={selectedMemberId}
+          setSelectedMemberId={setSelectedMemberId}
+          isSearching={isSearching}
+          setOpenCreate={setOpenCreate}
         />
-
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ bgcolor: 'action.hover' }}>
-                <TableCell sx={{ fontWeight: 700 }}>Member</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Source</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Details</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Joined</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {members.map(member => {
-                const isSelected = member.id === selectedMemberId
-                const source = member.source ?? 'Other'
-                const sourceHex = channelColor[source] ?? channelColor.Other
-
-                return (
-                  <TableRow
-                    key={member.id}
-                    hover
-                    onClick={() => setSelectedMemberId(member.id ?? null)}
-                    sx={{
-                      cursor: 'pointer',
-                      bgcolor: isSelected ? alpha('#2563eb', 0.06) : 'transparent'
-                    }}
-                  >
-                    <TableCell>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
-                        <Avatar sx={{ width: 34, height: 34, fontSize: 13, fontWeight: 700 }}>
-                          {getInitials(member.displayName || 'U')}
-                        </Avatar>
-                        <Box>
-                          <Typography variant='body2' fontWeight={700}>{member.displayName || 'Unnamed member'}</Typography>
-                          <Typography variant='caption' color='text.secondary'>ID: {member.id?.slice(0, 8)}</Typography>
-                        </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>
-                      <Chip
-                        size='small'
-                        label={source}
-                        sx={{
-                          bgcolor: alpha(sourceHex, 0.16),
-                          color: sourceHex,
-                          fontWeight: 700,
-                          border: `1px solid ${alpha(sourceHex, 0.25)}`
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant='body2'>{member.sourceId || '-'}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant='body2' color='text.secondary'>{member.createdAt?.slice(0, 10)}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Chip size='small' color='primary' label='Active' />
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-              {members.length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={5}>
-                    <Typography variant='body2' color='text.secondary' sx={{ py: 2 }}>No members found.</Typography>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-
-        {search.trim().length < 2 && (
-          <Stack direction='row' justifyContent='space-between' alignItems='center' sx={{ mt: 2 }}>
-            <Typography variant='body2' color='text.secondary'>
-              Showing {members.length} of {membersQuery.data?.result?.total ?? 0} members
-            </Typography>
-            <Pagination
-              color='primary'
-              page={page}
-              count={membersQuery.data?.result?.totalPages ?? 1}
-              onChange={(_, value) => setPage(value)}
-            />
-          </Stack>
-        )}
       </Card>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-        <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
-          <Box sx={{ p: 2.5, background: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)', color: 'common.white' }}>
-            <Typography variant='h5' fontWeight={800}>{selectedMember?.displayName || 'Select member'}</Typography>
-            <Typography variant='body2' sx={{ color: alpha('#fff', 0.85) }}>{selectedMember?.sourceId || 'No source ID'}</Typography>
-          </Box>
-          <Box sx={{ p: 2.5 }}>
-            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1.2, mb: 2 }}>
-              <Card sx={{ p: 1.5, bgcolor: 'action.hover' }}>
-                <Typography variant='caption' color='text.secondary'>Orders</Typography>
-                <Typography variant='h6' fontWeight={800}>{ordersQuery.data?.result?.total ?? selectedOrders.length}</Typography>
-              </Card>
-              <Card sx={{ p: 1.5, bgcolor: 'action.hover' }}>
-                <Typography variant='caption' color='text.secondary'>Source</Typography>
-                <Typography variant='h6' fontWeight={800}>{selectedMember?.source || '-'}</Typography>
-              </Card>
-              <Card sx={{ p: 1.5, bgcolor: 'action.hover' }}>
-                <Typography variant='caption' color='text.secondary'>Referrals</Typography>
-                <Typography variant='h6' fontWeight={800}>{referralOrdersQuery.data?.result?.total ?? referralOrders.length}</Typography>
-              </Card>
-              <Card sx={{ p: 1.5, bgcolor: 'action.hover' }}>
-                <Typography variant='caption' color='text.secondary'>Total Commission</Typography>
-                <Typography variant='h6' fontWeight={800} sx={{ fontSize: '0.95rem' }}>
-                  {totalReferralCommission.toLocaleString('vi-VN')} ₫
-                </Typography>
-              </Card>
-            </Box>
+      {/* Detail Panel */}
+      <Card sx={{ overflowX: 'hidden', p: { xs: 2.5, md: 3 }, height: '100%', borderRadius: 3 }}>
+        <CustomerDetailPanel
+          selectedMember={selectedMember}
+          orders={selectedOrders}
+          totalOrders={totalOrders}
+          ordersPage={ordersPage}
+          ordersTotalPages={ordersTotalPages}
+          setOrdersPage={setOrdersPage}
+          referralOrders={referralOrders}
+          totalReferrals={totalReferrals}
+          referralsPage={referralsPage}
+          referralsTotalPages={referralsTotalPages}
+          setReferralsPage={setReferralsPage}
+          totalSpend={memberTotalSpend}
+          totalReferralCommission={totalReferralCommission}
+          bonusProgress={bonusProgressQuery.data?.result}
+          txHistory={bonusTxQuery.data?.result ?? []}
+          detailTab={detailTab}
+          setDetailTab={setDetailTab}
+          setPayNoteDialog={setPayNoteDialog}
+          isPayingBonus={payBonus.isPending || settleTier.isPending}
+          cancelTx={cancelTx}
+          isCanceling={cancelBonus.isPending}
+          onEditMember={handleEditMember}
+        />
+      </Card>
 
-            <Tabs
-              value={detailTab}
-              onChange={(_, v) => setDetailTab(v)}
-              sx={{ mb: 1.5, minHeight: 36, '& .MuiTab-root': { minHeight: 36, py: 0, fontSize: 13 } }}
-            >
-              <Tab value='purchased' label='Purchases' />
-              <Tab value='referrals' label={`Referrals (${referralOrders.length})`} />
-            </Tabs>
+      <Dialog open={!!payNoteDialog?.open} onClose={() => setPayNoteDialog(null)} fullWidth maxWidth='xs'>
+        <DialogTitle>Pay Bonus</DialogTitle>
+        <DialogContent sx={{ pt: 2, pb: 1 }}>
+          <TextField
+            fullWidth
+            label='Note (optional)'
+            multiline
+            minRows={2}
+            value={payNoteDialog?.note ?? ''}
+            onChange={e => setPayNoteDialog(prev => prev ? { ...prev, note: e.target.value } : null)}
+          />
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2.5 }}>
+          <Button onClick={() => setPayNoteDialog(null)}>Cancel</Button>
+          <Button
+            variant='contained'
+            color='success'
+            disabled={payBonus.isPending || settleTier.isPending}
+            onClick={async () => {
+              if (!payNoteDialog) return
 
-            {detailTab === 'purchased' && (
-              <Stack spacing={1}>
-                {selectedOrders.slice(0, 8).map(order => (
-                  <Box key={order.id} sx={{ p: 1.25, borderRadius: 1.5, bgcolor: 'action.hover' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                      <Typography variant='body2' fontWeight={700}>{order.productName}</Typography>
-                      <Chip size='small' label={order.status} color={order.status === 'Active' ? 'primary' : 'default'} />
-                    </Box>
-                    <Typography variant='caption' color='text.secondary'>
-                      {getOrderCodeDisplay(order)} · {order.productVariantNameSnapshot} · {order.unitPriceSnapshot?.toLocaleString('vi-VN')} ₫
-                    </Typography>
-                    <br />
-                    <Typography variant='caption' color='text.secondary'>
-                      Warranty: {order.warrantyExpiry?.slice(0, 10)}
-                    </Typography>
-                  </Box>
-                ))}
-                {selectedOrders.length === 0 && (
-                  <Typography variant='body2' color='text.secondary'>No orders for selected member.</Typography>
-                )}
-              </Stack>
-            )}
+              try {
+                if (payNoteDialog.transactionId) {
+                  await payBonus.mutateAsync({ transactionId: payNoteDialog.transactionId, data: { note: payNoteDialog.note || null } })
+                } else {
+                  await settleTier.mutateAsync({
+                    data: {
+                      soldByMemberId: payNoteDialog.soldByMemberId!,
+                      tierId: payNoteDialog.tierId!,
+                      note: payNoteDialog.note || null
+                    }
+                  })
+                }
 
-            {detailTab === 'referrals' && (
-              <Stack spacing={1}>
-                {referralOrders.map(order => (
-                  <Box key={order.id} sx={{ p: 1.25, borderRadius: 1.5, bgcolor: 'action.hover' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 1 }}>
-                      <Typography variant='body2' fontWeight={700}>{order.productName}</Typography>
-                      <Tooltip title='Referral commission'>
-                        <Chip
-                          size='small'
-                          color='success'
-                          variant='outlined'
-                          label={`+${(order.referralCommissionAmountSnapshot ?? 0).toLocaleString('vi-VN')} ₫`}
-                        />
-                      </Tooltip>
-                    </Box>
-                    <Typography variant='caption' color='text.secondary'>
-                      {getOrderCodeDisplay(order)} · {order.memberDisplayName || 'Unknown buyer'}
-                    </Typography>
-                    <br />
-                    <Typography variant='caption' color='text.secondary'>
-                      {(order.referralCommissionPercentSnapshot ?? 0)}% · {order.purchaseDate?.slice(0, 10)}
-                    </Typography>
-                  </Box>
-                ))}
-                {referralOrders.length === 0 && (
-                  <Typography variant='body2' color='text.secondary'>No referral orders yet.</Typography>
-                )}
-              </Stack>
-            )}
-            <Box sx={{ mt: 2 }}>
-              <Typography variant='subtitle2' fontWeight={700} sx={{ mb: 0.6 }}>Staff Notes</Typography>
-              <Typography variant='body2' color='text.secondary'>
-                {selectedMember?.customerNote || 'No private notes for this member.'}
-              </Typography>
-            </Box>
-          </Box>
-        </Card>
-      </Box>
+                await Promise.all([bonusProgressQuery.refetch(), bonusTxQuery.refetch()])
+                toast.success('Bonus marked as paid')
+                setPayNoteDialog(null)
+              } catch {
+                toast.error('Failed to mark bonus as paid')
+              }
+            }}
+          >
+            Confirm Payment
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Dialog open={openCreate} onClose={() => setOpenCreate(false)} fullWidth maxWidth='sm'>
         <DialogTitle>Create Member</DialogTitle>
@@ -442,8 +416,62 @@ const AccountSalesCustomers = () => {
           </Button>
         </DialogActions>
       </Dialog>
+
+      {/* Edit Member Dialog — mutation usePutApiV1AccountSalesMembersId available after: restart alfred-core + pnpm generate */}
+      <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth='sm'>
+        <DialogTitle>Edit Member</DialogTitle>
+        <DialogContent sx={{ px: { xs: 2.5, sm: 3.5 }, pt: 2, pb: 1 }}>
+          <Stack spacing={2}>
+            <TextField
+              label='Display name'
+              value={editForm.displayName || ''}
+              onChange={event => setEditForm(prev => ({ ...prev, displayName: event.target.value }))}
+            />
+            <TextField
+              select
+              label='Source'
+              value={editForm.source || 'Zalo'}
+              onChange={event => setEditForm(prev => ({ ...prev, source: event.target.value as MemberSource }))}
+            >
+              <MenuItem value='Zalo'>Zalo</MenuItem>
+              <MenuItem value='Facebook'>Facebook</MenuItem>
+              <MenuItem value='Tiktok'>TikTok</MenuItem>
+              <MenuItem value='Other'>Other</MenuItem>
+            </TextField>
+            <TextField
+              label='Source ID (phone/link)'
+              value={editForm.sourceId || ''}
+              onChange={event => setEditForm(prev => ({ ...prev, sourceId: event.target.value }))}
+            />
+            <TextField
+              label='Customer note'
+              multiline
+              minRows={3}
+              value={editForm.customerNote || ''}
+              onChange={event => setEditForm(prev => ({ ...prev, customerNote: event.target.value }))}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ px: { xs: 2.5, sm: 3.5 }, pb: 2.5, pt: 1.5 }}>
+          <Button onClick={() => setOpenEdit(false)}>Cancel</Button>
+          <Button
+            variant='contained'
+            onClick={async () => {
+              // TODO: wire after restart alfred-core + pnpm generate:
+              // const updateMember = usePutApiV1AccountSalesMembersId()
+              // await updateMember.mutateAsync({ id: selectedMemberId!, data: editForm })
+              // await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesMembersQueryKey() })
+              toast.info('Restart alfred-core service then run pnpm generate to activate edit.')
+              setOpenEdit(false)
+            }}
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
 
 export default AccountSalesCustomers
+

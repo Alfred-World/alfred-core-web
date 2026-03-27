@@ -339,6 +339,15 @@ export const AccountOrderStatus = {
   Refunded: 'Refunded'
 } as const
 
+export type PaymentStatus = (typeof PaymentStatus)[keyof typeof PaymentStatus]
+
+export const PaymentStatus = {
+  Pending: 'Pending',
+  Paid: 'Paid',
+  PartiallyRefunded: 'PartiallyRefunded',
+  FullyRefunded: 'FullyRefunded'
+} as const
+
 export interface AccountOrderDto {
   id?: string
   orderCode?: string
@@ -371,6 +380,9 @@ export interface AccountOrderDto {
   /** @nullable */
   warrantyIssueNote?: string | null
   status?: AccountOrderStatus
+  paymentStatus?: PaymentStatus
+  isTrial?: boolean
+  refundAmount?: number
   createdAt?: string
   /** @nullable */
   updatedAt?: string | null
@@ -399,6 +411,23 @@ export interface AccountOrderDtoApiPagedResponse {
   /** @nullable */
   message?: string | null
   result?: AccountOrderDtoPageResult | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface AccountOrderDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: AccountOrderDto | null
   /** @nullable */
   errors?: ApiError[] | null
 }
@@ -623,6 +652,26 @@ export interface AttachmentDtoListApiResponse {
   errors?: ApiError[] | null
 }
 
+export type SalesBonusTransactionStatus = (typeof SalesBonusTransactionStatus)[keyof typeof SalesBonusTransactionStatus]
+
+export const SalesBonusTransactionStatus = {
+  Pending: 'Pending',
+  Paid: 'Paid',
+  Cancelled: 'Cancelled'
+} as const
+
+export interface BonusTierProgressDto {
+  tierId?: string
+  orderThreshold?: number
+  bonusAmount?: number
+  isActive?: boolean
+  isReached?: boolean
+  ordersNeeded?: number
+  transactionStatus?: SalesBonusTransactionStatus | null
+  /** @nullable */
+  transactionId?: string | null
+}
+
 export interface BrandCategoryDto {
   id?: string
   name?: string
@@ -690,6 +739,11 @@ export interface BrandDtoApiResponse {
   result?: BrandDto | null
   /** @nullable */
   errors?: ApiError[] | null
+}
+
+export interface CancelBonusTransactionRequest {
+  /** @nullable */
+  note?: string | null
 }
 
 export type CategoryType = (typeof CategoryType)[keyof typeof CategoryType]
@@ -902,6 +956,110 @@ export interface CheckWarrantyRequest {
   username?: string | null
 }
 
+export interface CommissionDto {
+  id?: string
+  memberId?: string
+  /** @nullable */
+  memberDisplayName?: string | null
+  availableBalance?: number
+  totalEarned?: number
+  totalPaidOut?: number
+  createdAt?: string
+  /** @nullable */
+  updatedAt?: string | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface CommissionDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: CommissionDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface CommissionDtoListApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: CommissionDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+export type CommissionTransactionType = (typeof CommissionTransactionType)[keyof typeof CommissionTransactionType]
+
+export const CommissionTransactionType = {
+  OrderCommission: 'OrderCommission',
+  Refund: 'Refund',
+  Payout: 'Payout'
+} as const
+
+export type CommissionTransactionStatus = (typeof CommissionTransactionStatus)[keyof typeof CommissionTransactionStatus]
+
+export const CommissionTransactionStatus = {
+  Pending: 'Pending',
+  Completed: 'Completed',
+  Cancelled: 'Cancelled'
+} as const
+
+export interface CommissionTransactionDto {
+  id?: string
+  memberId?: string
+  /** @nullable */
+  memberDisplayName?: string | null
+  /** @nullable */
+  accountOrderId?: string | null
+  /** @nullable */
+  orderCode?: string | null
+  transactionType?: CommissionTransactionType
+  amount?: number
+  balanceAfter?: number
+  /** @nullable */
+  note?: string | null
+  /** @nullable */
+  evidenceObjectKey?: string | null
+  status?: CommissionTransactionStatus
+  /** @nullable */
+  processedByUserId?: string | null
+  createdAt?: string
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface CommissionTransactionDtoListApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: CommissionTransactionDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 export type CommodityAssetClass = (typeof CommodityAssetClass)[keyof typeof CommodityAssetClass]
 
 export const CommodityAssetClass = {
@@ -1027,6 +1185,7 @@ export interface CreateAccountOrderRequest {
   referrerMemberId?: string | null
   /** @nullable */
   orderNote?: string | null
+  isTrial?: boolean
 }
 
 export interface CreateAssetLogRequest {
@@ -1139,6 +1298,11 @@ export interface CreateProductRequest {
   variants?: CreateProductVariantRequest[]
   /** @nullable */
   description?: string | null
+}
+
+export interface CreateSalesBonusTierRequest {
+  orderThreshold?: number
+  bonusAmount?: number
 }
 
 export interface CreateSourceAccountRequest {
@@ -1397,6 +1561,11 @@ export interface InvestmentTransactionDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface MarkBonusPaidRequest {
+  /** @nullable */
+  note?: string | null
+}
+
 export interface MemberDtoPageResult {
   items?: MemberDto[]
   page?: number
@@ -1459,6 +1628,59 @@ export interface MemberDtoListApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface MemberMonthlySalesSummaryDto {
+  id?: string
+  soldByMemberId?: string
+  /** @nullable */
+  soldByMemberName?: string | null
+  year?: number
+  month?: number
+  orderCount?: number
+  /** @nullable */
+  highestTierReachedId?: string | null
+  /** @nullable */
+  highestTierOrderThreshold?: number | null
+  totalBonusEarned?: number
+  createdAt?: string
+  /** @nullable */
+  updatedAt?: string | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface MemberMonthlySalesSummaryDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: MemberMonthlySalesSummaryDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface MemberMonthlySalesSummaryDtoListApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: MemberMonthlySalesSummaryDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 /**
  * Unified API response wrapper for all API responses (success + error).
 - On success: Success=true, Result is populated, Errors is null.
@@ -1472,6 +1694,41 @@ export interface ObjectApiResponse {
   /** @nullable */
   message?: string | null
   result?: unknown | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+export interface PayoutCommissionRequest {
+  memberId?: string
+  /** @nullable */
+  evidenceObjectKey?: string | null
+  /** @nullable */
+  note?: string | null
+}
+
+export interface PayoutResultDto {
+  transactionId?: string
+  memberId?: string
+  /** @nullable */
+  memberDisplayName?: string | null
+  amountPaid?: number
+  balanceAfter?: number
+  paymentDate?: string
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface PayoutResultDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: PayoutResultDto | null
   /** @nullable */
   errors?: ApiError[] | null
 }
@@ -1542,12 +1799,22 @@ export interface ProductDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface ReferralCommissionSettingHistoryDto {
+  id?: string
+  previousCommissionPercent?: number
+  newCommissionPercent?: number
+  changedAt?: string
+  changedByUser?: ReplicatedUserDto | null
+}
+
 export interface ReferralCommissionSettingDto {
   id?: string
   commissionPercent?: number
   createdAt?: string
   /** @nullable */
   updatedAt?: string | null
+  /** @nullable */
+  history?: ReferralCommissionSettingHistoryDto[] | null
 }
 
 /**
@@ -1565,14 +1832,6 @@ export interface ReferralCommissionSettingDtoApiResponse {
   result?: ReferralCommissionSettingDto | null
   /** @nullable */
   errors?: ApiError[] | null
-}
-
-export interface ReferralCommissionSettingHistoryDto {
-  id?: string
-  previousCommissionPercent?: number
-  newCommissionPercent?: number
-  changedAt?: string
-  changedByUser?: ReplicatedUserDto | null
 }
 
 /**
@@ -1593,6 +1852,40 @@ export interface ReferralCommissionSettingHistoryDtoListApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface RefundOrderRequest {
+  orderId?: string
+  refundAmount?: number
+  /** @nullable */
+  note?: string | null
+}
+
+export interface RefundResultDto {
+  orderId?: string
+  orderCode?: string
+  refundAmount?: number
+  totalRefunded?: number
+  commissionClawback?: number
+  paymentStatus?: PaymentStatus
+  orderStatus?: string
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface RefundResultDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: RefundResultDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
 export interface ReplaceAccountOrderRequest {
   replacementAccountCloneId?: string
   /** @nullable */
@@ -1603,6 +1896,105 @@ export interface ReplaceAccountOrderRequest {
 
 export interface ReviewAccountCloneRequest {
   isVerified?: boolean
+}
+
+export interface SalesBonusTierDto {
+  id?: string
+  orderThreshold?: number
+  bonusAmount?: number
+  isActive?: boolean
+  createdAt?: string
+  /** @nullable */
+  updatedAt?: string | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SalesBonusTierDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: SalesBonusTierDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SalesBonusTierDtoListApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: SalesBonusTierDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+export interface SalesBonusTransactionDto {
+  id?: string
+  soldByMemberId?: string
+  /** @nullable */
+  soldByMemberName?: string | null
+  salesBonusTierId?: string
+  year?: number
+  month?: number
+  orderCountAtTrigger?: number
+  orderThresholdSnapshot?: number
+  bonusAmountSnapshot?: number
+  status?: SalesBonusTransactionStatus
+  /** @nullable */
+  processedByUserId?: string | null
+  /** @nullable */
+  note?: string | null
+  createdAt?: string
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SalesBonusTransactionDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: SalesBonusTransactionDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SalesBonusTransactionDtoListApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  /** @nullable */
+  result?: SalesBonusTransactionDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
 }
 
 export interface SellAccountResultDto {
@@ -1628,6 +2020,34 @@ export interface SellAccountResultDtoApiResponse {
   /** @nullable */
   message?: string | null
   result?: SellAccountResultDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+export interface SellerBonusProgressDto {
+  soldByMemberId?: string
+  /** @nullable */
+  soldByMemberName?: string | null
+  year?: number
+  month?: number
+  currentOrderCount?: number
+  totalBonusEarned?: number
+  tiers?: BonusTierProgressDto[]
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface SellerBonusProgressDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: SellerBonusProgressDto | null
   /** @nullable */
   errors?: ApiError[] | null
 }
@@ -1686,6 +2106,13 @@ The frontend should trim this to the most recent N messages. */
 
 export interface SetSourceAccountActiveRequest {
   isActive?: boolean
+}
+
+export interface SettleBonusTierRequest {
+  soldByMemberId?: string
+  tierId?: string
+  /** @nullable */
+  note?: string | null
 }
 
 export interface SourceAccountDto {
@@ -1989,6 +2416,12 @@ export interface UpdateReferralCommissionSettingRequest {
   commissionPercent?: number
 }
 
+export interface UpdateSalesBonusTierRequest {
+  orderThreshold?: number
+  bonusAmount?: number
+  isActive?: boolean
+}
+
 export interface UpdateSourceAccountRequest {
   accountType?: AccountProductType
   username?: string
@@ -2165,6 +2598,13 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
 Available views depend on the endpoint (e.g., "list", "detail", "minimal").
  */
   view?: string
+}
+
+export type GetApiV1AccountSalesBonusTransactionsParams = {
+  year?: number
+  month?: number
+  status?: SalesBonusTransactionStatus
+  soldByMemberId?: string
 }
 
 export type GetApiV1AccountSalesMembersParams = {
@@ -3997,6 +4437,1841 @@ export const usePutApiV1AccountSalesAccountClonesAccountCloneIdStatus = <
   return useMutation(getPutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions(options), queryClient)
 }
 
+/**
+ * @summary Get all bonus tier configurations.
+ */
+export const getGetApiV1AccountSalesBonusTiersUrl = () => {
+  return `/api/v1/account-sales/bonus/tiers`
+}
+
+export const getApiV1AccountSalesBonusTiers = async (
+  options?: RequestInit
+): Promise<SalesBonusTierDtoListApiResponse> => {
+  return customFetch<SalesBonusTierDtoListApiResponse>(getGetApiV1AccountSalesBonusTiersUrl(), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesBonusTiersQueryKey = () => {
+  return [`/api/v1/account-sales/bonus/tiers`] as const
+}
+
+export const getGetApiV1AccountSalesBonusTiersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+  TError = ErrorType<unknown>
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>>
+  request?: SecondParameter<typeof customFetch>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusTiersQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>> = ({ signal }) =>
+    getApiV1AccountSalesBonusTiers({ signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesBonusTiersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>
+>
+export type GetApiV1AccountSalesBonusTiersQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+  TError = ErrorType<unknown>
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get all bonus tier configurations.
+ */
+
+export function useGetApiV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesBonusTiersQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Create a new bonus tier milestone.
+ */
+export const getPostApiV1AccountSalesBonusTiersUrl = () => {
+  return `/api/v1/account-sales/bonus/tiers`
+}
+
+export const postApiV1AccountSalesBonusTiers = async (
+  createSalesBonusTierRequest: CreateSalesBonusTierRequest,
+  options?: RequestInit
+): Promise<SalesBonusTierDtoApiResponse> => {
+  return customFetch<SalesBonusTierDtoApiResponse>(getPostApiV1AccountSalesBonusTiersUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(createSalesBonusTierRequest)
+  })
+}
+
+export const getPostApiV1AccountSalesBonusTiersMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+    TError,
+    { data: CreateSalesBonusTierRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+  TError,
+  { data: CreateSalesBonusTierRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesBonusTiers']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+    { data: CreateSalesBonusTierRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccountSalesBonusTiers(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesBonusTiersMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>
+>
+export type PostApiV1AccountSalesBonusTiersMutationBody = CreateSalesBonusTierRequest
+export type PostApiV1AccountSalesBonusTiersMutationError = ErrorType<unknown>
+
+/**
+ * @summary Create a new bonus tier milestone.
+ */
+export const usePostApiV1AccountSalesBonusTiers = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+      TError,
+      { data: CreateSalesBonusTierRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+  TError,
+  { data: CreateSalesBonusTierRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesBonusTiersMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Update an existing bonus tier.
+ */
+export const getPutApiV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
+  return `/api/v1/account-sales/bonus/tiers/${tierId}`
+}
+
+export const putApiV1AccountSalesBonusTiersTierId = async (
+  tierId: string,
+  updateSalesBonusTierRequest: UpdateSalesBonusTierRequest,
+  options?: RequestInit
+): Promise<SalesBonusTierDtoApiResponse> => {
+  return customFetch<SalesBonusTierDtoApiResponse>(getPutApiV1AccountSalesBonusTiersTierIdUrl(tierId), {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(updateSalesBonusTierRequest)
+  })
+}
+
+export const getPutApiV1AccountSalesBonusTiersTierIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+    TError,
+    { tierId: string; data: UpdateSalesBonusTierRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+  TError,
+  { tierId: string; data: UpdateSalesBonusTierRequest },
+  TContext
+> => {
+  const mutationKey = ['putApiV1AccountSalesBonusTiersTierId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+    { tierId: string; data: UpdateSalesBonusTierRequest }
+  > = props => {
+    const { tierId, data } = props ?? {}
+
+    return putApiV1AccountSalesBonusTiersTierId(tierId, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PutApiV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>
+>
+export type PutApiV1AccountSalesBonusTiersTierIdMutationBody = UpdateSalesBonusTierRequest
+export type PutApiV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
+
+/**
+ * @summary Update an existing bonus tier.
+ */
+export const usePutApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+      TError,
+      { tierId: string; data: UpdateSalesBonusTierRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+  TError,
+  { tierId: string; data: UpdateSalesBonusTierRequest },
+  TContext
+> => {
+  return useMutation(getPutApiV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Delete a bonus tier (hard delete).
+ */
+export const getDeleteApiV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
+  return `/api/v1/account-sales/bonus/tiers/${tierId}`
+}
+
+export const deleteApiV1AccountSalesBonusTiersTierId = async (tierId: string, options?: RequestInit): Promise<void> => {
+  return customFetch<void>(getDeleteApiV1AccountSalesBonusTiersTierIdUrl(tierId), {
+    ...options,
+    method: 'DELETE'
+  })
+}
+
+export const getDeleteApiV1AccountSalesBonusTiersTierIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+    TError,
+    { tierId: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+  TError,
+  { tierId: string },
+  TContext
+> => {
+  const mutationKey = ['deleteApiV1AccountSalesBonusTiersTierId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+    { tierId: string }
+  > = props => {
+    const { tierId } = props ?? {}
+
+    return deleteApiV1AccountSalesBonusTiersTierId(tierId, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type DeleteApiV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>
+>
+
+export type DeleteApiV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
+
+/**
+ * @summary Delete a bonus tier (hard delete).
+ */
+export const useDeleteApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+      TError,
+      { tierId: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+  TError,
+  { tierId: string },
+  TContext
+> => {
+  return useMutation(getDeleteApiV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Get all monthly sales summaries for a seller (history across all months).
+ */
+export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdUrl = (soldByMemberId: string) => {
+  return `/api/v1/account-sales/bonus/summaries/${soldByMemberId}`
+}
+
+export const getApiV1AccountSalesBonusSummariesSoldByMemberId = async (
+  soldByMemberId: string,
+  options?: RequestInit
+): Promise<MemberMonthlySalesSummaryDtoListApiResponse> => {
+  return customFetch<MemberMonthlySalesSummaryDtoListApiResponse>(
+    getGetApiV1AccountSalesBonusSummariesSoldByMemberIdUrl(soldByMemberId),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryKey = (soldByMemberId: string) => {
+  return [`/api/v1/account-sales/bonus/summaries/${soldByMemberId}`] as const
+}
+
+export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryKey(soldByMemberId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>> = ({
+    signal
+  }) => getApiV1AccountSalesBonusSummariesSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!soldByMemberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>
+>
+export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get all monthly sales summaries for a seller (history across all months).
+ */
+
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryOptions(soldByMemberId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get the monthly sales summary for a referrer member for a specific month.
+ */
+export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthUrl = (
+  soldByMemberId: string,
+  year: number,
+  month: number
+) => {
+  return `/api/v1/account-sales/bonus/summaries/${soldByMemberId}/${year}/${month}`
+}
+
+export const getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth = async (
+  soldByMemberId: string,
+  year: number,
+  month: number,
+  options?: RequestInit
+): Promise<MemberMonthlySalesSummaryDtoApiResponse> => {
+  return customFetch<MemberMonthlySalesSummaryDtoApiResponse>(
+    getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthUrl(soldByMemberId, year, month),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryKey = (
+  soldByMemberId: string,
+  year: number,
+  month: number
+) => {
+  return [`/api/v1/account-sales/bonus/summaries/${soldByMemberId}/${year}/${month}`] as const
+}
+
+export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  year: number,
+  month: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryKey(soldByMemberId, year, month)
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+  > = ({ signal }) =>
+    getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth(soldByMemberId, year, month, {
+      signal,
+      ...requestOptions
+    })
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(soldByMemberId && year && month),
+    staleTime: 10000,
+    ...queryOptions
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+>
+export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  year: number,
+  month: number,
+  options: {
+    query: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  year: number,
+  month: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        TError,
+        TData
+      >
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  year: number,
+  month: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get the monthly sales summary for a referrer member for a specific month.
+ */
+
+export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  year: number,
+  month: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<
+        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        TError,
+        TData
+      >
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOptions(
+    soldByMemberId,
+    year,
+    month,
+    options
+  )
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get all bonus transactions for a referrer member.
+ */
+export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdUrl = (soldByMemberId: string) => {
+  return `/api/v1/account-sales/bonus/transactions/${soldByMemberId}`
+}
+
+export const getApiV1AccountSalesBonusTransactionsSoldByMemberId = async (
+  soldByMemberId: string,
+  options?: RequestInit
+): Promise<SalesBonusTransactionDtoListApiResponse> => {
+  return customFetch<SalesBonusTransactionDtoListApiResponse>(
+    getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdUrl(soldByMemberId),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryKey = (soldByMemberId: string) => {
+  return [`/api/v1/account-sales/bonus/transactions/${soldByMemberId}`] as const
+}
+
+export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryKey(soldByMemberId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>> = ({
+    signal
+  }) => getApiV1AccountSalesBonusTransactionsSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!soldByMemberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>
+>
+export type GetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get all bonus transactions for a referrer member.
+ */
+
+export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions(soldByMemberId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get all bonus transactions across all sellers (admin). Filter by year, month, or status.
+ */
+export const getGetApiV1AccountSalesBonusTransactionsUrl = (params?: GetApiV1AccountSalesBonusTransactionsParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0
+    ? `/api/v1/account-sales/bonus/transactions?${stringifiedParams}`
+    : `/api/v1/account-sales/bonus/transactions`
+}
+
+export const getApiV1AccountSalesBonusTransactions = async (
+  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  options?: RequestInit
+): Promise<SalesBonusTransactionDtoListApiResponse> => {
+  return customFetch<SalesBonusTransactionDtoListApiResponse>(getGetApiV1AccountSalesBonusTransactionsUrl(params), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesBonusTransactionsQueryKey = (
+  params?: GetApiV1AccountSalesBonusTransactionsParams
+) => {
+  return [`/api/v1/account-sales/bonus/transactions`, ...(params ? [params] : [])] as const
+}
+
+export const getGetApiV1AccountSalesBonusTransactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusTransactionsQueryKey(params)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>> = ({ signal }) =>
+    getApiV1AccountSalesBonusTransactions(params, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesBonusTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>
+>
+export type GetApiV1AccountSalesBonusTransactionsQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  params: undefined | GetApiV1AccountSalesBonusTransactionsParams,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get all bonus transactions across all sellers (admin). Filter by year, month, or status.
+ */
+
+export function useGetApiV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesBonusTransactionsQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get current-month bonus progress for a seller (order count vs tier thresholds).
+ */
+export const getGetApiV1AccountSalesBonusProgressSoldByMemberIdUrl = (soldByMemberId: string) => {
+  return `/api/v1/account-sales/bonus/progress/${soldByMemberId}`
+}
+
+export const getApiV1AccountSalesBonusProgressSoldByMemberId = async (
+  soldByMemberId: string,
+  options?: RequestInit
+): Promise<SellerBonusProgressDtoApiResponse> => {
+  return customFetch<SellerBonusProgressDtoApiResponse>(
+    getGetApiV1AccountSalesBonusProgressSoldByMemberIdUrl(soldByMemberId),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryKey = (soldByMemberId: string) => {
+  return [`/api/v1/account-sales/bonus/progress/${soldByMemberId}`] as const
+}
+
+export const getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryKey(soldByMemberId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>> = ({
+    signal
+  }) => getApiV1AccountSalesBonusProgressSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!soldByMemberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesBonusProgressSoldByMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>
+>
+export type GetApiV1AccountSalesBonusProgressSoldByMemberIdQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get current-month bonus progress for a seller (order count vs tier thresholds).
+ */
+
+export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  soldByMemberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryOptions(soldByMemberId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Mark a pending bonus transaction as paid. Admin only.
+ */
+export const getPostApiV1AccountSalesBonusTransactionsTransactionIdPayUrl = (transactionId: string) => {
+  return `/api/v1/account-sales/bonus/transactions/${transactionId}/pay`
+}
+
+export const postApiV1AccountSalesBonusTransactionsTransactionIdPay = async (
+  transactionId: string,
+  markBonusPaidRequest: MarkBonusPaidRequest,
+  options?: RequestInit
+): Promise<SalesBonusTransactionDtoApiResponse> => {
+  return customFetch<SalesBonusTransactionDtoApiResponse>(
+    getPostApiV1AccountSalesBonusTransactionsTransactionIdPayUrl(transactionId),
+    {
+      ...options,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+      body: JSON.stringify(markBonusPaidRequest)
+    }
+  )
+}
+
+export const getPostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+    TError,
+    { transactionId: string; data: MarkBonusPaidRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+  TError,
+  { transactionId: string; data: MarkBonusPaidRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesBonusTransactionsTransactionIdPay']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+    { transactionId: string; data: MarkBonusPaidRequest }
+  > = props => {
+    const { transactionId, data } = props ?? {}
+
+    return postApiV1AccountSalesBonusTransactionsTransactionIdPay(transactionId, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>
+>
+export type PostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationBody = MarkBonusPaidRequest
+export type PostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationError = ErrorType<unknown>
+
+/**
+ * @summary Mark a pending bonus transaction as paid. Admin only.
+ */
+export const usePostApiV1AccountSalesBonusTransactionsTransactionIdPay = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+      TError,
+      { transactionId: string; data: MarkBonusPaidRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+  TError,
+  { transactionId: string; data: MarkBonusPaidRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Cancel a pending bonus transaction. Admin only.
+ */
+export const getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelUrl = (transactionId: string) => {
+  return `/api/v1/account-sales/bonus/transactions/${transactionId}/cancel`
+}
+
+export const postApiV1AccountSalesBonusTransactionsTransactionIdCancel = async (
+  transactionId: string,
+  cancelBonusTransactionRequest: CancelBonusTransactionRequest,
+  options?: RequestInit
+): Promise<SalesBonusTransactionDtoApiResponse> => {
+  return customFetch<SalesBonusTransactionDtoApiResponse>(
+    getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelUrl(transactionId),
+    {
+      ...options,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+      body: JSON.stringify(cancelBonusTransactionRequest)
+    }
+  )
+}
+
+export const getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+    TError,
+    { transactionId: string; data: CancelBonusTransactionRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+  TError,
+  { transactionId: string; data: CancelBonusTransactionRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesBonusTransactionsTransactionIdCancel']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+    { transactionId: string; data: CancelBonusTransactionRequest }
+  > = props => {
+    const { transactionId, data } = props ?? {}
+
+    return postApiV1AccountSalesBonusTransactionsTransactionIdCancel(transactionId, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>
+>
+export type PostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationBody = CancelBonusTransactionRequest
+export type PostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationError = ErrorType<unknown>
+
+/**
+ * @summary Cancel a pending bonus transaction. Admin only.
+ */
+export const usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+      TError,
+      { transactionId: string; data: CancelBonusTransactionRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+  TError,
+  { transactionId: string; data: CancelBonusTransactionRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Manually settle (create + pay) a bonus tier for a member for the current month. 
+Creates a Paid transaction if none exists, or marks an existing Pending one as Paid.
+ */
+export const getPostApiV1AccountSalesBonusTransactionsSettleTierUrl = () => {
+  return `/api/v1/account-sales/bonus/transactions/settle-tier`
+}
+
+export const postApiV1AccountSalesBonusTransactionsSettleTier = async (
+  settleBonusTierRequest: SettleBonusTierRequest,
+  options?: RequestInit
+): Promise<SalesBonusTransactionDtoApiResponse> => {
+  return customFetch<SalesBonusTransactionDtoApiResponse>(getPostApiV1AccountSalesBonusTransactionsSettleTierUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(settleBonusTierRequest)
+  })
+}
+
+export const getPostApiV1AccountSalesBonusTransactionsSettleTierMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+    TError,
+    { data: SettleBonusTierRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+  TError,
+  { data: SettleBonusTierRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesBonusTransactionsSettleTier']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+    { data: SettleBonusTierRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccountSalesBonusTransactionsSettleTier(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesBonusTransactionsSettleTierMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>
+>
+export type PostApiV1AccountSalesBonusTransactionsSettleTierMutationBody = SettleBonusTierRequest
+export type PostApiV1AccountSalesBonusTransactionsSettleTierMutationError = ErrorType<unknown>
+
+/**
+ * @summary Manually settle (create + pay) a bonus tier for a member for the current month. 
+Creates a Paid transaction if none exists, or marks an existing Pending one as Paid.
+ */
+export const usePostApiV1AccountSalesBonusTransactionsSettleTier = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+      TError,
+      { data: SettleBonusTierRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+  TError,
+  { data: SettleBonusTierRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesBonusTransactionsSettleTierMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Get all member commission balances.
+ */
+export const getGetApiV1AccountSalesCommissionsUrl = () => {
+  return `/api/v1/account-sales/commissions`
+}
+
+export const getApiV1AccountSalesCommissions = async (options?: RequestInit): Promise<CommissionDtoListApiResponse> => {
+  return customFetch<CommissionDtoListApiResponse>(getGetApiV1AccountSalesCommissionsUrl(), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesCommissionsQueryKey = () => {
+  return [`/api/v1/account-sales/commissions`] as const
+}
+
+export const getGetApiV1AccountSalesCommissionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+  TError = ErrorType<unknown>
+>(options?: {
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>>
+  request?: SecondParameter<typeof customFetch>
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesCommissionsQueryKey()
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>> = ({ signal }) =>
+    getApiV1AccountSalesCommissions({ signal, ...requestOptions })
+
+  return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesCommissionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>
+>
+export type GetApiV1AccountSalesCommissionsQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+  TError = ErrorType<unknown>
+>(
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get all member commission balances.
+ */
+
+export function useGetApiV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+  TError = ErrorType<unknown>
+>(
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesCommissionsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get commission balance for a specific member.
+ */
+export const getGetApiV1AccountSalesCommissionsMemberIdUrl = (memberId: string) => {
+  return `/api/v1/account-sales/commissions/${memberId}`
+}
+
+export const getApiV1AccountSalesCommissionsMemberId = async (
+  memberId: string,
+  options?: RequestInit
+): Promise<CommissionDtoApiResponse> => {
+  return customFetch<CommissionDtoApiResponse>(getGetApiV1AccountSalesCommissionsMemberIdUrl(memberId), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesCommissionsMemberIdQueryKey = (memberId: string) => {
+  return [`/api/v1/account-sales/commissions/${memberId}`] as const
+}
+
+export const getGetApiV1AccountSalesCommissionsMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesCommissionsMemberIdQueryKey(memberId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>> = ({ signal }) =>
+    getApiV1AccountSalesCommissionsMemberId(memberId, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!memberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesCommissionsMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>
+>
+export type GetApiV1AccountSalesCommissionsMemberIdQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get commission balance for a specific member.
+ */
+
+export function useGetApiV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesCommissionsMemberIdQueryOptions(memberId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Get commission transaction history for a member.
+ */
+export const getGetApiV1AccountSalesCommissionsMemberIdTransactionsUrl = (memberId: string) => {
+  return `/api/v1/account-sales/commissions/${memberId}/transactions`
+}
+
+export const getApiV1AccountSalesCommissionsMemberIdTransactions = async (
+  memberId: string,
+  options?: RequestInit
+): Promise<CommissionTransactionDtoListApiResponse> => {
+  return customFetch<CommissionTransactionDtoListApiResponse>(
+    getGetApiV1AccountSalesCommissionsMemberIdTransactionsUrl(memberId),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
+}
+
+export const getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryKey = (memberId: string) => {
+  return [`/api/v1/account-sales/commissions/${memberId}/transactions`] as const
+}
+
+export const getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryKey(memberId)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>> = ({
+    signal
+  }) => getApiV1AccountSalesCommissionsMemberIdTransactions(memberId, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!memberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesCommissionsMemberIdTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>
+>
+export type GetApiV1AccountSalesCommissionsMemberIdTransactionsQueryError = ErrorType<unknown>
+
+export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options: {
+    query: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+    > &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+    > &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get commission transaction history for a member.
+ */
+
+export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+  TError = ErrorType<unknown>
+>(
+  memberId: string,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryOptions(memberId, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+/**
+ * @summary Pay out the available commission balance to a member. Admin only.
+ */
+export const getPostApiV1AccountSalesCommissionsPayoutUrl = () => {
+  return `/api/v1/account-sales/commissions/payout`
+}
+
+export const postApiV1AccountSalesCommissionsPayout = async (
+  payoutCommissionRequest: PayoutCommissionRequest,
+  options?: RequestInit
+): Promise<PayoutResultDtoApiResponse> => {
+  return customFetch<PayoutResultDtoApiResponse>(getPostApiV1AccountSalesCommissionsPayoutUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(payoutCommissionRequest)
+  })
+}
+
+export const getPostApiV1AccountSalesCommissionsPayoutMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+    TError,
+    { data: PayoutCommissionRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+  TError,
+  { data: PayoutCommissionRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesCommissionsPayout']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+    { data: PayoutCommissionRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccountSalesCommissionsPayout(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesCommissionsPayoutMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>
+>
+export type PostApiV1AccountSalesCommissionsPayoutMutationBody = PayoutCommissionRequest
+export type PostApiV1AccountSalesCommissionsPayoutMutationError = ErrorType<unknown>
+
+/**
+ * @summary Pay out the available commission balance to a member. Admin only.
+ */
+export const usePostApiV1AccountSalesCommissionsPayout = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+      TError,
+      { data: PayoutCommissionRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+  TError,
+  { data: PayoutCommissionRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesCommissionsPayoutMutationOptions(options), queryClient)
+}
+
 export const getGetApiV1AccountSalesMembersUrl = (params?: GetApiV1AccountSalesMembersParams) => {
   const normalizedParams = new URLSearchParams()
 
@@ -4742,6 +7017,161 @@ export function useGetApiV1AccountSalesOrdersRevenueBySeller<
   }
 
   return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentUrl = (orderId: string) => {
+  return `/api/v1/account-sales/orders/${orderId}/confirm-payment`
+}
+
+export const postApiV1AccountSalesOrdersOrderIdConfirmPayment = async (
+  orderId: string,
+  options?: RequestInit
+): Promise<AccountOrderDtoApiResponse> => {
+  return customFetch<AccountOrderDtoApiResponse>(getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentUrl(orderId), {
+    ...options,
+    method: 'POST'
+  })
+}
+
+export const getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+    TError,
+    { orderId: string },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+  TError,
+  { orderId: string },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesOrdersOrderIdConfirmPayment']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+    { orderId: string }
+  > = props => {
+    const { orderId } = props ?? {}
+
+    return postApiV1AccountSalesOrdersOrderIdConfirmPayment(orderId, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>
+>
+
+export type PostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationError = ErrorType<unknown>
+
+export const usePostApiV1AccountSalesOrdersOrderIdConfirmPayment = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+      TError,
+      { orderId: string },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+  TError,
+  { orderId: string },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions(options), queryClient)
+}
+
+export const getPostApiV1AccountSalesOrdersOrderIdRefundUrl = (orderId: string) => {
+  return `/api/v1/account-sales/orders/${orderId}/refund`
+}
+
+export const postApiV1AccountSalesOrdersOrderIdRefund = async (
+  orderId: string,
+  refundOrderRequest: RefundOrderRequest,
+  options?: RequestInit
+): Promise<RefundResultDtoApiResponse> => {
+  return customFetch<RefundResultDtoApiResponse>(getPostApiV1AccountSalesOrdersOrderIdRefundUrl(orderId), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(refundOrderRequest)
+  })
+}
+
+export const getPostApiV1AccountSalesOrdersOrderIdRefundMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+    TError,
+    { orderId: string; data: RefundOrderRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+  TError,
+  { orderId: string; data: RefundOrderRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccountSalesOrdersOrderIdRefund']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+    { orderId: string; data: RefundOrderRequest }
+  > = props => {
+    const { orderId, data } = props ?? {}
+
+    return postApiV1AccountSalesOrdersOrderIdRefund(orderId, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccountSalesOrdersOrderIdRefundMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>
+>
+export type PostApiV1AccountSalesOrdersOrderIdRefundMutationBody = RefundOrderRequest
+export type PostApiV1AccountSalesOrdersOrderIdRefundMutationError = ErrorType<unknown>
+
+export const usePostApiV1AccountSalesOrdersOrderIdRefund = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+      TError,
+      { orderId: string; data: RefundOrderRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+  TError,
+  { orderId: string; data: RefundOrderRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccountSalesOrdersOrderIdRefundMutationOptions(options), queryClient)
 }
 
 export const getGetApiV1AccountSalesProductsUrl = (params?: GetApiV1AccountSalesProductsParams) => {

@@ -1,9 +1,7 @@
 'use client'
 
-import AccountSalesDashboard from '../_components/AccountSalesDashboard'
-
-const DashboardCRM = () => {
-  return <AccountSalesDashboard />
+const Dashboard = () => {
+  return <></>
 }
 
-export default DashboardCRM
+export default Dashboard

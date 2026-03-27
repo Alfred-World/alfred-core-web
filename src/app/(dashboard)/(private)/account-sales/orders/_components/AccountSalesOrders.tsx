@@ -8,6 +8,7 @@ import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
+import Checkbox from '@mui/material/Checkbox'
 import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Dialog from '@mui/material/Dialog'
@@ -16,6 +17,7 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import IconButton from '@mui/material/IconButton'
 import Pagination from '@mui/material/Pagination'
 import Stack from '@mui/material/Stack'
@@ -46,7 +48,10 @@ import {
   usePostApiV1AccountSalesWarrantyCheck,
   usePostApiV1AccountSalesOrdersOrderIdReplace,
   usePostApiV1AccountSalesOrdersSell,
-  AccountProductType
+  usePostApiV1AccountSalesOrdersOrderIdConfirmPayment,
+  usePostApiV1AccountSalesOrdersOrderIdRefund,
+  AccountProductType,
+  PaymentStatus
 } from '@/generated/core-api'
 import type {
   AccountCloneDto,
@@ -57,16 +62,32 @@ import type {
   CreateProductRequest,
   CreateProductVariantRequest,
   ReplaceAccountOrderRequest,
-  WarrantyCheckResultDto
+  RefundOrderRequest,
+  WarrantyCheckResultDto,
+  AccountOrderStatus
 } from '@/generated/core-api'
 
 const OTP_STEP_SECONDS = 30
 const OTP_GUARDRAILS = createGuardrails({ MIN_SECRET_BYTES: 1 })
 
-const statusTone: Record<string, string> = {
+const statusTone: Record<AccountOrderStatus, string> = {
   Active: '#2563eb',
   WarrantyDone: '#16a34a',
   Refunded: '#ef4444'
+}
+
+const paymentStatusTone: Record<PaymentStatus, string> = {
+  Pending: '#d97706',
+  Paid: '#16a34a',
+  PartiallyRefunded: '#7c3aed',
+  FullyRefunded: '#ef4444'
+}
+
+const paymentStatusLabel: Record<PaymentStatus, string> = {
+  Pending: 'Unpaid',
+  Paid: 'Paid',
+  PartiallyRefunded: 'Partially Refunded',
+  FullyRefunded: 'Fully Refunded'
 }
 
 const CloneInfoRow = ({ label, value, copyable, secret }: { label: string; value?: string | null; copyable?: boolean; secret?: boolean }) => {
@@ -178,7 +199,7 @@ const AccountSalesOrders = () => {
   const [page, setPage] = useState(1)
   const [openSell, setOpenSell] = useState(false)
   const [openCreateProduct, setOpenCreateProduct] = useState(false)
-  const [sellForm, setSellForm] = useState<SellOrderForm>({ memberId: '', productId: '', productVariantId: '', accountCloneId: '' })
+  const [sellForm, setSellForm] = useState<SellOrderForm>({ memberId: '', productId: '', productVariantId: '', accountCloneId: '', isTrial: false })
 
   const [productForm, setProductForm] = useState<CreateProductRequest>({
     name: '',
@@ -190,6 +211,11 @@ const AccountSalesOrders = () => {
   const [replaceOrderId, setReplaceOrderId] = useState<string | null>(null)
   const [replaceAccountCloneId, setReplaceAccountCloneId] = useState<string>('')
   const [openWarrantyCheck, setOpenWarrantyCheck] = useState(false)
+
+  const [confirmPaymentOrderId, setConfirmPaymentOrderId] = useState<string | null>(null)
+  const [refundOrderId, setRefundOrderId] = useState<string | null>(null)
+  const [refundAmount, setRefundAmount] = useState('')
+  const [refundNote, setRefundNote] = useState('')
   const [checkingWarranty, setCheckingWarranty] = useState(false)
   const [warrantyForm, setWarrantyForm] = useState<CheckWarrantyRequest>({ productId: '', username: '' })
   const [warrantyResult, setWarrantyResult] = useState<WarrantyCheckResultDto | null>(null)
@@ -372,6 +398,42 @@ const AccountSalesOrders = () => {
 
   const checkWarrantyMutation = usePostApiV1AccountSalesWarrantyCheck()
 
+  const confirmPaymentMutation = usePostApiV1AccountSalesOrdersOrderIdConfirmPayment({
+    mutation: {
+      onSuccess: async response => {
+        if (!response.success) {
+          toast.error(response.errors?.[0]?.message || 'Failed to confirm payment')
+
+          return
+        }
+
+        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
+        toast.success('Payment confirmed successfully')
+        setConfirmPaymentOrderId(null)
+      }
+    }
+  })
+
+  const refundMutation = usePostApiV1AccountSalesOrdersOrderIdRefund({
+    mutation: {
+      onSuccess: async response => {
+        if (!response.success) {
+          toast.error(response.errors?.[0]?.message || 'Failed to process refund')
+
+          return
+        }
+
+        const result = response.result
+
+        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
+        toast.success(`Refunded ${result?.refundAmount?.toLocaleString('vi-VN')} ₫ | Clawback commission: ${result?.commissionClawback?.toLocaleString('vi-VN')} ₫`)
+        setRefundOrderId(null)
+        setRefundAmount('')
+        setRefundNote('')
+      }
+    }
+  })
+
   const allOrders = useMemo(() => ordersQuery.data?.result?.items ?? [], [ordersQuery.data?.result?.items])
 
   const orders = useMemo(() => {
@@ -496,6 +558,8 @@ const AccountSalesOrders = () => {
                 <TableCell sx={{ fontWeight: 700 }}>Warranty Expiry</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Seller</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Status</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Trial</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Payment</TableCell>
                 <TableCell sx={{ fontWeight: 700 }}>Action</TableCell>
               </TableRow>
             </TableHead>
@@ -541,18 +605,35 @@ const AccountSalesOrders = () => {
                       />
                     </TableCell>
                     <TableCell>
-                      <Stack direction='row' spacing={1}>
-                        <Button
-                          variant='outlined'
-                          size='small'
-                          onClick={async () => {
-                            const payload = `${order.id}|${order.productName}|${order.warrantyExpiry}`
-
-                            await navigator.clipboard.writeText(payload)
-                          }}
-                        >
-                          Copy
-                        </Button>
+                      {order.isTrial ? (
+                        <Chip label='Trial' size='small' color='warning' variant='outlined' sx={{ fontWeight: 700 }} />
+                      ) : (
+                        <Typography variant='caption' color='text.disabled'>—</Typography>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {order.paymentStatus != null && (
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.4 }}>
+                          <Chip
+                            label={paymentStatusLabel[order.paymentStatus] ?? order.paymentStatus}
+                            size='small'
+                            sx={{
+                              bgcolor: alpha(paymentStatusTone[order.paymentStatus] ?? '#64748b', 0.14),
+                              color: paymentStatusTone[order.paymentStatus] ?? '#64748b',
+                              border: `1px solid ${alpha(paymentStatusTone[order.paymentStatus] ?? '#64748b', 0.25)}`,
+                              fontWeight: 700
+                            }}
+                          />
+                          {(order.refundAmount ?? 0) > 0 && (
+                            <Typography variant='caption' color='error.main'>
+                              -{order.refundAmount?.toLocaleString('vi-VN')} ₫
+                            </Typography>
+                          )}
+                        </Box>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap>
                         <Button
                           size='small'
                           variant='outlined'
@@ -574,6 +655,31 @@ const AccountSalesOrders = () => {
                         >
                           Warranty
                         </Button>
+                        {order.paymentStatus === PaymentStatus.Pending && (
+                          <Button
+                            size='small'
+                            variant='contained'
+                            color='success'
+                            onClick={() => setConfirmPaymentOrderId(order.id ?? null)}
+                          >
+                            Pay
+                          </Button>
+                        )}
+                        {(order.paymentStatus === PaymentStatus.Paid ||
+                          order.paymentStatus === PaymentStatus.PartiallyRefunded) && (
+                          <Button
+                            size='small'
+                            variant='outlined'
+                            color='error'
+                            onClick={() => {
+                              setRefundOrderId(order.id ?? null)
+                              setRefundAmount('')
+                              setRefundNote('')
+                            }}
+                          >
+                            Refund
+                          </Button>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>
@@ -581,7 +687,7 @@ const AccountSalesOrders = () => {
               })}
               {orders.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6}>
+                  <TableCell colSpan={8}>
                     <Typography variant='body2' color='text.secondary' sx={{ py: 2 }}>
                       No orders available for this member.
                     </Typography>
@@ -703,6 +809,15 @@ const AccountSalesOrders = () => {
               minRows={3}
               value={sellForm.orderNote || ''}
               onChange={event => setSellForm(prev => ({ ...prev, orderNote: event.target.value }))}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={sellForm.isTrial ?? false}
+                  onChange={event => setSellForm(prev => ({ ...prev, isTrial: event.target.checked }))}
+                />
+              }
+              label='Trial order'
             />
             {sellMutation.data?.result && (
               <Alert severity='success'>
@@ -964,6 +1079,80 @@ const AccountSalesOrders = () => {
             }}
           >
             {checkingWarranty ? 'Checking...' : 'Check'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Confirm Payment Dialog ───────────────────────────────── */}
+      <Dialog open={!!confirmPaymentOrderId} onClose={() => setConfirmPaymentOrderId(null)} maxWidth='xs' fullWidth>
+        <DialogTitle>Confirm Payment</DialogTitle>
+        <DialogContent sx={{ px: { xs: 2.5, sm: 3.5 }, pt: 2, pb: 1 }}>
+          <Typography variant='body2' color='text.secondary'>
+            Confirm that the customer has fully paid for this order. This will update the payment status and accrue referral commission if applicable.
+          </Typography>
+        </DialogContent>
+        <DialogActions sx={{ px: { xs: 2.5, sm: 3.5 }, pb: 2.5, pt: 1.5 }}>
+          <Button onClick={() => setConfirmPaymentOrderId(null)}>Cancel</Button>
+          <Button
+            variant='contained'
+            color='success'
+            disabled={confirmPaymentMutation.isPending}
+            onClick={async () => {
+              if (!confirmPaymentOrderId) return
+              await confirmPaymentMutation.mutateAsync({ orderId: confirmPaymentOrderId })
+            }}
+          >
+            Confirm Payment
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* ── Refund Dialog ────────────────────────────────────────────── */}
+      <Dialog open={!!refundOrderId} onClose={() => setRefundOrderId(null)} maxWidth='xs' fullWidth>
+        <DialogTitle>Refund Order</DialogTitle>
+        <DialogContent sx={{ px: { xs: 2.5, sm: 3.5 }, pt: 2, pb: 1 }}>
+          <Stack spacing={2}>
+            <Typography variant='body2' color='text.secondary'>
+              Enter the refund amount. The system will automatically claw back the proportional referral commission.
+            </Typography>
+            <TextField
+              label='Refund amount (VND)'
+              type='text'
+              inputMode='numeric'
+              value={refundAmount}
+              onChange={e => setRefundAmount(e.target.value.replace(/[^\d]/g, ''))}
+              fullWidth
+              helperText={refundAmount ? `${parseInt(refundAmount, 10).toLocaleString('vi-VN')} ₫` : undefined}
+            />
+            <TextField
+              label='Note (optional)'
+              multiline
+              minRows={2}
+              value={refundNote}
+              onChange={e => setRefundNote(e.target.value)}
+              fullWidth
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ px: { xs: 2.5, sm: 3.5 }, pb: 2.5, pt: 1.5 }}>
+          <Button onClick={() => setRefundOrderId(null)}>Cancel</Button>
+          <Button
+            variant='contained'
+            color='error'
+            disabled={!refundAmount || refundMutation.isPending}
+            onClick={async () => {
+              if (!refundOrderId) return
+
+              const payload: RefundOrderRequest = {
+                orderId: refundOrderId,
+                refundAmount: parseInt(refundAmount, 10),
+                note: refundNote || null
+              }
+
+              await refundMutation.mutateAsync({ orderId: refundOrderId, data: payload })
+            }}
+          >
+            Confirm Refund
           </Button>
         </DialogActions>
       </Dialog>
