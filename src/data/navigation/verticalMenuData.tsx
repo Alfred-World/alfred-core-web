@@ -73,11 +73,6 @@ const verticalMenuData = (): VerticalMenuDataType[] => [
         href: '/account-sales/orders'
       },
       {
-        label: 'Commissions',
-        icon: 'tabler-coins',
-        href: '/account-sales/commissions'
-      },
-      {
         label: 'Sales Bonus',
         icon: 'tabler-trophy',
         href: '/account-sales/bonus'

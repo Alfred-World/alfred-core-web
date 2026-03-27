@@ -107,14 +107,18 @@ const TiersTab = () => {
     setDrafts(originalTiers.map(t => ({ id: t.id!, orderThreshold: t.orderThreshold ?? 0, bonusAmount: t.bonusAmount ?? 0 })))
   }
 
-  const activeDrafts = drafts.filter(d => !d.isDeleted).sort((a, b) => a.orderThreshold - b.orderThreshold)
+  // Insertion order — used for rendering the list so re-typing threshold doesn't cause jumps
+  const activeDrafts = drafts.filter(d => !d.isDeleted)
 
-  const maxPotentialPayout = activeDrafts.length > 0 
-    ? Math.max(...activeDrafts.map(d => d.bonusAmount || 0)) 
+  // Sorted — used only for the progress bar visualizer and stat calculations
+  const activeDraftsSorted = [...activeDrafts].sort((a, b) => a.orderThreshold - b.orderThreshold)
+
+  const maxPotentialPayout = activeDraftsSorted.length > 0 
+    ? Math.max(...activeDraftsSorted.map(d => d.bonusAmount || 0)) 
     : 0
 
-  const maxThreshVal = activeDrafts.length > 0 ? Math.max(...activeDrafts.map(d => d.orderThreshold)) : 50
-  const isZeroHidden = activeDrafts.some(d => maxThreshVal > 0 && (d.orderThreshold / maxThreshVal) * 100 < 8)
+  const maxThreshVal = activeDraftsSorted.length > 0 ? Math.max(...activeDraftsSorted.map(d => d.orderThreshold)) : 50
+  const isZeroHidden = activeDraftsSorted.some(d => maxThreshVal > 0 && (d.orderThreshold / maxThreshVal) * 100 < 8)
 
   // Calculate Avg orders per rep using accurate data from sellerRevenueQuery
   const avgOrdersPerRep = useMemo(() => {
@@ -257,7 +261,13 @@ const TiersTab = () => {
                     ))}
 
                     <Button
-                      onClick={() => setDrafts(prev => [...prev, { id: `new_${Date.now()}`, orderThreshold: 0, bonusAmount: 0, isNew: true }])}
+                      onClick={() => {
+                        const nextThreshold = activeDraftsSorted.length > 0
+                          ? Math.max(...activeDraftsSorted.map(d => d.orderThreshold)) + 1
+                          : 1
+
+                        setDrafts(prev => [...prev, { id: `new_${Date.now()}`, orderThreshold: nextThreshold, bonusAmount: 0, isNew: true }])
+                      }}
                       sx={{
                         py: 2,
                         border: '2px dashed',
@@ -378,7 +388,7 @@ const TiersTab = () => {
                 </>
               )}
 
-              {activeDrafts.map((tier, i) => {
+              {activeDraftsSorted.map((tier, i) => {
                 const isLast = tier.orderThreshold === maxThreshVal
                 const leftPercent = maxThreshVal > 0 ? (tier.orderThreshold / maxThreshVal) * 100 : 0
                 const left = Math.min(leftPercent, 100)

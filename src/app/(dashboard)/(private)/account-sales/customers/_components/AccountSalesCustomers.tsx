@@ -56,8 +56,8 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
 import CustomerListSidebar from './CustomerListSidebar'
 import CustomerDetailPanel from './CustomerDetailPanel'
 
-type DetailTab = 'purchased' | 'referrals' | 'bonus-progress' | 'staff-notes'
-const VALID_TABS: DetailTab[] = ['purchased', 'referrals', 'bonus-progress', 'staff-notes']
+type DetailTab = 'purchased' | 'referrals' | 'bonus-progress' | 'commission' | 'staff-notes'
+const VALID_TABS: DetailTab[] = ['purchased', 'referrals', 'bonus-progress', 'commission', 'staff-notes']
 
 const AccountSalesCustomers = () => {
   const queryClient = useQueryClient()
@@ -172,6 +172,30 @@ return membersQuery.data?.result?.items ?? []
   const memberTotalSpend = memberDetailQuery.data?.result?.stats.totalSpend ?? 0
   const totalReferralCommission = memberDetailQuery.data?.result?.stats.totalReferralCommission ?? 0
 
+  // Always-enabled count queries — load stats when member is opened, regardless of active tab
+  const orderCountQuery = useGetApiV1AccountSalesOrders(
+    {
+      page: 1,
+      pageSize: 1,
+      sort: '-purchaseDate',
+      filter: selectedMemberId ? dsl().string('memberId').eq(selectedMemberId).build() : undefined,
+      view: 'list'
+    },
+    { query: { enabled: !!selectedMemberId } }
+  )
+
+  const referralCountQuery = useGetApiV1AccountSalesOrders(
+    {
+      page: 1,
+      pageSize: 1,
+      sort: '-purchaseDate',
+      filter: selectedMemberId ? dsl().string('referrerMemberId').eq(selectedMemberId).build() : undefined,
+      view: 'list'
+    },
+    { query: { enabled: !!selectedMemberId } }
+  )
+
+  // Tab-gated full list queries — only load when on the respective tab
   const ordersQuery = useGetApiV1AccountSalesOrders(
     {
       page: ordersPage,
@@ -225,7 +249,7 @@ return
   })
 
   const selectedOrders = ordersQuery.data?.result?.items ?? []
-  const totalOrders = ordersQuery.data?.result?.total ?? 0
+  const totalOrders = orderCountQuery.data?.result?.total ?? 0
   const ordersTotalPages = ordersQuery.data?.result?.totalPages ?? 1
 
   const referralOrders = useMemo(
@@ -233,7 +257,7 @@ return
     [referralOrdersQuery.data?.result?.items]
   )
 
-  const totalReferrals = referralOrdersQuery.data?.result?.total ?? 0
+  const totalReferrals = referralCountQuery.data?.result?.total ?? 0
   const referralsTotalPages = referralOrdersQuery.data?.result?.totalPages ?? 1
 
   const customersApiErrorMessage = useMemo(() => {

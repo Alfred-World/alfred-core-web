@@ -21,6 +21,7 @@ import { getInitials } from '@/utils/getInitials'
 import CustomerPurchasesTab from './CustomerPurchasesTab'
 import CustomerReferralsTab from './CustomerReferralsTab'
 import CustomerBonusProgressTab from './CustomerBonusProgressTab'
+import CustomerCommissionTab from './CustomerCommissionTab'
 
 export type PayNoteDialogOpts = {
   open: boolean
@@ -46,8 +47,8 @@ export type DetailPanelProps = {
   totalReferralCommission: number
   bonusProgress: SellerBonusProgressDto | null | undefined
   txHistory: SalesBonusTransactionDto[]
-  detailTab: 'purchased' | 'referrals' | 'bonus-progress' | 'staff-notes'
-  setDetailTab: (v: 'purchased' | 'referrals' | 'bonus-progress' | 'staff-notes') => void
+  detailTab: 'purchased' | 'referrals' | 'bonus-progress' | 'commission' | 'staff-notes'
+  setDetailTab: (v: 'purchased' | 'referrals' | 'bonus-progress' | 'commission' | 'staff-notes') => void
   setPayNoteDialog: (opts: PayNoteDialogOpts | null) => void
   isPayingBonus: boolean
   cancelTx: (id: string) => Promise<void>
@@ -169,6 +170,7 @@ const CustomerDetailPanel = (props: DetailPanelProps) => {
         <Tab value='purchased' label='Purchases' disableRipple />
         <Tab value='referrals' label='Referrals' disableRipple />
         <Tab value='bonus-progress' label='Bonus Progress' disableRipple />
+        <Tab value='commission' label='Commission' disableRipple />
         <Tab value='staff-notes' label='Staff Notes' disableRipple />
       </Tabs>
 
@@ -206,6 +208,10 @@ const CustomerDetailPanel = (props: DetailPanelProps) => {
             cancelTx={cancelTx}
             isCanceling={isCanceling}
           />
+        )}
+
+        {detailTab === 'commission' && (
+          <CustomerCommissionTab memberId={selectedMember.id ?? null} />
         )}
 
         {detailTab === 'staff-notes' && (
