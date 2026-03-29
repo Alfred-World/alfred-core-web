@@ -25,10 +25,14 @@ import { customFetch } from '../libs/custom-instance'
 import type { ErrorType } from '../libs/custom-instance'
 export interface AccessPermissionDto {
   id?: string
-  code?: string
-  name?: string
-  resource?: string
-  action?: string
+  /** @nullable */
+  code?: string | null
+  /** @nullable */
+  name?: string | null
+  /** @nullable */
+  resource?: string | null
+  /** @nullable */
+  action?: string | null
   /** @nullable */
   description?: string | null
   isActive?: boolean
@@ -457,7 +461,8 @@ export interface ApiErrorResponse {
 
 export interface AssetDto {
   id?: string
-  name?: string
+  /** @nullable */
+  name?: string | null
   /** @nullable */
   categoryId?: string | null
   /** @nullable */
@@ -471,8 +476,10 @@ export interface AssetDto {
   initialCost?: number
   /** @nullable */
   warrantyExpiryDate?: string | null
-  specs?: string
-  status?: string
+  /** @nullable */
+  specs?: string | null
+  /** @nullable */
+  status?: string | null
   /** @nullable */
   location?: string | null
   createdAt?: string
@@ -527,7 +534,8 @@ export interface AssetDtoApiResponse {
 export interface AssetLogDto {
   id?: string
   assetId?: string
-  eventType?: string
+  /** @nullable */
+  eventType?: string | null
   /** @nullable */
   brandId?: string | null
   /** @nullable */
@@ -682,7 +690,8 @@ export interface BrandCategoryDto {
 
 export interface BrandDto {
   id?: string
-  name?: string
+  /** @nullable */
+  name?: string | null
   /** @nullable */
   website?: string | null
   /** @nullable */
@@ -691,7 +700,8 @@ export interface BrandDto {
   description?: string | null
   /** @nullable */
   logoUrl?: string | null
-  categories?: BrandCategoryDto[]
+  /** @nullable */
+  categories?: BrandCategoryDto[] | null
   createdAt?: string
   /** @nullable */
   updatedAt?: string | null
@@ -779,8 +789,10 @@ export interface CategoryCountByTypeDtoListApiResponse {
 
 export interface CategoryDto {
   id?: string
-  code?: string
-  name?: string
+  /** @nullable */
+  code?: string | null
+  /** @nullable */
+  name?: string | null
   /** @nullable */
   icon?: string | null
   type?: CategoryType
@@ -788,7 +800,8 @@ export interface CategoryDto {
   parentId?: string | null
   /** @nullable */
   parentName?: string | null
-  formSchema?: string
+  /** @nullable */
+  formSchema?: string | null
   subCategoryCount?: number
   createdAt?: string
 }
@@ -1070,9 +1083,12 @@ export const CommodityAssetClass = {
 
 export interface CommodityDto {
   id?: string
-  code?: string
-  name?: string
-  assetClass?: string
+  /** @nullable */
+  code?: string | null
+  /** @nullable */
+  name?: string | null
+  /** @nullable */
+  assetClass?: string | null
   /** @nullable */
   defaultUnitId?: string | null
   /** @nullable */
@@ -1499,7 +1515,8 @@ export interface InvestmentTransactionDto {
   commodityId?: string
   /** @nullable */
   commodityName?: string | null
-  transactionType?: string
+  /** @nullable */
+  transactionType?: string | null
   transactionDate?: string
   quantity?: number
   unitId?: string
@@ -1564,6 +1581,45 @@ export interface InvestmentTransactionDtoApiResponse {
 export interface MarkBonusPaidRequest {
   /** @nullable */
   note?: string | null
+}
+
+export interface MemberMonthlyStatsDto {
+  year?: number
+  month?: number
+  orderCount?: number
+  totalSpend?: number
+  referralCount?: number
+  totalReferralCommission?: number
+}
+
+export interface MemberStatsDto {
+  totalOrders?: number
+  totalSpend?: number
+  totalReferrals?: number
+  totalReferralCommission?: number
+  monthly?: MemberMonthlyStatsDto[]
+}
+
+export interface MemberDetailDto {
+  member?: MemberDto
+  stats?: MemberStatsDto
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface MemberDetailDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: MemberDetailDto | null
+  /** @nullable */
+  errors?: ApiError[] | null
 }
 
 export interface MemberDtoPageResult {
@@ -1677,6 +1733,23 @@ export interface MemberMonthlySalesSummaryDtoListApiResponse {
   message?: string | null
   /** @nullable */
   result?: MemberMonthlySalesSummaryDto[] | null
+  /** @nullable */
+  errors?: ApiError[] | null
+}
+
+/**
+ * Unified API response wrapper for all API responses (success + error).
+- On success: Success=true, Result is populated, Errors is null.
+- On failure: Success=false, Errors is populated, Result is null.
+            
+This enables discriminated union pattern on the frontend:
+  if (data.success) { data.result... } else { data.errors... }
+ */
+export interface MemberStatsDtoApiResponse {
+  success: boolean
+  /** @nullable */
+  message?: string | null
+  result?: MemberStatsDto | null
   /** @nullable */
   errors?: ApiError[] | null
 }
@@ -2118,8 +2191,10 @@ export interface SettleBonusTierRequest {
 export interface SourceAccountDto {
   id?: string
   accountType?: AccountProductType
-  username?: string
-  password?: string
+  /** @nullable */
+  username?: string | null
+  /** @nullable */
+  password?: string | null
   /** @nullable */
   twoFaSecret?: string | null
   /** @nullable */
@@ -2227,8 +2302,10 @@ export interface UnitCountByStatusDtoListApiResponse {
 
 export interface UnitDto {
   id?: string
-  code?: string
-  name?: string
+  /** @nullable */
+  code?: string | null
+  /** @nullable */
+  name?: string | null
   /** @nullable */
   symbol?: string | null
   category?: UnitCategory
@@ -2396,6 +2473,16 @@ export interface UpdateCommodityRequest {
   defaultUnitId?: string | null
   /** @nullable */
   description?: string | null
+}
+
+export interface UpdateMemberRequest {
+  /** @nullable */
+  displayName?: string | null
+  source?: MemberSource
+  /** @nullable */
+  sourceId?: string | null
+  /** @nullable */
+  customerNote?: string | null
 }
 
 export interface UpdateProductVariantRequest {
@@ -6479,6 +6566,202 @@ export const usePostApiV1AccountSalesMembers = <TError = ErrorType<unknown>, TCo
   return useMutation(getPostApiV1AccountSalesMembersMutationOptions(options), queryClient)
 }
 
+export const getGetApiV1AccountSalesMembersIdUrl = (id: string) => {
+  return `/api/v1/account-sales/members/${id}`
+}
+
+export const getApiV1AccountSalesMembersId = async (
+  id: string,
+  options?: RequestInit
+): Promise<MemberDtoApiResponse> => {
+  return customFetch<MemberDtoApiResponse>(getGetApiV1AccountSalesMembersIdUrl(id), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesMembersIdQueryKey = (id: string) => {
+  return [`/api/v1/account-sales/members/${id}`] as const
+}
+
+export const getGetApiV1AccountSalesMembersIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersIdQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>> = ({ signal }) =>
+    getApiV1AccountSalesMembersId(id, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesMembersIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>
+>
+export type GetApiV1AccountSalesMembersIdQueryError = ErrorType<ProblemDetails>
+
+export function useGetApiV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesMembersIdQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getPutApiV1AccountSalesMembersIdUrl = (id: string) => {
+  return `/api/v1/account-sales/members/${id}`
+}
+
+export const putApiV1AccountSalesMembersId = async (
+  id: string,
+  updateMemberRequest: UpdateMemberRequest,
+  options?: RequestInit
+): Promise<MemberDtoApiResponse> => {
+  return customFetch<MemberDtoApiResponse>(getPutApiV1AccountSalesMembersIdUrl(id), {
+    ...options,
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(updateMemberRequest)
+  })
+}
+
+export const getPutApiV1AccountSalesMembersIdMutationOptions = <
+  TError = ErrorType<ProblemDetails>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+    TError,
+    { id: string; data: UpdateMemberRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+  TError,
+  { id: string; data: UpdateMemberRequest },
+  TContext
+> => {
+  const mutationKey = ['putApiV1AccountSalesMembersId']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+    { id: string; data: UpdateMemberRequest }
+  > = props => {
+    const { id, data } = props ?? {}
+
+    return putApiV1AccountSalesMembersId(id, data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PutApiV1AccountSalesMembersIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>
+>
+export type PutApiV1AccountSalesMembersIdMutationBody = UpdateMemberRequest
+export type PutApiV1AccountSalesMembersIdMutationError = ErrorType<ProblemDetails>
+
+export const usePutApiV1AccountSalesMembersId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+      TError,
+      { id: string; data: UpdateMemberRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+  TError,
+  { id: string; data: UpdateMemberRequest },
+  TContext
+> => {
+  return useMutation(getPutApiV1AccountSalesMembersIdMutationOptions(options), queryClient)
+}
+
 export const getGetApiV1AccountSalesMembersSearchUrl = (params?: GetApiV1AccountSalesMembersSearchParams) => {
   const normalizedParams = new URLSearchParams()
 
@@ -6600,6 +6883,240 @@ export function useGetApiV1AccountSalesMembersSearch<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
   const queryOptions = getGetApiV1AccountSalesMembersSearchQueryOptions(params, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getGetApiV1AccountSalesMembersIdDetailUrl = (id: string) => {
+  return `/api/v1/account-sales/members/${id}/detail`
+}
+
+export const getApiV1AccountSalesMembersIdDetail = async (
+  id: string,
+  options?: RequestInit
+): Promise<MemberDetailDtoApiResponse> => {
+  return customFetch<MemberDetailDtoApiResponse>(getGetApiV1AccountSalesMembersIdDetailUrl(id), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesMembersIdDetailQueryKey = (id: string) => {
+  return [`/api/v1/account-sales/members/${id}/detail`] as const
+}
+
+export const getGetApiV1AccountSalesMembersIdDetailQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersIdDetailQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>> = ({ signal }) =>
+    getApiV1AccountSalesMembersIdDetail(id, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesMembersIdDetailQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>
+>
+export type GetApiV1AccountSalesMembersIdDetailQueryError = ErrorType<ProblemDetails>
+
+export function useGetApiV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesMembersIdDetailQueryOptions(id, options)
+
+  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
+    queryKey: DataTag<QueryKey, TData, TError>
+  }
+
+  return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getGetApiV1AccountSalesMembersIdStatsUrl = (id: string) => {
+  return `/api/v1/account-sales/members/${id}/stats`
+}
+
+export const getApiV1AccountSalesMembersIdStats = async (
+  id: string,
+  options?: RequestInit
+): Promise<MemberStatsDtoApiResponse> => {
+  return customFetch<MemberStatsDtoApiResponse>(getGetApiV1AccountSalesMembersIdStatsUrl(id), {
+    ...options,
+    method: 'GET'
+  })
+}
+
+export const getGetApiV1AccountSalesMembersIdStatsQueryKey = (id: string) => {
+  return [`/api/v1/account-sales/members/${id}/stats`] as const
+}
+
+export const getGetApiV1AccountSalesMembersIdStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  }
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {}
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersIdStatsQueryKey(id)
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>> = ({ signal }) =>
+    getApiV1AccountSalesMembersIdStats(id, { signal, ...requestOptions })
+
+  return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type GetApiV1AccountSalesMembersIdStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>
+>
+export type GetApiV1AccountSalesMembersIdStatsQueryError = ErrorType<ProblemDetails>
+
+export function useGetApiV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options: {
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>> &
+      Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>> &
+      Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+          TError,
+          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>
+        >,
+        'initialData'
+      >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useGetApiV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+
+export function useGetApiV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+  TError = ErrorType<ProblemDetails>
+>(
+  id: string,
+  options?: {
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>>
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  const queryOptions = getGetApiV1AccountSalesMembersIdStatsQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>

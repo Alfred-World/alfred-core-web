@@ -1131,7 +1131,7 @@ return (
 
                   {/* Log entries */}
                   {!logsLoading && logs.map(log => {
-                    const meta = getEventMeta(log.eventType)
+                    const meta = getEventMeta(log.eventType ?? undefined)
 
                     return (
                       <Box key={log.id} sx={{ display: 'flex', gap: 2, position: 'relative', zIndex: 1 }}>

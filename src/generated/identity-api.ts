@@ -88,7 +88,8 @@ export interface ApiErrorResponse {
 
 export interface ApplicationDto {
   id?: string
-  clientId?: string
+  /** @nullable */
+  clientId?: string | null
   /** @nullable */
   clientSecret?: string | null
   /** @nullable */
@@ -368,8 +369,10 @@ export interface ObjectApiResponse {
 
 export interface PermissionDto {
   id?: string
-  code?: string
-  name?: string
+  /** @nullable */
+  code?: string | null
+  /** @nullable */
+  name?: string | null
   /** @nullable */
   description?: string | null
   /** @nullable */

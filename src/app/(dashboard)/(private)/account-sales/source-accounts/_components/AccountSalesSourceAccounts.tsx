@@ -401,12 +401,12 @@ const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { tar
     if (target) {
       setEditForm({
         accountType: target.accountType,
-        username: target.username,
-        password: target.password,
-        twoFaSecret: target.twoFaSecret,
-        recoveryEmail: target.recoveryEmail,
-        recoveryPhone: target.recoveryPhone,
-        notes: target.notes
+        username: target.username ?? undefined,
+        password: target.password ?? undefined,
+        twoFaSecret: target.twoFaSecret ?? undefined,
+        recoveryEmail: target.recoveryEmail ?? undefined,
+        recoveryPhone: target.recoveryPhone ?? undefined,
+        notes: target.notes ?? undefined
       })
     }
   }, [target])
