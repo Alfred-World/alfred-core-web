@@ -24,7 +24,14 @@ export type ReferralsTabProps = {
   setPage: (p: number) => void
 }
 
-const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals, page, totalPages, setPage }: ReferralsTabProps) => {
+const CustomerReferralsTab = ({
+  referralOrders,
+  totalCommission,
+  totalReferrals,
+  page,
+  totalPages,
+  setPage
+}: ReferralsTabProps) => {
   const lastReferralDate = referralOrders[0]?.purchaseDate?.slice(0, 10) || 'N/A'
 
   return (
@@ -33,18 +40,34 @@ const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals,
         <Box sx={{ p: 2.5, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <Box>
-              <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+              <Typography
+                variant='caption'
+                sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+              >
                 Total Commission Earned
               </Typography>
               <Typography variant='h4' sx={{ mt: 1, mb: 0.5, fontWeight: 800 }}>
                 {totalCommission.toLocaleString('vi-VN')}₫
               </Typography>
-              <Typography variant='caption' sx={{ color: 'success.main', fontWeight: 700, display: 'flex', alignItems: 'center' }}>
+              <Typography
+                variant='caption'
+                sx={{ color: 'success.main', fontWeight: 700, display: 'flex', alignItems: 'center' }}
+              >
                 <i className='tabler-trending-up' style={{ marginRight: 4 }} />
                 +24.5% from last month
               </Typography>
             </Box>
-            <Box sx={{ width: 40, height: 40, borderRadius: 2, bgcolor: t => alpha(t.palette.text.primary, 0.05), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 2,
+                bgcolor: t => alpha(t.palette.text.primary, 0.05),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
               <i className='tabler-businessplan' style={{ fontSize: 20, color: 'text.secondary' }} />
             </Box>
           </Box>
@@ -53,7 +76,10 @@ const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals,
         <Box sx={{ p: 2.5, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <Box>
-              <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+              <Typography
+                variant='caption'
+                sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+              >
                 Recent Referral
               </Typography>
               <Typography variant='h4' sx={{ mt: 1, mb: 0.5, fontWeight: 800 }}>
@@ -63,7 +89,17 @@ const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals,
                 Direct Link
               </Typography>
             </Box>
-            <Box sx={{ width: 40, height: 40, borderRadius: 2, bgcolor: t => alpha(t.palette.text.primary, 0.05), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box
+              sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 2,
+                bgcolor: t => alpha(t.palette.text.primary, 0.05),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
               <i className='tabler-link' style={{ fontSize: 20, color: 'text.secondary' }} />
             </Box>
           </Box>
@@ -71,13 +107,19 @@ const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals,
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant='subtitle1' fontWeight={700}>Referral History</Typography>
+        <Typography variant='subtitle1' fontWeight={700}>
+          Referral History
+        </Typography>
       </Box>
 
       <TableContainer sx={{ bgcolor: 'transparent', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ '& th': { color: 'text.secondary', fontWeight: 700, borderColor: 'divider', borderBottomWidth: 2 } }}>
+            <TableRow
+              sx={{
+                '& th': { color: 'text.secondary', fontWeight: 700, borderColor: 'divider', borderBottomWidth: 2 }
+              }}
+            >
               <TableCell>ORDER ID</TableCell>
               <TableCell>PRODUCT</TableCell>
               <TableCell>BUYER</TableCell>
@@ -91,11 +133,17 @@ const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals,
                 <TableCell sx={{ fontWeight: 700 }}>#{order.orderCode}</TableCell>
                 <TableCell>
                   <Box>
-                    <Typography variant='body2' fontWeight={700}>{order.productName}</Typography>
-                    <Typography variant='caption' sx={{ color: 'success.main', fontWeight: 700 }}>{order.referralCommissionPercentSnapshot ?? 0}% rate</Typography>
+                    <Typography variant='body2' fontWeight={700}>
+                      {order.productName}
+                    </Typography>
+                    <Typography variant='caption' sx={{ color: 'success.main', fontWeight: 700 }}>
+                      {order.referralCommissionPercentSnapshot ?? 0}% rate
+                    </Typography>
                   </Box>
                 </TableCell>
-                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>{order.memberDisplayName || 'Unknown buyer'}</TableCell>
+                <TableCell sx={{ color: 'text.primary', fontWeight: 600 }}>
+                  {order.memberDisplayName || 'Unknown buyer'}
+                </TableCell>
                 <TableCell sx={{ color: 'text.secondary' }}>{order.purchaseDate?.slice(0, 10)}</TableCell>
                 <TableCell align='right'>
                   <Chip
@@ -120,13 +168,7 @@ const CustomerReferralsTab = ({ referralOrders, totalCommission, totalReferrals,
 
       {totalPages > 1 && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-          <Pagination
-            count={totalPages}
-            page={page}
-            onChange={(_, p) => setPage(p)}
-            size='small'
-            color='primary'
-          />
+          <Pagination count={totalPages} page={page} onChange={(_, p) => setPage(p)} size='small' color='primary' />
         </Box>
       )}
 

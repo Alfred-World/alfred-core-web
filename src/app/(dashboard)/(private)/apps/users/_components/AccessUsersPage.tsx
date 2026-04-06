@@ -77,14 +77,20 @@ const AccessUsersPage = () => {
 
     if (value) {
       builder = builder.group(g => {
-        g.string('fullName').contains(value).or().string('userName').contains(value).or().string('email').contains(value)
+        g.string('fullName')
+          .contains(value)
+          .or()
+          .string('userName')
+          .contains(value)
+          .or()
+          .string('email')
+          .contains(value)
       })
     }
 
     const compiled = builder.build()
 
-    
-return compiled === '' ? undefined : compiled
+    return compiled === '' ? undefined : compiled
   }, [submittedKeyword])
 
   const usersQuery = useGetApiV1AccessControlUsers({
@@ -188,8 +194,7 @@ return compiled === '' ? undefined : compiled
 
         const response = result as { success?: boolean }
 
-        
-return response.success !== true
+        return response.success !== true
       })
 
       if (firstFailure) {
@@ -236,8 +241,8 @@ return response.success !== true
             }}
           />
 
-          <Button 
-            variant='contained' 
+          <Button
+            variant='contained'
             onClick={() => {
               setSubmittedKeyword(keyword)
               setPage(1)
@@ -312,7 +317,12 @@ return response.success !== true
           <Typography variant='body2' color='text.secondary'>
             Showing {users.length} of {total} users
           </Typography>
-          <Pagination page={page} count={Math.max(1, totalPages)} onChange={(_, value) => setPage(value)} color='primary' />
+          <Pagination
+            page={page}
+            count={Math.max(1, totalPages)}
+            onChange={(_, value) => setPage(value)}
+            color='primary'
+          />
         </Stack>
       </Card>
 
@@ -379,9 +389,13 @@ return response.success !== true
                           <i className={role.icon || 'tabler-shield'} style={{ fontSize: 18 }} />
                         </Box>
                         <Box>
-                          <Typography variant='subtitle2' fontWeight={600}>{role.name || 'Unknown role'}</Typography>
+                          <Typography variant='subtitle2' fontWeight={600}>
+                            {role.name || 'Unknown role'}
+                          </Typography>
                           {role.isSystem && (
-                            <Typography variant='caption' color='info.main'>System Core</Typography>
+                            <Typography variant='caption' color='info.main'>
+                              System Core
+                            </Typography>
                           )}
                         </Box>
                       </Stack>
@@ -400,7 +414,7 @@ return response.success !== true
           )}
         </DialogContent>
 
-        <DialogActions sx={{ px: 3, py: 2, mt:2 }}>
+        <DialogActions sx={{ px: 3, py: 2, mt: 2 }}>
           <Button
             variant='outlined'
             color='secondary'
@@ -413,7 +427,9 @@ return response.success !== true
             variant='contained'
             disabled={isUpdatingRoles || rolesQuery.isLoading}
             onClick={handleSaveUserRoles}
-            startIcon={isUpdatingRoles ? <CircularProgress size={18} color='inherit' /> : <i className='tabler-device-floppy' />}
+            startIcon={
+              isUpdatingRoles ? <CircularProgress size={18} color='inherit' /> : <i className='tabler-device-floppy' />
+            }
           >
             Save Changes
           </Button>

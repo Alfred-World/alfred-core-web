@@ -32,7 +32,7 @@ const MAX_CONTEXT_MESSAGES = 20
 const SUGGESTIONS = [
   { label: 'List all brands', icon: 'tabler-building-store' },
   { label: 'List all categories', icon: 'tabler-category' },
-  { label: 'Create a new brand', icon: 'tabler-plus' },
+  { label: 'Create a new brand', icon: 'tabler-plus' }
 ]
 
 // ─── Typing indicator ───────────────────────────────────────────────────────
@@ -52,8 +52,8 @@ function TypingDots() {
             animationDelay: `${i * 0.2}s`,
             '@keyframes typing-bounce': {
               '0%, 80%, 100%': { transform: 'scale(0.7)', opacity: 0.5 },
-              '40%': { transform: 'scale(1)', opacity: 1 },
-            },
+              '40%': { transform: 'scale(1)', opacity: 1 }
+            }
           }}
         />
       ))}
@@ -71,15 +71,14 @@ function formatFunctionName(name: string): string {
 function ActionCard({ action }: { action: ActionResultEntry }) {
   const ok = action.isSuccess
 
-  
-return (
+  return (
     <Box
       sx={{
         borderRadius: 2.5,
         overflow: 'hidden',
         border: '1px solid',
         borderColor: ok ? 'success.light' : 'error.light',
-        mb: 0.75,
+        mb: 0.75
       }}
     >
       {/* Colored header strip */}
@@ -92,7 +91,7 @@ return (
           py: 0.85,
           background: ok
             ? 'linear-gradient(90deg, var(--mui-palette-success-main), var(--mui-palette-success-dark))'
-            : 'linear-gradient(90deg, var(--mui-palette-error-main), var(--mui-palette-error-dark))',
+            : 'linear-gradient(90deg, var(--mui-palette-error-main), var(--mui-palette-error-dark))'
         }}
       >
         <i
@@ -112,10 +111,13 @@ return (
             py: 0.15,
             borderRadius: 1,
             bgcolor: 'rgba(255,255,255,0.18)',
-            backdropFilter: 'blur(4px)',
+            backdropFilter: 'blur(4px)'
           }}
         >
-          <Typography variant='caption' sx={{ color: '#fff', fontSize: '0.65rem', fontWeight: 700, letterSpacing: 0.6, textTransform: 'uppercase' }}>
+          <Typography
+            variant='caption'
+            sx={{ color: '#fff', fontSize: '0.65rem', fontWeight: 700, letterSpacing: 0.6, textTransform: 'uppercase' }}
+          >
             {ok ? 'Success' : 'Failed'}
           </Typography>
         </Box>
@@ -127,7 +129,7 @@ return (
           sx={{
             px: 1.5,
             py: 1,
-            bgcolor: ok ? 'rgba(86,202,0,0.04)' : 'rgba(255,77,73,0.04)',
+            bgcolor: ok ? 'rgba(86,202,0,0.04)' : 'rgba(255,77,73,0.04)'
           }}
         >
           {action.message && (
@@ -160,7 +162,7 @@ function MessageBubble({ msg, showTime }: { msg: DisplayMessage; showTime: boole
           flexDirection: isUser ? 'row-reverse' : 'row',
           alignItems: 'flex-end',
           gap: 1.25,
-          mb: 0.5,
+          mb: 0.5
         }}
       >
         {/* Avatar */}
@@ -173,7 +175,7 @@ function MessageBubble({ msg, showTime }: { msg: DisplayMessage; showTime: boole
             bgcolor: isUser ? 'primary.main' : 'background.paper',
             border: '1.5px solid',
             borderColor: isUser ? 'primary.main' : 'divider',
-            boxShadow: isUser ? '0 2px 8px rgba(var(--mui-palette-primary-mainChannel) / 0.35)' : 'none',
+            boxShadow: isUser ? '0 2px 8px rgba(var(--mui-palette-primary-mainChannel) / 0.35)' : 'none'
           }}
         >
           <i
@@ -197,7 +199,7 @@ function MessageBubble({ msg, showTime }: { msg: DisplayMessage; showTime: boole
                 display: 'block',
                 ml: 'auto',
                 border: '1px solid',
-                borderColor: 'divider',
+                borderColor: 'divider'
               }}
             />
           )}
@@ -218,31 +220,34 @@ function MessageBubble({ msg, showTime }: { msg: DisplayMessage; showTime: boole
                 borderRadius: isUser ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
                 ...(isUser
                   ? {
-                      background: 'linear-gradient(135deg, var(--mui-palette-primary-main), var(--mui-palette-primary-dark))',
+                      background:
+                        'linear-gradient(135deg, var(--mui-palette-primary-main), var(--mui-palette-primary-dark))',
                       color: 'primary.contrastText',
-                      boxShadow: '0 2px 12px rgba(var(--mui-palette-primary-mainChannel) / 0.3)',
+                      boxShadow: '0 2px 12px rgba(var(--mui-palette-primary-mainChannel) / 0.3)'
                     }
                   : msg.isError
-                  ? {
-                      bgcolor: 'error.lighter',
-                      border: '1px solid',
-                      borderColor: 'error.light',
-                      color: 'error.dark',
-                    }
-                  : {
-                      bgcolor: 'background.paper',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      color: 'text.primary',
-                    }),
+                    ? {
+                        bgcolor: 'error.lighter',
+                        border: '1px solid',
+                        borderColor: 'error.light',
+                        color: 'error.dark'
+                      }
+                    : {
+                        bgcolor: 'background.paper',
+                        border: '1px solid',
+                        borderColor: 'divider',
+                        color: 'text.primary'
+                      }),
                 wordBreak: 'break-word',
-                whiteSpace: 'pre-wrap',
+                whiteSpace: 'pre-wrap'
               }}
             >
               {msg.isError && (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mb: 0.75 }}>
                   <i className='tabler-alert-circle' style={{ fontSize: 14, color: 'var(--mui-palette-error-main)' }} />
-                  <Typography variant='caption' fontWeight={600} color='error.main'>Failed</Typography>
+                  <Typography variant='caption' fontWeight={600} color='error.main'>
+                    Failed
+                  </Typography>
                 </Box>
               )}
               <Typography variant='body2' sx={{ lineHeight: 1.65 }}>
@@ -259,7 +264,7 @@ function MessageBubble({ msg, showTime }: { msg: DisplayMessage; showTime: boole
                 display: 'block',
                 mt: 0.4,
                 textAlign: isUser ? 'right' : 'left',
-                fontSize: '0.68rem',
+                fontSize: '0.68rem'
               }}
             >
               {isUser ? 'You' : 'Alfred AI'} · {time}
@@ -324,7 +329,10 @@ export default function AiChatPanel() {
     setError(null)
     const now = new Date()
 
-    setMessages(prev => [...prev, { role: 'user', content: trimmed, type: 'text', imagePreview: imagePreview ?? undefined, timestamp: now }])
+    setMessages(prev => [
+      ...prev,
+      { role: 'user', content: trimmed, type: 'text', imagePreview: imagePreview ?? undefined, timestamp: now }
+    ])
     setInput('')
     const contextToSend = context.slice(-MAX_CONTEXT_MESSAGES)
     const currentImageBase64 = imageBase64 ?? undefined
@@ -337,8 +345,8 @@ export default function AiChatPanel() {
         data: {
           message: trimmed,
           context: contextToSend,
-          ...(currentImageBase64 ? { imageBase64: currentImageBase64, imageMimeType: currentMimeType } : {}),
-        },
+          ...(currentImageBase64 ? { imageBase64: currentImageBase64, imageMimeType: currentMimeType } : {})
+        }
       })
 
       if (!res.success || !res.result) {
@@ -350,7 +358,7 @@ export default function AiChatPanel() {
         const data = res.result
         const isAiError = data.isSuccess === false
         const content = data.message ?? (isAiError ? (data.error ?? 'An error occurred') : '')
- 
+
         setMessages(prev => [
           ...prev,
           {
@@ -359,23 +367,22 @@ export default function AiChatPanel() {
             type: (data.type as 'text' | 'action') ?? 'text',
             actions: data.actions ?? undefined,
             timestamp: new Date(),
-            isError: isAiError,
-          },
+            isError: isAiError
+          }
         ])
 
         if (!isAiError) {
-          setContext(prev => [
-            ...prev,
-            { role: 'user', content: trimmed },
-            { role: 'assistant', content },
-          ])
+          setContext(prev => [...prev, { role: 'user', content: trimmed }, { role: 'assistant', content }])
         }
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : 'Unexpected error'
 
       setError(msg)
-      setMessages(prev => [...prev, { role: 'assistant', content: `Error: ${msg}`, type: 'text', timestamp: new Date() }])
+      setMessages(prev => [
+        ...prev,
+        { role: 'assistant', content: `Error: ${msg}`, type: 'text', timestamp: new Date() }
+      ])
     }
   }
 
@@ -387,8 +394,7 @@ export default function AiChatPanel() {
   }
 
   // Show timestamp only on last message of each role-group
-  const shouldShowTime = (idx: number) =>
-    idx === messages.length - 1 || messages[idx + 1]?.role !== messages[idx].role
+  const shouldShowTime = (idx: number) => idx === messages.length - 1 || messages[idx + 1]?.role !== messages[idx].role
 
   return (
     <Box
@@ -397,7 +403,7 @@ export default function AiChatPanel() {
         flexDirection: 'column',
         height: 'calc(100vh - 130px)',
         maxWidth: 860,
-        mx: 'auto',
+        mx: 'auto'
       }}
     >
       {/* ── Header ── */}
@@ -410,7 +416,7 @@ export default function AiChatPanel() {
           pb: 2,
           borderBottom: '1px solid',
           borderColor: 'divider',
-          mb: 0,
+          mb: 0
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -420,7 +426,7 @@ export default function AiChatPanel() {
                 width: 42,
                 height: 42,
                 background: 'linear-gradient(135deg, var(--mui-palette-primary-main), var(--mui-palette-primary-dark))',
-                boxShadow: '0 4px 14px rgba(var(--mui-palette-primary-mainChannel) / 0.4)',
+                boxShadow: '0 4px 14px rgba(var(--mui-palette-primary-mainChannel) / 0.4)'
               }}
             >
               <i className='tabler-robot' style={{ fontSize: 20, color: '#fff' }} />
@@ -435,7 +441,7 @@ export default function AiChatPanel() {
                 borderRadius: '50%',
                 bgcolor: 'success.main',
                 border: '2px solid',
-                borderColor: 'background.default',
+                borderColor: 'background.default'
               }}
             />
           </Box>
@@ -443,8 +449,15 @@ export default function AiChatPanel() {
             <Typography variant='subtitle1' fontWeight={700} lineHeight={1.2}>
               Alfred AI
             </Typography>
-            <Typography variant='caption' color='text.secondary' sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-              <Box component='span' sx={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', bgcolor: 'success.main' }} />
+            <Typography
+              variant='caption'
+              color='text.secondary'
+              sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}
+            >
+              <Box
+                component='span'
+                sx={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', bgcolor: 'success.main' }}
+              />
               Online · Powered by Groq
               {context.length > 0 && ` · ${context.length / 2} msg in context`}
             </Typography>
@@ -455,7 +468,11 @@ export default function AiChatPanel() {
           <span>
             <IconButton
               size='small'
-              onClick={() => { setMessages([]); setContext([]); setError(null) }}
+              onClick={() => {
+                setMessages([])
+                setContext([])
+                setError(null)
+              }}
               disabled={messages.length === 0}
               sx={{ color: 'text.secondary', '&:hover': { color: 'error.main' } }}
             >
@@ -476,7 +493,7 @@ export default function AiChatPanel() {
           flexDirection: 'column',
           '&::-webkit-scrollbar': { width: 4 },
           '&::-webkit-scrollbar-track': { bgcolor: 'transparent' },
-          '&::-webkit-scrollbar-thumb': { borderRadius: 2, bgcolor: 'divider' },
+          '&::-webkit-scrollbar-thumb': { borderRadius: 2, bgcolor: 'divider' }
         }}
       >
         {messages.length === 0 ? (
@@ -488,7 +505,7 @@ export default function AiChatPanel() {
               alignItems: 'center',
               justifyContent: 'center',
               gap: 2,
-              pb: 4,
+              pb: 4
             }}
           >
             <Box
@@ -501,7 +518,7 @@ export default function AiChatPanel() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 boxShadow: '0 8px 24px rgba(var(--mui-palette-primary-mainChannel) / 0.35)',
-                mb: 1,
+                mb: 1
               }}
             >
               <i className='tabler-sparkles' style={{ fontSize: 32, color: '#fff' }} />
@@ -546,7 +563,7 @@ export default function AiChatPanel() {
                   flexShrink: 0,
                   bgcolor: 'background.paper',
                   border: '1.5px solid',
-                  borderColor: 'divider',
+                  borderColor: 'divider'
                 }}
               >
                 <i className='tabler-robot' style={{ fontSize: 14 }} />
@@ -558,7 +575,7 @@ export default function AiChatPanel() {
                   borderRadius: '18px 18px 18px 4px',
                   bgcolor: 'background.paper',
                   border: '1px solid',
-                  borderColor: 'divider',
+                  borderColor: 'divider'
                 }}
               >
                 <TypingDots />
@@ -585,11 +602,13 @@ export default function AiChatPanel() {
               borderColor: 'error.light',
               display: 'flex',
               alignItems: 'center',
-              gap: 1,
+              gap: 1
             }}
           >
             <i className='tabler-alert-circle' style={{ fontSize: 15, color: 'var(--mui-palette-error-main)' }} />
-            <Typography variant='caption' color='error.main' sx={{ flex: 1 }}>{error}</Typography>
+            <Typography variant='caption' color='error.main' sx={{ flex: 1 }}>
+              {error}
+            </Typography>
             <IconButton size='small' onClick={() => setError(null)} sx={{ color: 'error.main' }}>
               <i className='tabler-x' style={{ fontSize: 14 }} />
             </IconButton>
@@ -611,7 +630,7 @@ export default function AiChatPanel() {
             borderRadius: 2,
             bgcolor: 'background.paper',
             border: '1px solid',
-            borderColor: 'divider',
+            borderColor: 'divider'
           }}
         >
           <Box
@@ -660,7 +679,7 @@ export default function AiChatPanel() {
           bgcolor: 'background.paper',
           boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
           transition: 'border-color 0.2s',
-          '&:focus-within': { borderColor: 'primary.main' },
+          '&:focus-within': { borderColor: 'primary.main' }
         }}
       >
         <input
@@ -694,7 +713,7 @@ export default function AiChatPanel() {
           disabled={isPending}
           sx={{
             fontSize: '0.9rem',
-            '& .MuiInputBase-input': { py: 0.5 },
+            '& .MuiInputBase-input': { py: 0.5 }
           }}
         />
 
@@ -718,7 +737,7 @@ export default function AiChatPanel() {
                   height: 32,
                   transition: 'all 0.2s',
                   '&:hover': { opacity: 0.88 },
-                  '&.Mui-disabled': { bgcolor: 'transparent' },
+                  '&.Mui-disabled': { bgcolor: 'transparent' }
                 }}
               >
                 <i className='tabler-send' style={{ fontSize: 16 }} />

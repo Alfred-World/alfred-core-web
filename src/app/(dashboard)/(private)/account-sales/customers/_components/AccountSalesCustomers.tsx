@@ -25,6 +25,7 @@ import {
   useGetApiV1AccountSalesOrders,
   useGetApiV1AccountSalesMembersSearch,
   usePostApiV1AccountSalesMembers,
+  usePatchApiV1AccountSalesMembersId,
   useGetApiV1AccountSalesBonusProgressSoldByMemberId,
   useGetApiV1AccountSalesBonusTransactionsSoldByMemberId,
   usePostApiV1AccountSalesBonusTransactionsTransactionIdPay,
@@ -35,8 +36,10 @@ import type {
   ApiErrorResponse,
   CreateMemberRequest,
   MemberDto,
-  MemberSource
+  MemberSource,
+  UpdateMemberRequest
 } from '@/generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 import { dsl } from '@/utils/dslQueryBuilder'
 
 const getApiErrorMessage = (error: unknown, fallback: string) => {
@@ -67,35 +70,41 @@ const AccountSalesCustomers = () => {
 
   const selectedMemberId = searchParams.get('member')
 
-  const detailTab = (VALID_TABS.includes(searchParams.get('tab') as DetailTab)
+  const detailTab = VALID_TABS.includes(searchParams.get('tab') as DetailTab)
     ? (searchParams.get('tab') as DetailTab)
-    : 'purchased')
+    : 'purchased'
 
-  const setSelectedMemberId = useCallback((id: string | null) => {
-    const params = new URLSearchParams(searchParams.toString())
+  const setSelectedMemberId = useCallback(
+    (id: string | null) => {
+      const params = new URLSearchParams(searchParams.toString())
 
-    if (id) {
-      params.set('member', id)
-    } else {
-      params.delete('member')
-    }
+      if (id) {
+        params.set('member', id)
+      } else {
+        params.delete('member')
+      }
 
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [router, pathname, searchParams])
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    },
+    [router, pathname, searchParams]
+  )
 
-  const setDetailTab = useCallback((tab: DetailTab) => {
-    const params = new URLSearchParams(searchParams.toString())
+  const setDetailTab = useCallback(
+    (tab: DetailTab) => {
+      const params = new URLSearchParams(searchParams.toString())
 
-    params.set('tab', tab)
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
-  }, [router, pathname, searchParams])
+      params.set('tab', tab)
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+    },
+    [router, pathname, searchParams]
+  )
 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
   const [openCreate, setOpenCreate] = useState(false)
   const [form, setForm] = useState<CreateMemberRequest>({ source: 'Zalo' })
   const [openEdit, setOpenEdit] = useState(false)
-  const [editForm, setEditForm] = useState<CreateMemberRequest>({ source: 'Zalo' })
+  const [editForm, setEditForm] = useState<UpdateMemberRequest>({})
   const [ordersPage, setOrdersPage] = useState(1)
   const [referralsPage, setReferralsPage] = useState(1)
 
@@ -114,9 +123,11 @@ const AccountSalesCustomers = () => {
       return undefined
     }
 
-    return dsl().group(g => {
-      g.string('displayName').contains(search.trim()).or().string('sourceId').contains(search.trim())
-    }).build()
+    return dsl()
+      .group(g => {
+        g.string('displayName').contains(search.trim()).or().string('sourceId').contains(search.trim())
+      })
+      .build()
   }, [search])
 
   const membersQuery = useGetApiV1AccountSalesMembers({ page, pageSize: 12, filter, sort: '-createdAt' })
@@ -133,8 +144,7 @@ const AccountSalesCustomers = () => {
       return searchQuery.data?.result ?? []
     }
 
-    
-return membersQuery.data?.result?.items ?? []
+    return membersQuery.data?.result?.items ?? []
   }, [membersQuery.data?.result?.items, searchQuery.data?.result, isSearching])
 
   useEffect(() => {
@@ -142,8 +152,8 @@ return membersQuery.data?.result?.items ?? []
       setSelectedMemberId(members[0].id)
     }
 
-  // setSelectedMemberId is stable (useCallback), safe to omit
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // setSelectedMemberId is stable (useCallback), safe to omit
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [members, selectedMemberId])
 
   // Reset tab pagination when selected member changes
@@ -218,15 +228,13 @@ return membersQuery.data?.result?.items ?? []
     { query: { enabled: !!selectedMemberId && detailTab === 'referrals' } }
   )
 
-  const bonusProgressQuery = useGetApiV1AccountSalesBonusProgressSoldByMemberId(
-    selectedMemberId!,
-    { query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' } }
-  )
+  const bonusProgressQuery = useGetApiV1AccountSalesBonusProgressSoldByMemberId(selectedMemberId!, {
+    query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' }
+  })
 
-  const bonusTxQuery = useGetApiV1AccountSalesBonusTransactionsSoldByMemberId(
-    selectedMemberId!,
-    { query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' } }
-  )
+  const bonusTxQuery = useGetApiV1AccountSalesBonusTransactionsSoldByMemberId(selectedMemberId!, {
+    query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' }
+  })
 
   const payBonus = usePostApiV1AccountSalesBonusTransactionsTransactionIdPay()
   const cancelBonus = usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel()
@@ -237,13 +245,30 @@ return membersQuery.data?.result?.items ?? []
       onSuccess: async response => {
         if (!response.success) {
           toast.error(response.errors?.[0]?.message || 'Failed to create member')
-          
-return
+
+          return
         }
 
         setOpenCreate(false)
         setForm({ source: 'Zalo' })
         await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesMembersQueryKey() })
+      }
+    }
+  })
+
+  const updateMember = usePatchApiV1AccountSalesMembersId({
+    mutation: {
+      onSuccess: async response => {
+        if (!response.success) {
+          toast.error(response.errors?.[0]?.message || 'Failed to update member')
+
+          return
+        }
+
+        toast.success('Member updated successfully')
+        setOpenEdit(false)
+        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesMembersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: ['account-sales', 'members', selectedMemberId, 'detail'] })
       }
     }
   })
@@ -263,15 +288,20 @@ return
   const customersApiErrorMessage = useMemo(() => {
     const error = membersQuery.error || searchQuery.error || ordersQuery.error || referralOrdersQuery.error
 
-    
-return getApiErrorMessage(error, 'Unable to load customer data from API.')
+    return getApiErrorMessage(error, 'Unable to load customer data from API.')
   }, [membersQuery.error, searchQuery.error, ordersQuery.error, referralOrdersQuery.error])
 
   useEffect(() => {
     if (membersQuery.isError || searchQuery.isError || ordersQuery.isError || referralOrdersQuery.isError) {
       toast.error(customersApiErrorMessage)
     }
-  }, [membersQuery.isError, searchQuery.isError, ordersQuery.isError, referralOrdersQuery.isError, customersApiErrorMessage])
+  }, [
+    membersQuery.isError,
+    searchQuery.isError,
+    ordersQuery.isError,
+    referralOrdersQuery.isError,
+    customersApiErrorMessage
+  ])
 
   const cancelTx = async (txId: string) => {
     try {
@@ -294,15 +324,48 @@ return getApiErrorMessage(error, 'Unable to load customer data from API.')
     setOpenEdit(true)
   }
 
+  const handleSaveEditMember = async () => {
+    if (!selectedMemberId || !selectedMember) return
+
+    const original: UpdateMemberRequest = {
+      displayName: selectedMember.displayName ?? '',
+      source: selectedMember.source ?? 'Zalo',
+      sourceId: selectedMember.sourceId ?? '',
+      customerNote: selectedMember.customerNote ?? ''
+    }
+
+    const changes = getChangedFields(original, editForm)
+
+    if (!changes) {
+      toast.info('No changes detected')
+      setOpenEdit(false)
+
+      return
+    }
+
+    await updateMember.mutateAsync({ id: selectedMemberId, data: changes })
+  }
+
   return (
-    <Box sx={{ 
-      display: 'grid', 
-      gridTemplateColumns: { xs: '1fr', lg: '350px 1fr' }, 
-      gap: { xs: 3, lg: 4 }, 
-      minHeight: '80vh' 
-    }}>
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: { xs: '1fr', lg: '350px 1fr' },
+        gap: { xs: 3, lg: 4 },
+        minHeight: '80vh'
+      }}
+    >
       {/* Sidebar List */}
-      <Card sx={{ height: { xs: '60vh', lg: 'auto' }, overflowY: 'hidden', p: { xs: 2.5, md: 3 }, borderRadius: 3, display: 'flex', flexDirection: 'column' }}>
+      <Card
+        sx={{
+          height: { xs: '60vh', lg: 'auto' },
+          overflowY: 'hidden',
+          p: { xs: 2.5, md: 3 },
+          borderRadius: 3,
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         <CustomerListSidebar
           members={members}
           totalMembers={membersQuery.data?.result?.total ?? 0}
@@ -355,7 +418,7 @@ return getApiErrorMessage(error, 'Unable to load customer data from API.')
             multiline
             minRows={2}
             value={payNoteDialog?.note ?? ''}
-            onChange={e => setPayNoteDialog(prev => prev ? { ...prev, note: e.target.value } : null)}
+            onChange={e => setPayNoteDialog(prev => (prev ? { ...prev, note: e.target.value } : null))}
           />
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2.5 }}>
@@ -369,7 +432,10 @@ return getApiErrorMessage(error, 'Unable to load customer data from API.')
 
               try {
                 if (payNoteDialog.transactionId) {
-                  await payBonus.mutateAsync({ transactionId: payNoteDialog.transactionId, data: { note: payNoteDialog.note || null } })
+                  await payBonus.mutateAsync({
+                    transactionId: payNoteDialog.transactionId,
+                    data: { note: payNoteDialog.note || null }
+                  })
                 } else {
                   await settleTier.mutateAsync({
                     data: {
@@ -441,7 +507,7 @@ return getApiErrorMessage(error, 'Unable to load customer data from API.')
         </DialogActions>
       </Dialog>
 
-      {/* Edit Member Dialog — mutation usePutApiV1AccountSalesMembersId available after: restart alfred-core + pnpm generate */}
+      {/* Edit Member Dialog */}
       <Dialog open={openEdit} onClose={() => setOpenEdit(false)} fullWidth maxWidth='sm'>
         <DialogTitle>Edit Member</DialogTitle>
         <DialogContent sx={{ px: { xs: 2.5, sm: 3.5 }, pt: 2, pb: 1 }}>
@@ -478,17 +544,7 @@ return getApiErrorMessage(error, 'Unable to load customer data from API.')
         </DialogContent>
         <DialogActions sx={{ px: { xs: 2.5, sm: 3.5 }, pb: 2.5, pt: 1.5 }}>
           <Button onClick={() => setOpenEdit(false)}>Cancel</Button>
-          <Button
-            variant='contained'
-            onClick={async () => {
-              // TODO: wire after restart alfred-core + pnpm generate:
-              // const updateMember = usePutApiV1AccountSalesMembersId()
-              // await updateMember.mutateAsync({ id: selectedMemberId!, data: editForm })
-              // await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesMembersQueryKey() })
-              toast.info('Restart alfred-core service then run pnpm generate to activate edit.')
-              setOpenEdit(false)
-            }}
-          >
+          <Button variant='contained' disabled={updateMember.isPending} onClick={handleSaveEditMember}>
             Save
           </Button>
         </DialogActions>
@@ -498,4 +554,3 @@ return getApiErrorMessage(error, 'Unable to load customer data from API.')
 }
 
 export default AccountSalesCustomers
-

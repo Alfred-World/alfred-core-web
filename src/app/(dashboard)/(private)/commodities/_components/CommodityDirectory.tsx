@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 
 import { toast } from 'react-toastify'
 
-
 import { alpha } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -95,23 +94,37 @@ const TickerCard = ({ assetClass, count, isActive, onClick }: TickerCardProps) =
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1.5 }}>
-            <Box sx={{
-              width: 34, height: 34, borderRadius: 1.5,
-              bgcolor: alpha(cfg.hex, 0.15),
-              display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}>
+            <Box
+              sx={{
+                width: 34,
+                height: 34,
+                borderRadius: 1.5,
+                bgcolor: alpha(cfg.hex, 0.15),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
               <i className={cfg.icon} style={{ fontSize: 18, color: cfg.hex }} />
             </Box>
-            <Typography variant='body2' color='text.secondary' fontWeight={600}>{cfg.label}</Typography>
+            <Typography variant='body2' color='text.secondary' fontWeight={600}>
+              {cfg.label}
+            </Typography>
           </Box>
-          <Typography variant='h4' fontWeight={800} sx={{ lineHeight: 1.1 }}>{count}</Typography>
-          <Typography variant='caption' color='text.secondary'>instruments</Typography>
+          <Typography variant='h4' fontWeight={800} sx={{ lineHeight: 1.1 }}>
+            {count}
+          </Typography>
+          <Typography variant='caption' color='text.secondary'>
+            instruments
+          </Typography>
         </Box>
         <Chip
           label={isActive ? 'Selected' : 'View'}
           size='small'
           sx={{
-            height: 20, fontSize: 10, fontWeight: 700,
+            height: 20,
+            fontSize: 10,
+            fontWeight: 700,
             bgcolor: isActive ? alpha(cfg.hex, 0.15) : 'action.hover',
             color: isActive ? cfg.hex : 'text.secondary'
           }}
@@ -135,9 +148,23 @@ const CommodityDirectory = () => {
   const forexFilter = useMemo(() => dsl().string('assetClass').eq('Forex').build(), [])
   const stockFilter = useMemo(() => dsl().string('assetClass').eq('Stock').build(), [])
 
-  const { data: metalData, isError: isMetalError, error: metalError } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: metalFilter })
-  const { data: forexData, isError: isForexError, error: forexError } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: forexFilter })
-  const { data: stockData, isError: isStockError, error: stockError } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: stockFilter })
+  const {
+    data: metalData,
+    isError: isMetalError,
+    error: metalError
+  } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: metalFilter })
+
+  const {
+    data: forexData,
+    isError: isForexError,
+    error: forexError
+  } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: forexFilter })
+
+  const {
+    data: stockData,
+    isError: isStockError,
+    error: stockError
+  } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: stockFilter })
 
   const classCounts: Record<string, number> = {
     Metal: metalData?.result?.total ?? 0,
@@ -156,12 +183,18 @@ const CommodityDirectory = () => {
   }, [search, classFilter])
 
   // ─── Main data ──────────────────────────────────────────────────────────────
-  const { data, isLoading, isError: isDataError, error: dataError } = useGetApiV1Commodities({ page, pageSize, filter, sort: 'code' })
+  const {
+    data,
+    isLoading,
+    isError: isDataError,
+    error: dataError
+  } = useGetApiV1Commodities({ page, pageSize, filter, sort: 'code' })
+
   const deleteMutation = useDeleteApiV1CommoditiesId()
 
-  const commodities = data?.result?.items     ?? []
-  const total       = data?.result?.total     ?? 0
-  const totalPages  = data?.result?.totalPages ?? 1
+  const commodities = data?.result?.items ?? []
+  const total = data?.result?.total ?? 0
+  const totalPages = data?.result?.totalPages ?? 1
 
   const handleDelete = async (id: string, e: React.MouseEvent) => {
     e.stopPropagation()
@@ -195,7 +228,6 @@ const CommodityDirectory = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-
       {/* ─── Page Header ─────────────────────────────────────────────── */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
@@ -224,7 +256,10 @@ const CommodityDirectory = () => {
             assetClass={cls}
             count={classCounts[cls]}
             isActive={classFilter === cls}
-            onClick={() => { setClassFilter(prev => prev === cls ? '' : cls); setPage(1) }}
+            onClick={() => {
+              setClassFilter(prev => (prev === cls ? '' : cls))
+              setPage(1)
+            }}
           />
         ))}
       </Box>
@@ -237,7 +272,10 @@ const CommodityDirectory = () => {
               size='small'
               placeholder='Search by name or code...'
               value={search}
-              onChange={e => { setSearch(e.target.value); setPage(1) }}
+              onChange={e => {
+                setSearch(e.target.value)
+                setPage(1)
+              }}
               sx={{ minWidth: 260 }}
               slotProps={{
                 input: {
@@ -250,23 +288,39 @@ const CommodityDirectory = () => {
               }}
             />
             <TextField
-              select size='small' label='Asset Class'
+              select
+              size='small'
+              label='Asset Class'
               value={classFilter}
-              onChange={e => { setClassFilter(e.target.value); setPage(1) }}
+              onChange={e => {
+                setClassFilter(e.target.value)
+                setPage(1)
+              }}
               sx={{ minWidth: 150 }}
             >
               <MenuItem value=''>All Classes</MenuItem>
               {ASSET_CLASSES.map(cls => (
                 <MenuItem key={cls} value={cls}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <i className={assetClassConfig[cls].icon} style={{ fontSize: 15, color: assetClassConfig[cls].hex }} />
+                    <i
+                      className={assetClassConfig[cls].icon}
+                      style={{ fontSize: 15, color: assetClassConfig[cls].hex }}
+                    />
                     {assetClassConfig[cls].label}
                   </Box>
                 </MenuItem>
               ))}
             </TextField>
             {(search || classFilter) && (
-              <Chip label='Clear' size='small' variant='outlined' onDelete={() => { setSearch(''); setClassFilter('') }} />
+              <Chip
+                label='Clear'
+                size='small'
+                variant='outlined'
+                onDelete={() => {
+                  setSearch('')
+                  setClassFilter('')
+                }}
+              />
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
@@ -285,9 +339,21 @@ const CommodityDirectory = () => {
 
       {/* ─── Market Watchlist Table ───────────────────────────────────── */}
       <Card sx={{ border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
-        <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box
+          sx={{
+            px: 3,
+            py: 2,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1
+          }}
+        >
           <i className='tabler-list-details' style={{ fontSize: 18, opacity: 0.5 }} />
-          <Typography variant='subtitle1' fontWeight={700}>Market Watchlist</Typography>
+          <Typography variant='subtitle1' fontWeight={700}>
+            Market Watchlist
+          </Typography>
           <Chip label={`${total} instruments`} size='small' sx={{ ml: 'auto', fontWeight: 600 }} />
         </Box>
 
@@ -299,7 +365,14 @@ const CommodityDirectory = () => {
                   <TableCell
                     key={h || i}
                     align={['Buy Price', 'Sell Price'].includes(h) ? 'right' : 'left'}
-                    sx={{ fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.8, color: 'text.secondary', py: 1.5 }}
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: 11,
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.8,
+                      color: 'text.secondary',
+                      py: 1.5
+                    }}
                   >
                     {h}
                   </TableCell>
@@ -312,7 +385,9 @@ const CommodityDirectory = () => {
                   <TableRow key={i}>
                     {Array.from({ length: 7 }).map((_, j) => (
                       <TableCell key={j}>
-                        <Box sx={{ height: 16, borderRadius: 1, bgcolor: 'action.hover', width: j === 0 ? '40%' : '65%' }} />
+                        <Box
+                          sx={{ height: 16, borderRadius: 1, bgcolor: 'action.hover', width: j === 0 ? '40%' : '65%' }}
+                        />
                       </TableCell>
                     ))}
                   </TableRow>
@@ -321,15 +396,31 @@ const CommodityDirectory = () => {
                 <TableRow>
                   <TableCell colSpan={7} align='center' sx={{ py: 12 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                      <Box sx={{
-                        width: 80, height: 80, borderRadius: '50%', bgcolor: 'action.hover',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                      }}>
+                      <Box
+                        sx={{
+                          width: 80,
+                          height: 80,
+                          borderRadius: '50%',
+                          bgcolor: 'action.hover',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
                         <i className='tabler-chart-dots-3' style={{ fontSize: 40, opacity: 0.35 }} />
                       </Box>
-                      <Typography variant='h6' fontWeight={600} color='text.secondary'>No instruments found</Typography>
-                      <Typography variant='body2' color='text.disabled'>Add commodities to start tracking your portfolio.</Typography>
-                      <Button variant='outlined' size='small' startIcon={<i className='tabler-plus' />} onClick={() => router.push('/commodities/new')}>
+                      <Typography variant='h6' fontWeight={600} color='text.secondary'>
+                        No instruments found
+                      </Typography>
+                      <Typography variant='body2' color='text.disabled'>
+                        Add commodities to start tracking your portfolio.
+                      </Typography>
+                      <Button
+                        variant='outlined'
+                        size='small'
+                        startIcon={<i className='tabler-plus' />}
+                        onClick={() => router.push('/commodities/new')}
+                      >
                         Add First Commodity
                       </Button>
                     </Box>
@@ -354,14 +445,27 @@ const CommodityDirectory = () => {
                       {/* Code */}
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                          <Box sx={{
-                            width: 36, height: 36, borderRadius: 1.5,
-                            bgcolor: alpha(cls.hex, 0.12),
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                          }}>
+                          <Box
+                            sx={{
+                              width: 36,
+                              height: 36,
+                              borderRadius: 1.5,
+                              bgcolor: alpha(cls.hex, 0.12),
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0
+                            }}
+                          >
                             <i className={cls.icon} style={{ fontSize: 18, color: cls.hex }} />
                           </Box>
-                          <Typography variant='body2' fontWeight={800} fontFamily='monospace' fontSize={14} letterSpacing={0.5}>
+                          <Typography
+                            variant='body2'
+                            fontWeight={800}
+                            fontFamily='monospace'
+                            fontSize={14}
+                            letterSpacing={0.5}
+                          >
                             {c.code}
                           </Typography>
                         </Box>
@@ -370,13 +474,21 @@ const CommodityDirectory = () => {
                       {/* Name */}
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Typography variant='body2' fontWeight={500}>{c.name}</Typography>
+                          <Typography variant='body2' fontWeight={500}>
+                            {c.name}
+                          </Typography>
                         </Box>
                         {c.description && (
                           <Typography
                             variant='caption'
                             color='text.disabled'
-                            sx={{ display: 'block', maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                            sx={{
+                              display: 'block',
+                              maxWidth: 200,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap'
+                            }}
                           >
                             {c.description}
                           </Typography>
@@ -389,7 +501,8 @@ const CommodityDirectory = () => {
                           label={cls.label}
                           size='small'
                           sx={{
-                            fontWeight: 700, fontSize: 11,
+                            fontWeight: 700,
+                            fontSize: 11,
                             bgcolor: alpha(cls.hex, 0.12),
                             color: cls.hex,
                             border: `1px solid ${alpha(cls.hex, 0.3)}`,
@@ -409,12 +522,16 @@ const CommodityDirectory = () => {
 
                       {/* Buy Price */}
                       <TableCell align='right'>
-                        <Typography variant='body2' color='text.disabled' fontStyle='italic'>—</Typography>
+                        <Typography variant='body2' color='text.disabled' fontStyle='italic'>
+                          —
+                        </Typography>
                       </TableCell>
 
                       {/* Sell Price */}
                       <TableCell align='right'>
-                        <Typography variant='body2' color='text.disabled' fontStyle='italic'>—</Typography>
+                        <Typography variant='body2' color='text.disabled' fontStyle='italic'>
+                          —
+                        </Typography>
                       </TableCell>
 
                       {/* Actions */}
@@ -445,20 +562,36 @@ const CommodityDirectory = () => {
         </TableContainer>
 
         {/* Footer */}
-        <Box sx={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          px: 3, py: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'action.hover'
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            px: 3,
+            py: 2,
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            bgcolor: 'action.hover'
+          }}
+        >
           <Typography variant='body2' color='text.secondary'>
-            {total === 0 ? 'No instruments' : (
+            {total === 0 ? (
+              'No instruments'
+            ) : (
               <>
                 Showing{' '}
-                <Box component='span' fontWeight={700} color='text.primary'>{((page - 1) * pageSize) + 1}</Box>
-                {' '}–{' '}
-                <Box component='span' fontWeight={700} color='text.primary'>{Math.min(page * pageSize, total)}</Box>
-                {' '}of{' '}
-                <Box component='span' fontWeight={700} color='text.primary'>{total}</Box>
-                {' '}instruments
+                <Box component='span' fontWeight={700} color='text.primary'>
+                  {(page - 1) * pageSize + 1}
+                </Box>{' '}
+                –{' '}
+                <Box component='span' fontWeight={700} color='text.primary'>
+                  {Math.min(page * pageSize, total)}
+                </Box>{' '}
+                of{' '}
+                <Box component='span' fontWeight={700} color='text.primary'>
+                  {total}
+                </Box>{' '}
+                instruments
               </>
             )}
           </Typography>

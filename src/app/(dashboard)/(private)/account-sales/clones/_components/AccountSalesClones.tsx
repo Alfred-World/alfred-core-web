@@ -81,7 +81,12 @@ const AccountSalesClones = () => {
 
   const productsQuery = useGetApiV1AccountSalesProducts({ page: 1, pageSize: 200, sort: 'name' })
   const sourceAccountsQuery = useGetApiV1AccountSalesSourceAccounts({ page: 1, pageSize: 200, sort: 'username' })
-  const sourceAccounts = useMemo<SourceAccountDto[]>(() => sourceAccountsQuery.data?.result?.items ?? [], [sourceAccountsQuery.data?.result?.items])
+
+  const sourceAccounts = useMemo<SourceAccountDto[]>(
+    () => sourceAccountsQuery.data?.result?.items ?? [],
+    [sourceAccountsQuery.data?.result?.items]
+  )
+
   const products = useMemo(() => productsQuery.data?.result?.items ?? [], [productsQuery.data?.result?.items])
 
   const filter = useMemo(() => {
@@ -107,9 +112,9 @@ const AccountSalesClones = () => {
     return compiled === '' ? undefined : compiled
   }, [debouncedKeyword, productFilter, statusFilter])
 
-  const clonesQuery = useGetApiV1AccountSalesAccountClones({ 
-    page, 
-    pageSize: PAGE_SIZE, 
+  const clonesQuery = useGetApiV1AccountSalesAccountClones({
+    page,
+    pageSize: PAGE_SIZE,
     sort: '-createdAt',
     filter
   })
@@ -149,9 +154,10 @@ const AccountSalesClones = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, pt: 1, pb: 4 }}>
-      
       {/* Header */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}
+      >
         <Box>
           <Typography variant='h3' fontWeight={800} sx={{ mb: 0.5, letterSpacing: '-0.5px' }}>
             Account Clones
@@ -161,17 +167,13 @@ const AccountSalesClones = () => {
           </Typography>
         </Box>
         <Stack direction='row' spacing={2}>
-          <Button 
-            variant='outlined' 
-            color='inherit'
-            startIcon={<i className='tabler-filter' />} 
-          >
+          <Button variant='outlined' color='inherit' startIcon={<i className='tabler-filter' />}>
             Filters
           </Button>
-          <Button 
-            variant='contained' 
+          <Button
+            variant='contained'
             color='primary'
-            startIcon={<i className='tabler-plus' />} 
+            startIcon={<i className='tabler-plus' />}
             onClick={() => setOpenCreate(true)}
             sx={{
               borderRadius: 2,
@@ -188,47 +190,115 @@ const AccountSalesClones = () => {
       {/* Stats Cards */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
         <Card variant='outlined' sx={{ p: 3, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
-          <Box sx={{ position: 'absolute', bottom: -10, left: 20, width: 80, height: 6, bgcolor: 'primary.main', borderRadius: 4, boxShadow: theme => `0 0 20px ${theme.palette.primary.main}` }} />
-          <Typography variant='caption' sx={{ color: 'text.secondary', letterSpacing: '1px', fontWeight: 700 }}>TOTAL CLONES</Typography>
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: -10,
+              left: 20,
+              width: 80,
+              height: 6,
+              bgcolor: 'primary.main',
+              borderRadius: 4,
+              boxShadow: theme => `0 0 20px ${theme.palette.primary.main}`
+            }}
+          />
+          <Typography variant='caption' sx={{ color: 'text.secondary', letterSpacing: '1px', fontWeight: 700 }}>
+            TOTAL CLONES
+          </Typography>
           <Stack direction='row' alignItems='center' spacing={2} sx={{ mt: 1 }}>
-            <Typography variant='h3' fontWeight={800}>{totalClones.toLocaleString()}</Typography>
+            <Typography variant='h3' fontWeight={800}>
+              {totalClones.toLocaleString()}
+            </Typography>
             <Chip size='small' label='~12%' color='success' sx={{ fontWeight: 700, borderRadius: 1.5, height: 22 }} />
-          </Stack>
-        </Card>
-        
-        <Card variant='outlined' sx={{ p: 3, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
-          <Box sx={{ position: 'absolute', bottom: -10, left: 20, width: 80, height: 6, bgcolor: 'secondary.main', borderRadius: 4, boxShadow: theme => `0 0 20px ${theme.palette.secondary.main}` }} />
-          <Typography variant='caption' sx={{ color: 'text.secondary', letterSpacing: '1px', fontWeight: 700 }}>VERIFIED NODES</Typography>
-          <Stack direction='row' alignItems='center' spacing={2} sx={{ mt: 1 }}>
-            {/* Fake stat since API doesn't aggregate by status */}
-            <Typography variant='h3' fontWeight={800}>{Math.floor(totalClones * 0.86).toLocaleString()}</Typography>
-            <Chip size='small' label='86% Compliance' color='secondary' sx={{ fontWeight: 700, borderRadius: 1.5, height: 22 }} />
           </Stack>
         </Card>
 
         <Card variant='outlined' sx={{ p: 3, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
-          <Box sx={{ position: 'absolute', bottom: -10, left: 20, width: 80, height: 6, bgcolor: 'warning.main', borderRadius: 4, boxShadow: theme => `0 0 20px ${theme.palette.warning.main}` }} />
-          <Typography variant='caption' sx={{ color: 'text.secondary', letterSpacing: '1px', fontWeight: 700 }}>PENDING INIT</Typography>
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: -10,
+              left: 20,
+              width: 80,
+              height: 6,
+              bgcolor: 'secondary.main',
+              borderRadius: 4,
+              boxShadow: theme => `0 0 20px ${theme.palette.secondary.main}`
+            }}
+          />
+          <Typography variant='caption' sx={{ color: 'text.secondary', letterSpacing: '1px', fontWeight: 700 }}>
+            VERIFIED NODES
+          </Typography>
           <Stack direction='row' alignItems='center' spacing={2} sx={{ mt: 1 }}>
-            <Typography variant='h3' fontWeight={800}>{Math.floor(totalClones * 0.14).toLocaleString()}</Typography>
-            <Chip size='small' label='Requires Action' color='warning' sx={{ fontWeight: 700, borderRadius: 1.5, height: 22 }} />
+            {/* Fake stat since API doesn't aggregate by status */}
+            <Typography variant='h3' fontWeight={800}>
+              {Math.floor(totalClones * 0.86).toLocaleString()}
+            </Typography>
+            <Chip
+              size='small'
+              label='86% Compliance'
+              color='secondary'
+              sx={{ fontWeight: 700, borderRadius: 1.5, height: 22 }}
+            />
+          </Stack>
+        </Card>
+
+        <Card variant='outlined' sx={{ p: 3, borderRadius: 3, position: 'relative', overflow: 'hidden' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: -10,
+              left: 20,
+              width: 80,
+              height: 6,
+              bgcolor: 'warning.main',
+              borderRadius: 4,
+              boxShadow: theme => `0 0 20px ${theme.palette.warning.main}`
+            }}
+          />
+          <Typography variant='caption' sx={{ color: 'text.secondary', letterSpacing: '1px', fontWeight: 700 }}>
+            PENDING INIT
+          </Typography>
+          <Stack direction='row' alignItems='center' spacing={2} sx={{ mt: 1 }}>
+            <Typography variant='h3' fontWeight={800}>
+              {Math.floor(totalClones * 0.14).toLocaleString()}
+            </Typography>
+            <Chip
+              size='small'
+              label='Requires Action'
+              color='warning'
+              sx={{ fontWeight: 700, borderRadius: 1.5, height: 22 }}
+            />
           </Stack>
         </Card>
       </Box>
 
       {/* Main Table Card */}
       <Card variant='outlined' sx={{ borderRadius: 4, overflow: 'hidden' }}>
-        <Box sx={{ p: 3, display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', md: 'center' }, gap: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
-          <Typography variant='h5' fontWeight={700}>Node Registry</Typography>
-          
+        <Box
+          sx={{
+            p: 3,
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            justifyContent: 'space-between',
+            alignItems: { xs: 'flex-start', md: 'center' },
+            gap: 2,
+            borderBottom: '1px solid',
+            borderColor: 'divider'
+          }}
+        >
+          <Typography variant='h5' fontWeight={700}>
+            Node Registry
+          </Typography>
+
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5}>
             <TextField
               size='small'
               placeholder='Search systems...'
               value={keyword}
               onChange={event => setKeyword(event.target.value)}
-              sx={{ 
-                minWidth: 220, 
+              sx={{
+                minWidth: 220,
                 '& .MuiOutlinedInput-root': { bgcolor: 'background.default', borderRadius: 2 }
               }}
               slotProps={{
@@ -250,7 +320,9 @@ const AccountSalesClones = () => {
             >
               <MenuItem value='all'>All products</MenuItem>
               {products.map(product => (
-                <MenuItem key={product.id} value={product.id}>{product.name}</MenuItem>
+                <MenuItem key={product.id} value={product.id}>
+                  {product.name}
+                </MenuItem>
               ))}
             </TextField>
             <TextField
@@ -262,7 +334,9 @@ const AccountSalesClones = () => {
             >
               <MenuItem value='all'>All status</MenuItem>
               {availableStatuses.map(status => (
-                <MenuItem key={status} value={status}>{status}</MenuItem>
+                <MenuItem key={status} value={status}>
+                  {status}
+                </MenuItem>
               ))}
             </TextField>
           </Stack>
@@ -276,24 +350,42 @@ const AccountSalesClones = () => {
                 <TableCell>EXTERNAL ID</TableCell>
                 <TableCell>VERIFIED AT</TableCell>
                 <TableCell>STATUS</TableCell>
-                <TableCell align='right' sx={{ pr: 3 }}>ACTIONS</TableCell>
+                <TableCell align='right' sx={{ pr: 3 }}>
+                  ACTIONS
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {clones.map(clone => {
                 const statusTheme = STATUS_COLOR[clone.status ?? 'Init'] || STATUS_COLOR['Init']
-                
+
                 return (
                   <TableRow key={clone.id} hover sx={{ '& td': { py: 2 } }}>
                     <TableCell sx={{ pl: 3 }}>
                       <Stack direction='row' alignItems='center' spacing={2}>
-                        <Box sx={{ width: 36, height: 36, borderRadius: '50%', bgcolor: theme => alpha(theme.palette.primary.main, 0.1), display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'primary.main', flexShrink: 0 }}>
+                        <Box
+                          sx={{
+                            width: 36,
+                            height: 36,
+                            borderRadius: '50%',
+                            bgcolor: theme => alpha(theme.palette.primary.main, 0.1),
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: 'primary.main',
+                            flexShrink: 0
+                          }}
+                        >
                           <i className='tabler-user' style={{ fontSize: 18 }} />
                         </Box>
                         <Box sx={{ zIndex: 1 }}>
-                          <Typography variant='body2' fontWeight={700}>{clone.username}</Typography>
+                          <Typography variant='body2' fontWeight={700}>
+                            {clone.username}
+                          </Typography>
                           <Typography variant='caption' color='text.secondary'>
-                            {clone.sourceAccount ? `[${clone.sourceAccount.accountType}] ${clone.sourceAccount.username}` : 'Independent Node'}
+                            {clone.sourceAccount
+                              ? `[${clone.sourceAccount.accountType}] ${clone.sourceAccount.username}`
+                              : 'Independent Node'}
                           </Typography>
                         </Box>
                       </Stack>
@@ -306,19 +398,25 @@ const AccountSalesClones = () => {
                     <TableCell>
                       {clone.verifiedAt ? (
                         <Box>
-                          <Typography variant='body2' fontWeight={500}>{dayjs(clone.verifiedAt).format('MMM DD, YYYY')}</Typography>
-                          <Typography variant='caption' color='text.secondary'>{dayjs(clone.verifiedAt).format('HH:mm [GMT]')}</Typography>
+                          <Typography variant='body2' fontWeight={500}>
+                            {dayjs(clone.verifiedAt).format('MMM DD, YYYY')}
+                          </Typography>
+                          <Typography variant='caption' color='text.secondary'>
+                            {dayjs(clone.verifiedAt).format('HH:mm [GMT]')}
+                          </Typography>
                         </Box>
                       ) : (
-                        <Typography variant='body2' color='text.secondary' fontStyle='italic'>Pending sequence...</Typography>
+                        <Typography variant='body2' color='text.secondary' fontStyle='italic'>
+                          Pending sequence...
+                        </Typography>
                       )}
                     </TableCell>
                     <TableCell>
-                      <Chip 
-                        size='small' 
-                        label={clone.status || 'Unknown'} 
+                      <Chip
+                        size='small'
+                        label={clone.status || 'Unknown'}
                         color={statusTheme}
-                        sx={{ fontWeight: 700 }} 
+                        sx={{ fontWeight: 700 }}
                       />
                     </TableCell>
                     <TableCell align='right' sx={{ pr: 3 }}>
@@ -329,7 +427,11 @@ const AccountSalesClones = () => {
                         <IconButton size='small' onClick={() => handleOpenEdit(clone)} color='primary'>
                           <i className='tabler-pencil' style={{ fontSize: 18 }} />
                         </IconButton>
-                        <IconButton size='small' onClick={() => toast.info('Delete functionality not implemented.')} color='error'>
+                        <IconButton
+                          size='small'
+                          onClick={() => toast.info('Delete functionality not implemented.')}
+                          color='error'
+                        >
                           <i className='tabler-trash' style={{ fontSize: 18 }} />
                         </IconButton>
                       </Stack>
@@ -343,7 +445,9 @@ const AccountSalesClones = () => {
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', opacity: 0.5 }}>
                       <i className='tabler-database-off' style={{ fontSize: 48, marginBottom: 16 }} />
                       <Typography variant='h6'>No clones found</Typography>
-                      <Typography variant='body2' color='text.secondary'>No registry entries matched your current filters.</Typography>
+                      <Typography variant='body2' color='text.secondary'>
+                        No registry entries matched your current filters.
+                      </Typography>
                     </Box>
                   </TableCell>
                 </TableRow>
@@ -352,7 +456,16 @@ const AccountSalesClones = () => {
           </Table>
         </TableContainer>
 
-        <Box sx={{ p: 2.5, borderTop: '1px solid', borderColor: 'divider', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Box
+          sx={{
+            p: 2.5,
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}
+        >
           <Typography variant='body2' color='text.secondary'>
             Showing <strong>1-{PAGE_SIZE}</strong> of <strong>{totalClones}</strong> clones
           </Typography>
@@ -367,15 +480,45 @@ const AccountSalesClones = () => {
       </Card>
 
       {/* Info Banner Container equivalent to v6 */}
-      <Card variant='outlined' sx={{ mt: 1, p: 2.5, borderRadius: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderLeft: '4px solid', borderLeftColor: 'primary.main' }}>
+      <Card
+        variant='outlined'
+        sx={{
+          mt: 1,
+          p: 2.5,
+          borderRadius: 4,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderLeft: '4px solid',
+          borderLeftColor: 'primary.main'
+        }}
+      >
         <Stack direction='row' spacing={2} alignItems='center'>
-          <Box sx={{ width: 48, height: 48, borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <Box
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 2,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}
+          >
             <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'primary.main', opacity: 0.1, borderRadius: 2 }} />
-            <i className='tabler-info-circle' style={{ fontSize: 24, zIndex: 1, color: 'var(--mui-palette-primary-main)' }} />
+            <i
+              className='tabler-info-circle'
+              style={{ fontSize: 24, zIndex: 1, color: 'var(--mui-palette-primary-main)' }}
+            />
           </Box>
           <Box>
-            <Typography variant='subtitle1' fontWeight={700}>Verification Engine is running at 100% capacity</Typography>
-            <Typography variant='body2' color='text.secondary'>Average propagation time for new clones: 4.2 seconds. No synchronization issues detected in the last 24 hours.</Typography>
+            <Typography variant='subtitle1' fontWeight={700}>
+              Verification Engine is running at 100% capacity
+            </Typography>
+            <Typography variant='body2' color='text.secondary'>
+              Average propagation time for new clones: 4.2 seconds. No synchronization issues detected in the last 24
+              hours.
+            </Typography>
           </Box>
         </Stack>
         <Button variant='outlined' color='inherit' sx={{ whiteSpace: 'nowrap' }}>
@@ -404,7 +547,7 @@ const AccountSalesClones = () => {
       <AccountCloneDetailDrawer
         selectedClone={selectedClone}
         onClose={() => setSelectedClone(null)}
-        onEdit={(clone) => {
+        onEdit={clone => {
           setSelectedClone(null)
           setEditTarget(clone)
           setOpenEdit(true)

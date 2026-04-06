@@ -53,7 +53,7 @@ const getApiErrorMessage = (error: unknown, fallback: string) => {
 const AccountSalesProducts = () => {
   const theme = useTheme()
   const [page, setPage] = useState(1)
-  
+
   // Search state
   const [keyword, setKeyword] = useState('')
   const [debouncedKeyword, setDebouncedKeyword] = useState('')
@@ -123,14 +123,17 @@ const AccountSalesProducts = () => {
   const totalProducts = productsQuery.data?.result?.total ?? 0
   const activePackages = products.reduce((acc, p) => acc + (p.variants?.length || 0), 0)
 
-  const averagePrice = products.length > 0 
-    ? Math.round(products.reduce((acc, p) => acc + ((p.variants?.[0]?.price || 0)), 0) / products.length)
-    : 0
+  const averagePrice =
+    products.length > 0
+      ? Math.round(products.reduce((acc, p) => acc + (p.variants?.[0]?.price || 0), 0) / products.length)
+      : 0
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       {/* HEADER SECTION */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 2 }}
+      >
         <Box>
           <Typography variant='h4' fontWeight={800} sx={{ letterSpacing: '-0.5px' }}>
             Inventory Control
@@ -143,7 +146,13 @@ const AccountSalesProducts = () => {
           <Button variant='outlined' color='inherit' sx={{ bgcolor: 'background.paper', borderColor: 'divider' }}>
             Export CSV
           </Button>
-          <Button variant='contained' color='primary' startIcon={<i className='tabler-plus' />} onClick={handleCreateNew} sx={{ px: 3, boxShadow: `0 4px 14px 0 ${alpha(theme.palette.primary.main, 0.39)}` }}>
+          <Button
+            variant='contained'
+            color='primary'
+            startIcon={<i className='tabler-plus' />}
+            onClick={handleCreateNew}
+            sx={{ px: 3, boxShadow: `0 4px 14px 0 ${alpha(theme.palette.primary.main, 0.39)}` }}
+          >
             New Product
           </Button>
         </Stack>
@@ -151,56 +160,154 @@ const AccountSalesProducts = () => {
 
       {/* STAT CARDS */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' }, gap: 3 }}>
-        <Card variant='outlined' sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}>
-          <Typography variant='caption' fontWeight={700} sx={{ color: 'text.secondary', letterSpacing: '1px', textTransform: 'uppercase' }}>TOTAL PRODUCTS</Typography>
-          <Typography variant='h3' fontWeight={800} sx={{ mt: 1 }}>{totalProducts.toLocaleString()}</Typography>
-          <i className='tabler-clipboard-check' style={{ position: 'absolute', right: 24, bottom: 24, fontSize: 48, color: alpha(theme.palette.text.secondary, 0.1) }} />
-        </Card>
-        
-        <Card variant='outlined' sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}>
-          <Typography variant='caption' fontWeight={700} sx={{ color: 'text.secondary', letterSpacing: '1px', textTransform: 'uppercase' }}>ACTIVE PACKAGES</Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 1 }}>
-            <Typography variant='h3' fontWeight={800}>{activePackages}</Typography>
-            <Chip size="small" icon={<i className='tabler-check' style={{ fontSize: 12 }} />} label="Stable" color="success" variant="outlined" sx={{ height: 20, fontSize: '0.65rem', fontWeight: 700 }} />
-          </Box>
-          <i className='tabler-package' style={{ position: 'absolute', right: 24, bottom: 24, fontSize: 48, color: alpha(theme.palette.text.secondary, 0.1) }} />
+        <Card
+          variant='outlined'
+          sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}
+        >
+          <Typography
+            variant='caption'
+            fontWeight={700}
+            sx={{ color: 'text.secondary', letterSpacing: '1px', textTransform: 'uppercase' }}
+          >
+            TOTAL PRODUCTS
+          </Typography>
+          <Typography variant='h3' fontWeight={800} sx={{ mt: 1 }}>
+            {totalProducts.toLocaleString()}
+          </Typography>
+          <i
+            className='tabler-clipboard-check'
+            style={{
+              position: 'absolute',
+              right: 24,
+              bottom: 24,
+              fontSize: 48,
+              color: alpha(theme.palette.text.secondary, 0.1)
+            }}
+          />
         </Card>
 
-        <Card variant='outlined' sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}>
-          <Typography variant='caption' fontWeight={700} sx={{ color: 'text.secondary', letterSpacing: '1px', textTransform: 'uppercase' }}>AVG. PRICING</Typography>
+        <Card
+          variant='outlined'
+          sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}
+        >
+          <Typography
+            variant='caption'
+            fontWeight={700}
+            sx={{ color: 'text.secondary', letterSpacing: '1px', textTransform: 'uppercase' }}
+          >
+            ACTIVE PACKAGES
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 1 }}>
+            <Typography variant='h3' fontWeight={800}>
+              {activePackages}
+            </Typography>
+            <Chip
+              size='small'
+              icon={<i className='tabler-check' style={{ fontSize: 12 }} />}
+              label='Stable'
+              color='success'
+              variant='outlined'
+              sx={{ height: 20, fontSize: '0.65rem', fontWeight: 700 }}
+            />
+          </Box>
+          <i
+            className='tabler-package'
+            style={{
+              position: 'absolute',
+              right: 24,
+              bottom: 24,
+              fontSize: 48,
+              color: alpha(theme.palette.text.secondary, 0.1)
+            }}
+          />
+        </Card>
+
+        <Card
+          variant='outlined'
+          sx={{ p: 3, borderRadius: 3, bgcolor: 'background.paper', position: 'relative', overflow: 'hidden' }}
+        >
+          <Typography
+            variant='caption'
+            fontWeight={700}
+            sx={{ color: 'text.secondary', letterSpacing: '1px', textTransform: 'uppercase' }}
+          >
+            AVG. PRICING
+          </Typography>
           <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 1, mt: 1 }}>
             <Typography variant='h3' fontWeight={800}>
-              <Typography component='span' variant='h5' sx={{ color: 'text.secondary', mr: 0.5, fontWeight: 700, verticalAlign: 'top' }}>₫</Typography>
+              <Typography
+                component='span'
+                variant='h5'
+                sx={{ color: 'text.secondary', mr: 0.5, fontWeight: 700, verticalAlign: 'top' }}
+              >
+                ₫
+              </Typography>
               {averagePrice.toLocaleString('vi-VN')}
             </Typography>
-            <Typography variant='caption' fontWeight={600} sx={{ color: 'text.secondary', mb: 0.5 }}>/UNIT</Typography>
+            <Typography variant='caption' fontWeight={600} sx={{ color: 'text.secondary', mb: 0.5 }}>
+              /UNIT
+            </Typography>
           </Box>
-          <i className='tabler-coin' style={{ position: 'absolute', right: 24, bottom: 24, fontSize: 48, color: alpha(theme.palette.text.secondary, 0.1) }} />
+          <i
+            className='tabler-coin'
+            style={{
+              position: 'absolute',
+              right: 24,
+              bottom: 24,
+              fontSize: 48,
+              color: alpha(theme.palette.text.secondary, 0.1)
+            }}
+          />
         </Card>
       </Box>
 
       {/* TABLE SECTION */}
       <Card variant='outlined' sx={{ borderRadius: 3, bgcolor: 'background.paper', overflow: 'hidden' }}>
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid', borderColor: 'divider' }}>
+        <Box
+          sx={{
+            p: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid',
+            borderColor: 'divider'
+          }}
+        >
           <TextField
-            size="small"
-            placeholder="Search products, SKUs or categories..."
+            size='small'
+            placeholder='Search products, SKUs or categories...'
             value={keyword}
             onChange={e => setKeyword(e.target.value)}
             slotProps={{
               input: {
                 startAdornment: (
-                  <InputAdornment position="start">
-                    <i className="tabler-search" style={{ color: theme.palette.text.secondary }} />
+                  <InputAdornment position='start'>
+                    <i className='tabler-search' style={{ color: theme.palette.text.secondary }} />
                   </InputAdornment>
                 ),
                 sx: { borderRadius: 2, bgcolor: 'background.default', minWidth: 320 }
               }
             }}
           />
-          <Stack direction="row" spacing={1}>
-            <Button size="small" variant="outlined" color="inherit" startIcon={<i className='tabler-filter' />} sx={{ borderRadius: 2 }}>Filter</Button>
-            <Button size="small" variant="outlined" color="inherit" startIcon={<i className='tabler-sort-descending' />} sx={{ borderRadius: 2 }}>Sort</Button>
+          <Stack direction='row' spacing={1}>
+            <Button
+              size='small'
+              variant='outlined'
+              color='inherit'
+              startIcon={<i className='tabler-filter' />}
+              sx={{ borderRadius: 2 }}
+            >
+              Filter
+            </Button>
+            <Button
+              size='small'
+              variant='outlined'
+              color='inherit'
+              startIcon={<i className='tabler-sort-descending' />}
+              sx={{ borderRadius: 2 }}
+            >
+              Sort
+            </Button>
           </Stack>
         </Box>
 
@@ -208,16 +315,32 @@ const AccountSalesProducts = () => {
           <Table>
             <TableHead>
               <TableRow sx={{ bgcolor: alpha(theme.palette.background.default, 0.4) }}>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>PRODUCT NAME</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>TYPE</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>PACKAGES</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>STATUS</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>ACTIONS</TableCell>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>
+                  PRODUCT NAME
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>
+                  TYPE
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>
+                  PACKAGES
+                </TableCell>
+                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}>
+                  STATUS
+                </TableCell>
+                <TableCell
+                  align='right'
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '1px' }}
+                >
+                  ACTIONS
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {products.map((product, idx) => {
-                const tone = productTypeColor[product.productType || AccountProductType.Other] || productTypeColor[AccountProductType.Other]
+                const tone =
+                  productTypeColor[product.productType || AccountProductType.Other] ||
+                  productTypeColor[AccountProductType.Other]
+
                 const sku = `SKU-${product.id?.substring(0, 5).toUpperCase()}-${String.fromCharCode(65 + (idx % 26))}`
                 const isHardware = product.productType === AccountProductType.Other
                 const isActive = true // Placeholder logic for now
@@ -226,21 +349,27 @@ const AccountSalesProducts = () => {
                   <TableRow key={product.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                        <Box sx={{ 
-                          width: 40, 
-                          height: 40, 
-                          borderRadius: 2, 
-                          bgcolor: alpha(tone, 0.1), 
-                          color: tone, 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          justifyContent: 'center' 
-                        }}>
+                        <Box
+                          sx={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 2,
+                            bgcolor: alpha(tone, 0.1),
+                            color: tone,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
                           <i className={isHardware ? 'tabler-cpu' : 'tabler-box'} style={{ fontSize: 20 }} />
                         </Box>
                         <Box>
-                          <Typography variant='body2' fontWeight={700} sx={{ color: 'text.primary' }}>{product.name}</Typography>
-                          <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 500 }}>{sku}</Typography>
+                          <Typography variant='body2' fontWeight={700} sx={{ color: 'text.primary' }}>
+                            {product.name}
+                          </Typography>
+                          <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 500 }}>
+                            {sku}
+                          </Typography>
                         </Box>
                       </Box>
                     </TableCell>
@@ -260,26 +389,51 @@ const AccountSalesProducts = () => {
                     </TableCell>
                     <TableCell>
                       <Typography variant='body2' fontWeight={600} sx={{ color: 'text.secondary' }}>
-                        {(product.variants || []).length < 10 && (product.variants || []).length > 0 ? "0" : ""}{(product.variants || []).length}
+                        {(product.variants || []).length < 10 && (product.variants || []).length > 0 ? '0' : ''}
+                        {(product.variants || []).length}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Switch size="small" checked={isActive} color="primary" sx={{ pointerEvents: 'none' }} />
-                        <Typography variant='caption' fontWeight={600} sx={{ color: isActive ? 'text.primary' : 'text.secondary' }}>
+                        <Switch size='small' checked={isActive} color='primary' sx={{ pointerEvents: 'none' }} />
+                        <Typography
+                          variant='caption'
+                          fontWeight={600}
+                          sx={{ color: isActive ? 'text.primary' : 'text.secondary' }}
+                        >
                           {isActive ? 'Active' : 'Inactive'}
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell align="right">
-                      <Stack direction='row' spacing={0.5} justifyContent="flex-end">
-                        <IconButton size='small' onClick={() => handleView(product)} sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.1) } }}>
+                    <TableCell align='right'>
+                      <Stack direction='row' spacing={0.5} justifyContent='flex-end'>
+                        <IconButton
+                          size='small'
+                          onClick={() => handleView(product)}
+                          sx={{
+                            color: 'text.secondary',
+                            '&:hover': { color: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.1) }
+                          }}
+                        >
                           <i className='tabler-eye' style={{ fontSize: 18 }} />
                         </IconButton>
-                        <IconButton size='small' onClick={() => handleEdit(product)} sx={{ color: 'text.secondary', '&:hover': { color: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.1) } }}>
+                        <IconButton
+                          size='small'
+                          onClick={() => handleEdit(product)}
+                          sx={{
+                            color: 'text.secondary',
+                            '&:hover': { color: 'primary.main', bgcolor: alpha(theme.palette.primary.main, 0.1) }
+                          }}
+                        >
                           <i className='tabler-pencil' style={{ fontSize: 18 }} />
                         </IconButton>
-                        <IconButton size='small' sx={{ color: 'text.secondary', '&:hover': { color: 'error.main', bgcolor: alpha(theme.palette.error.main, 0.1) } }}>
+                        <IconButton
+                          size='small'
+                          sx={{
+                            color: 'text.secondary',
+                            '&:hover': { color: 'error.main', bgcolor: alpha(theme.palette.error.main, 0.1) }
+                          }}
+                        >
                           <i className='tabler-trash' style={{ fontSize: 18 }} />
                         </IconButton>
                       </Stack>
@@ -301,27 +455,45 @@ const AccountSalesProducts = () => {
         </TableContainer>
 
         {/* PAGINATION FOOTER */}
-        <Box sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid', borderColor: 'divider', bgcolor: alpha(theme.palette.background.default, 0.4) }}>
+        <Box
+          sx={{
+            p: 2,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            bgcolor: alpha(theme.palette.background.default, 0.4)
+          }}
+        >
           <Typography variant='body2' color='text.secondary'>
-            Showing <Typography component="span" fontWeight={700} color="text.primary">{(page - 1) * 10 + 1}-{Math.min(page * 10, totalProducts)}</Typography> of <Typography component="span" fontWeight={700} color="text.primary">{totalProducts}</Typography> products
+            Showing{' '}
+            <Typography component='span' fontWeight={700} color='text.primary'>
+              {(page - 1) * 10 + 1}-{Math.min(page * 10, totalProducts)}
+            </Typography>{' '}
+            of{' '}
+            <Typography component='span' fontWeight={700} color='text.primary'>
+              {totalProducts}
+            </Typography>{' '}
+            products
           </Typography>
           <Pagination
             page={page}
             count={productsQuery.data?.result?.totalPages ?? 1}
             onChange={(_, value) => setPage(value)}
-            shape="rounded"
+            shape='rounded'
             sx={{
               '& .MuiPaginationItem-root': {
                 bgcolor: 'background.paper',
                 border: '1px solid',
-                borderColor: 'divider',
+                borderColor: 'divider'
               },
               '& .Mui-selected': {
                 bgcolor: 'primary.main',
                 color: 'primary.contrastText',
                 borderColor: 'primary.main',
                 '&:hover': {
-                  bgcolor: 'primary.dark',
+                  bgcolor: 'primary.dark'
                 }
               }
             }}
@@ -330,12 +502,8 @@ const AccountSalesProducts = () => {
       </Card>
 
       {/* MODALS */}
-      <ProductCreateEditModal 
-        open={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        editTarget={selectedProduct} 
-      />
-      
+      <ProductCreateEditModal open={isModalOpen} onClose={() => setIsModalOpen(false)} editTarget={selectedProduct} />
+
       <ProductDetailDrawer
         open={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}

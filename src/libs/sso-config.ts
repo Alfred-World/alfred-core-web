@@ -1,18 +1,15 @@
 /**
  * SSO Configuration - Uses Generated API for Type Safety
- * 
+ *
  * For JSON API calls: use generated functions directly
  * For redirect endpoints: use generated QueryKey to extract URL path
- * 
+ *
  * This ensures if backend changes URLs, regenerating API will catch issues
  */
 
 import { GATEWAY_URL } from './custom-instance'
 import { NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_OAUTH_CLIENT_ID } from './env'
-import {
-  getIdentityAuthValidateToken,
-  getGetIdentityAuthCheckSsoQueryKey
-} from '@/generated/identity-api'
+import { getIdentityAuthValidateToken, getGetIdentityAuthCheckSsoQueryKey } from '@/generated/identity-api'
 
 /**
  * App base URL - used for post-logout redirect
@@ -32,7 +29,6 @@ export const OAUTH_CLIENT_ID = NEXT_PUBLIC_OAUTH_CLIENT_ID
 export const getSsoCheckUrl = (returnUrl: string) => {
   // Get URL path from generated QueryKey
   const [urlPath] = getGetIdentityAuthCheckSsoQueryKey({ returnUrl })
-
 
   return `${GATEWAY_URL}${urlPath}?returnUrl=${encodeURIComponent(returnUrl)}`
 }

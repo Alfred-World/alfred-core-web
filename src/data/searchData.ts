@@ -16,7 +16,7 @@ const data: SearchData[] = [
     url: '/dashboards',
     icon: 'tabler-chart-pie-2',
     section: 'Dashboards'
-  },
+  }
 ]
 
 export default data

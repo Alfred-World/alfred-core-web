@@ -31,9 +31,10 @@ import {
   useGetApiV1Units,
   useGetApiV1UnitsId,
   usePostApiV1Units,
-  usePutApiV1UnitsId
+  usePatchApiV1UnitsId
 } from '@generated/core-api'
 import type { UnitDto } from '@generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 import { UNIT_CATEGORIES, UNIT_CATEGORY_META, UNIT_STATUSES, UNIT_STATUS_META } from '@/constants/unitType'
 
 // ─── Validation Schema ─────────────────────────────────────────────────────────
@@ -99,10 +100,7 @@ const UnitEditorDialog = ({ open, unitId, onClose }: UnitEditorDialogProps) => {
 
   // Filter base units to same category, excluding self
   const baseUnitOptions = useMemo(
-    () =>
-      allUnits.filter(
-        (u: UnitDto) => u.category === selectedCategory && u.id !== unitId
-      ),
+    () => allUnits.filter((u: UnitDto) => u.category === selectedCategory && u.id !== unitId),
     [allUnits, selectedCategory, unitId]
   )
 
@@ -135,7 +133,7 @@ const UnitEditorDialog = ({ open, unitId, onClose }: UnitEditorDialogProps) => {
 
   // Mutations
   const { mutateAsync: createUnit } = usePostApiV1Units()
-  const { mutateAsync: updateUnit } = usePutApiV1UnitsId()
+  const { mutateAsync: updateUnit } = usePatchApiV1UnitsId()
 
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsQueryKey() })
@@ -157,7 +155,22 @@ const UnitEditorDialog = ({ open, unitId, onClose }: UnitEditorDialogProps) => {
     }
 
     if (isEditMode) {
-      await updateUnit({ id: unitId!, data: payload })
+      const original = {
+        code: unit?.code ?? '',
+        name: unit?.name ?? '',
+        symbol: unit?.symbol ?? null,
+        category: unit?.category ?? 'Weight',
+        baseUnitId: unit?.baseUnitId ?? null,
+        conversionRate: unit?.conversionRate ?? 1,
+        status: unit?.status ?? 'Active',
+        description: unit?.description ?? null
+      }
+
+      const changes = getChangedFields(original as Record<string, unknown>, payload as Record<string, unknown>)
+
+      if (changes) {
+        await updateUnit({ id: unitId!, data: changes })
+      }
     } else {
       await createUnit({ data: payload })
     }
@@ -379,9 +392,13 @@ const UnitEditorDialog = ({ open, unitId, onClose }: UnitEditorDialogProps) => {
                     gap: 1
                   }}
                 >
-                  <i className='tabler-info-circle' style={{ fontSize: 18, color: 'var(--mui-palette-primary-main)' }} />
+                  <i
+                    className='tabler-info-circle'
+                    style={{ fontSize: 18, color: 'var(--mui-palette-primary-main)' }}
+                  />
                   <Typography variant='caption' color='primary.main'>
-                    Base units serve as the reference point for conversions. Other units in the same category can reference this as their base.
+                    Base units serve as the reference point for conversions. Other units in the same category can
+                    reference this as their base.
                   </Typography>
                 </Box>
               </Grid>

@@ -41,30 +41,35 @@ import {
   useGetApiV1Units,
   usePostApiV1Commodities,
   usePostApiV1CommoditiesCommodityIdTransactions,
-  usePutApiV1CommoditiesId
+  usePatchApiV1CommoditiesId
 } from '@generated/core-api'
 import type { InvestmentTransactionDto, UnitDto } from '@generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 const ASSET_CLASSES = ['Metal', 'Forex', 'Stock'] as const
 const TRANSACTION_TYPES = ['Buy', 'Sell'] as const
 
 const assetClassConfig: Record<string, { label: string; icon: string; hex: string; desc: string }> = {
-  Metal: { label: 'Metal', icon: 'tabler-coin',            hex: '#f59e0b', desc: 'Gold, silver, platinum…' },
+  Metal: { label: 'Metal', icon: 'tabler-coin', hex: '#f59e0b', desc: 'Gold, silver, platinum…' },
   Forex: { label: 'Forex', icon: 'tabler-currency-dollar', hex: '#10b981', desc: 'USD, EUR, JPY…' },
-  Stock: { label: 'Stock', icon: 'tabler-chart-line',      hex: '#8b5cf6', desc: 'Stocks, ETFs, funds…' }
+  Stock: { label: 'Stock', icon: 'tabler-chart-line', hex: '#8b5cf6', desc: 'Stocks, ETFs, funds…' }
 }
 
 const txnTypeConfig: Record<string, { hex: string; bg: string; icon: string }> = {
-  Buy:  { hex: '#10b981', bg: '#10b98118', icon: 'tabler-arrow-down-left' },
-  Sell: { hex: '#ef4444', bg: '#ef444418', icon: 'tabler-arrow-up-right'  }
+  Buy: { hex: '#10b981', bg: '#10b98118', icon: 'tabler-arrow-down-left' },
+  Sell: { hex: '#ef4444', bg: '#ef444418', icon: 'tabler-arrow-up-right' }
 }
 
 // ─── Field label ────────────────────────────────────────────────────────────────
 const FieldLabel = ({ children, required }: { children: React.ReactNode; required?: boolean }) => (
   <Typography variant='body2' fontWeight={600} color='text.secondary' sx={{ mb: 0.75, display: 'flex', gap: 0.5 }}>
     {children}
-    {required && <Typography component='span' color='error.main'>*</Typography>}
+    {required && (
+      <Typography component='span' color='error.main'>
+        *
+      </Typography>
+    )}
   </Typography>
 )
 
@@ -125,7 +130,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
 
   // ─── Mutations ─────────────────────────────────────────────────────────────
   const createMutation = usePostApiV1Commodities()
-  const updateMutation = usePutApiV1CommoditiesId()
+  const updateMutation = usePatchApiV1CommoditiesId()
   const createTxnMutation = usePostApiV1CommoditiesCommodityIdTransactions()
   const deleteTxnMutation = useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId()
 
@@ -173,10 +178,26 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
     }
 
     if (isEditMode && commodityId) {
-      await updateMutation.mutateAsync({
-        id: commodityId,
-        data: { name: payload.name, assetClass: payload.assetClass, defaultUnitId: payload.defaultUnitId, description: payload.description }
-      })
+      const current = {
+        name: payload.name,
+        assetClass: payload.assetClass,
+        defaultUnitId: payload.defaultUnitId,
+        description: payload.description
+      }
+
+      const original = {
+        name: commodity?.name ?? '',
+        assetClass: commodity?.assetClass ?? 'Metal',
+        defaultUnitId: commodity?.defaultUnitId ?? null,
+        description: commodity?.description ?? null
+      }
+
+      const changes = getChangedFields(original as Record<string, unknown>, current as Record<string, unknown>)
+
+      if (changes) {
+        await updateMutation.mutateAsync({ id: commodityId, data: changes })
+      }
+
       await queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesQueryKey() })
       router.push(`/commodities/${commodityId}`)
     } else {
@@ -272,25 +293,30 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
 
   // ─── Holdings summary ─────────────────────────────────────────────────────
   const holdings = useMemo(() => {
-    let qty = 0, invested = 0, fees = 0
+    let qty = 0,
+      invested = 0,
+      fees = 0
 
     for (const txn of transactions) {
-      if (txn.transactionType === 'Buy') { qty += txn.quantity ?? 0; invested += txn.totalAmount ?? 0 }
-      else { qty -= txn.quantity ?? 0; invested -= txn.totalAmount ?? 0 }
+      if (txn.transactionType === 'Buy') {
+        qty += txn.quantity ?? 0
+        invested += txn.totalAmount ?? 0
+      } else {
+        qty -= txn.quantity ?? 0
+        invested -= txn.totalAmount ?? 0
+      }
 
       fees += txn.feeAmount ?? 0
     }
 
-    
-return { qty, invested, fees, avg: qty > 0 ? invested / qty : 0 }
+    return { qty, invested, fees, avg: qty > 0 ? invested / qty : 0 }
   }, [transactions])
 
-  const txnType  = watchTxn('transactionType')
+  const txnType = watchTxn('transactionType')
   const txnTotal = watchTxn('totalAmount')
 
   return (
     <Box sx={{ maxWidth: isEditMode ? '100%' : 700, mx: isEditMode ? 0 : 'auto' }}>
-
       {/* ── Header ───────────────────────────────────────────────────────── */}
       <Box sx={{ alignItems: 'center', gap: 2, mb: 5 }}>
         <IconButton
@@ -309,13 +335,22 @@ return { qty, invested, fees, avg: qty > 0 ? invested / qty : 0 }
           </Typography>
         </Box>
         {isEditMode && commodity?.assetClass && (
-          <Box sx={{
-            display: 'flex', alignItems: 'center', gap: 1,
-            px: 2, py: 0.75, borderRadius: 2,
-            bgcolor: alpha(cfg.hex, 0.12), border: `1px solid ${alpha(cfg.hex, 0.3)}`
-          }}>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 2,
+              py: 0.75,
+              borderRadius: 2,
+              bgcolor: alpha(cfg.hex, 0.12),
+              border: `1px solid ${alpha(cfg.hex, 0.3)}`
+            }}
+          >
             <i className={cfg.icon} style={{ fontSize: 16, color: cfg.hex }} />
-            <Typography variant='body2' fontWeight={700} sx={{ color: cfg.hex }}>{cfg.label}</Typography>
+            <Typography variant='body2' fontWeight={700} sx={{ color: cfg.hex }}>
+              {cfg.label}
+            </Typography>
           </Box>
         )}
       </Box>
@@ -325,22 +360,42 @@ return { qty, invested, fees, avg: qty > 0 ? invested / qty : 0 }
         <Grid size={{ xs: 12, md: isEditMode ? 5 : 12 }}>
           <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, overflow: 'hidden' }}>
             {/* Accent bar */}
-            <Box sx={{ height: 4, background: `linear-gradient(90deg, ${cfg.hex}, ${alpha(cfg.hex, 0.3)})`, transition: 'background 0.4s' }} />
+            <Box
+              sx={{
+                height: 4,
+                background: `linear-gradient(90deg, ${cfg.hex}, ${alpha(cfg.hex, 0.3)})`,
+                transition: 'background 0.4s'
+              }}
+            />
             <Box sx={{ px: 3.5, pt: 3, pb: 4 }}>
               {/* Card title */}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3.5 }}>
-                <Box sx={{ width: 36, height: 36, borderRadius: 1.5, bgcolor: alpha(cfg.hex, 0.15), display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.3s' }}>
+                <Box
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: 1.5,
+                    bgcolor: alpha(cfg.hex, 0.15),
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'background 0.3s'
+                  }}
+                >
                   <i className={cfg.icon} style={{ fontSize: 18, color: cfg.hex, transition: 'color 0.3s' }} />
                 </Box>
                 <Box>
-                  <Typography variant='subtitle1' fontWeight={700}>Commodity Details</Typography>
-                  <Typography variant='caption' color='text.secondary'>Fill in all required fields</Typography>
+                  <Typography variant='subtitle1' fontWeight={700}>
+                    Commodity Details
+                  </Typography>
+                  <Typography variant='caption' color='text.secondary'>
+                    Fill in all required fields
+                  </Typography>
                 </Box>
               </Box>
 
               <form onSubmit={handleSubmit(onSubmit)}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-
                   {/* ── Asset Class toggle ──────────────────────────────── */}
                   <Box>
                     <FieldLabel required>Asset Class</FieldLabel>
@@ -353,28 +408,56 @@ return { qty, invested, fees, avg: qty > 0 ? invested / qty : 0 }
                             const c = assetClassConfig[cls]
                             const active = field.value === cls
 
-                            
-return (
+                            return (
                               <Box
                                 key={cls}
                                 onClick={() => field.onChange(cls)}
                                 sx={{
-                                  flex: 1, py: 1.5, px: 1, borderRadius: 1.5,
-                                  border: '2px solid', cursor: 'pointer',
+                                  flex: 1,
+                                  py: 1.5,
+                                  px: 1,
+                                  borderRadius: 1.5,
+                                  border: '2px solid',
+                                  cursor: 'pointer',
                                   borderColor: active ? c.hex : 'divider',
                                   bgcolor: active ? alpha(c.hex, 0.1) : 'transparent',
                                   transition: 'all 0.18s',
                                   '&:hover': { borderColor: c.hex, bgcolor: alpha(c.hex, 0.06) },
-                                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  gap: 0.5
                                 }}
                               >
-                                <i className={c.icon} style={{ fontSize: 22, color: active ? c.hex : 'inherit', opacity: active ? 1 : 0.4, transition: 'color 0.18s' }} />
-                                <Typography variant='caption' fontWeight={700}
-                                  sx={{ color: active ? c.hex : 'text.secondary', letterSpacing: 0.3, transition: 'color 0.18s' }}>
+                                <i
+                                  className={c.icon}
+                                  style={{
+                                    fontSize: 22,
+                                    color: active ? c.hex : 'inherit',
+                                    opacity: active ? 1 : 0.4,
+                                    transition: 'color 0.18s'
+                                  }}
+                                />
+                                <Typography
+                                  variant='caption'
+                                  fontWeight={700}
+                                  sx={{
+                                    color: active ? c.hex : 'text.secondary',
+                                    letterSpacing: 0.3,
+                                    transition: 'color 0.18s'
+                                  }}
+                                >
                                   {c.label}
                                 </Typography>
-                                <Typography variant='caption'
-                                  sx={{ fontSize: '0.65rem', color: 'text.disabled', textAlign: 'center', display: { xs: 'none', sm: 'block' } }}>
+                                <Typography
+                                  variant='caption'
+                                  sx={{
+                                    fontSize: '0.65rem',
+                                    color: 'text.disabled',
+                                    textAlign: 'center',
+                                    display: { xs: 'none', sm: 'block' }
+                                  }}
+                                >
                                   {c.desc}
                                 </Typography>
                               </Box>
@@ -383,7 +466,11 @@ return (
                         </Box>
                       )}
                     />
-                    {errors.assetClass && <FormHelperText error sx={{ mt: 0.5 }}>{errors.assetClass.message}</FormHelperText>}
+                    {errors.assetClass && (
+                      <FormHelperText error sx={{ mt: 0.5 }}>
+                        {errors.assetClass.message}
+                      </FormHelperText>
+                    )}
                   </Box>
 
                   {/* ── Code + Name ─────────────────────────────────────── */}
@@ -490,9 +577,11 @@ return (
                       variant='contained'
                       disabled={isSubmitting}
                       startIcon={
-                        isSubmitting
-                          ? <i className='tabler-loader-2 animate-spin' style={{ fontSize: 16 }} />
-                          : <i className={isEditMode ? 'tabler-device-floppy' : 'tabler-plus'} style={{ fontSize: 16 }} />
+                        isSubmitting ? (
+                          <i className='tabler-loader-2 animate-spin' style={{ fontSize: 16 }} />
+                        ) : (
+                          <i className={isEditMode ? 'tabler-device-floppy' : 'tabler-plus'} style={{ fontSize: 16 }} />
+                        )
                       }
                       sx={{ fontWeight: 700, px: 3, bgcolor: cfg.hex, '&:hover': { bgcolor: alpha(cfg.hex, 0.85) } }}
                     >
@@ -508,23 +597,38 @@ return (
         {/* ── Right: Holdings + Transactions (edit only) ────────────────────── */}
         {isEditMode && (
           <Grid size={{ xs: 12, md: 7 }}>
-
             {/* Holdings summary */}
             <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2, mb: 3 }}>
-              <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box
+                sx={{
+                  px: 3,
+                  py: 2,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1.5
+                }}
+              >
                 <i className='tabler-wallet' style={{ fontSize: 18, color: cfg.hex }} />
-                <Typography variant='subtitle1' fontWeight={700}>Holdings Summary</Typography>
+                <Typography variant='subtitle1' fontWeight={700}>
+                  Holdings Summary
+                </Typography>
               </Box>
               <Box sx={{ p: 3, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 2 }}>
                 {[
-                  { label: 'Qty Held',       v: holdings.qty.toLocaleString('en-US', { maximumFractionDigits: 4 }) },
+                  { label: 'Qty Held', v: holdings.qty.toLocaleString('en-US', { maximumFractionDigits: 4 }) },
                   { label: 'Total Invested', v: fmtCurrency(holdings.invested) },
-                  { label: 'Avg Cost',       v: fmtCurrency(holdings.avg) },
-                  { label: 'Total Fees',     v: fmtCurrency(holdings.fees) }
+                  { label: 'Avg Cost', v: fmtCurrency(holdings.avg) },
+                  { label: 'Total Fees', v: fmtCurrency(holdings.fees) }
                 ].map(kpi => (
                   <Box key={kpi.label}>
-                    <Typography variant='caption' color='text.secondary' fontWeight={500}>{kpi.label}</Typography>
-                    <Typography variant='subtitle2' fontWeight={700} sx={{ mt: 0.5 }}>{kpi.v}</Typography>
+                    <Typography variant='caption' color='text.secondary' fontWeight={500}>
+                      {kpi.label}
+                    </Typography>
+                    <Typography variant='subtitle2' fontWeight={700} sx={{ mt: 0.5 }}>
+                      {kpi.v}
+                    </Typography>
                   </Box>
                 ))}
               </Box>
@@ -532,13 +636,27 @@ return (
 
             {/* Transactions */}
             <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
-              <Box sx={{ px: 3, py: 2, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box
+                sx={{
+                  px: 3,
+                  py: 2,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center'
+                }}
+              >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <i className='tabler-history' style={{ fontSize: 18, color: 'var(--mui-palette-primary-main)' }} />
-                  <Typography variant='subtitle1' fontWeight={700}>Transactions</Typography>
+                  <Typography variant='subtitle1' fontWeight={700}>
+                    Transactions
+                  </Typography>
                   {transactions.length > 0 && (
                     <Box sx={{ px: 1, py: 0.2, borderRadius: 1, bgcolor: 'action.selected' }}>
-                      <Typography variant='caption' fontWeight={700}>{transactions.length}</Typography>
+                      <Typography variant='caption' fontWeight={700}>
+                        {transactions.length}
+                      </Typography>
                     </Box>
                   )}
                 </Box>
@@ -558,7 +676,16 @@ return (
                   <TableHead>
                     <TableRow sx={{ bgcolor: 'action.hover' }}>
                       {['Type', 'Date', 'Qty', 'Price/Unit', 'Total', 'Fee', ''].map(h => (
-                        <TableCell key={h} sx={{ fontWeight: 700, fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.05em', py: 1.25 }}>
+                        <TableCell
+                          key={h}
+                          sx={{
+                            fontWeight: 700,
+                            fontSize: '0.7rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            py: 1.25
+                          }}
+                        >
                           {h}
                         </TableCell>
                       ))}
@@ -570,7 +697,9 @@ return (
                         <TableCell colSpan={7} sx={{ py: 5, textAlign: 'center' }}>
                           <Box sx={{ opacity: 0.4 }}>
                             <i className='tabler-inbox' style={{ fontSize: 32 }} />
-                            <Typography variant='body2' sx={{ mt: 1 }}>No transactions yet.</Typography>
+                            <Typography variant='body2' sx={{ mt: 1 }}>
+                              No transactions yet.
+                            </Typography>
                           </Box>
                         </TableCell>
                       </TableRow>
@@ -578,28 +707,53 @@ return (
                       transactions.map((txn: InvestmentTransactionDto) => {
                         const tc2 = txnTypeConfig[txn.transactionType ?? 'Buy']
 
-                        
-return (
+                        return (
                           <TableRow key={txn.id} sx={{ '&:hover': { bgcolor: 'action.hover' } }}>
                             <TableCell>
-                              <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, px: 0.9, py: 0.3, borderRadius: 1, bgcolor: tc2.bg }}>
+                              <Box
+                                sx={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: 0.5,
+                                  px: 0.9,
+                                  py: 0.3,
+                                  borderRadius: 1,
+                                  bgcolor: tc2.bg
+                                }}
+                              >
                                 <i className={tc2.icon} style={{ fontSize: 11, color: tc2.hex }} />
-                                <Typography variant='caption' fontWeight={700} sx={{ color: tc2.hex, fontSize: '0.68rem' }}>
+                                <Typography
+                                  variant='caption'
+                                  fontWeight={700}
+                                  sx={{ color: tc2.hex, fontSize: '0.68rem' }}
+                                >
                                   {txn.transactionType?.toUpperCase()}
                                 </Typography>
                               </Box>
                             </TableCell>
-                            <TableCell sx={{ fontSize: '0.8rem', whiteSpace: 'nowrap' }}>{fmtDate(txn.transactionDate)}</TableCell>
+                            <TableCell sx={{ fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
+                              {fmtDate(txn.transactionDate)}
+                            </TableCell>
                             <TableCell sx={{ fontSize: '0.8rem', fontWeight: 500 }}>
-                              {txn.quantity?.toLocaleString()} <Typography component='span' variant='caption' color='text.disabled'>{txn.unitCode}</Typography>
+                              {txn.quantity?.toLocaleString()}{' '}
+                              <Typography component='span' variant='caption' color='text.disabled'>
+                                {txn.unitCode}
+                              </Typography>
                             </TableCell>
                             <TableCell sx={{ fontSize: '0.8rem' }}>{fmtCurrency(txn.pricePerUnit)}</TableCell>
-                            <TableCell sx={{ fontSize: '0.8rem', fontWeight: 700 }}>{fmtCurrency(txn.totalAmount)}</TableCell>
-                            <TableCell sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>{txn.feeAmount ? fmtCurrency(txn.feeAmount) : '—'}</TableCell>
+                            <TableCell sx={{ fontSize: '0.8rem', fontWeight: 700 }}>
+                              {fmtCurrency(txn.totalAmount)}
+                            </TableCell>
+                            <TableCell sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>
+                              {txn.feeAmount ? fmtCurrency(txn.feeAmount) : '—'}
+                            </TableCell>
                             <TableCell sx={{ pr: 1.5 }}>
                               <Tooltip title='Delete'>
-                                <IconButton size='small' onClick={() => handleDeleteTxn(txn.id!)}
-                                  sx={{ opacity: 0.35, '&:hover': { opacity: 1, color: 'error.main' } }}>
+                                <IconButton
+                                  size='small'
+                                  onClick={() => handleDeleteTxn(txn.id!)}
+                                  sx={{ opacity: 0.35, '&:hover': { opacity: 1, color: 'error.main' } }}
+                                >
                                   <i className='tabler-trash' style={{ fontSize: 14 }} />
                                 </IconButton>
                               </Tooltip>
@@ -617,22 +771,43 @@ return (
       </Grid>
 
       {/* ── Add Transaction Dialog ────────────────────────────────────────────── */}
-      <Dialog open={txnOpen} onClose={() => { setTxnOpen(false); resetTxn() }} maxWidth='sm' fullWidth>
+      <Dialog
+        open={txnOpen}
+        onClose={() => {
+          setTxnOpen(false)
+          resetTxn()
+        }}
+        maxWidth='sm'
+        fullWidth
+      >
         <form onSubmit={handleTxnSubmit(onTxnSubmit)}>
           <DialogTitle sx={{ pb: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ width: 36, height: 36, borderRadius: 1.5, bgcolor: alpha(cfg.hex, 0.15), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 1.5,
+                  bgcolor: alpha(cfg.hex, 0.15),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 <i className={cfg.icon} style={{ fontSize: 18, color: cfg.hex }} />
               </Box>
               <Box>
-                <Typography variant='subtitle1' fontWeight={700}>Add Transaction</Typography>
-                <Typography variant='caption' color='text.secondary'>{commodity?.name} · {commodity?.code}</Typography>
+                <Typography variant='subtitle1' fontWeight={700}>
+                  Add Transaction
+                </Typography>
+                <Typography variant='caption' color='text.secondary'>
+                  {commodity?.name} · {commodity?.code}
+                </Typography>
               </Box>
             </Box>
           </DialogTitle>
           <Divider sx={{ mt: 2 }} />
           <DialogContent sx={{ pt: 2.5, display: 'flex', flexDirection: 'column', gap: 2.5 }}>
-
             {/* Buy / Sell toggle */}
             <Box>
               <FieldLabel required>Transaction Type</FieldLabel>
@@ -645,20 +820,27 @@ return (
                       const c2 = txnTypeConfig[type]
                       const active = field.value === type
 
-                      
-return (
+                      return (
                         <Box
                           key={type}
                           onClick={() => field.onChange(type)}
                           sx={{
-                            flex: 1, py: 1.5, borderRadius: 1.5, textAlign: 'center', cursor: 'pointer',
-                            border: '2px solid', borderColor: active ? c2.hex : 'divider',
-                            bgcolor: active ? c2.bg : 'transparent', transition: 'all 0.15s',
+                            flex: 1,
+                            py: 1.5,
+                            borderRadius: 1.5,
+                            textAlign: 'center',
+                            cursor: 'pointer',
+                            border: '2px solid',
+                            borderColor: active ? c2.hex : 'divider',
+                            bgcolor: active ? c2.bg : 'transparent',
+                            transition: 'all 0.15s',
                             '&:hover': { borderColor: c2.hex }
                           }}
                         >
                           <i className={c2.icon} style={{ fontSize: 20, color: c2.hex, display: 'block' }} />
-                          <Typography variant='body2' fontWeight={700} sx={{ color: c2.hex, mt: 0.5 }}>{type}</Typography>
+                          <Typography variant='body2' fontWeight={700} sx={{ color: c2.hex, mt: 0.5 }}>
+                            {type}
+                          </Typography>
                         </Box>
                       )
                     })}
@@ -675,8 +857,13 @@ return (
                   name='transactionDate'
                   control={txnControl}
                   render={({ field }) => (
-                    <TextField {...field} type='date' size='small' fullWidth
-                      error={!!txnErrors.transactionDate} helperText={txnErrors.transactionDate?.message}
+                    <TextField
+                      {...field}
+                      type='date'
+                      size='small'
+                      fullWidth
+                      error={!!txnErrors.transactionDate}
+                      helperText={txnErrors.transactionDate?.message}
                     />
                   )}
                 />
@@ -687,9 +874,14 @@ return (
                   name='quantity'
                   control={txnControl}
                   render={({ field }) => (
-                    <TextField {...field} onChange={e => field.onChange(Number(e.target.value))}
-                      type='number' size='small' fullWidth
-                      error={!!txnErrors.quantity} helperText={txnErrors.quantity?.message}
+                    <TextField
+                      {...field}
+                      onChange={e => field.onChange(Number(e.target.value))}
+                      type='number'
+                      size='small'
+                      fullWidth
+                      error={!!txnErrors.quantity}
+                      helperText={txnErrors.quantity?.message}
                       slotProps={{ htmlInput: { step: 'any', min: 0 } }}
                     />
                   )}
@@ -707,7 +899,9 @@ return (
                       getOptionLabel={(opt: UnitDto) => `${opt.name} (${opt.code})`}
                       value={units.find(u => u.id === field.value) ?? null}
                       onChange={(_, val) => field.onChange(val?.id ?? '')}
-                      renderInput={params => <TextField {...params} error={!!txnErrors.unitId} helperText={txnErrors.unitId?.message} />}
+                      renderInput={params => (
+                        <TextField {...params} error={!!txnErrors.unitId} helperText={txnErrors.unitId?.message} />
+                      )}
                       isOptionEqualToValue={(opt, val) => opt.id === val.id}
                     />
                   )}
@@ -719,8 +913,12 @@ return (
                   name='pricePerUnit'
                   control={txnControl}
                   render={({ field }) => (
-                    <TextField {...field} onChange={e => field.onChange(Number(e.target.value))}
-                      type='number' size='small' fullWidth
+                    <TextField
+                      {...field}
+                      onChange={e => field.onChange(Number(e.target.value))}
+                      type='number'
+                      size='small'
+                      fullWidth
                       error={!!txnErrors.pricePerUnit}
                       slotProps={{ htmlInput: { step: 'any', min: 0 } }}
                     />
@@ -730,15 +928,25 @@ return (
             </Box>
 
             {/* Auto-calculated total */}
-            <Box sx={{
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              p: 2, borderRadius: 1.5,
-              border: '1px solid', borderColor: txnTypeConfig[txnType]?.hex ?? 'divider',
-              bgcolor: alpha(txnTypeConfig[txnType]?.hex ?? '#888', 0.06)
-            }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                p: 2,
+                borderRadius: 1.5,
+                border: '1px solid',
+                borderColor: txnTypeConfig[txnType]?.hex ?? 'divider',
+                bgcolor: alpha(txnTypeConfig[txnType]?.hex ?? '#888', 0.06)
+              }}
+            >
               <Box>
-                <Typography variant='caption' color='text.secondary' fontWeight={600}>Total Amount</Typography>
-                <Typography variant='caption' color='text.disabled' sx={{ display: 'block' }}>Auto-calculated · Qty × Price</Typography>
+                <Typography variant='caption' color='text.secondary' fontWeight={600}>
+                  Total Amount
+                </Typography>
+                <Typography variant='caption' color='text.disabled' sx={{ display: 'block' }}>
+                  Auto-calculated · Qty × Price
+                </Typography>
               </Box>
               <Typography variant='h6' fontWeight={700} sx={{ color: txnTypeConfig[txnType]?.hex }}>
                 {fmtCurrency(txnTotal)}
@@ -753,8 +961,13 @@ return (
                   name='feeAmount'
                   control={txnControl}
                   render={({ field }) => (
-                    <TextField {...field} onChange={e => field.onChange(Number(e.target.value))}
-                      type='number' size='small' fullWidth placeholder='0'
+                    <TextField
+                      {...field}
+                      onChange={e => field.onChange(Number(e.target.value))}
+                      type='number'
+                      size='small'
+                      fullWidth
+                      placeholder='0'
                       slotProps={{ htmlInput: { step: 'any', min: 0 } }}
                     />
                   )}
@@ -765,25 +978,33 @@ return (
                 <Controller
                   name='notes'
                   control={txnControl}
-                  render={({ field }) => (
-                    <TextField {...field} size='small' fullWidth placeholder='Optional…' />
-                  )}
+                  render={({ field }) => <TextField {...field} size='small' fullWidth placeholder='Optional…' />}
                 />
               </Box>
             </Box>
           </DialogContent>
           <Divider />
           <DialogActions sx={{ px: 3, py: 2, gap: 1 }}>
-            <Button onClick={() => { setTxnOpen(false); resetTxn() }} variant='outlined' sx={{ fontWeight: 700 }}>
+            <Button
+              onClick={() => {
+                setTxnOpen(false)
+                resetTxn()
+              }}
+              variant='outlined'
+              sx={{ fontWeight: 700 }}
+            >
               Cancel
             </Button>
             <Button
               type='submit'
               variant='contained'
               disabled={createTxnMutation.isPending}
-              startIcon={createTxnMutation.isPending
-                ? <i className='tabler-loader-2 animate-spin' style={{ fontSize: 15 }} />
-                : <i className='tabler-circle-check' style={{ fontSize: 15 }} />
+              startIcon={
+                createTxnMutation.isPending ? (
+                  <i className='tabler-loader-2 animate-spin' style={{ fontSize: 15 }} />
+                ) : (
+                  <i className='tabler-circle-check' style={{ fontSize: 15 }} />
+                )
               }
               sx={{ fontWeight: 700, minWidth: 140 }}
             >

@@ -135,7 +135,15 @@ const RoleList = ({
             </Typography>
           </Box>
         }
-        action={<Chip label={`${roles.length} Total`} size='small' variant='tonal' color='secondary' sx={{ fontWeight: 500 }} />}
+        action={
+          <Chip
+            label={`${roles.length} Total`}
+            size='small'
+            variant='tonal'
+            color='secondary'
+            sx={{ fontWeight: 500 }}
+          />
+        }
         sx={{
           p: 4,
           pb: 2,
@@ -150,7 +158,6 @@ const RoleList = ({
       <Divider />
 
       <Box sx={{ p: 4, pb: 2 }}>
-
         <TextField
           fullWidth
           size='small'
@@ -272,7 +279,13 @@ const RoleList = ({
                           {accessType}
                         </Typography>
                         {role.isSystem && (
-                          <Chip label='System' size='small' variant='tonal' color='info' sx={{ height: 18, fontSize: '0.625rem' }} />
+                          <Chip
+                            label='System'
+                            size='small'
+                            variant='tonal'
+                            color='info'
+                            sx={{ height: 18, fontSize: '0.625rem' }}
+                          />
                         )}
                         {role.isImmutable && (
                           <Box sx={{ display: 'flex', alignItems: 'center', color: 'warning.main' }}>
@@ -293,10 +306,20 @@ const RoleList = ({
                     }}
                     onClick={e => e.stopPropagation()}
                   >
-                    <IconButton size='small' color='primary' onClick={() => onEditRole(role)} disabled={!!role.isImmutable}>
+                    <IconButton
+                      size='small'
+                      color='primary'
+                      onClick={() => onEditRole(role)}
+                      disabled={!!role.isImmutable}
+                    >
                       <i className='tabler-edit' />
                     </IconButton>
-                    <IconButton size='small' color='error' onClick={() => onDeleteRole(role)} disabled={!!role.isImmutable}>
+                    <IconButton
+                      size='small'
+                      color='error'
+                      onClick={() => onDeleteRole(role)}
+                      disabled={!!role.isImmutable}
+                    >
                       <i className='tabler-trash' />
                     </IconButton>
                   </Box>
@@ -323,7 +346,13 @@ const RoleList = ({
       <Divider />
 
       <Box sx={{ p: 4 }}>
-        <Button fullWidth variant='outlined' startIcon={<i className='tabler-plus' />} sx={{ py: 2, borderRadius: 1 }} onClick={onAddClick}>
+        <Button
+          fullWidth
+          variant='outlined'
+          startIcon={<i className='tabler-plus' />}
+          sx={{ py: 2, borderRadius: 1 }}
+          onClick={onAddClick}
+        >
           Add New Role
         </Button>
       </Box>

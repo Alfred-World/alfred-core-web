@@ -90,7 +90,17 @@ const paymentStatusLabel: Record<PaymentStatus, string> = {
   FullyRefunded: 'Fully Refunded'
 }
 
-const CloneInfoRow = ({ label, value, copyable, secret }: { label: string; value?: string | null; copyable?: boolean; secret?: boolean }) => {
+const CloneInfoRow = ({
+  label,
+  value,
+  copyable,
+  secret
+}: {
+  label: string
+  value?: string | null
+  copyable?: boolean
+  secret?: boolean
+}) => {
   const [revealed, setRevealed] = useState(false)
 
   if (!value) return null
@@ -104,8 +114,20 @@ const CloneInfoRow = ({ label, value, copyable, secret }: { label: string; value
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, py: 0.75 }}>
-      <Typography variant='caption' color='text.secondary' sx={{ minWidth: 110, flexShrink: 0, pt: 0.25 }}>{label}</Typography>
-      <Typography variant='body2' sx={{ fontFamily: 'monospace', wordBreak: 'break-all', flex: 1, letterSpacing: secret && !revealed ? 2 : undefined }}>{displayValue}</Typography>
+      <Typography variant='caption' color='text.secondary' sx={{ minWidth: 110, flexShrink: 0, pt: 0.25 }}>
+        {label}
+      </Typography>
+      <Typography
+        variant='body2'
+        sx={{
+          fontFamily: 'monospace',
+          wordBreak: 'break-all',
+          flex: 1,
+          letterSpacing: secret && !revealed ? 2 : undefined
+        }}
+      >
+        {displayValue}
+      </Typography>
       {secret && (
         <Tooltip title={revealed ? 'Hide' : 'Reveal'}>
           <IconButton size='small' onClick={() => setRevealed(v => !v)} sx={{ flexShrink: 0 }}>
@@ -115,7 +137,9 @@ const CloneInfoRow = ({ label, value, copyable, secret }: { label: string; value
       )}
       {copyable && (
         <Tooltip title='Copy'>
-          <IconButton size='small' onClick={handleCopy} sx={{ flexShrink: 0 }}><i className='tabler-copy' style={{ fontSize: 14 }} /></IconButton>
+          <IconButton size='small' onClick={handleCopy} sx={{ flexShrink: 0 }}>
+            <i className='tabler-copy' style={{ fontSize: 14 }} />
+          </IconButton>
         </Tooltip>
       )}
     </Box>
@@ -180,7 +204,12 @@ type SellOrderForm = CreateAccountOrderRequest & {
   accountCloneId?: string
 }
 
-const getVariantLabel = (variant: { name?: string | null; price?: number | null; warrantyDays?: number | null; id?: string }) => {
+const getVariantLabel = (variant: {
+  name?: string | null
+  price?: number | null
+  warrantyDays?: number | null
+  id?: string
+}) => {
   const name = variant.name || variant.id || 'Variant'
   const price = Number(variant.price || 0).toLocaleString('vi-VN')
   const warrantyDays = variant.warrantyDays || 0
@@ -199,7 +228,14 @@ const AccountSalesOrders = () => {
   const [page, setPage] = useState(1)
   const [openSell, setOpenSell] = useState(false)
   const [openCreateProduct, setOpenCreateProduct] = useState(false)
-  const [sellForm, setSellForm] = useState<SellOrderForm>({ memberId: '', productId: '', productVariantId: '', accountCloneId: '', isTrial: false })
+
+  const [sellForm, setSellForm] = useState<SellOrderForm>({
+    memberId: '',
+    productId: '',
+    productVariantId: '',
+    accountCloneId: '',
+    isTrial: false
+  })
 
   const [productForm, setProductForm] = useState<CreateProductRequest>({
     name: '',
@@ -426,7 +462,9 @@ const AccountSalesOrders = () => {
         const result = response.result
 
         await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
-        toast.success(`Refunded ${result?.refundAmount?.toLocaleString('vi-VN')} ₫ | Clawback commission: ${result?.commissionClawback?.toLocaleString('vi-VN')} ₫`)
+        toast.success(
+          `Refunded ${result?.refundAmount?.toLocaleString('vi-VN')} ₫ | Clawback commission: ${result?.commissionClawback?.toLocaleString('vi-VN')} ₫`
+        )
         setRefundOrderId(null)
         setRefundAmount('')
         setRefundNote('')
@@ -477,16 +515,17 @@ const AccountSalesOrders = () => {
   }, [membersQuery.error, productsQuery.error, clonesQuery.error, ordersQuery.error])
 
   const soonExpired = useMemo(
-    () => orders.filter(order => {
-      if (!order.warrantyExpiry) {
-        return false
-      }
+    () =>
+      orders.filter(order => {
+        if (!order.warrantyExpiry) {
+          return false
+        }
 
-      const diff = new Date(order.warrantyExpiry).getTime() - nowMs
-      const hours = diff / (1000 * 60 * 60)
+        const diff = new Date(order.warrantyExpiry).getTime() - nowMs
+        const hours = diff / (1000 * 60 * 60)
 
-      return hours > 0 && hours <= 48
-    }).length,
+        return hours > 0 && hours <= 48
+      }).length,
     [nowMs, orders]
   )
 
@@ -499,10 +538,16 @@ const AccountSalesOrders = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
       <Card sx={{ p: 2.5, border: '1px solid', borderColor: 'divider' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, flexWrap: 'wrap' }}>
+        <Box
+          sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 2, flexWrap: 'wrap' }}
+        >
           <Box>
-            <Typography variant='h4' fontWeight={800}>Orders & Warranty</Typography>
-            <Typography variant='body2' color='text.secondary'>Manage account handover, OTP visibility, and warranty replacement workflow.</Typography>
+            <Typography variant='h4' fontWeight={800}>
+              Orders & Warranty
+            </Typography>
+            <Typography variant='body2' color='text.secondary'>
+              Manage account handover, OTP visibility, and warranty replacement workflow.
+            </Typography>
           </Box>
           <Box sx={{ display: 'flex', gap: 1.2, flexWrap: 'wrap' }}>
             <TextField
@@ -532,10 +577,18 @@ const AccountSalesOrders = () => {
             <Button variant='outlined' startIcon={<i className='tabler-key' />} href='/account-sales/clones'>
               Manage Account Clones
             </Button>
-            <Button variant='outlined' startIcon={<i className='tabler-shield-check' />} onClick={() => setOpenWarrantyCheck(true)}>
+            <Button
+              variant='outlined'
+              startIcon={<i className='tabler-shield-check' />}
+              onClick={() => setOpenWarrantyCheck(true)}
+            >
               Check Warranty
             </Button>
-            <Button variant='outlined' startIcon={<i className='tabler-package' />} onClick={() => setOpenCreateProduct(true)}>
+            <Button
+              variant='outlined'
+              startIcon={<i className='tabler-package' />}
+              onClick={() => setOpenCreateProduct(true)}
+            >
               New Product
             </Button>
           </Box>
@@ -544,7 +597,11 @@ const AccountSalesOrders = () => {
         <Stack direction='row' spacing={1} sx={{ mt: 2.2 }}>
           <Chip label={`All Orders ${ordersQuery.data?.result?.total ?? 0}`} color='primary' variant='outlined' />
           <Chip label={`Expiring Soon ${soonExpired}`} color='warning' variant='outlined' />
-          <Chip label={`Active ${orders.filter(x => x.status === 'Active').length}`} color='success' variant='outlined' />
+          <Chip
+            label={`Active ${orders.filter(x => x.status === 'Active').length}`}
+            color='success'
+            variant='outlined'
+          />
         </Stack>
       </Card>
 
@@ -572,13 +629,20 @@ const AccountSalesOrders = () => {
                 return (
                   <TableRow key={order.id}>
                     <TableCell>
-                      <Typography variant='body2' fontWeight={700}>{getOrderCodeDisplay(order)}</Typography>
-                      <Typography variant='caption' color='text.secondary'>Purchased: {order.purchaseDate?.slice(0, 10)}</Typography>
+                      <Typography variant='body2' fontWeight={700}>
+                        {getOrderCodeDisplay(order)}
+                      </Typography>
+                      <Typography variant='caption' color='text.secondary'>
+                        Purchased: {order.purchaseDate?.slice(0, 10)}
+                      </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant='body2' fontWeight={700}>{order.memberDisplayName || 'Unknown member'}</Typography>
+                      <Typography variant='body2' fontWeight={700}>
+                        {order.memberDisplayName || 'Unknown member'}
+                      </Typography>
                       <Typography variant='caption' color='text.secondary'>
-                        {order.productName} {order.productVariantNameSnapshot ? `| ${order.productVariantNameSnapshot}` : ''}
+                        {order.productName}{' '}
+                        {order.productVariantNameSnapshot ? `| ${order.productVariantNameSnapshot}` : ''}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -590,7 +654,9 @@ const AccountSalesOrders = () => {
                       )}
                     </TableCell>
                     <TableCell>
-                      <Typography variant='body2' fontWeight={700}>{order.soldByUser?.fullName || order.soldByUser?.email || '-'}</Typography>
+                      <Typography variant='body2' fontWeight={700}>
+                        {order.soldByUser?.fullName || order.soldByUser?.email || '-'}
+                      </Typography>
                     </TableCell>
                     <TableCell>
                       <Chip
@@ -608,7 +674,9 @@ const AccountSalesOrders = () => {
                       {order.isTrial ? (
                         <Chip label='Trial' size='small' color='warning' variant='outlined' sx={{ fontWeight: 700 }} />
                       ) : (
-                        <Typography variant='caption' color='text.disabled'>—</Typography>
+                        <Typography variant='caption' color='text.disabled'>
+                          —
+                        </Typography>
                       )}
                     </TableCell>
                     <TableCell>
@@ -751,7 +819,9 @@ const AccountSalesOrders = () => {
             />
             <Autocomplete
               options={selectedProduct?.variants || []}
-              value={(selectedProduct?.variants || []).find(variant => variant.id === sellForm.productVariantId) ?? null}
+              value={
+                (selectedProduct?.variants || []).find(variant => variant.id === sellForm.productVariantId) ?? null
+              }
               onChange={(_, variant) => setSellForm(prev => ({ ...prev, productVariantId: variant?.id || '' }))}
               getOptionLabel={getVariantLabel}
               isOptionEqualToValue={(option, value) => option.id === value.id}
@@ -823,7 +893,14 @@ const AccountSalesOrders = () => {
               <Alert severity='success'>
                 Issued: {sellMutation.data.result.username} | {sellMutation.data.result.password}
                 {sellMutation.data.result.twoFaSecret && (
-                  <> | OTP: {generateSync({ secret: sellMutation.data.result.twoFaSecret.replace(/\s+/g, ''), guardrails: OTP_GUARDRAILS })}</>
+                  <>
+                    {' '}
+                    | OTP:{' '}
+                    {generateSync({
+                      secret: sellMutation.data.result.twoFaSecret.replace(/\s+/g, ''),
+                      guardrails: OTP_GUARDRAILS
+                    })}
+                  </>
                 )}
               </Alert>
             )}
@@ -862,12 +939,17 @@ const AccountSalesOrders = () => {
               options={Object.values(AccountProductType)}
               value={productForm.productType || AccountProductType.Other}
               onChange={(_, productType) =>
-                setProductForm(prev => ({ ...prev, productType: (productType || AccountProductType.Other) as AccountProductType }))
+                setProductForm(prev => ({
+                  ...prev,
+                  productType: (productType || AccountProductType.Other) as AccountProductType
+                }))
               }
               renderInput={params => <TextField {...params} label='Product type' />}
             />
             <Stack spacing={2}>
-              <Typography variant='subtitle2' fontWeight={700}>Product packages</Typography>
+              <Typography variant='subtitle2' fontWeight={700}>
+                Product packages
+              </Typography>
               {(productForm.variants || []).map((variant, index) => (
                 <Stack key={`order-create-variant-${index}`} spacing={1}>
                   <TextField
@@ -986,7 +1068,14 @@ const AccountSalesOrders = () => {
             <Alert severity='success' sx={{ mt: 1.5 }}>
               New credential: {replaceMutation.data.result.username} | {replaceMutation.data.result.password}
               {replaceMutation.data.result.twoFaSecret && (
-                <> | OTP: {generateSync({ secret: replaceMutation.data.result.twoFaSecret.replace(/\s+/g, ''), guardrails: OTP_GUARDRAILS })}</>
+                <>
+                  {' '}
+                  | OTP:{' '}
+                  {generateSync({
+                    secret: replaceMutation.data.result.twoFaSecret.replace(/\s+/g, ''),
+                    guardrails: OTP_GUARDRAILS
+                  })}
+                </>
               )}
             </Alert>
           )}
@@ -1043,7 +1132,9 @@ const AccountSalesOrders = () => {
             {warrantyResult && (
               <Alert severity={warrantyResult.isSoldByUs && warrantyResult.isInWarranty ? 'success' : 'warning'}>
                 {warrantyResult.message || 'Warranty check completed.'}
-                {warrantyResult.order?.id ? ` | Order: ${getOrderCodeDisplay(warrantyResult.order as OrderCodeAware)}` : ''}
+                {warrantyResult.order?.id
+                  ? ` | Order: ${getOrderCodeDisplay(warrantyResult.order as OrderCodeAware)}`
+                  : ''}
               </Alert>
             )}
           </Stack>
@@ -1088,7 +1179,8 @@ const AccountSalesOrders = () => {
         <DialogTitle>Confirm Payment</DialogTitle>
         <DialogContent sx={{ px: { xs: 2.5, sm: 3.5 }, pt: 2, pb: 1 }}>
           <Typography variant='body2' color='text.secondary'>
-            Confirm that the customer has fully paid for this order. This will update the payment status and accrue referral commission if applicable.
+            Confirm that the customer has fully paid for this order. This will update the payment status and accrue
+            referral commission if applicable.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ px: { xs: 2.5, sm: 3.5 }, pb: 2.5, pt: 1.5 }}>
@@ -1167,48 +1259,79 @@ const AccountSalesOrders = () => {
         {selectedOrder && (
           <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             {/* Header */}
-            <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            <Box
+              sx={{
+                px: 3,
+                py: 2.5,
+                borderBottom: '1px solid',
+                borderColor: 'divider',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1.5
+              }}
+            >
               <IconButton size='small' onClick={() => setSelectedOrder(null)}>
                 <i className='tabler-x' style={{ fontSize: 18 }} />
               </IconButton>
               <Box sx={{ flex: 1 }}>
-                <Typography variant='subtitle1' fontWeight={700}>{getOrderCodeDisplay(selectedOrder)}</Typography>
+                <Typography variant='subtitle1' fontWeight={700}>
+                  {getOrderCodeDisplay(selectedOrder)}
+                </Typography>
                 <Typography variant='caption' color='text.secondary'>
                   {selectedOrder.memberDisplayName || 'Unknown member'} · {selectedOrder.productName}
                 </Typography>
               </Box>
-              <Chip size='small' label={selectedOrder.status} color={selectedOrder.status === 'Active' ? 'primary' : 'default'} />
+              <Chip
+                size='small'
+                label={selectedOrder.status}
+                color={selectedOrder.status === 'Active' ? 'primary' : 'default'}
+              />
             </Box>
 
             {/* Body */}
             <Box sx={{ flex: 1, overflowY: 'auto', px: 3, py: 2.5, display: 'flex', flexDirection: 'column', gap: 3 }}>
               {/* Order Info */}
               <Box>
-                <Typography variant='overline' color='text.secondary' sx={{ letterSpacing: 1.2 }}>Order Info</Typography>
+                <Typography variant='overline' color='text.secondary' sx={{ letterSpacing: 1.2 }}>
+                  Order Info
+                </Typography>
                 <Divider sx={{ mb: 1.5, mt: 0.5 }} />
                 <CloneInfoRow label='Variant' value={selectedOrder.productVariantNameSnapshot} />
-                <CloneInfoRow label='Price' value={selectedOrder.unitPriceSnapshot != null ? `${selectedOrder.unitPriceSnapshot.toLocaleString('vi-VN')} VND` : null} />
+                <CloneInfoRow
+                  label='Price'
+                  value={
+                    selectedOrder.unitPriceSnapshot != null
+                      ? `${selectedOrder.unitPriceSnapshot.toLocaleString('vi-VN')} VND`
+                      : null
+                  }
+                />
                 <CloneInfoRow label='Purchase Date' value={selectedOrder.purchaseDate?.slice(0, 10)} />
                 <CloneInfoRow label='Warranty Expiry' value={selectedOrder.warrantyExpiry?.slice(0, 10)} />
-                <CloneInfoRow label='Sold By' value={selectedOrder.soldByUser?.fullName || selectedOrder.soldByUser?.email} />
-                {(selectedOrder.referralCommissionAmountSnapshot != null && selectedOrder.referralCommissionAmountSnapshot > 0) && (
-                  <>
-                    <CloneInfoRow
-                      label='Commission'
-                      value={`${selectedOrder.referralCommissionAmountSnapshot.toLocaleString('vi-VN')} ₫ (${selectedOrder.referralCommissionPercentSnapshot}%)`}
-                    />
-                    <CloneInfoRow
-                      label='Referrer'
-                      value={selectedOrder.referrerMember?.displayName || selectedOrder.referrerMemberId || null}
-                    />
-                  </>
-                )}
+                <CloneInfoRow
+                  label='Sold By'
+                  value={selectedOrder.soldByUser?.fullName || selectedOrder.soldByUser?.email}
+                />
+                {selectedOrder.referralCommissionAmountSnapshot != null &&
+                  selectedOrder.referralCommissionAmountSnapshot > 0 && (
+                    <>
+                      <CloneInfoRow
+                        label='Commission'
+                        value={`${selectedOrder.referralCommissionAmountSnapshot.toLocaleString('vi-VN')} ₫ (${selectedOrder.referralCommissionPercentSnapshot}%)`}
+                      />
+                      <CloneInfoRow
+                        label='Referrer'
+                        value={selectedOrder.referrerMember?.displayName || selectedOrder.referrerMemberId || null}
+                      />
+                    </>
+                  )}
                 {selectedOrder.orderNote && <CloneInfoRow label='Note' value={selectedOrder.orderNote} />}
               </Box>
 
               {/* Account Clone Info */}
               <Box>
-                <Typography variant='overline' color='text.secondary' sx={{ letterSpacing: 1.2 }}>Account Clone</Typography>
+                <Typography variant='overline' color='text.secondary' sx={{ letterSpacing: 1.2 }}>
+                  Account Clone
+                </Typography>
                 <Divider sx={{ mb: 1.5, mt: 0.5 }} />
                 {cloneDetailQuery.isLoading && (
                   <Box sx={{ display: 'flex', justifyContent: 'center', py: 3 }}>
@@ -1216,7 +1339,9 @@ const AccountSalesOrders = () => {
                   </Box>
                 )}
                 {cloneDetailQuery.isError && (
-                  <Typography variant='body2' color='error'>Failed to load account info.</Typography>
+                  <Typography variant='body2' color='error'>
+                    Failed to load account info.
+                  </Typography>
                 )}
                 {cloneDetailQuery.data && (
                   <>
@@ -1237,9 +1362,22 @@ const AccountSalesOrders = () => {
                           }}
                         >
                           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
-                            <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: 0.8 }}>LIVE OTP</Typography>
+                            <Typography
+                              variant='caption'
+                              color='text.secondary'
+                              fontWeight={600}
+                              sx={{ letterSpacing: 0.8 }}
+                            >
+                              LIVE OTP
+                            </Typography>
                             <Tooltip title='Copy code'>
-                              <IconButton size='small' onClick={() => { void navigator.clipboard.writeText(otpView.code); toast.success('Copied OTP code') }}>
+                              <IconButton
+                                size='small'
+                                onClick={() => {
+                                  void navigator.clipboard.writeText(otpView.code)
+                                  toast.success('Copied OTP code')
+                                }}
+                              >
                                 <i className='tabler-copy' style={{ fontSize: 14 }} />
                               </IconButton>
                             </Tooltip>
@@ -1251,12 +1389,24 @@ const AccountSalesOrders = () => {
                             color='success.main'
                             sx={{ letterSpacing: '0.2em', mb: 0.5 }}
                           >
-                            {otpView.code.length === 6 ? `${otpView.code.slice(0, 3)} ${otpView.code.slice(3)}` : otpView.code}
+                            {otpView.code.length === 6
+                              ? `${otpView.code.slice(0, 3)} ${otpView.code.slice(3)}`
+                              : otpView.code}
                           </Typography>
-                          <Typography variant='caption' color='text.secondary'>Refresh in {otpView.remainingSeconds}s</Typography>
+                          <Typography variant='caption' color='text.secondary'>
+                            Refresh in {otpView.remainingSeconds}s
+                          </Typography>
                           {otpauthUri && (
                             <Box sx={{ mt: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                              <Box sx={{ p: 1.5, bgcolor: 'white', borderRadius: 1.5, display: 'inline-flex', boxShadow: 1 }}>
+                              <Box
+                                sx={{
+                                  p: 1.5,
+                                  bgcolor: 'white',
+                                  borderRadius: 1.5,
+                                  display: 'inline-flex',
+                                  boxShadow: 1
+                                }}
+                              >
                                 <QRCodeSVG value={otpauthUri} size={160} />
                               </Box>
                               <Typography variant='caption' color='text.secondary' textAlign='center'>
@@ -1268,12 +1418,20 @@ const AccountSalesOrders = () => {
                       </Box>
                     )}
                     <CloneInfoRow label='Extra Info' value={cloneDetailQuery.data.extraInfo} copyable secret />
-                    <CloneInfoRow label='Sold At' value={cloneDetailQuery.data.soldAt?.slice(0, 16).replace('T', ' ')} />
-                    <CloneInfoRow label='Verified At' value={cloneDetailQuery.data.verifiedAt?.slice(0, 16).replace('T', ' ')} />
+                    <CloneInfoRow
+                      label='Sold At'
+                      value={cloneDetailQuery.data.soldAt?.slice(0, 16).replace('T', ' ')}
+                    />
+                    <CloneInfoRow
+                      label='Verified At'
+                      value={cloneDetailQuery.data.verifiedAt?.slice(0, 16).replace('T', ' ')}
+                    />
                   </>
                 )}
                 {!cloneDetailQuery.isLoading && !cloneDetailQuery.data && !cloneDetailQuery.isError && (
-                  <Typography variant='body2' color='text.secondary'>No account clone found for this order.</Typography>
+                  <Typography variant='body2' color='text.secondary'>
+                    No account clone found for this order.
+                  </Typography>
                 )}
               </Box>
             </Box>

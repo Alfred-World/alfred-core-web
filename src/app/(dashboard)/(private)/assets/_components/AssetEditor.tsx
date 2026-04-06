@@ -42,14 +42,16 @@ import {
   useGetApiV1CategoriesId,
   useGetApiV1CategoriesTree,
   usePostApiV1Assets,
-  usePutApiV1AssetsId,
+  usePatchApiV1AssetsId,
   useGetApiV1Attachments,
   usePostApiV1Attachments,
   useDeleteApiV1AttachmentsId,
   CategoryType,
-  AssetLogEventType
+  AssetLogEventType,
+  AssetStatus
 } from '@generated/core-api'
-import type { AttachmentDto, CategoryTreeNodeDto } from '@generated/core-api'
+import type { AttachmentDto, CategoryTreeNodeDto, UpdateAssetRequest } from '@generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 
 // ─── Types for category form schema ───────────────────────────────────────────
 interface SchemaField {
@@ -66,11 +68,10 @@ const ASSET_STATUSES = ['Active', 'Sold', 'Broken', 'Discarded'] as const
 const EVENT_TYPES = [
   { value: AssetLogEventType.Maintain, label: 'Maintenance', icon: 'tabler-settings-2', color: '#4caf50' },
   { value: AssetLogEventType.Repair, label: 'Repair', icon: 'tabler-tool', color: '#ff9800' },
-  { value: AssetLogEventType.Refill, label: 'Refill', icon: 'tabler-gas-station', color: '#2196f3' },
+  { value: AssetLogEventType.Refill, label: 'Refill', icon: 'tabler-gas-station', color: '#2196f3' }
 ] as const
 
-const getEventMeta = (eventType?: string) =>
-  EVENT_TYPES.find(e => e.value === eventType) ?? EVENT_TYPES[0]
+const getEventMeta = (eventType?: string) => EVENT_TYPES.find(e => e.value === eventType) ?? EVENT_TYPES[0]
 
 // ─── Validation ────────────────────────────────────────────────────────────────
 const assetSchema = v.object({
@@ -125,7 +126,12 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
 
   // Preview modal state
   const [previewOpen, setPreviewOpen] = useState(false)
-  const [previewItem, setPreviewItem] = useState<{ fileName?: string; downloadUrl?: string; contentType?: string } | null>(null)
+
+  const [previewItem, setPreviewItem] = useState<{
+    fileName?: string
+    downloadUrl?: string
+    contentType?: string
+  } | null>(null)
 
   const handleOpenPreview = (item: { fileName?: string; downloadUrl?: string; contentType?: string }) => {
     setPreviewItem(item)
@@ -135,8 +141,8 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
   // Fetch categories (Asset type)
   const { data: categoryTreeData } = useGetApiV1CategoriesTree({ type: CategoryType.Asset, pageSize: 200 })
 
-  const categories = useMemo(() =>
-    categoryTreeData?.result?.items ? flattenTree(categoryTreeData.result.items) : [],
+  const categories = useMemo(
+    () => (categoryTreeData?.result?.items ? flattenTree(categoryTreeData.result.items) : []),
     [categoryTreeData]
   )
 
@@ -171,7 +177,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
 
   // Mutations
   const createMutation = usePostApiV1Assets()
-  const updateMutation = usePutApiV1AssetsId()
+  const updateMutation = usePatchApiV1AssetsId()
 
   // Attachment hooks (with caching)
   const attachmentParams = { targetId: assetId ?? '', targetType: 'Asset' }
@@ -182,15 +188,9 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
 
   const allAttachments = useMemo(() => attachmentsData?.result ?? [], [attachmentsData])
 
-  const primaryImage = useMemo(
-    () => allAttachments.find(a => a.purpose === 'PrimaryImage') ?? null,
-    [allAttachments]
-  )
+  const primaryImage = useMemo(() => allAttachments.find(a => a.purpose === 'PrimaryImage') ?? null, [allAttachments])
 
-  const attachments = useMemo(
-    () => allAttachments.filter(a => a.purpose !== 'PrimaryImage'),
-    [allAttachments]
-  )
+  const attachments = useMemo(() => allAttachments.filter(a => a.purpose !== 'PrimaryImage'), [allAttachments])
 
   const uploadAttachment = usePostApiV1Attachments()
   const deleteAttachment = useDeleteApiV1AttachmentsId()
@@ -237,7 +237,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
         purchaseDate: asset.purchaseDate ? asset.purchaseDate.split('T')[0] : '',
         initialCost: asset.initialCost ?? 0,
         warrantyExpiryDate: asset.warrantyExpiryDate ? asset.warrantyExpiryDate.split('T')[0] : '',
-        status: (asset.status as typeof ASSET_STATUSES[number]) ?? 'Active',
+        status: (asset.status as (typeof ASSET_STATUSES)[number]) ?? 'Active',
         location: asset.location ?? ''
       })
       setSelectedCategoryId(asset.categoryId ?? undefined)
@@ -254,15 +254,18 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
   }, [asset, reset])
 
   // Handle category change — sync spec values
-  const handleCategoryChange = useCallback((categoryId: string) => {
-    setSelectedCategoryId(categoryId || undefined)
-    setValue('categoryId', categoryId)
+  const handleCategoryChange = useCallback(
+    (categoryId: string) => {
+      setSelectedCategoryId(categoryId || undefined)
+      setValue('categoryId', categoryId)
 
-    // Reset specs when category changes (unless editing)
-    if (!isEditMode) {
-      setSpecsValues({})
-    }
-  }, [isEditMode, setValue])
+      // Reset specs when category changes (unless editing)
+      if (!isEditMode) {
+        setSpecsValues({})
+      }
+    },
+    [isEditMode, setValue]
+  )
 
   const updateSpecValue = useCallback((label: string, value: unknown) => {
     setSpecsValues(prev => ({ ...prev, [label]: value }))
@@ -273,20 +276,35 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
 
     try {
       if (isEditMode && assetId) {
-        await updateMutation.mutateAsync({
-          id: assetId,
-          data: {
-            name: data.name,
-            categoryId: data.categoryId || null,
-            brandId: data.brandId || null,
-            purchaseDate: data.purchaseDate || null,
-            initialCost: data.initialCost,
-            warrantyExpiryDate: data.warrantyExpiryDate || null,
-            specs,
-            status: data.status,
-            location: data.location || null
-          }
-        })
+        const current: UpdateAssetRequest = {
+          name: data.name,
+          categoryId: data.categoryId || null,
+          brandId: data.brandId || null,
+          purchaseDate: data.purchaseDate || null,
+          initialCost: data.initialCost,
+          warrantyExpiryDate: data.warrantyExpiryDate || null,
+          specs,
+          status: data.status as AssetStatus,
+          location: data.location || undefined
+        }
+
+        const original: UpdateAssetRequest = {
+          name: asset?.name ?? '',
+          categoryId: asset?.categoryId ?? null,
+          brandId: asset?.brandId ?? null,
+          purchaseDate: asset?.purchaseDate ? asset.purchaseDate.split('T')[0] : null,
+          initialCost: asset?.initialCost ?? 0,
+          warrantyExpiryDate: asset?.warrantyExpiryDate ? asset.warrantyExpiryDate.split('T')[0] : null,
+          specs: asset?.specs ?? '{}',
+          status: (asset?.status as AssetStatus) ?? AssetStatus.Active,
+          location: asset?.location ?? undefined
+        }
+
+        const changes = getChangedFields(original, current)
+
+        if (!changes) return
+
+        await updateMutation.mutateAsync({ id: assetId, data: changes })
       } else {
         await createMutation.mutateAsync({
           data: {
@@ -334,9 +352,14 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
       setLogForm({
         eventType: AssetLogEventType.Maintain,
         performedAt: new Date().toISOString().split('T')[0],
-        cost: 0, quantity: 1, note: '', nextDueDate: ''
+        cost: 0,
+        quantity: 1,
+        note: '',
+        nextDueDate: ''
       })
-    } catch { /* handled by React Query */ }
+    } catch {
+      /* handled by React Query */
+    }
   }
 
   const handleDeleteLog = async (logId: string) => {
@@ -348,13 +371,17 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
       await queryClient.invalidateQueries({
         queryKey: getGetApiV1AssetsAssetIdLogsQueryKey(assetId)
       })
-    } catch { /* handled by React Query */ }
+    } catch {
+      /* handled by React Query */
+    }
   }
 
   // ─── File upload handler ──────────────────────────────────────────────────────
   const invalidateAttachments = useCallback(() => {
     if (assetId) {
-      queryClient.invalidateQueries({ queryKey: getGetApiV1AttachmentsQueryKey({ targetId: assetId, targetType: 'Asset' }) })
+      queryClient.invalidateQueries({
+        queryKey: getGetApiV1AttachmentsQueryKey({ targetId: assetId, targetType: 'Asset' })
+      })
     }
   }, [assetId, queryClient])
 
@@ -367,7 +394,9 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
     try {
       // Delete old primary image if exists
       if (primaryImage?.id) {
-        try { await deleteAttachment.mutateAsync({ id: primaryImage.id }) } catch {
+        try {
+          await deleteAttachment.mutateAsync({ id: primaryImage.id })
+        } catch {
           console.warn('Failed to delete old primary image')
         }
       }
@@ -396,7 +425,9 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
       try {
         await deleteAttachment.mutateAsync({ id: primaryImage.id })
         invalidateAttachments()
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
   }
 
@@ -435,7 +466,9 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
     try {
       await deleteAttachment.mutateAsync({ id: item.id })
       invalidateAttachments()
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }
 
   // ─── Render a dynamic spec field ──────────────────────────────────────────────
@@ -497,7 +530,9 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
               onChange={e => updateSpecValue(key, e.target.value)}
             >
               {(field.options ?? []).map(opt => (
-                <MenuItem key={opt} value={opt}>{opt}</MenuItem>
+                <MenuItem key={opt} value={opt}>
+                  {opt}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>
@@ -507,12 +542,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
         return (
           <FormControlLabel
             key={index}
-            control={
-              <Checkbox
-                checked={!!specsValues[key]}
-                onChange={e => updateSpecValue(key, e.target.checked)}
-              />
-            }
+            control={<Checkbox checked={!!specsValues[key]} onChange={e => updateSpecValue(key, e.target.checked)} />}
             label={
               <Typography variant='body2'>
                 {field.label}
@@ -531,9 +561,15 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
             </Typography>
             <Box
               sx={{
-                border: '2px dashed', borderColor: 'divider', borderRadius: 2, p: 3,
-                textAlign: 'center', bgcolor: 'action.hover', cursor: 'pointer',
-                transition: 'border-color 0.15s', '&:hover': { borderColor: 'primary.main' }
+                border: '2px dashed',
+                borderColor: 'divider',
+                borderRadius: 2,
+                p: 3,
+                textAlign: 'center',
+                bgcolor: 'action.hover',
+                cursor: 'pointer',
+                transition: 'border-color 0.15s',
+                '&:hover': { borderColor: 'primary.main' }
               }}
             >
               <i className='tabler-cloud-upload' style={{ fontSize: 28, opacity: 0.4 }} />
@@ -556,8 +592,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
     if (!purchaseDate) return null
     const diff = Date.now() - new Date(purchaseDate).getTime()
 
-    
-return Math.floor(diff / 86_400_000)
+    return Math.floor(diff / 86_400_000)
   }, [purchaseDate])
 
   return (
@@ -566,7 +601,8 @@ return Math.floor(diff / 86_400_000)
         {/* ── Breadcrumb ───────────────────────────────────────────────────── */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, mb: 3 }}>
           <Typography
-            variant='body2' color='text.secondary'
+            variant='body2'
+            color='text.secondary'
             sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' }, transition: 'color 0.15s' }}
             onClick={() => router.push('/')}
           >
@@ -574,28 +610,37 @@ return Math.floor(diff / 86_400_000)
           </Typography>
           <i className='tabler-chevron-right' style={{ fontSize: 13, opacity: 0.4 }} />
           <Typography
-            variant='body2' color='text.secondary'
+            variant='body2'
+            color='text.secondary'
             sx={{ cursor: 'pointer', '&:hover': { color: 'primary.main' }, transition: 'color 0.15s' }}
             onClick={() => router.push('/assets')}
           >
             Assets
           </Typography>
           <i className='tabler-chevron-right' style={{ fontSize: 13, opacity: 0.4 }} />
-          <Typography variant='body2'>
-            {isEditMode ? `Edit: ${asset?.name ?? ''}` : 'New Asset'}
-          </Typography>
+          <Typography variant='body2'>{isEditMode ? `Edit: ${asset?.name ?? ''}` : 'New Asset'}</Typography>
         </Box>
 
         {/* ── Header: inline name + meta + actions ─────────────────────────── */}
-        <Box sx={{
-          display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start',
-          justifyContent: 'space-between', gap: 3,
-          borderBottom: '1px solid', borderColor: 'divider', pb: 4, mb: 4
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: 3,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            pb: 4,
+            mb: 4
+          }}
+        >
           {/* Left: name + meta */}
           <Box sx={{ flex: 1, minWidth: 280, display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-              <Typography variant='caption' color='text.secondary'
+              <Typography
+                variant='caption'
+                color='text.secondary'
                 sx={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em' }}
               >
                 Asset Name
@@ -610,11 +655,17 @@ return Math.floor(diff / 86_400_000)
                       {...field}
                       placeholder='Enter asset name…'
                       sx={{
-                        fontSize: { xs: '1.5rem', md: '1.875rem' }, fontWeight: 900,
-                        color: 'text.primary', bgcolor: 'transparent',
-                        border: 0, borderBottom: '1px dashed',
+                        fontSize: { xs: '1.5rem', md: '1.875rem' },
+                        fontWeight: 900,
+                        color: 'text.primary',
+                        bgcolor: 'transparent',
+                        border: 0,
+                        borderBottom: '1px dashed',
                         borderColor: errors.name ? 'error.main' : 'divider',
-                        outline: 'none', px: 0, width: '100%', maxWidth: 500,
+                        outline: 'none',
+                        px: 0,
+                        width: '100%',
+                        maxWidth: 500,
                         fontFamily: 'inherit',
                         '&:focus': { borderColor: 'primary.main' }
                       }}
@@ -624,7 +675,9 @@ return Math.floor(diff / 86_400_000)
                 <i className='tabler-pencil' style={{ fontSize: 22, opacity: 0.4, flexShrink: 0 }} />
               </Box>
               {errors.name && (
-                <Typography variant='caption' color='error'>{errors.name.message}</Typography>
+                <Typography variant='caption' color='error'>
+                  {errors.name.message}
+                </Typography>
               )}
             </Box>
           </Box>
@@ -643,9 +696,11 @@ return Math.floor(diff / 86_400_000)
               variant='contained'
               disabled={isSubmitting}
               startIcon={
-                isSubmitting
-                  ? <i className='tabler-loader-2 animate-spin' style={{ fontSize: 18 }} />
-                  : <i className='tabler-device-floppy' style={{ fontSize: 18 }} />
+                isSubmitting ? (
+                  <i className='tabler-loader-2 animate-spin' style={{ fontSize: 18 }} />
+                ) : (
+                  <i className='tabler-device-floppy' style={{ fontSize: 18 }} />
+                )
               }
               sx={{ borderRadius: 2, fontWeight: 700, px: 3 }}
             >
@@ -658,14 +713,18 @@ return Math.floor(diff / 86_400_000)
         <Card sx={{ borderRadius: 3, mb: 4, p: 3, border: '1px solid', borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
             <i className='tabler-settings' style={{ fontSize: 22, color: 'var(--mui-palette-primary-main)' }} />
-            <Typography variant='h6' fontWeight={700}>Basic Attributes</Typography>
+            <Typography variant='h6' fontWeight={700}>
+              Basic Attributes
+            </Typography>
           </Box>
-          
+
           <Grid container spacing={2.5}>
             {/* Location */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 1 }}>Location</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 1 }}>
+                  Location
+                </Typography>
                 <Controller
                   name='location'
                   control={control}
@@ -685,18 +744,19 @@ return Math.floor(diff / 86_400_000)
             {/* Status */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 1 }}>Status</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 1 }}>
+                  Status
+                </Typography>
                 <Controller
                   name='status'
                   control={control}
                   render={({ field }) => (
-                    <Select
-                      {...field}
-                      size='small'
-                      fullWidth
-                      sx={{ fontSize: '0.875rem' }}
-                    >
-                      {ASSET_STATUSES.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+                    <Select {...field} size='small' fullWidth sx={{ fontSize: '0.875rem' }}>
+                      {ASSET_STATUSES.map(s => (
+                        <MenuItem key={s} value={s}>
+                          {s}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 />
@@ -706,7 +766,9 @@ return Math.floor(diff / 86_400_000)
             {/* Brand */}
             <Grid size={{ xs: 12, sm: 6 }}>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 1 }}>Brand</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 1 }}>
+                  Brand
+                </Typography>
                 <Controller
                   name='brandId'
                   control={control}
@@ -714,7 +776,7 @@ return Math.floor(diff / 86_400_000)
                     <Autocomplete
                       size='small'
                       options={brands}
-                      getOptionLabel={(opt) => opt.name ?? ''}
+                      getOptionLabel={opt => opt.name ?? ''}
                       value={brands.find(b => b.id === field.value) ?? null}
                       onChange={(_, val) => field.onChange(val?.id ?? '')}
                       fullWidth
@@ -738,12 +800,14 @@ return Math.floor(diff / 86_400_000)
         <Card sx={{ borderRadius: 3, mb: 4, p: 3, border: '1px solid', borderColor: 'divider' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
             <i className='tabler-folder-open' style={{ fontSize: 22, color: 'var(--mui-palette-primary-main)' }} />
-            <Typography variant='h6' fontWeight={700}>Category</Typography>
+            <Typography variant='h6' fontWeight={700}>
+              Category
+            </Typography>
             <Typography variant='caption' color='text.secondary' sx={{ ml: 'auto' }}>
               Select and manage asset category
             </Typography>
           </Box>
-          
+
           <Controller
             name='categoryId'
             control={control}
@@ -752,7 +816,7 @@ return Math.floor(diff / 86_400_000)
                 value={categories.find(c => c.id === field.value) ?? null}
                 onChange={(_, value) => handleCategoryChange(value?.id ?? '')}
                 options={categories}
-                getOptionLabel={(opt) => opt.name ?? ''}
+                getOptionLabel={opt => opt.name ?? ''}
                 noOptionsText='No categories found'
                 isOptionEqualToValue={(option, value) => option.id === value?.id}
                 slotProps={{
@@ -763,30 +827,32 @@ return Math.floor(diff / 86_400_000)
                 renderOption={(props, option) => {
                   const { key, ...rest } = props
 
-                  
-return (
-                  <Box
-                    component='li'
-                    key={key}
-                    {...rest}
-                    sx={{
-                      pl: `${option.depth! * 20 + 16}px !important`,
-                      transition: 'background-color 0.2s',
-                    }}
-                  >
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
-                      <Box
-                        sx={{
-                          width: 4, height: 4, borderRadius: '50%',
-                          bgcolor: 'primary.main', opacity: 0.6
-                        }}
-                      />
-                      <Typography variant='body2'>{option.name}</Typography>
+                  return (
+                    <Box
+                      component='li'
+                      key={key}
+                      {...rest}
+                      sx={{
+                        pl: `${option.depth! * 20 + 16}px !important`,
+                        transition: 'background-color 0.2s'
+                      }}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, width: '100%' }}>
+                        <Box
+                          sx={{
+                            width: 4,
+                            height: 4,
+                            borderRadius: '50%',
+                            bgcolor: 'primary.main',
+                            opacity: 0.6
+                          }}
+                        />
+                        <Typography variant='body2'>{option.name}</Typography>
+                      </Box>
                     </Box>
-                  </Box>
                   )
                 }}
-                renderInput={(params) => (
+                renderInput={params => (
                   <TextField
                     {...params}
                     placeholder='Search category…'
@@ -810,7 +876,16 @@ return (
 
           {/* Category Info */}
           {selectedCategoryId && categoryDetailData?.result && (
-            <Box sx={{ mt: 3, p: 2.5, bgcolor: 'action.hover', borderRadius: 1.5, border: '1px solid', borderColor: 'divider' }}>
+            <Box
+              sx={{
+                mt: 3,
+                p: 2.5,
+                bgcolor: 'action.hover',
+                borderRadius: 1.5,
+                border: '1px solid',
+                borderColor: 'divider'
+              }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
                 <i className='tabler-info-circle' style={{ fontSize: 16, opacity: 0.6 }} />
                 <Typography variant='caption' fontWeight={600} color='text.secondary'>
@@ -830,18 +905,30 @@ return (
                       <Box
                         key={idx}
                         sx={{
-                          fontSize: '0.7rem', bgcolor: 'primary.main', color: 'primary.contrastText',
-                          px: 1, py: 0.5, borderRadius: 1, fontWeight: 600
+                          fontSize: '0.7rem',
+                          bgcolor: 'primary.main',
+                          color: 'primary.contrastText',
+                          px: 1,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontWeight: 600
                         }}
                       >
                         {field.label}
                       </Box>
                     ))}
                     {schemaFields.length > 5 && (
-                      <Box sx={{
-                        fontSize: '0.7rem', bgcolor: 'action.selected', color: 'text.secondary',
-                        px: 1, py: 0.5, borderRadius: 1, fontWeight: 600
-                      }}>
+                      <Box
+                        sx={{
+                          fontSize: '0.7rem',
+                          bgcolor: 'action.selected',
+                          color: 'text.secondary',
+                          px: 1,
+                          py: 0.5,
+                          borderRadius: 1,
+                          fontWeight: 600
+                        }}
+                      >
                         +{schemaFields.length - 5} more
                       </Box>
                     )}
@@ -861,7 +948,9 @@ return (
                 <i className='tabler-coin' style={{ fontSize: 80, color: 'var(--mui-palette-primary-main)' }} />
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, position: 'relative', zIndex: 1 }}>
-                <Typography variant='body2' color='text.secondary' fontWeight={500}>Initial Cost</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={500}>
+                  Initial Cost
+                </Typography>
                 <Controller
                   name='initialCost'
                   control={control}
@@ -893,7 +982,9 @@ return (
                 <i className='tabler-clock' style={{ fontSize: 80, color: 'var(--mui-palette-primary-main)' }} />
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, position: 'relative', zIndex: 1 }}>
-                <Typography variant='body2' color='text.secondary' fontWeight={500}>In Use Since</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={500}>
+                  In Use Since
+                </Typography>
                 <Controller
                   name='purchaseDate'
                   control={control}
@@ -924,18 +1015,26 @@ return (
                 <i className='tabler-shield-check' style={{ fontSize: 80, color: 'var(--mui-palette-primary-main)' }} />
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, position: 'relative', zIndex: 1 }}>
-                <Typography variant='body2' color='text.secondary' fontWeight={500}>Warranty Status</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={500}>
+                  Warranty Status
+                </Typography>
                 <Controller
                   name='status'
                   control={control}
                   render={({ field }) => (
                     <Select {...field} size='small' fullWidth>
-                      {ASSET_STATUSES.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+                      {ASSET_STATUSES.map(s => (
+                        <MenuItem key={s} value={s}>
+                          {s}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 />
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <Typography variant='caption' color='text.secondary' sx={{ whiteSpace: 'nowrap' }}>Expires:</Typography>
+                  <Typography variant='caption' color='text.secondary' sx={{ whiteSpace: 'nowrap' }}>
+                    Expires:
+                  </Typography>
                   <Controller
                     name='warrantyExpiryDate'
                     control={control}
@@ -945,9 +1044,16 @@ return (
                         {...field}
                         type='date'
                         sx={{
-                          fontSize: '0.75rem', color: 'text.secondary', bgcolor: 'transparent',
-                          border: 0, borderBottom: '1px solid', borderColor: 'divider',
-                          outline: 'none', pb: 0.25, flexGrow: 1, fontFamily: 'inherit',
+                          fontSize: '0.75rem',
+                          color: 'text.secondary',
+                          bgcolor: 'transparent',
+                          border: 0,
+                          borderBottom: '1px solid',
+                          borderColor: 'divider',
+                          outline: 'none',
+                          pb: 0.25,
+                          flexGrow: 1,
+                          fontFamily: 'inherit',
                           '&:focus': { borderColor: 'primary.main' }
                         }}
                       />
@@ -960,21 +1066,25 @@ return (
         </Grid>
 
         {/* ── Main 5 + 7 grid ──────────────────────────────────────────────── */}
-        <Grid container spacing={3} sx={{ mb: 4 }}
-          alignItems='flex-start'
-        >
+        <Grid container spacing={3} sx={{ mb: 4 }} alignItems='flex-start'>
           {/* Left: Technical Specifications */}
           <Grid size={{ xs: 12, lg: 5 }}>
             <Card sx={{ borderRadius: 3, display: 'flex', flexDirection: 'column' }}>
               {/* Header */}
-              <Box sx={{
-                px: 3, py: 2.5, borderBottom: '1px solid', borderColor: 'divider',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                bgcolor: 'action.hover', borderRadius: '12px 12px 0 0'
-              }}>
-                <Typography variant='h6' fontWeight={700}
-                  sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                >
+              <Box
+                sx={{
+                  px: 3,
+                  py: 2.5,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  bgcolor: 'action.hover',
+                  borderRadius: '12px 12px 0 0'
+                }}
+              >
+                <Typography variant='h6' fontWeight={700} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                   <i className='tabler-settings' style={{ fontSize: 20, color: 'var(--mui-palette-primary-main)' }} />
                   Technical Specifications
                 </Typography>
@@ -983,15 +1093,19 @@ return (
               {/* Spec fields */}
               <Box sx={{ p: 3, flexGrow: 1 }}>
                 {schemaFields.length > 0 ? (
-                  <Box sx={{
-                    display: 'grid',
-                    gridTemplateColumns: '35% 1fr',
-                    gap: '14px 12px',
-                    alignItems: 'center'
-                  }}>
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '35% 1fr',
+                      gap: '14px 12px',
+                      alignItems: 'center'
+                    }}
+                  >
                     {schemaFields.map((field, index) => (
                       <Box key={index} sx={{ display: 'contents' }}>
-                        <Typography variant='caption' color='text.secondary'
+                        <Typography
+                          variant='caption'
+                          color='text.secondary'
                           sx={{ fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em' }}
                         >
                           {field.label}
@@ -1014,29 +1128,40 @@ return (
 
               {/* Image upload */}
               <Box sx={{ p: 3, pt: 0 }}>
-                <input
-                  ref={fileInputRef}
-                  type='file'
-                  accept='image/*'
-                  hidden
-                  onChange={handleImageUpload}
-                />
+                <input ref={fileInputRef} type='file' accept='image/*' hidden onChange={handleImageUpload} />
                 <Box
                   onClick={() => !imageUploading && isEditMode && fileInputRef.current?.click()}
                   sx={{
-                    bgcolor: 'action.hover', borderRadius: 2, p: 2,
-                    border: '1px dashed', borderColor: 'divider',
-                    display: 'flex', alignItems: 'center', gap: 2,
+                    bgcolor: 'action.hover',
+                    borderRadius: 2,
+                    p: 2,
+                    border: '1px dashed',
+                    borderColor: 'divider',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
                     transition: 'border-color 0.15s',
                     opacity: isEditMode ? 1 : 0.5,
-                    '&:hover': isEditMode ? { borderColor: 'primary.main', cursor: imageUploading ? 'wait' : 'pointer' } : {}
+                    '&:hover': isEditMode
+                      ? { borderColor: 'primary.main', cursor: imageUploading ? 'wait' : 'pointer' }
+                      : {}
                   }}
                 >
-                  <Box sx={{
-                    width: 64, height: 64, bgcolor: 'background.paper', borderRadius: 1.5,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    border: '1px solid', borderColor: 'divider', flexShrink: 0, overflow: 'hidden'
-                  }}>
+                  <Box
+                    sx={{
+                      width: 64,
+                      height: 64,
+                      bgcolor: 'background.paper',
+                      borderRadius: 1.5,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      flexShrink: 0,
+                      overflow: 'hidden'
+                    }}
+                  >
                     {imageUploading ? (
                       <CircularProgress size={24} />
                     ) : primaryImage?.downloadUrl ? (
@@ -1055,17 +1180,25 @@ return (
                       {!isEditMode ? 'Save first to upload' : primaryImage?.downloadUrl ? 'Primary Image' : 'No Image'}
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
-                      <Typography variant='caption' color='primary'
+                      <Typography
+                        variant='caption'
+                        color='primary'
                         sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
                       >
                         {primaryImage?.downloadUrl ? 'Change' : 'Upload'}
                       </Typography>
                       {primaryImage?.downloadUrl && (
                         <>
-                          <Typography variant='caption' color='text.disabled'>|</Typography>
+                          <Typography variant='caption' color='text.disabled'>
+                            |
+                          </Typography>
                           <Typography
-                            variant='caption' color='error'
-                            onClick={e => { e.stopPropagation(); handleRemoveImage() }}
+                            variant='caption'
+                            color='error'
+                            onClick={e => {
+                              e.stopPropagation()
+                              handleRemoveImage()
+                            }}
                             sx={{ cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
                           >
                             Remove
@@ -1083,32 +1216,55 @@ return (
           <Grid size={{ xs: 12, lg: 7 }}>
             <Card sx={{ borderRadius: 3, display: 'flex', flexDirection: 'column' }}>
               {/* Header */}
-              <Box sx={{
-                px: 3, py: 2.5, borderBottom: '1px solid', borderColor: 'divider',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                bgcolor: 'action.hover', borderRadius: '12px 12px 0 0', cursor: 'pointer'
-              }}
-              onClick={() => setShowLogs(!showLogs)}
+              <Box
+                sx={{
+                  px: 3,
+                  py: 2.5,
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  bgcolor: 'action.hover',
+                  borderRadius: '12px 12px 0 0',
+                  cursor: 'pointer'
+                }}
+                onClick={() => setShowLogs(!showLogs)}
               >
-                <Typography variant='h6' fontWeight={700}
-                  sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-                >
-                  <i className={`tabler-chevron-${showLogs ? 'down' : 'right'}`} style={{ fontSize: 18, color: 'var(--mui-palette-primary-main)', transition: 'transform 0.2s' }} />
+                <Typography variant='h6' fontWeight={700} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <i
+                    className={`tabler-chevron-${showLogs ? 'down' : 'right'}`}
+                    style={{ fontSize: 18, color: 'var(--mui-palette-primary-main)', transition: 'transform 0.2s' }}
+                  />
                   <i className='tabler-history' style={{ fontSize: 20, color: 'var(--mui-palette-primary-main)' }} />
                   Timeline Editor
                   {logs.length > 0 && (
-                    <Box component='span' sx={{
-                      ml: 1, fontSize: '0.7rem', fontWeight: 700,
-                      bgcolor: 'primary.main', color: 'primary.contrastText',
-                      borderRadius: 1, px: 1, py: 0.25, lineHeight: 1.6
-                    }}>
+                    <Box
+                      component='span'
+                      sx={{
+                        ml: 1,
+                        fontSize: '0.7rem',
+                        fontWeight: 700,
+                        bgcolor: 'primary.main',
+                        color: 'primary.contrastText',
+                        borderRadius: 1,
+                        px: 1,
+                        py: 0.25,
+                        lineHeight: 1.6
+                      }}
+                    >
                       {logs.length}
                     </Box>
                   )}
                 </Typography>
                 {isEditMode && (
-                  <Button variant='contained' size='small'
-                    onClick={(e) => { e.stopPropagation(); setLogDialogOpen(true) }}
+                  <Button
+                    variant='contained'
+                    size='small'
+                    onClick={e => {
+                      e.stopPropagation()
+                      setLogDialogOpen(true)
+                    }}
                     startIcon={<i className='tabler-plus' style={{ fontSize: 14 }} />}
                     sx={{ fontSize: '0.7rem', fontWeight: 700, borderRadius: 1.5 }}
                   >
@@ -1119,155 +1275,217 @@ return (
 
               {/* Timeline events - show only if expanded */}
               {showLogs && (
-              <Box sx={{ p: 3, position: 'relative', flexGrow: 1, overflow: 'auto', maxHeight: 500 }}>
+                <Box sx={{ p: 3, position: 'relative', flexGrow: 1, overflow: 'auto', maxHeight: 500 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    {/* Loading state */}
+                    {logsLoading && (
+                      <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
+                        <CircularProgress size={28} />
+                      </Box>
+                    )}
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                  {/* Loading state */}
-                  {logsLoading && (
-                    <Box sx={{ display: 'flex', justifyContent: 'center', py: 4 }}>
-                      <CircularProgress size={28} />
-                    </Box>
-                  )}
+                    {/* Log entries */}
+                    {!logsLoading &&
+                      logs.map(log => {
+                        const meta = getEventMeta(log.eventType ?? undefined)
 
-                  {/* Log entries */}
-                  {!logsLoading && logs.map(log => {
-                    const meta = getEventMeta(log.eventType ?? undefined)
-
-                    return (
-                      <Box key={log.id} sx={{ display: 'flex', gap: 2, position: 'relative', zIndex: 1 }}>
-                        <Box sx={{ flexShrink: 0, pt: 0.5 }}>
-                          <Box sx={{
-                            width: 32, height: 32, borderRadius: '50%',
-                            bgcolor: `${meta.color}18`,
-                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                          }}>
-                            <i className={meta.icon} style={{ fontSize: 15, color: meta.color }} />
-                          </Box>
-                        </Box>
-                        <Box sx={{
-                          flex: 1, bgcolor: 'background.paper', borderRadius: 2, p: 2,
-                          border: '1px solid', borderColor: 'divider',
-                          transition: 'box-shadow 0.15s',
-                          '&:hover': { boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }
-                        }}>
-                          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 0.5 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <Typography variant='body2' fontWeight={700}>
-                                {meta.label}
-                              </Typography>
-                              <Box sx={{
-                                fontSize: '0.6rem', fontWeight: 700, textTransform: 'uppercase',
-                                px: 0.75, py: 0.15, borderRadius: 0.75, letterSpacing: '0.05em',
-                                bgcolor: `${meta.color}18`, color: meta.color
-                              }}>
-                                {log.eventType}
+                        return (
+                          <Box key={log.id} sx={{ display: 'flex', gap: 2, position: 'relative', zIndex: 1 }}>
+                            <Box sx={{ flexShrink: 0, pt: 0.5 }}>
+                              <Box
+                                sx={{
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: '50%',
+                                  bgcolor: `${meta.color}18`,
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center'
+                                }}
+                              >
+                                <i className={meta.icon} style={{ fontSize: 15, color: meta.color }} />
                               </Box>
                             </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                              <Typography variant='caption' color='text.secondary'>
-                                {log.performedAt
-                                  ? new Date(log.performedAt).toLocaleDateString('en-US', {
-                                      month: 'short', day: 'numeric', year: 'numeric'
-                                    })
-                                  : ''}
-                              </Typography>
-                              <Tooltip title='Delete entry'>
-                                <IconButton
-                                  size='small'
-                                  onClick={() => log.id && handleDeleteLog(log.id)}
-                                  sx={{ ml: 0.5, opacity: 0.5, '&:hover': { opacity: 1, color: 'error.main' } }}
-                                >
-                                  <i className='tabler-trash' style={{ fontSize: 14 }} />
-                                </IconButton>
-                              </Tooltip>
+                            <Box
+                              sx={{
+                                flex: 1,
+                                bgcolor: 'background.paper',
+                                borderRadius: 2,
+                                p: 2,
+                                border: '1px solid',
+                                borderColor: 'divider',
+                                transition: 'box-shadow 0.15s',
+                                '&:hover': { boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }
+                              }}
+                            >
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'flex-start',
+                                  mb: 0.5
+                                }}
+                              >
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                  <Typography variant='body2' fontWeight={700}>
+                                    {meta.label}
+                                  </Typography>
+                                  <Box
+                                    sx={{
+                                      fontSize: '0.6rem',
+                                      fontWeight: 700,
+                                      textTransform: 'uppercase',
+                                      px: 0.75,
+                                      py: 0.15,
+                                      borderRadius: 0.75,
+                                      letterSpacing: '0.05em',
+                                      bgcolor: `${meta.color}18`,
+                                      color: meta.color
+                                    }}
+                                  >
+                                    {log.eventType}
+                                  </Box>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                  <Typography variant='caption' color='text.secondary'>
+                                    {log.performedAt
+                                      ? new Date(log.performedAt).toLocaleDateString('en-US', {
+                                          month: 'short',
+                                          day: 'numeric',
+                                          year: 'numeric'
+                                        })
+                                      : ''}
+                                  </Typography>
+                                  <Tooltip title='Delete entry'>
+                                    <IconButton
+                                      size='small'
+                                      onClick={() => log.id && handleDeleteLog(log.id)}
+                                      sx={{ ml: 0.5, opacity: 0.5, '&:hover': { opacity: 1, color: 'error.main' } }}
+                                    >
+                                      <i className='tabler-trash' style={{ fontSize: 14 }} />
+                                    </IconButton>
+                                  </Tooltip>
+                                </Box>
+                              </Box>
+                              {log.note && (
+                                <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mb: 0.5 }}>
+                                  {log.note}
+                                </Typography>
+                              )}
+                              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+                                {(log.cost ?? 0) > 0 && (
+                                  <Typography variant='caption' color='text.secondary'>
+                                    Cost:{' '}
+                                    <Box component='span' fontWeight={700} color='text.primary'>
+                                      ${log.cost?.toLocaleString()}
+                                    </Box>
+                                  </Typography>
+                                )}
+                                {(log.quantity ?? 1) !== 1 && (
+                                  <Typography variant='caption' color='text.secondary'>
+                                    Qty:{' '}
+                                    <Box component='span' fontWeight={700} color='text.primary'>
+                                      {log.quantity}
+                                    </Box>
+                                  </Typography>
+                                )}
+                                {(log.cost ?? 0) > 0 && (log.quantity ?? 1) > 1 && (
+                                  <Typography variant='caption' color='text.secondary'>
+                                    Unit price:{' '}
+                                    <Box component='span' fontWeight={700} color='text.primary'>
+                                      $
+                                      {((log.cost ?? 0) / (log.quantity ?? 1)).toLocaleString(undefined, {
+                                        maximumFractionDigits: 2
+                                      })}
+                                    </Box>
+                                  </Typography>
+                                )}
+                                {log.brandName && (
+                                  <Typography variant='caption' color='text.secondary'>
+                                    Brand:{' '}
+                                    <Box component='span' fontWeight={600}>
+                                      {log.brandName}
+                                    </Box>
+                                  </Typography>
+                                )}
+                                {log.nextDueDate && (
+                                  <Typography variant='caption' color='text.secondary'>
+                                    Next due:{' '}
+                                    <Box component='span' fontWeight={600}>
+                                      {new Date(log.nextDueDate).toLocaleDateString('en-US', {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric'
+                                      })}
+                                    </Box>
+                                  </Typography>
+                                )}
+                              </Box>
                             </Box>
                           </Box>
-                          {log.note && (
-                            <Typography variant='caption' color='text.secondary' sx={{ display: 'block', mb: 0.5 }}>
-                              {log.note}
-                            </Typography>
-                          )}
-                          <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                            {(log.cost ?? 0) > 0 && (
-                              <Typography variant='caption' color='text.secondary'>
-                                Cost: <Box component='span' fontWeight={700} color='text.primary'>${log.cost?.toLocaleString()}</Box>
-                              </Typography>
-                            )}
-                            {(log.quantity ?? 1) !== 1 && (
-                              <Typography variant='caption' color='text.secondary'>
-                                Qty: <Box component='span' fontWeight={700} color='text.primary'>{log.quantity}</Box>
-                              </Typography>
-                            )}
-                            {(log.cost ?? 0) > 0 && (log.quantity ?? 1) > 1 && (
-                              <Typography variant='caption' color='text.secondary'>
-                                Unit price: <Box component='span' fontWeight={700} color='text.primary'>${((log.cost ?? 0) / (log.quantity ?? 1)).toLocaleString(undefined, { maximumFractionDigits: 2 })}</Box>
-                              </Typography>
-                            )}
-                            {log.brandName && (
-                              <Typography variant='caption' color='text.secondary'>
-                                Brand: <Box component='span' fontWeight={600}>{log.brandName}</Box>
-                              </Typography>
-                            )}
-                            {log.nextDueDate && (
-                              <Typography variant='caption' color='text.secondary'>
-                                Next due:{' '}
-                                <Box component='span' fontWeight={600}>
-                                  {new Date(log.nextDueDate).toLocaleDateString('en-US', {
-                                    month: 'short', day: 'numeric', year: 'numeric'
-                                  })}
-                                </Box>
-                              </Typography>
-                            )}
+                        )
+                      })}
+
+                    {/* System event (locked) — only in edit mode */}
+                    {isEditMode && asset && (
+                      <Box sx={{ display: 'flex', gap: 2, position: 'relative', zIndex: 1, opacity: 0.55 }}>
+                        <Box sx={{ flexShrink: 0, pt: 0.5 }}>
+                          <Box
+                            sx={{
+                              width: 32,
+                              height: 32,
+                              borderRadius: '50%',
+                              bgcolor: 'action.selected',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center'
+                            }}
+                          >
+                            <i className='tabler-lock' style={{ fontSize: 15, opacity: 0.6 }} />
                           </Box>
                         </Box>
-                      </Box>
-                    )
-                  })}
-
-                  {/* System event (locked) — only in edit mode */}
-                  {isEditMode && asset && (
-                    <Box sx={{ display: 'flex', gap: 2, position: 'relative', zIndex: 1, opacity: 0.55 }}>
-                      <Box sx={{ flexShrink: 0, pt: 0.5 }}>
-                        <Box sx={{
-                          width: 32, height: 32, borderRadius: '50%',
-                          bgcolor: 'action.selected',
-                          display: 'flex', alignItems: 'center', justifyContent: 'center'
-                        }}>
-                          <i className='tabler-lock' style={{ fontSize: 15, opacity: 0.6 }} />
-                        </Box>
-                      </Box>
-                      <Box sx={{
-                        flex: 1, bgcolor: 'action.hover', borderRadius: 2, p: 2,
-                        border: '1px dashed', borderColor: 'divider'
-                      }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                          <Typography variant='body2' fontWeight={700}>Asset Registered in System</Typography>
-                          <Typography variant='caption' color='text.secondary'>
-                            {asset.createdAt
-                              ? new Date(asset.createdAt).toLocaleDateString('en-US', {
-                                  month: 'short', day: 'numeric', year: 'numeric'
-                                })
-                              : ''}
+                        <Box
+                          sx={{
+                            flex: 1,
+                            bgcolor: 'action.hover',
+                            borderRadius: 2,
+                            p: 2,
+                            border: '1px dashed',
+                            borderColor: 'divider'
+                          }}
+                        >
+                          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                            <Typography variant='body2' fontWeight={700}>
+                              Asset Registered in System
+                            </Typography>
+                            <Typography variant='caption' color='text.secondary'>
+                              {asset.createdAt
+                                ? new Date(asset.createdAt).toLocaleDateString('en-US', {
+                                    month: 'short',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                  })
+                                : ''}
+                            </Typography>
+                          </Box>
+                          <Typography variant='caption' color='text.secondary' sx={{ fontStyle: 'italic' }}>
+                            System Event — Cannot be modified.
                           </Typography>
                         </Box>
-                        <Typography variant='caption' color='text.secondary' sx={{ fontStyle: 'italic' }}>
-                          System Event — Cannot be modified.
+                      </Box>
+                    )}
+
+                    {/* Empty state */}
+                    {!logsLoading && logs.length === 0 && !isEditMode && (
+                      <Box sx={{ textAlign: 'center', py: 5, opacity: 0.5 }}>
+                        <i className='tabler-history' style={{ fontSize: 36, opacity: 0.3 }} />
+                        <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
+                          No log entries yet.
                         </Typography>
                       </Box>
-                    </Box>
-                  )}
-
-                  {/* Empty state */}
-                  {!logsLoading && logs.length === 0 && !isEditMode && (
-                    <Box sx={{ textAlign: 'center', py: 5, opacity: 0.5 }}>
-                      <i className='tabler-history' style={{ fontSize: 36, opacity: 0.3 }} />
-                      <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
-                        No log entries yet.
-                      </Typography>
-                    </Box>
-                  )}
+                    )}
+                  </Box>
                 </Box>
-              </Box>
               )}
             </Card>
           </Grid>
@@ -1276,7 +1494,9 @@ return (
         {/* ── Manage Attachments ───────────────────────────────────────────── */}
         <Box sx={{ mb: 6 }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant='h6' fontWeight={700}>Manage Attachments</Typography>
+            <Typography variant='h6' fontWeight={700}>
+              Manage Attachments
+            </Typography>
             <Typography variant='body2' color='text.secondary'>
               {attachments.length > 0 ? `${attachments.length} file(s)` : 'No attachments yet'}
             </Typography>
@@ -1292,18 +1512,24 @@ return (
             onChange={handleAttachmentUpload}
           />
 
-          <Box sx={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
-            gap: 2
-          }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+              gap: 2
+            }}
+          >
             {/* Real attachment cards */}
             {attachments.map(item => (
               <Box
                 key={item.id}
                 sx={{
-                  aspectRatio: '4/3', borderRadius: 3, overflow: 'hidden',
-                  bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider',
+                  aspectRatio: '4/3',
+                  borderRadius: 3,
+                  overflow: 'hidden',
+                  bgcolor: 'action.hover',
+                  border: '1px solid',
+                  borderColor: 'divider',
                   position: 'relative',
                   '&:hover .attachment-actions': { opacity: 1 },
                   cursor: 'pointer'
@@ -1317,25 +1543,46 @@ return (
                     sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 ) : (
-                  <Box sx={{
-                    width: '100%', height: '100%',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3
-                  }}>
+                  <Box
+                    sx={{
+                      width: '100%',
+                      height: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      opacity: 0.3
+                    }}
+                  >
                     <i className='tabler-file-description' style={{ fontSize: 48 }} />
                   </Box>
                 )}
 
-                <Box className='attachment-actions' sx={{
-                  position: 'absolute', inset: 0,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
-                  opacity: 0, transition: 'opacity 0.2s', bgcolor: 'rgba(0,0,0,0.45)'
-                }}>
+                <Box
+                  className='attachment-actions'
+                  sx={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 1,
+                    opacity: 0,
+                    transition: 'opacity 0.2s',
+                    bgcolor: 'rgba(0,0,0,0.45)'
+                  }}
+                >
                   <Box
                     onClick={() => handleOpenPreview(item)}
                     sx={{
-                      width: 36, height: 36, borderRadius: '50%', bgcolor: 'rgba(30,30,50,0.9)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      cursor: 'pointer', transition: 'transform 0.15s',
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      bgcolor: 'rgba(30,30,50,0.9)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: 'transform 0.15s',
                       '&:hover': { transform: 'scale(1.1)' }
                     }}
                   >
@@ -1344,9 +1591,15 @@ return (
                   <Box
                     onClick={() => handleAttachmentDelete(item)}
                     sx={{
-                      width: 36, height: 36, borderRadius: '50%', bgcolor: 'error.main',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      cursor: 'pointer', transition: 'transform 0.15s',
+                      width: 36,
+                      height: 36,
+                      borderRadius: '50%',
+                      bgcolor: 'error.main',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: 'transform 0.15s',
                       '&:hover': { transform: 'scale(1.1)' }
                     }}
                   >
@@ -1354,10 +1607,17 @@ return (
                   </Box>
                 </Box>
 
-                <Box sx={{
-                  position: 'absolute', bottom: 0, left: 0, right: 0,
-                  p: 1.5, bgcolor: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)'
-                }}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    p: 1.5,
+                    bgcolor: 'rgba(0,0,0,0.55)',
+                    backdropFilter: 'blur(4px)'
+                  }}
+                >
                   <Typography variant='caption' sx={{ color: 'white', fontWeight: 600 }} noWrap>
                     {item.fileName}
                   </Typography>
@@ -1369,13 +1629,20 @@ return (
             <Box
               onClick={() => !attachmentUploading && isEditMode && attachmentInputRef.current?.click()}
               sx={{
-                aspectRatio: '4/3', borderRadius: 3,
-                border: '2px dashed', borderColor: !isEditMode || attachmentUploading ? 'text.disabled' : 'primary.main',
-                bgcolor: 'primary.50', opacity: !isEditMode || attachmentUploading ? 0.5 : 0.7,
-                display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center',
-                gap: 1.5, cursor: !isEditMode || attachmentUploading ? 'not-allowed' : 'pointer',
-                p: 2, textAlign: 'center',
+                aspectRatio: '4/3',
+                borderRadius: 3,
+                border: '2px dashed',
+                borderColor: !isEditMode || attachmentUploading ? 'text.disabled' : 'primary.main',
+                bgcolor: 'primary.50',
+                opacity: !isEditMode || attachmentUploading ? 0.5 : 0.7,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 1.5,
+                cursor: !isEditMode || attachmentUploading ? 'not-allowed' : 'pointer',
+                p: 2,
+                textAlign: 'center',
                 transition: 'all 0.2s',
                 '&:hover': isEditMode && !attachmentUploading ? { opacity: 1, bgcolor: 'primary.100' } : {}
               }}
@@ -1384,16 +1651,31 @@ return (
                 <CircularProgress size={28} color='primary' />
               ) : (
                 <>
-                  <Box sx={{
-                    width: 44, height: 44, borderRadius: '50%',
-                    bgcolor: 'primary.main', opacity: 0.15,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    mx: 'auto'
-                  }}>
-                    <i className='tabler-cloud-upload' style={{ fontSize: 22, color: 'var(--mui-palette-primary-main)' }} />
+                  <Box
+                    sx={{
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      bgcolor: 'primary.main',
+                      opacity: 0.15,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mx: 'auto'
+                    }}
+                  >
+                    <i
+                      className='tabler-cloud-upload'
+                      style={{ fontSize: 22, color: 'var(--mui-palette-primary-main)' }}
+                    />
                   </Box>
                   <Box>
-                    <Typography variant='caption' color={isEditMode ? 'primary' : 'text.secondary'} fontWeight={700} display='block'>
+                    <Typography
+                      variant='caption'
+                      color={isEditMode ? 'primary' : 'text.secondary'}
+                      fontWeight={700}
+                      display='block'
+                    >
                       {isEditMode ? 'Click to Upload' : 'Save first to upload'}
                     </Typography>
                     <Typography variant='caption' color='text.secondary'>
@@ -1415,7 +1697,9 @@ return (
         fullWidth
         slotProps={{ paper: { sx: { borderRadius: 3 } } }}
       >
-        <DialogTitle sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+        <DialogTitle
+          sx={{ fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}
+        >
           <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <i className='tabler-file' style={{ fontSize: 20, color: 'var(--mui-palette-primary-main)' }} />
             {previewItem?.fileName}
@@ -1455,7 +1739,14 @@ return (
           )}
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2.5, gap: 1 }}>
-          <Button component='a' href={previewItem?.downloadUrl} target='_blank' rel='noopener noreferrer' variant='outlined' startIcon={<i className='tabler-download' style={{ fontSize: 16 }} />}>
+          <Button
+            component='a'
+            href={previewItem?.downloadUrl}
+            target='_blank'
+            rel='noopener noreferrer'
+            variant='outlined'
+            startIcon={<i className='tabler-download' style={{ fontSize: 16 }} />}
+          >
             Download
           </Button>
           <Button onClick={() => setPreviewOpen(false)}>Close</Button>
@@ -1565,9 +1856,11 @@ return (
             onClick={handleCreateLog}
             disabled={createLogMutation.isPending}
             startIcon={
-              createLogMutation.isPending
-                ? <CircularProgress size={16} color='inherit' />
-                : <i className='tabler-check' style={{ fontSize: 16 }} />
+              createLogMutation.isPending ? (
+                <CircularProgress size={16} color='inherit' />
+              ) : (
+                <i className='tabler-check' style={{ fontSize: 16 }} />
+              )
             }
             sx={{ fontWeight: 700, borderRadius: 1.5 }}
           >

@@ -10,13 +10,13 @@ import Loading from './Loading'
 
 /**
  * AuthRedirect - Redirects to Gateway SSO check instead of login
- * 
+ *
  * When user lands on a protected page without local NextAuth session:
  * 1. Redirect to Gateway check-sso endpoint
  * 2. Gateway checks AlfredSession cookie
  * 3. If authenticated: redirects back with sso_token param
  * 4. If not: redirects back with sso_error param
- * 
+ *
  * The callback is handled by the login page
  */
 const AuthRedirect = () => {

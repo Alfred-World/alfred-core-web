@@ -66,7 +66,6 @@ const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
         logoTextRef.current.classList.remove('hidden')
       }
     }
-
   }, [isHovered, layout, isBreakpointReached])
 
   return (

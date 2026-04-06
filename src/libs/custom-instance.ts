@@ -81,7 +81,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     const fullUrl = url.startsWith('http') ? url : `${serverGatewayUrl}${url}`
 
     const response = await fetch(fullUrl, { ...options })
-    const body = await response.json() as T
+    const body = (await response.json()) as T
 
     if (shouldThrowHookError && (!response.ok || isApiEnvelopeFailure(body))) {
       throw body
@@ -99,7 +99,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
 
   const response = await fetch(proxyUrl, {
     ...options,
-    credentials: 'include', // Sends HttpOnly session cookie automatically
+    credentials: 'include' // Sends HttpOnly session cookie automatically
   })
 
   // The proxy already handles token refresh server-side.
@@ -114,7 +114,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     }
 
     // Check if the response body indicates a permission error (vs session expired)
-    const body = await response.json() as T
+    const body = (await response.json()) as T
     const apiBody = body as { errors?: Array<{ code?: string }> }
     const isPermissionError = apiBody.errors?.some(e => e.code !== 'UNAUTHORIZED')
 
@@ -129,7 +129,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     return redirectToLogin()
   }
 
-  const body = await response.json() as T
+  const body = (await response.json()) as T
 
   if (shouldThrowHookError && (!response.ok || isApiEnvelopeFailure(body))) {
     throw body

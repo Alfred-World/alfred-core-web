@@ -10,12 +10,14 @@ function isPublicPath(pathname: string): boolean {
 }
 
 function isPrivatePath(pathname: string): boolean {
-  return pathname.startsWith('/assets')
-    || pathname.startsWith('/brands')
-    || pathname.startsWith('/categories')
-    || pathname.startsWith('/units')
-    || pathname.startsWith('/commodities')
-    || pathname.startsWith('/ai-chat')
+  return (
+    pathname.startsWith('/assets') ||
+    pathname.startsWith('/brands') ||
+    pathname.startsWith('/categories') ||
+    pathname.startsWith('/units') ||
+    pathname.startsWith('/commodities') ||
+    pathname.startsWith('/ai-chat')
+  )
 }
 
 export async function proxy(request: NextRequest) {
@@ -35,7 +37,6 @@ export async function proxy(request: NextRequest) {
   }
 
   if (isPublicPath(pathname) && isAuthenticated) {
-
     return NextResponse.redirect(new URL('/', request.url))
   }
 

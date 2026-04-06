@@ -30,16 +30,18 @@ const BrandDirectory = () => {
   const pageSize = 10
 
   // Fetch brand-type categories from API
-  const { data: categoriesData, isLoading: loadingCategories, isError: isCategoriesError, error: categoriesError } = useGetApiV1Categories({
+  const {
+    data: categoriesData,
+    isLoading: loadingCategories,
+    isError: isCategoriesError,
+    error: categoriesError
+  } = useGetApiV1Categories({
     filter: "type == 'Brand'",
     pageSize: 100,
     sort: 'name'
   })
 
-  const categories = useMemo<CategoryDto[]>(
-    () => categoriesData?.result?.items ?? [],
-    [categoriesData]
-  )
+  const categories = useMemo<CategoryDto[]>(() => categoriesData?.result?.items ?? [], [categoriesData])
 
   // Build DSL filter (search only — category filtering is done via categoryId param)
   const filter = useMemo(() => {
@@ -51,7 +53,12 @@ const BrandDirectory = () => {
     return builder.build() || undefined
   }, [search])
 
-  const { data, isLoading, isError: isBrandsError, error: brandsError } = useGetApiV1Brands({
+  const {
+    data,
+    isLoading,
+    isError: isBrandsError,
+    error: brandsError
+  } = useGetApiV1Brands({
     page,
     pageSize,
     filter,
@@ -98,7 +105,11 @@ const BrandDirectory = () => {
             Manage, organize, and track all your partner brands in one place.
           </Typography>
         </Box>
-        <Button variant='contained' startIcon={<i className='tabler-plus' />} onClick={() => router.push('/brands/new')}>
+        <Button
+          variant='contained'
+          startIcon={<i className='tabler-plus' />}
+          onClick={() => router.push('/brands/new')}
+        >
           Add New Brand
         </Button>
       </Box>
@@ -135,13 +146,7 @@ const BrandDirectory = () => {
           }}
           loading={loadingCategories}
           sx={{ minWidth: 220 }}
-          renderInput={params => (
-            <TextField
-              {...params}
-              label='Category'
-              placeholder='All Categories'
-            />
-          )}
+          renderInput={params => <TextField {...params} label='Category' placeholder='All Categories' />}
         />
       </Box>
 

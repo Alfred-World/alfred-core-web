@@ -67,14 +67,16 @@ const CustomerCommissionTab = ({ memberId }: CustomerCommissionTabProps) => {
       onSuccess: async response => {
         if (!response.success) {
           toast.error(response.errors?.[0]?.message || 'Failed to process payout')
-          
-return
+
+          return
         }
 
         const result = response.result
 
         if (memberId) {
-          await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesCommissionsMemberIdQueryKey(memberId) })
+          await queryClient.invalidateQueries({
+            queryKey: getGetApiV1AccountSalesCommissionsMemberIdQueryKey(memberId)
+          })
         }
 
         await txQuery.refetch()
@@ -123,7 +125,10 @@ return
       {/* Summary Cards */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr 1fr', md: '1fr 1fr 1fr' }, gap: 2 }}>
         <Box sx={{ p: 2.5, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
-          <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          <Typography
+            variant='caption'
+            sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+          >
             Available Balance
           </Typography>
           <Typography
@@ -136,7 +141,10 @@ return
         </Box>
 
         <Box sx={{ p: 2.5, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
-          <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          <Typography
+            variant='caption'
+            sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+          >
             Total Earned
           </Typography>
           <Typography variant='h5' fontWeight={800} sx={{ mt: 1 }}>
@@ -145,7 +153,10 @@ return
         </Box>
 
         <Box sx={{ p: 2.5, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
-          <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}>
+          <Typography
+            variant='caption'
+            sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 0.5, textTransform: 'uppercase' }}
+          >
             Total Paid Out
           </Typography>
           <Typography variant='h5' fontWeight={800} sx={{ mt: 1, color: 'text.secondary' }}>
@@ -179,7 +190,11 @@ return
         <TableContainer sx={{ bgcolor: 'transparent', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
           <Table size='small'>
             <TableHead>
-              <TableRow sx={{ '& th': { color: 'text.secondary', fontWeight: 700, borderColor: 'divider', borderBottomWidth: 2 } }}>
+              <TableRow
+                sx={{
+                  '& th': { color: 'text.secondary', fontWeight: 700, borderColor: 'divider', borderBottomWidth: 2 }
+                }}
+              >
                 <TableCell>TYPE</TableCell>
                 <TableCell>ORDER</TableCell>
                 <TableCell>NOTE</TableCell>
@@ -199,7 +214,9 @@ return
               {!txQuery.isLoading && transactions.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} sx={{ py: 3 }}>
-                    <Typography variant='body2' color='text.secondary'>No transactions yet.</Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      No transactions yet.
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}
@@ -239,7 +256,8 @@ return
                     </TableCell>
                     <TableCell align='right'>
                       <Typography variant='body2' fontWeight={700} color={isCredit ? 'success.main' : 'error.main'}>
-                        {isCredit ? '+' : ''}{tx.amount?.toLocaleString('en-US')} ₫
+                        {isCredit ? '+' : ''}
+                        {tx.amount?.toLocaleString('en-US')} ₫
                       </Typography>
                     </TableCell>
                     <TableCell align='right'>

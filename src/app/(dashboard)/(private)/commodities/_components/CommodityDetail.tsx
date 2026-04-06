@@ -53,7 +53,7 @@ const assetClassConfig: Record<string, { label: string; icon: string; hex: strin
 }
 
 const typeConfig: Record<string, { hex: string; bg: string }> = {
-  Buy:  { hex: '#10b981', bg: '#10b98118' },
+  Buy: { hex: '#10b981', bg: '#10b98118' },
   Sell: { hex: '#ef4444', bg: '#ef444418' }
 }
 
@@ -61,7 +61,12 @@ const formatCurrency = (n?: number | null, compact = false) => {
   if (n === undefined || n === null) return '—'
 
   if (compact && Math.abs(n) >= 1_000_000) {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 2 }).format(n)
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 2
+    }).format(n)
   }
 
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(n)
@@ -74,11 +79,11 @@ const formatDate = (s?: string | null) =>
 const txnSchema = v.object({
   transactionType: v.picklist([...TRANSACTION_TYPES], 'Select type'),
   transactionDate: v.pipe(v.string(), v.nonEmpty('Required')),
-  quantity:        v.pipe(v.number(), v.minValue(0.0001, 'Must be > 0')),
-  unitId:          v.pipe(v.string(), v.nonEmpty('Required')),
-  pricePerUnit:    v.pipe(v.number(), v.minValue(0)),
-  feeAmount:       v.optional(v.pipe(v.number(), v.minValue(0))),
-  notes:           v.optional(v.pipe(v.string(), v.maxLength(500)))
+  quantity: v.pipe(v.number(), v.minValue(0.0001, 'Must be > 0')),
+  unitId: v.pipe(v.string(), v.nonEmpty('Required')),
+  pricePerUnit: v.pipe(v.number(), v.minValue(0)),
+  feeAmount: v.optional(v.pipe(v.number(), v.minValue(0))),
+  notes: v.optional(v.pipe(v.string(), v.maxLength(500)))
 })
 
 type TxnFormData = v.InferOutput<typeof txnSchema>
@@ -111,16 +116,19 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
   }
 
   const { data: txnData, isLoading: txnLoading } = useGetApiV1CommoditiesCommodityIdTransactions(
-    commodityId, txnParams, { query: { staleTime: 60_000 } }
+    commodityId,
+    txnParams,
+    { query: { staleTime: 60_000 } }
   )
 
   const transactions = txnData?.result?.items ?? []
-  const totalCount  = txnData?.result?.total ?? 0
-  const totalPages  = txnData?.result?.totalPages ?? 1
+  const totalCount = txnData?.result?.total ?? 0
+  const totalPages = txnData?.result?.totalPages ?? 1
 
   // All transactions for KPI (page 1 large page just for stats)
   const { data: allTxnData } = useGetApiV1CommoditiesCommodityIdTransactions(
-    commodityId, { page: 1, pageSize: 999, sort: '-transactionDate' },
+    commodityId,
+    { page: 1, pageSize: 999, sort: '-transactionDate' },
     { query: { staleTime: 60_000 } }
   )
 
@@ -131,15 +139,15 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
 
   // ─── KPI Calculations ─────────────────────────────────────────────────────────
   const kpi = useMemo(() => {
-    const buys  = allTxns.filter(t => t.transactionType === 'Buy')
+    const buys = allTxns.filter(t => t.transactionType === 'Buy')
     const sells = allTxns.filter(t => t.transactionType === 'Sell')
-    const totalBuyValue  = buys.reduce((s, t) => s + (t.totalAmount ?? 0), 0)
+    const totalBuyValue = buys.reduce((s, t) => s + (t.totalAmount ?? 0), 0)
     const totalSellValue = sells.reduce((s, t) => s + (t.totalAmount ?? 0), 0)
-    const totalFees      = allTxns.reduce((s, t) => s + (t.feeAmount ?? 0), 0)
-    const netValue       = totalBuyValue - totalSellValue
+    const totalFees = allTxns.reduce((s, t) => s + (t.feeAmount ?? 0), 0)
+    const netValue = totalBuyValue - totalSellValue
     const now = new Date()
 
-    const monthlyTxns    = allTxns.filter(t => {
+    const monthlyTxns = allTxns.filter(t => {
       const d = t.transactionDate ? new Date(t.transactionDate) : null
 
       return d && d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
@@ -153,7 +161,11 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
   const deleteTxn = useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId()
 
   const {
-    control, handleSubmit, watch, setValue, reset,
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
     formState: { errors, isSubmitting }
   } = useForm<TxnFormData>({
     resolver: valibotResolver(txnSchema),
@@ -168,7 +180,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
     }
   })
 
-  const qty   = watch('quantity') ?? 0
+  const qty = watch('quantity') ?? 0
   const price = watch('pricePerUnit') ?? 0
   const total = qty * price
 
@@ -191,7 +203,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
         notes: data.notes || null
       }
     })
-    await queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId) })
+    await queryClient.invalidateQueries({
+      queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
+    })
     setTxnDialogOpen(false)
     reset()
   }
@@ -199,7 +213,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
   const handleDeleteTxn = async (txn: InvestmentTransactionDto) => {
     if (!txn.id) return
     await deleteTxn.mutateAsync({ commodityId, transactionId: txn.id })
-    await queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId) })
+    await queryClient.invalidateQueries({
+      queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
+    })
   }
 
   const cfg = assetClassConfig[commodity?.assetClass ?? ''] ?? assetClassConfig['Metal']
@@ -210,7 +226,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
         <Skeleton height={32} width='25%' />
         <Skeleton height={60} width='40%' />
         <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
-          {[1,2,3,4].map(i => <Skeleton key={i} height={110} variant='rounded' />)}
+          {[1, 2, 3, 4].map(i => (
+            <Skeleton key={i} height={110} variant='rounded' />
+          ))}
         </Box>
         <Skeleton height={400} variant='rounded' />
       </Box>
@@ -221,7 +239,6 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-
       {/* ── Breadcrumb ───────────────────────────────────────────── */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
         {[
@@ -245,14 +262,23 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
       </Box>
 
       {/* ── Header ───────────────────────────────────────────────── */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 3 }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 3 }}
+      >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box sx={{
-              width: 48, height: 48, borderRadius: 2,
-              bgcolor: alpha(cfg.hex, 0.15),
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-            }}>
+            <Box
+              sx={{
+                width: 48,
+                height: 48,
+                borderRadius: 2,
+                bgcolor: alpha(cfg.hex, 0.15),
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: 0
+              }}
+            >
               <i className={cfg.icon} style={{ fontSize: 24, color: cfg.hex }} />
             </Box>
             <Box>
@@ -260,10 +286,15 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
                 <Typography variant='h3' fontWeight={900} letterSpacing={-1} sx={{ lineHeight: 1.1 }}>
                   {commodity.name}
                 </Typography>
-                <Box sx={{
-                  px: 1.5, py: 0.5, borderRadius: 1,
-                  bgcolor: alpha(cfg.hex, 0.12), border: `1px solid ${alpha(cfg.hex, 0.3)}`
-                }}>
+                <Box
+                  sx={{
+                    px: 1.5,
+                    py: 0.5,
+                    borderRadius: 1,
+                    bgcolor: alpha(cfg.hex, 0.12),
+                    border: `1px solid ${alpha(cfg.hex, 0.3)}`
+                  }}
+                >
                   <Typography variant='caption' fontWeight={800} sx={{ color: cfg.hex, letterSpacing: 0.5 }}>
                     {commodity.assetClass?.toUpperCase()}
                   </Typography>
@@ -304,9 +335,21 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
 
       {/* ── KPI Cards ────────────────────────────────────────────── */}
       <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
-        <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Box
+          sx={{
+            px: 3,
+            py: 2.5,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1.5
+          }}
+        >
           <i className='tabler-chart-bar' style={{ fontSize: 20, color: cfg.hex }} />
-          <Typography variant='subtitle1' fontWeight={700}>Portfolio Overview</Typography>
+          <Typography variant='subtitle1' fontWeight={700}>
+            Portfolio Overview
+          </Typography>
         </Box>
         <Box sx={{ p: 3, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
           {/* Total Buy Value */}
@@ -314,21 +357,36 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             <Box sx={{ position: 'absolute', right: 0, top: -8, opacity: 0.07 }}>
               <i className='tabler-shopping-cart' style={{ fontSize: 52, color: cfg.hex }} />
             </Box>
-            <Typography variant='body2' color='text.secondary' fontWeight={500}>Total Invested</Typography>
-            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}>{formatCurrency(kpi.totalBuyValue, true)}</Typography>
-            <Typography variant='caption' color='text.disabled'>{allTxns.filter(t => t.transactionType === 'Buy').length} buy orders</Typography>
+            <Typography variant='body2' color='text.secondary' fontWeight={500}>
+              Total Invested
+            </Typography>
+            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}>
+              {formatCurrency(kpi.totalBuyValue, true)}
+            </Typography>
+            <Typography variant='caption' color='text.disabled'>
+              {allTxns.filter(t => t.transactionType === 'Buy').length} buy orders
+            </Typography>
           </Box>
 
           {/* Net Position */}
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75, position: 'relative' }}>
             <Box sx={{ position: 'absolute', right: 0, top: -8, opacity: 0.07 }}>
-              <i className='tabler-trending-up' style={{ fontSize: 52, color: kpi.netValue >= 0 ? '#10b981' : '#ef4444' }} />
+              <i
+                className='tabler-trending-up'
+                style={{ fontSize: 52, color: kpi.netValue >= 0 ? '#10b981' : '#ef4444' }}
+              />
             </Box>
-            <Typography variant='body2' color='text.secondary' fontWeight={500}>Net Position</Typography>
-            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}
+            <Typography variant='body2' color='text.secondary' fontWeight={500}>
+              Net Position
+            </Typography>
+            <Typography
+              variant='h5'
+              fontWeight={700}
+              letterSpacing={-0.5}
               sx={{ color: kpi.netValue >= 0 ? '#10b981' : '#ef4444' }}
             >
-              {kpi.netValue >= 0 ? '+' : ''}{formatCurrency(kpi.netValue, true)}
+              {kpi.netValue >= 0 ? '+' : ''}
+              {formatCurrency(kpi.netValue, true)}
             </Typography>
             <Typography variant='caption' color='text.disabled'>
               {formatCurrency(kpi.totalSellValue, true)} recovered
@@ -340,9 +398,15 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             <Box sx={{ position: 'absolute', right: 0, top: -8, opacity: 0.07 }}>
               <i className='tabler-receipt' style={{ fontSize: 52, color: '#f59e0b' }} />
             </Box>
-            <Typography variant='body2' color='text.secondary' fontWeight={500}>Total Fees</Typography>
-            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}>{formatCurrency(kpi.totalFees, true)}</Typography>
-            <Typography variant='caption' color='text.disabled'>All-time transaction fees</Typography>
+            <Typography variant='body2' color='text.secondary' fontWeight={500}>
+              Total Fees
+            </Typography>
+            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}>
+              {formatCurrency(kpi.totalFees, true)}
+            </Typography>
+            <Typography variant='caption' color='text.disabled'>
+              All-time transaction fees
+            </Typography>
           </Box>
 
           {/* Transactions */}
@@ -350,9 +414,15 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             <Box sx={{ position: 'absolute', right: 0, top: -8, opacity: 0.07 }}>
               <i className='tabler-list-details' style={{ fontSize: 52, color: '#6366f1' }} />
             </Box>
-            <Typography variant='body2' color='text.secondary' fontWeight={500}>Monthly Txns</Typography>
-            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}>{kpi.monthlyTxns}</Typography>
-            <Typography variant='caption' color='text.disabled'>{kpi.totalCount} all-time transactions</Typography>
+            <Typography variant='body2' color='text.secondary' fontWeight={500}>
+              Monthly Txns
+            </Typography>
+            <Typography variant='h5' fontWeight={700} letterSpacing={-0.5}>
+              {kpi.monthlyTxns}
+            </Typography>
+            <Typography variant='caption' color='text.disabled'>
+              {kpi.totalCount} all-time transactions
+            </Typography>
           </Box>
         </Box>
       </Card>
@@ -360,13 +430,29 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
       {/* ── Transaction Ledger Table ──────────────────────────────── */}
       <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
         {/* Table header */}
-        <Box sx={{ px: 3, py: 2.5, borderBottom: '1px solid', borderColor: 'divider', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+        <Box
+          sx={{
+            px: 3,
+            py: 2.5,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: 2
+          }}
+        >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <i className='tabler-history' style={{ fontSize: 20, color: 'var(--mui-palette-primary-main)' }} />
-            <Typography variant='subtitle1' fontWeight={700}>Transaction History</Typography>
+            <Typography variant='subtitle1' fontWeight={700}>
+              Transaction History
+            </Typography>
             {totalCount > 0 && (
               <Box sx={{ px: 1, py: 0.25, borderRadius: 1, bgcolor: 'action.selected' }}>
-                <Typography variant='caption' fontWeight={700}>{totalCount}</Typography>
+                <Typography variant='caption' fontWeight={700}>
+                  {totalCount}
+                </Typography>
               </Box>
             )}
           </Box>
@@ -375,7 +461,10 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             {/* Type filter */}
             <Select
               value={typeFilter}
-              onChange={e => { setTypeFilter(e.target.value as 'All' | 'Buy' | 'Sell'); setPage(1) }}
+              onChange={e => {
+                setTypeFilter(e.target.value as 'All' | 'Buy' | 'Sell')
+                setPage(1)
+              }}
               size='small'
               sx={{ fontSize: '0.8rem', minWidth: 90, '.MuiSelect-select': { py: 0.75, px: 1.5 } }}
             >
@@ -402,97 +491,141 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             <TableHead>
               <TableRow sx={{ bgcolor: 'action.hover' }}>
                 {['Date', 'Type', 'Quantity', 'Price / Unit', 'Total Amount', 'Fee', 'Notes', ''].map(h => (
-                  <TableCell key={h} sx={{ fontWeight: 700, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', py: 1.5, whiteSpace: 'nowrap' }}>
+                  <TableCell
+                    key={h}
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: '0.72rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      py: 1.5,
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
                     {h}
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {txnLoading && [1,2,3,4,5].map(i => (
-                <TableRow key={i}>
-                  {[1,2,3,4,5,6,7,8].map(j => (
-                    <TableCell key={j}><Skeleton height={20} /></TableCell>
-                  ))}
-                </TableRow>
-              ))}
+              {txnLoading &&
+                [1, 2, 3, 4, 5].map(i => (
+                  <TableRow key={i}>
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map(j => (
+                      <TableCell key={j}>
+                        <Skeleton height={20} />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
               {!txnLoading && transactions.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={8} sx={{ py: 6, textAlign: 'center' }}>
                     <Box sx={{ opacity: 0.4 }}>
                       <i className='tabler-inbox' style={{ fontSize: 36 }} />
-                      <Typography variant='body2' sx={{ mt: 1 }}>No transactions yet.</Typography>
+                      <Typography variant='body2' sx={{ mt: 1 }}>
+                        No transactions yet.
+                      </Typography>
                     </Box>
                   </TableCell>
                 </TableRow>
               )}
-              {!txnLoading && transactions.map((txn) => {
-                const tc = typeConfig[txn.transactionType ?? ''] ?? typeConfig['Buy']
+              {!txnLoading &&
+                transactions.map(txn => {
+                  const tc = typeConfig[txn.transactionType ?? ''] ?? typeConfig['Buy']
 
-                return (
-                  <TableRow key={txn.id}
-                    sx={{ '&:hover': { bgcolor: 'action.hover' }, transition: 'background 0.15s' }}
-                  >
-                    <TableCell sx={{ whiteSpace: 'nowrap', fontSize: '0.815rem' }}>
-                      {formatDate(txn.transactionDate)}
-                    </TableCell>
-                    <TableCell>
-                      <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, px: 1, py: 0.35, borderRadius: 1, bgcolor: tc.bg }}>
-                        <i
-                          className={txn.transactionType === 'Buy' ? 'tabler-arrow-down-left' : 'tabler-arrow-up-right'}
-                          style={{ fontSize: 12, color: tc.hex }}
-                        />
-                        <Typography variant='caption' fontWeight={700} sx={{ color: tc.hex, letterSpacing: 0.3 }}>
-                          {txn.transactionType?.toUpperCase()}
-                        </Typography>
-                      </Box>
-                    </TableCell>
-                    <TableCell sx={{ fontSize: '0.815rem', fontWeight: 500 }}>
-                      {txn.quantity?.toLocaleString()} <Typography component='span' variant='caption' color='text.secondary'>{txn.unitCode}</Typography>
-                    </TableCell>
-                    <TableCell sx={{ fontSize: '0.815rem' }}>
-                      {formatCurrency(txn.pricePerUnit)}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: '0.815rem', fontWeight: 700 }}>
-                      {formatCurrency(txn.totalAmount)}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: '0.815rem', color: 'text.secondary' }}>
-                      {txn.feeAmount ? formatCurrency(txn.feeAmount) : '—'}
-                    </TableCell>
-                    <TableCell sx={{ fontSize: '0.815rem', color: 'text.secondary', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {txn.notes || '—'}
-                    </TableCell>
-                    <TableCell sx={{ width: 40, pr: 2 }}>
-                      <Tooltip title='Delete'>
-                        <IconButton
-                          size='small'
-                          onClick={() => handleDeleteTxn(txn)}
-                          sx={{ opacity: 0.4, '&:hover': { opacity: 1, color: 'error.main' } }}
+                  return (
+                    <TableRow
+                      key={txn.id}
+                      sx={{ '&:hover': { bgcolor: 'action.hover' }, transition: 'background 0.15s' }}
+                    >
+                      <TableCell sx={{ whiteSpace: 'nowrap', fontSize: '0.815rem' }}>
+                        {formatDate(txn.transactionDate)}
+                      </TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: 0.5,
+                            px: 1,
+                            py: 0.35,
+                            borderRadius: 1,
+                            bgcolor: tc.bg
+                          }}
                         >
-                          <i className='tabler-trash' style={{ fontSize: 15 }} />
-                        </IconButton>
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+                          <i
+                            className={
+                              txn.transactionType === 'Buy' ? 'tabler-arrow-down-left' : 'tabler-arrow-up-right'
+                            }
+                            style={{ fontSize: 12, color: tc.hex }}
+                          />
+                          <Typography variant='caption' fontWeight={700} sx={{ color: tc.hex, letterSpacing: 0.3 }}>
+                            {txn.transactionType?.toUpperCase()}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell sx={{ fontSize: '0.815rem', fontWeight: 500 }}>
+                        {txn.quantity?.toLocaleString()}{' '}
+                        <Typography component='span' variant='caption' color='text.secondary'>
+                          {txn.unitCode}
+                        </Typography>
+                      </TableCell>
+                      <TableCell sx={{ fontSize: '0.815rem' }}>{formatCurrency(txn.pricePerUnit)}</TableCell>
+                      <TableCell sx={{ fontSize: '0.815rem', fontWeight: 700 }}>
+                        {formatCurrency(txn.totalAmount)}
+                      </TableCell>
+                      <TableCell sx={{ fontSize: '0.815rem', color: 'text.secondary' }}>
+                        {txn.feeAmount ? formatCurrency(txn.feeAmount) : '—'}
+                      </TableCell>
+                      <TableCell
+                        sx={{
+                          fontSize: '0.815rem',
+                          color: 'text.secondary',
+                          maxWidth: 180,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap'
+                        }}
+                      >
+                        {txn.notes || '—'}
+                      </TableCell>
+                      <TableCell sx={{ width: 40, pr: 2 }}>
+                        <Tooltip title='Delete'>
+                          <IconButton
+                            size='small'
+                            onClick={() => handleDeleteTxn(txn)}
+                            sx={{ opacity: 0.4, '&:hover': { opacity: 1, color: 'error.main' } }}
+                          >
+                            <i className='tabler-trash' style={{ fontSize: 15 }} />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
             </TableBody>
           </Table>
         </TableContainer>
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <Box sx={{ px: 3, py: 2, borderTop: '1px solid', borderColor: 'divider', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Box
+            sx={{
+              px: 3,
+              py: 2,
+              borderTop: '1px solid',
+              borderColor: 'divider',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
             <Typography variant='caption' color='text.secondary'>
-              Showing {Math.min((page - 1) * pageSize + 1, totalCount)}–{Math.min(page * pageSize, totalCount)} of {totalCount}
+              Showing {Math.min((page - 1) * pageSize + 1, totalCount)}–{Math.min(page * pageSize, totalCount)} of{' '}
+              {totalCount}
             </Typography>
-            <Pagination
-              count={totalPages}
-              page={page}
-              onChange={(_, p) => setPage(p)}
-              size='small'
-              color='primary'
-            />
+            <Pagination count={totalPages} page={page} onChange={(_, p) => setPage(p)} size='small' color='primary' />
           </Box>
         )}
       </Card>
@@ -502,7 +635,17 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
         <form onSubmit={handleSubmit(handleAddTxn)}>
           <DialogTitle sx={{ fontWeight: 700, pb: 0 }}>
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-              <Box sx={{ width: 36, height: 36, borderRadius: 1.5, bgcolor: alpha(cfg.hex, 0.15), display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 1.5,
+                  bgcolor: alpha(cfg.hex, 0.15),
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 <i className={cfg.icon} style={{ fontSize: 18, color: cfg.hex }} />
               </Box>
               Record New Transaction
@@ -516,7 +659,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             {/* Type + Date */}
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Transaction Type</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                  Transaction Type
+                </Typography>
                 <Controller
                   name='transactionType'
                   control={control}
@@ -531,7 +676,11 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
                             key={type}
                             onClick={() => field.onChange(type)}
                             sx={{
-                              flex: 1, py: 1.5, borderRadius: 1.5, textAlign: 'center', cursor: 'pointer',
+                              flex: 1,
+                              py: 1.5,
+                              borderRadius: 1.5,
+                              textAlign: 'center',
+                              cursor: 'pointer',
                               border: '2px solid',
                               borderColor: active ? tc.hex : 'divider',
                               bgcolor: active ? tc.bg : 'transparent',
@@ -554,7 +703,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
                 />
               </Box>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Transaction Date</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                  Transaction Date
+                </Typography>
                 <Controller
                   name='transactionDate'
                   control={control}
@@ -575,7 +726,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             {/* Qty + Unit */}
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Quantity</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                  Quantity
+                </Typography>
                 <Controller
                   name='quantity'
                   control={control}
@@ -594,15 +747,21 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
                 />
               </Box>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Unit</Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                  Unit
+                </Typography>
                 <Controller
                   name='unitId'
                   control={control}
                   render={({ field }) => (
                     <Select {...field} size='small' fullWidth error={!!errors.unitId} displayEmpty>
-                      <MenuItem value=''><em>Select unit</em></MenuItem>
+                      <MenuItem value=''>
+                        <em>Select unit</em>
+                      </MenuItem>
                       {units.map(u => (
-                        <MenuItem key={u.id} value={u.id ?? ''}>{u.name} ({u.code})</MenuItem>
+                        <MenuItem key={u.id} value={u.id ?? ''}>
+                          {u.name} ({u.code})
+                        </MenuItem>
                       ))}
                     </Select>
                   )}
@@ -612,7 +771,9 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
 
             {/* Price per unit */}
             <Box>
-              <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Price per Unit</Typography>
+              <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                Price per Unit
+              </Typography>
               <Controller
                 name='pricePerUnit'
                 control={control}
@@ -636,8 +797,21 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             </Box>
 
             {/* Auto-calculated total */}
-            <Box sx={{ p: 2, borderRadius: 1.5, border: '1px solid', borderColor: 'divider', bgcolor: 'action.hover', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant='body2' color='text.secondary' fontWeight={600}>Total Amount</Typography>
+            <Box
+              sx={{
+                p: 2,
+                borderRadius: 1.5,
+                border: '1px solid',
+                borderColor: 'divider',
+                bgcolor: 'action.hover',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <Typography variant='body2' color='text.secondary' fontWeight={600}>
+                Total Amount
+              </Typography>
               <Typography variant='h6' fontWeight={700} color='primary.main'>
                 {formatCurrency(total)}
               </Typography>
@@ -646,7 +820,12 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
             {/* Fee + Notes */}
             <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Transaction Fee <Typography component='span' variant='caption' color='text.disabled'>(optional)</Typography></Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                  Transaction Fee{' '}
+                  <Typography component='span' variant='caption' color='text.disabled'>
+                    (optional)
+                  </Typography>
+                </Typography>
                 <Controller
                   name='feeAmount'
                   control={control}
@@ -668,7 +847,12 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
                 />
               </Box>
               <Box>
-                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>Notes <Typography component='span' variant='caption' color='text.disabled'>(optional)</Typography></Typography>
+                <Typography variant='body2' color='text.secondary' fontWeight={600} sx={{ mb: 0.75 }}>
+                  Notes{' '}
+                  <Typography component='span' variant='caption' color='text.disabled'>
+                    (optional)
+                  </Typography>
+                </Typography>
                 <Controller
                   name='notes'
                   control={control}
@@ -695,9 +879,12 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
               type='submit'
               variant='contained'
               disabled={isSubmitting}
-              startIcon={isSubmitting
-                ? <i className='tabler-loader-2 animate-spin' style={{ fontSize: 16 }} />
-                : <i className='tabler-device-floppy' style={{ fontSize: 16 }} />
+              startIcon={
+                isSubmitting ? (
+                  <i className='tabler-loader-2 animate-spin' style={{ fontSize: 16 }} />
+                ) : (
+                  <i className='tabler-device-floppy' style={{ fontSize: 16 }} />
+                )
               }
               sx={{ fontWeight: 700, minWidth: 160 }}
             >

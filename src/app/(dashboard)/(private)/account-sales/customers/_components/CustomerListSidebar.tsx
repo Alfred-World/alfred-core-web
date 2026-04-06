@@ -51,17 +51,23 @@ const CustomerListSidebar = (props: SidebarProps) => {
   } = props
 
   return (
-    <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100%',
-      borderColor: 'divider',
-    }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        borderColor: 'divider'
+      }}
+    >
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Typography variant='h6' fontWeight={700}>Members</Typography>
+          <Typography variant='h6' fontWeight={700}>
+            Members
+          </Typography>
           <Box sx={{ px: 1, py: 0.25, borderRadius: 1.5, bgcolor: 'primary.main', color: 'primary.contrastText' }}>
-            <Typography variant='caption' fontWeight={800}>{totalMembers.toLocaleString()}</Typography>
+            <Typography variant='caption' fontWeight={800}>
+              {totalMembers.toLocaleString()}
+            </Typography>
           </Box>
         </Box>
         <IconButton size='small' sx={{ bgcolor: 'action.hover' }} onClick={() => setOpenCreate(true)}>
@@ -124,22 +130,24 @@ const CustomerListSidebar = (props: SidebarProps) => {
                     backgroundColor: isActive ? '#10b981' : '#64748b',
                     color: isActive ? '#10b981' : '#64748b',
                     boxShadow: t => `0 0 0 2px ${t.palette.background.paper}`,
-                    '&::after': isActive ? {
-                      position: 'absolute',
-                      top: 0,
-                      left: 0,
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: '50%',
-                      animation: 'ripple 1.2s infinite ease-in-out',
-                      border: '1px solid currentColor',
-                      content: '""',
-                    } : {}
+                    '&::after': isActive
+                      ? {
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '50%',
+                          animation: 'ripple 1.2s infinite ease-in-out',
+                          border: '1px solid currentColor',
+                          content: '""'
+                        }
+                      : {}
                   },
                   '@keyframes ripple': {
                     '0%': { transform: 'scale(.8)', opacity: 1 },
-                    '100%': { transform: 'scale(2.4)', opacity: 0 },
-                  },
+                    '100%': { transform: 'scale(2.4)', opacity: 0 }
+                  }
                 }}
               >
                 <Avatar sx={{ width: 40, height: 40, fontSize: 14, fontWeight: 700 }}>
@@ -147,11 +155,27 @@ const CustomerListSidebar = (props: SidebarProps) => {
                 </Avatar>
               </Badge>
               <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                <Typography variant='body2' fontWeight={700} noWrap sx={{ color: isSelected ? 'primary.main' : 'text.primary' }}>
+                <Typography
+                  variant='body2'
+                  fontWeight={700}
+                  noWrap
+                  sx={{ color: isSelected ? 'primary.main' : 'text.primary' }}
+                >
                   {member.displayName || 'Unnamed member'}
                 </Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.25 }}>
-                  <Box sx={{ px: 0.75, py: 0.25, borderRadius: 1, bgcolor: alpha(sourceHex, 0.15), color: sourceHex, fontSize: 10, fontWeight: 800, textTransform: 'uppercase' }}>
+                  <Box
+                    sx={{
+                      px: 0.75,
+                      py: 0.25,
+                      borderRadius: 1,
+                      bgcolor: alpha(sourceHex, 0.15),
+                      color: sourceHex,
+                      fontSize: 10,
+                      fontWeight: 800,
+                      textTransform: 'uppercase'
+                    }}
+                  >
                     {source}
                   </Box>
                   <Typography variant='caption' sx={{ fontSize: 10, color: 'text.secondary' }}>

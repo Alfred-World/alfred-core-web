@@ -107,9 +107,12 @@ const CategoryTree = ({ selectedId, onSelect, onCreateNew }: CategoryTreeProps) 
   }, [countsData])
 
   // Paginated root nodes
-  const { data, isLoading, isError: isTreeError, error: treeError } = useGetApiV1CategoriesTree(
-    { ...(typeFilter ? { type: typeFilter } : {}), page, pageSize: TREE_PAGE_SIZE }
-  )
+  const {
+    data,
+    isLoading,
+    isError: isTreeError,
+    error: treeError
+  } = useGetApiV1CategoriesTree({ ...(typeFilter ? { type: typeFilter } : {}), page, pageSize: TREE_PAGE_SIZE })
 
   const totalCount = data?.result?.total ?? 0
   const hasMore = (data?.result?.items?.length ?? 0) > 0 && accumulatedRoots.length < totalCount
@@ -256,15 +259,11 @@ const CategoryTree = ({ selectedId, onSelect, onCreateNew }: CategoryTreeProps) 
           itemId={node.id}
           label={
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, py: 0.25, minWidth: 0 }}>
-              {node.icon && (
-                <i className={node.icon} style={{ fontSize: 15, opacity: 0.7, flexShrink: 0 }} />
-              )}
+              {node.icon && <i className={node.icon} style={{ fontSize: 15, opacity: 0.7, flexShrink: 0 }} />}
               <Typography variant='body2' noWrap sx={{ flex: 1, fontSize: 13, minWidth: 0 }}>
                 {node.label}
               </Typography>
-              {loadingIds.has(node.id) && (
-                <CircularProgress size={12} sx={{ flexShrink: 0 }} />
-              )}
+              {loadingIds.has(node.id) && <CircularProgress size={12} sx={{ flexShrink: 0 }} />}
               {node.type && (
                 <Box
                   sx={{
@@ -406,11 +405,7 @@ const CategoryTree = ({ selectedId, onSelect, onCreateNew }: CategoryTreeProps) 
                 </InputAdornment>
               ),
               endAdornment: search ? (
-                <InputAdornment
-                  position='end'
-                  sx={{ cursor: 'pointer' }}
-                  onClick={() => setSearch('')}
-                >
+                <InputAdornment position='end' sx={{ cursor: 'pointer' }} onClick={() => setSearch('')}>
                   <i className='tabler-x' style={{ fontSize: 14 }} />
                 </InputAdornment>
               ) : undefined,

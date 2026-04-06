@@ -35,7 +35,7 @@ export type BonusProgressTabProps = {
 
 const CustomerBonusProgressTab = (props: BonusProgressTabProps) => {
   const { bonusProgress, txHistory, selectedMemberId, setPayNoteDialog, isPayingBonus, cancelTx, isCanceling } = props
-  
+
   const tiers: BonusTierProgressDto[] = bonusProgress?.tiers ?? []
   const orderCount = bonusProgress?.currentOrderCount ?? 0
 
@@ -48,55 +48,107 @@ const CustomerBonusProgressTab = (props: BonusProgressTabProps) => {
 
   return (
     <Box>
-      <Box sx={{ p: { xs: 2.5, md: 4 }, bgcolor: 'action.hover', border: '1px solid', borderColor: 'divider', borderRadius: 3, mb: 3 }}>
+      <Box
+        sx={{
+          p: { xs: 2.5, md: 4 },
+          bgcolor: 'action.hover',
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 3,
+          mb: 3
+        }}
+      >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 5 }}>
           <Box>
-            <Typography variant='h6' fontWeight={800}>Tier Milestones</Typography>
+            <Typography variant='h6' fontWeight={800}>
+              Tier Milestones
+            </Typography>
             <Typography variant='body2' sx={{ color: 'text.secondary' }}>
               {ordersNeeded > 0 ? `Next tier unlock in ${ordersNeeded} orders` : 'Max tier reached!'}
             </Typography>
           </Box>
           <Box sx={{ textAlign: 'right' }}>
-            <Typography variant='h5' fontWeight={800}>{orderCount}</Typography>
-            <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 1 }}>CURRENT ORDERS</Typography>
+            <Typography variant='h5' fontWeight={800}>
+              {orderCount}
+            </Typography>
+            <Typography variant='caption' sx={{ color: 'text.secondary', fontWeight: 700, letterSpacing: 1 }}>
+              CURRENT ORDERS
+            </Typography>
           </Box>
         </Box>
 
         <Box sx={{ position: 'relative', display: 'flex', justifyContent: 'space-between', mt: 3, px: 2 }}>
           {/* Progress track */}
-          <Box sx={{ position: 'absolute', top: 12, left: '10%', right: '10%', height: 4, bgcolor: 'divider', borderRadius: 2, zIndex: 0 }} />
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              left: '10%',
+              right: '10%',
+              height: 4,
+              bgcolor: 'divider',
+              borderRadius: 2,
+              zIndex: 0
+            }}
+          />
           {/* Fill track */}
           {activeIndex >= 0 && (
-            <Box sx={{ 
-              position: 'absolute', top: 12, left: '10%', 
-              width: `${progressPct * 0.8}%`, 
-              height: 4, bgcolor: 'primary.main', borderRadius: 2, zIndex: 1,
-              transition: 'width 0.5s ease-in-out'
-            }} />
+            <Box
+              sx={{
+                position: 'absolute',
+                top: 12,
+                left: '10%',
+                width: `${progressPct * 0.8}%`,
+                height: 4,
+                bgcolor: 'primary.main',
+                borderRadius: 2,
+                zIndex: 1,
+                transition: 'width 0.5s ease-in-out'
+              }}
+            />
           )}
 
           {tiers.map((tier, idx) => {
             const isReached = tier.isReached ?? false
             const isCurrent = idx === activeIndex
 
-            
-return (
-              <Box key={tier.tierId ?? idx} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2, width: 80 }}>
-                <Box sx={{ 
-                  width: 24, height: 24, borderRadius: '50%', 
-                  bgcolor: 'background.paper', 
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  mb: 1.5,
-                  ...(isReached 
-                    ? { border: '3px solid', borderColor: 'primary.main', boxShadow: t => `0 0 10px ${alpha(t.palette.primary.main, 0.5)}` } 
-                    : { border: '3px solid', borderColor: 'divider' })
-                }}>
+            return (
+              <Box
+                key={tier.tierId ?? idx}
+                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 2, width: 80 }}
+              >
+                <Box
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    borderRadius: '50%',
+                    bgcolor: 'background.paper',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: 1.5,
+                    ...(isReached
+                      ? {
+                          border: '3px solid',
+                          borderColor: 'primary.main',
+                          boxShadow: t => `0 0 10px ${alpha(t.palette.primary.main, 0.5)}`
+                        }
+                      : { border: '3px solid', borderColor: 'divider' })
+                  }}
+                >
                   {isReached && <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: 'primary.main' }} />}
                 </Box>
-                <Typography variant='body2' fontWeight={700} sx={{ color: isReached ? 'text.primary' : 'text.secondary' }}>
+                <Typography
+                  variant='body2'
+                  fontWeight={700}
+                  sx={{ color: isReached ? 'text.primary' : 'text.secondary' }}
+                >
                   {tier.orderThreshold} orders
                 </Typography>
-                <Typography variant='caption' sx={{ color: isCurrent ? 'primary.main' : 'text.disabled', fontWeight: isCurrent ? 700 : 400 }}>
+                <Typography
+                  variant='caption'
+                  sx={{ color: isCurrent ? 'primary.main' : 'text.disabled', fontWeight: isCurrent ? 700 : 400 }}
+                >
                   {isReached ? 'Reached' : `${tier.ordersNeeded ?? ''} more`}
                 </Typography>
                 {tier.bonusAmount != null && (
@@ -111,14 +163,22 @@ return (
       </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant='subtitle1' fontWeight={700}>Payment History</Typography>
-        <Button size='small' variant='outlined' sx={{ textTransform: 'uppercase' }}>View All</Button>
+        <Typography variant='subtitle1' fontWeight={700}>
+          Payment History
+        </Typography>
+        <Button size='small' variant='outlined' sx={{ textTransform: 'uppercase' }}>
+          View All
+        </Button>
       </Box>
 
       <TableContainer sx={{ bgcolor: 'transparent', border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ '& th': { color: 'text.secondary', fontWeight: 700, borderColor: 'divider', borderBottomWidth: 2 } }}>
+            <TableRow
+              sx={{
+                '& th': { color: 'text.secondary', fontWeight: 700, borderColor: 'divider', borderBottomWidth: 2 }
+              }}
+            >
               <TableCell>PERIOD</TableCell>
               <TableCell>ORDERS TRIGGERED</TableCell>
               <TableCell>AMOUNT</TableCell>
@@ -132,19 +192,25 @@ return (
 
               return (
                 <TableRow key={tx.id} hover sx={{ '& td': { borderColor: 'divider' } }}>
-                  <TableCell sx={{ fontWeight: 700 }}>{tx.year}/{String(tx.month).padStart(2, '0')}</TableCell>
-                  <TableCell sx={{ color: 'text.primary' }}>{tx.orderCountAtTrigger} orders {tx.note ? `· ${tx.note}` : ''}</TableCell>
-                  <TableCell sx={{ fontWeight: 800 }}>{(tx.bonusAmountSnapshot ?? 0).toLocaleString('vi-VN')}₫</TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>
+                    {tx.year}/{String(tx.month).padStart(2, '0')}
+                  </TableCell>
+                  <TableCell sx={{ color: 'text.primary' }}>
+                    {tx.orderCountAtTrigger} orders {tx.note ? `· ${tx.note}` : ''}
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 800 }}>
+                    {(tx.bonusAmountSnapshot ?? 0).toLocaleString('vi-VN')}₫
+                  </TableCell>
                   <TableCell>
-                    <Chip 
-                      size='small' 
-                      label={tx.status} 
+                    <Chip
+                      size='small'
+                      label={tx.status}
                       color={chipColor as 'success' | 'warning' | 'default'}
-                      sx={{ 
+                      sx={{
                         fontWeight: 800,
                         fontSize: 10,
                         borderRadius: 1
-                      }} 
+                      }}
                     />
                   </TableCell>
                   <TableCell align='right'>
@@ -189,26 +255,30 @@ return (
 
       {/* Manual Tier Payments if any tier reached but not paid */}
       <Box sx={{ mt: 3 }}>
-        <Typography variant='caption' sx={{ color: 'text.secondary', mb: 1, display: 'block' }}>MANUAL TIER PAYMENTS</Typography>
+        <Typography variant='caption' sx={{ color: 'text.secondary', mb: 1, display: 'block' }}>
+          MANUAL TIER PAYMENTS
+        </Typography>
         <Stack spacing={1} direction='row' flexWrap='wrap'>
           {tiers.map((tier: BonusTierProgressDto) => {
             const isReached = tier.isReached ?? false
             const isPaid = tier.transactionStatus === 'Paid'
-            
+
             if (!isReached || isPaid) return null
-            
+
             return (
               <Chip
                 key={tier.tierId}
                 label={`Pay ${tier.orderThreshold} orders tier: ${(tier.bonusAmount ?? 0).toLocaleString()}₫`}
                 color='primary'
-                onClick={() => setPayNoteDialog({
-                  open: true,
-                  transactionId: tier.transactionId ?? null,
-                  soldByMemberId: selectedMemberId ?? undefined,
-                  tierId: tier.tierId ?? undefined,
-                  note: ''
-                })}
+                onClick={() =>
+                  setPayNoteDialog({
+                    open: true,
+                    transactionId: tier.transactionId ?? null,
+                    soldByMemberId: selectedMemberId ?? undefined,
+                    tierId: tier.tierId ?? undefined,
+                    note: ''
+                  })
+                }
                 disabled={isPayingBonus}
                 sx={{ borderRadius: 1.5 }}
                 icon={<i className='tabler-cash' style={{ marginLeft: 8 }} />}

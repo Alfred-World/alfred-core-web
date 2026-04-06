@@ -31,9 +31,10 @@ import {
   useGetApiV1BrandsId,
   useGetApiV1CategoriesTree,
   usePostApiV1Brands,
-  usePutApiV1BrandsId
+  usePatchApiV1BrandsId
 } from '@generated/core-api'
-import type { CategoryTreeNodeDto } from '@generated/core-api'
+import type { CategoryTreeNodeDto, UpdateBrandRequest } from '@generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 import { getInitials } from '@/utils/getInitials'
 
 // Flatten category tree into a flat list for select options
@@ -76,7 +77,7 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
 
   // Mutations
   const createMutation = usePostApiV1Brands()
-  const updateMutation = usePutApiV1BrandsId()
+  const updateMutation = usePatchApiV1BrandsId()
 
   const {
     control,
@@ -118,17 +119,29 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
   const onSubmit = async (data: BrandFormData) => {
     try {
       if (isEditMode && brandId) {
-        await updateMutation.mutateAsync({
-          id: brandId,
-          data: {
-            name: data.name,
-            website: data.website || null,
-            supportPhone: data.supportPhone || null,
-            description: data.description || null,
-            logoUrl: data.logoUrl || null,
-            categoryIds: data.categoryIds ?? null
-          }
-        })
+        const current: UpdateBrandRequest = {
+          name: data.name,
+          website: data.website || undefined,
+          supportPhone: data.supportPhone || undefined,
+          description: data.description || undefined,
+          logoUrl: data.logoUrl || undefined,
+          categoryIds: data.categoryIds ?? undefined
+        }
+
+        const original: UpdateBrandRequest = {
+          name: brand?.name ?? '',
+          website: brand?.website ?? undefined,
+          supportPhone: brand?.supportPhone ?? undefined,
+          description: brand?.description ?? undefined,
+          logoUrl: brand?.logoUrl ?? undefined,
+          categoryIds: brand?.categories?.map(c => c.id ?? '') ?? undefined
+        }
+
+        const changes = getChangedFields(original, current)
+
+        if (changes) {
+          await updateMutation.mutateAsync({ id: brandId, data: changes })
+        }
       } else {
         await createMutation.mutateAsync({
           data: {
@@ -248,7 +261,12 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
             )}
 
             {isEditMode && (
-              <Button variant='contained' fullWidth sx={{ mt: 3 }} onClick={() => router.push(`/brands/${brandId}/edit`)}>
+              <Button
+                variant='contained'
+                fullWidth
+                sx={{ mt: 3 }}
+                onClick={() => router.push(`/brands/${brandId}/edit`)}
+              >
                 View Details
               </Button>
             )}
@@ -371,7 +389,9 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
                         >
                           {brandCategories.map(cat => (
                             <MenuItem key={cat.id} value={cat.id} sx={{ pl: 2 + (cat.depth ?? 0) * 2 }}>
-                              {cat.icon && <i className={cat.icon} style={{ fontSize: 16, marginRight: 8, opacity: 0.7 }} />}
+                              {cat.icon && (
+                                <i className={cat.icon} style={{ fontSize: 16, marginRight: 8, opacity: 0.7 }} />
+                              )}
                               {cat.name}
                             </MenuItem>
                           ))}
@@ -401,7 +421,11 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
                             htmlInput: { maxLength: 250 }
                           }}
                         />
-                        <Typography variant='caption' color='text.secondary' sx={{ mt: 0.5, display: 'block', textAlign: 'right' }}>
+                        <Typography
+                          variant='caption'
+                          color='text.secondary'
+                          sx={{ mt: 0.5, display: 'block', textAlign: 'right' }}
+                        >
                           {field.value?.length ?? 0}/250 characters
                         </Typography>
                       </Box>
@@ -438,7 +462,11 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
                         >
                           {field.value ? (
                             <Box>
-                              <Avatar src={field.value} variant='rounded' sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }} />
+                              <Avatar
+                                src={field.value}
+                                variant='rounded'
+                                sx={{ width: 80, height: 80, mx: 'auto', mb: 2 }}
+                              />
                               <Typography variant='caption' color='text.secondary'>
                                 Click to change
                               </Typography>

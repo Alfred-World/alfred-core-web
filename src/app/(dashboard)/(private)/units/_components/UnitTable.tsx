@@ -206,8 +206,8 @@ const UnitTable = ({ categoryFilter, onCategoryFilterChange, onCreateNew, onEdit
             </TableRow>
           </TableHead>
           <TableBody>
-            {isLoading
-              ? Array.from({ length: 5 }).map((_, i) => (
+            {isLoading ? (
+              Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
                   {Array.from({ length: 6 }).map((__, j) => (
                     <TableCell key={j}>
@@ -216,24 +216,18 @@ const UnitTable = ({ categoryFilter, onCategoryFilterChange, onCreateNew, onEdit
                   ))}
                 </TableRow>
               ))
-              : units.length === 0
-                ? (
-                  <TableRow>
-                    <TableCell colSpan={6} align='center' sx={{ py: 8 }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
-                        <i className='tabler-ruler-off' style={{ fontSize: 40, opacity: 0.3 }} />
-                        <Typography color='text.secondary'>No units found</Typography>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                )
-                : units.map((unit: UnitDto) => (
-                  <UnitRow
-                    key={unit.id}
-                    unit={unit}
-                    onMenuOpen={handleMenuOpen}
-                  />
-                ))}
+            ) : units.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} align='center' sx={{ py: 8 }}>
+                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+                    <i className='tabler-ruler-off' style={{ fontSize: 40, opacity: 0.3 }} />
+                    <Typography color='text.secondary'>No units found</Typography>
+                  </Box>
+                </TableCell>
+              </TableRow>
+            ) : (
+              units.map((unit: UnitDto) => <UnitRow key={unit.id} unit={unit} onMenuOpen={handleMenuOpen} />)
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -345,14 +339,7 @@ const UnitRow = ({ unit, onMenuOpen }: UnitRowProps) => {
 
       {/* Status */}
       <TableCell>
-        {statusMeta && (
-          <Chip
-            label={statusMeta.label}
-            size='small'
-            color={statusMeta.color}
-            variant='tonal'
-          />
-        )}
+        {statusMeta && <Chip label={statusMeta.label} size='small' color={statusMeta.color} variant='tonal' />}
       </TableCell>
 
       {/* Actions */}

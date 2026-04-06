@@ -2401,22 +2401,18 @@ export interface UnitTreeNodeDtoListApiResponse {
 
 export interface UpdateAccessRoleRequest {
   name?: string
-  /** @nullable */
-  icon?: string | null
+  icon?: string
   isImmutable?: boolean
   isSystem?: boolean
-  /** @nullable */
-  permissions?: string[] | null
+  permissions?: string[]
 }
 
 export interface UpdateAccountCloneRequest {
   externalAccountId?: string
   username?: string
   password?: string
-  /** @nullable */
-  twoFaSecret?: string | null
-  /** @nullable */
-  extraInfo?: string | null
+  twoFaSecret?: string
+  extraInfo?: string
   /** @nullable */
   sourceAccountId?: string | null
 }
@@ -2438,28 +2434,21 @@ export interface UpdateAssetRequest {
   warrantyExpiryDate?: string | null
   specs?: string
   status?: AssetStatus
-  /** @nullable */
-  location?: string | null
+  location?: string
 }
 
 export interface UpdateBrandRequest {
   name?: string
-  /** @nullable */
-  website?: string | null
-  /** @nullable */
-  supportPhone?: string | null
-  /** @nullable */
-  description?: string | null
-  /** @nullable */
-  logoUrl?: string | null
-  /** @nullable */
-  categoryIds?: string[] | null
+  website?: string
+  supportPhone?: string
+  description?: string
+  logoUrl?: string
+  categoryIds?: string[]
 }
 
 export interface UpdateCategoryRequest {
   name?: string
-  /** @nullable */
-  icon?: string | null
+  icon?: string
   type?: CategoryType
   /** @nullable */
   parentId?: string | null
@@ -2471,18 +2460,14 @@ export interface UpdateCommodityRequest {
   assetClass?: CommodityAssetClass
   /** @nullable */
   defaultUnitId?: string | null
-  /** @nullable */
-  description?: string | null
+  description?: string
 }
 
 export interface UpdateMemberRequest {
-  /** @nullable */
-  displayName?: string | null
+  displayName?: string
   source?: MemberSource
-  /** @nullable */
-  sourceId?: string | null
-  /** @nullable */
-  customerNote?: string | null
+  sourceId?: string
+  customerNote?: string
 }
 
 export interface UpdateProductVariantRequest {
@@ -2495,8 +2480,7 @@ export interface UpdateProductRequest {
   name?: string
   productType?: AccountProductType
   variants?: UpdateProductVariantRequest[]
-  /** @nullable */
-  description?: string | null
+  description?: string
 }
 
 export interface UpdateReferralCommissionSettingRequest {
@@ -2513,27 +2497,21 @@ export interface UpdateSourceAccountRequest {
   accountType?: AccountProductType
   username?: string
   password?: string
-  /** @nullable */
-  twoFaSecret?: string | null
-  /** @nullable */
-  recoveryEmail?: string | null
-  /** @nullable */
-  recoveryPhone?: string | null
-  /** @nullable */
-  notes?: string | null
+  twoFaSecret?: string
+  recoveryEmail?: string
+  recoveryPhone?: string
+  notes?: string
 }
 
 export interface UpdateUnitRequest {
   name?: string
-  /** @nullable */
-  symbol?: string | null
+  symbol?: string
   category?: UnitCategory
   /** @nullable */
   baseUnitId?: string | null
   conversionRate?: number
   status?: UnitStatus
-  /** @nullable */
-  description?: string | null
+  description?: string
 }
 
 export interface UploadUrlResultDto {
@@ -3472,41 +3450,41 @@ export function useGetApiV1AccessControlRolesId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPutApiV1AccessControlRolesIdUrl = (id: string) => {
+export const getPatchApiV1AccessControlRolesIdUrl = (id: string) => {
   return `/api/v1/access-control/roles/${id}`
 }
 
-export const putApiV1AccessControlRolesId = async (
+export const patchApiV1AccessControlRolesId = async (
   id: string,
   updateAccessRoleRequest: UpdateAccessRoleRequest,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getPutApiV1AccessControlRolesIdUrl(id), {
+  return customFetch<AccessRoleDtoApiResponse>(getPatchApiV1AccessControlRolesIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateAccessRoleRequest)
   })
 }
 
-export const getPutApiV1AccessControlRolesIdMutationOptions = <
+export const getPatchApiV1AccessControlRolesIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
     TError,
     { id: string; data: UpdateAccessRoleRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccessControlRolesId>>,
+  Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
   TError,
   { id: string; data: UpdateAccessRoleRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccessControlRolesId']
+  const mutationKey = ['patchApiV1AccessControlRolesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3514,27 +3492,27 @@ export const getPutApiV1AccessControlRolesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
     { id: string; data: UpdateAccessRoleRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1AccessControlRolesId(id, data, requestOptions)
+    return patchApiV1AccessControlRolesId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccessControlRolesIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccessControlRolesId>>
+export type PatchApiV1AccessControlRolesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>
 >
-export type PutApiV1AccessControlRolesIdMutationBody = UpdateAccessRoleRequest
-export type PutApiV1AccessControlRolesIdMutationError = ErrorType<unknown>
+export type PatchApiV1AccessControlRolesIdMutationBody = UpdateAccessRoleRequest
+export type PatchApiV1AccessControlRolesIdMutationError = ErrorType<unknown>
 
-export const usePutApiV1AccessControlRolesId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchApiV1AccessControlRolesId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccessControlRolesId>>,
+      Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
       TError,
       { id: string; data: UpdateAccessRoleRequest },
       TContext
@@ -3543,12 +3521,12 @@ export const usePutApiV1AccessControlRolesId = <TError = ErrorType<unknown>, TCo
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccessControlRolesId>>,
+  Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
   TError,
   { id: string; data: UpdateAccessRoleRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccessControlRolesIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccessControlRolesIdMutationOptions(options), queryClient)
 }
 
 export const getDeleteApiV1AccessControlRolesIdUrl = (id: string) => {
@@ -4272,44 +4250,44 @@ export const usePostApiV1AccountSalesAccountClones = <TError = ErrorType<unknown
   return useMutation(getPostApiV1AccountSalesAccountClonesMutationOptions(options), queryClient)
 }
 
-export const getPutApiV1AccountSalesAccountClonesAccountCloneIdUrl = (accountCloneId: string) => {
+export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdUrl = (accountCloneId: string) => {
   return `/api/v1/account-sales/account-clones/${accountCloneId}`
 }
 
-export const putApiV1AccountSalesAccountClonesAccountCloneId = async (
+export const patchApiV1AccountSalesAccountClonesAccountCloneId = async (
   accountCloneId: string,
   updateAccountCloneRequest: UpdateAccountCloneRequest,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiResponse> => {
   return customFetch<AccountCloneDtoApiResponse>(
-    getPutApiV1AccountSalesAccountClonesAccountCloneIdUrl(accountCloneId),
+    getPatchApiV1AccountSalesAccountClonesAccountCloneIdUrl(accountCloneId),
     {
       ...options,
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json', ...options?.headers },
       body: JSON.stringify(updateAccountCloneRequest)
     }
   )
 }
 
-export const getPutApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions = <
+export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
     TError,
     { accountCloneId: string; data: UpdateAccountCloneRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesAccountClonesAccountCloneId']
+  const mutationKey = ['patchApiV1AccountSalesAccountClonesAccountCloneId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4317,27 +4295,27 @@ export const getPutApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions =
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
     { accountCloneId: string; data: UpdateAccountCloneRequest }
   > = props => {
     const { accountCloneId, data } = props ?? {}
 
-    return putApiV1AccountSalesAccountClonesAccountCloneId(accountCloneId, data, requestOptions)
+    return patchApiV1AccountSalesAccountClonesAccountCloneId(accountCloneId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesAccountClonesAccountCloneIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneId>>
+export type PatchApiV1AccountSalesAccountClonesAccountCloneIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>
 >
-export type PutApiV1AccountSalesAccountClonesAccountCloneIdMutationBody = UpdateAccountCloneRequest
-export type PutApiV1AccountSalesAccountClonesAccountCloneIdMutationError = ErrorType<unknown>
+export type PatchApiV1AccountSalesAccountClonesAccountCloneIdMutationBody = UpdateAccountCloneRequest
+export type PatchApiV1AccountSalesAccountClonesAccountCloneIdMutationError = ErrorType<unknown>
 
-export const usePutApiV1AccountSalesAccountClonesAccountCloneId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchApiV1AccountSalesAccountClonesAccountCloneId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneId>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
       TError,
       { accountCloneId: string; data: UpdateAccountCloneRequest },
       TContext
@@ -4346,12 +4324,12 @@ export const usePutApiV1AccountSalesAccountClonesAccountCloneId = <TError = Erro
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions(options), queryClient)
 }
 
 export const getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewUrl = (accountCloneId: string) => {
@@ -4439,44 +4417,44 @@ export const usePostApiV1AccountSalesAccountClonesAccountCloneIdReview = <
   return useMutation(getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationOptions(options), queryClient)
 }
 
-export const getPutApiV1AccountSalesAccountClonesAccountCloneIdStatusUrl = (accountCloneId: string) => {
+export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusUrl = (accountCloneId: string) => {
   return `/api/v1/account-sales/account-clones/${accountCloneId}/status`
 }
 
-export const putApiV1AccountSalesAccountClonesAccountCloneIdStatus = async (
+export const patchApiV1AccountSalesAccountClonesAccountCloneIdStatus = async (
   accountCloneId: string,
   updateAccountCloneStatusRequest: UpdateAccountCloneStatusRequest,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiResponse> => {
   return customFetch<AccountCloneDtoApiResponse>(
-    getPutApiV1AccountSalesAccountClonesAccountCloneIdStatusUrl(accountCloneId),
+    getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusUrl(accountCloneId),
     {
       ...options,
-      method: 'PUT',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json', ...options?.headers },
       body: JSON.stringify(updateAccountCloneStatusRequest)
     }
   )
 }
 
-export const getPutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions = <
+export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
     TError,
     { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesAccountClonesAccountCloneIdStatus']
+  const mutationKey = ['patchApiV1AccountSalesAccountClonesAccountCloneIdStatus']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4484,30 +4462,30 @@ export const getPutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOpt
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
     { accountCloneId: string; data: UpdateAccountCloneStatusRequest }
   > = props => {
     const { accountCloneId, data } = props ?? {}
 
-    return putApiV1AccountSalesAccountClonesAccountCloneIdStatus(accountCloneId, data, requestOptions)
+    return patchApiV1AccountSalesAccountClonesAccountCloneIdStatus(accountCloneId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneIdStatus>>
+export type PatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>
 >
-export type PutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationBody = UpdateAccountCloneStatusRequest
-export type PutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationError = ErrorType<unknown>
+export type PatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationBody = UpdateAccountCloneStatusRequest
+export type PatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationError = ErrorType<unknown>
 
-export const usePutApiV1AccountSalesAccountClonesAccountCloneIdStatus = <
+export const usePatchApiV1AccountSalesAccountClonesAccountCloneIdStatus = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
       TError,
       { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
       TContext
@@ -4516,12 +4494,12 @@ export const usePutApiV1AccountSalesAccountClonesAccountCloneIdStatus = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions(options), queryClient)
 }
 
 /**
@@ -4726,41 +4704,41 @@ export const usePostApiV1AccountSalesBonusTiers = <TError = ErrorType<unknown>, 
 /**
  * @summary Update an existing bonus tier.
  */
-export const getPutApiV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
+export const getPatchApiV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
   return `/api/v1/account-sales/bonus/tiers/${tierId}`
 }
 
-export const putApiV1AccountSalesBonusTiersTierId = async (
+export const patchApiV1AccountSalesBonusTiersTierId = async (
   tierId: string,
   updateSalesBonusTierRequest: UpdateSalesBonusTierRequest,
   options?: RequestInit
 ): Promise<SalesBonusTierDtoApiResponse> => {
-  return customFetch<SalesBonusTierDtoApiResponse>(getPutApiV1AccountSalesBonusTiersTierIdUrl(tierId), {
+  return customFetch<SalesBonusTierDtoApiResponse>(getPatchApiV1AccountSalesBonusTiersTierIdUrl(tierId), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateSalesBonusTierRequest)
   })
 }
 
-export const getPutApiV1AccountSalesBonusTiersTierIdMutationOptions = <
+export const getPatchApiV1AccountSalesBonusTiersTierIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
     TError,
     { tierId: string; data: UpdateSalesBonusTierRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
   TError,
   { tierId: string; data: UpdateSalesBonusTierRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesBonusTiersTierId']
+  const mutationKey = ['patchApiV1AccountSalesBonusTiersTierId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4768,30 +4746,30 @@ export const getPutApiV1AccountSalesBonusTiersTierIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
     { tierId: string; data: UpdateSalesBonusTierRequest }
   > = props => {
     const { tierId, data } = props ?? {}
 
-    return putApiV1AccountSalesBonusTiersTierId(tierId, data, requestOptions)
+    return patchApiV1AccountSalesBonusTiersTierId(tierId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>
+export type PatchApiV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>
 >
-export type PutApiV1AccountSalesBonusTiersTierIdMutationBody = UpdateSalesBonusTierRequest
-export type PutApiV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
+export type PatchApiV1AccountSalesBonusTiersTierIdMutationBody = UpdateSalesBonusTierRequest
+export type PatchApiV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
 
 /**
  * @summary Update an existing bonus tier.
  */
-export const usePutApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
       TError,
       { tierId: string; data: UpdateSalesBonusTierRequest },
       TContext
@@ -4800,12 +4778,12 @@ export const usePutApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unkno
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesBonusTiersTierId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
   TError,
   { tierId: string; data: UpdateSalesBonusTierRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
 }
 
 /**
@@ -6683,41 +6661,41 @@ export function useGetApiV1AccountSalesMembersId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPutApiV1AccountSalesMembersIdUrl = (id: string) => {
+export const getPatchApiV1AccountSalesMembersIdUrl = (id: string) => {
   return `/api/v1/account-sales/members/${id}`
 }
 
-export const putApiV1AccountSalesMembersId = async (
+export const patchApiV1AccountSalesMembersId = async (
   id: string,
   updateMemberRequest: UpdateMemberRequest,
   options?: RequestInit
 ): Promise<MemberDtoApiResponse> => {
-  return customFetch<MemberDtoApiResponse>(getPutApiV1AccountSalesMembersIdUrl(id), {
+  return customFetch<MemberDtoApiResponse>(getPatchApiV1AccountSalesMembersIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateMemberRequest)
   })
 }
 
-export const getPutApiV1AccountSalesMembersIdMutationOptions = <
+export const getPatchApiV1AccountSalesMembersIdMutationOptions = <
   TError = ErrorType<ProblemDetails>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
     TError,
     { id: string; data: UpdateMemberRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
   TError,
   { id: string; data: UpdateMemberRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesMembersId']
+  const mutationKey = ['patchApiV1AccountSalesMembersId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6725,27 +6703,27 @@ export const getPutApiV1AccountSalesMembersIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
     { id: string; data: UpdateMemberRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1AccountSalesMembersId(id, data, requestOptions)
+    return patchApiV1AccountSalesMembersId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesMembersIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>
+export type PatchApiV1AccountSalesMembersIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>
 >
-export type PutApiV1AccountSalesMembersIdMutationBody = UpdateMemberRequest
-export type PutApiV1AccountSalesMembersIdMutationError = ErrorType<ProblemDetails>
+export type PatchApiV1AccountSalesMembersIdMutationBody = UpdateMemberRequest
+export type PatchApiV1AccountSalesMembersIdMutationError = ErrorType<ProblemDetails>
 
-export const usePutApiV1AccountSalesMembersId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
+export const usePatchApiV1AccountSalesMembersId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
       TError,
       { id: string; data: UpdateMemberRequest },
       TContext
@@ -6754,12 +6732,12 @@ export const usePutApiV1AccountSalesMembersId = <TError = ErrorType<ProblemDetai
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesMembersId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
   TError,
   { id: string; data: UpdateMemberRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesMembersIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesMembersIdMutationOptions(options), queryClient)
 }
 
 export const getGetApiV1AccountSalesMembersSearchUrl = (params?: GetApiV1AccountSalesMembersSearchParams) => {
@@ -8015,41 +7993,41 @@ export function useGetApiV1AccountSalesProductsId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPutApiV1AccountSalesProductsIdUrl = (id: string) => {
+export const getPatchApiV1AccountSalesProductsIdUrl = (id: string) => {
   return `/api/v1/account-sales/products/${id}`
 }
 
-export const putApiV1AccountSalesProductsId = async (
+export const patchApiV1AccountSalesProductsId = async (
   id: string,
   updateProductRequest: UpdateProductRequest,
   options?: RequestInit
 ): Promise<ProductDtoApiResponse> => {
-  return customFetch<ProductDtoApiResponse>(getPutApiV1AccountSalesProductsIdUrl(id), {
+  return customFetch<ProductDtoApiResponse>(getPatchApiV1AccountSalesProductsIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateProductRequest)
   })
 }
 
-export const getPutApiV1AccountSalesProductsIdMutationOptions = <
+export const getPatchApiV1AccountSalesProductsIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesProductsId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
     TError,
     { id: string; data: UpdateProductRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesProductsId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
   TError,
   { id: string; data: UpdateProductRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesProductsId']
+  const mutationKey = ['patchApiV1AccountSalesProductsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8057,27 +8035,27 @@ export const getPutApiV1AccountSalesProductsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesProductsId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
     { id: string; data: UpdateProductRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1AccountSalesProductsId(id, data, requestOptions)
+    return patchApiV1AccountSalesProductsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesProductsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesProductsId>>
+export type PatchApiV1AccountSalesProductsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>
 >
-export type PutApiV1AccountSalesProductsIdMutationBody = UpdateProductRequest
-export type PutApiV1AccountSalesProductsIdMutationError = ErrorType<unknown>
+export type PatchApiV1AccountSalesProductsIdMutationBody = UpdateProductRequest
+export type PatchApiV1AccountSalesProductsIdMutationError = ErrorType<unknown>
 
-export const usePutApiV1AccountSalesProductsId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchApiV1AccountSalesProductsId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesProductsId>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
       TError,
       { id: string; data: UpdateProductRequest },
       TContext
@@ -8086,12 +8064,12 @@ export const usePutApiV1AccountSalesProductsId = <TError = ErrorType<unknown>, T
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesProductsId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
   TError,
   { id: string; data: UpdateProductRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesProductsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesProductsIdMutationOptions(options), queryClient)
 }
 
 export const getGetApiV1AccountSalesSettingsReferralCommissionUrl = () => {
@@ -8214,40 +8192,43 @@ export function useGetApiV1AccountSalesSettingsReferralCommission<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPutApiV1AccountSalesSettingsReferralCommissionUrl = () => {
+export const getPatchApiV1AccountSalesSettingsReferralCommissionUrl = () => {
   return `/api/v1/account-sales/settings/referral-commission`
 }
 
-export const putApiV1AccountSalesSettingsReferralCommission = async (
+export const patchApiV1AccountSalesSettingsReferralCommission = async (
   updateReferralCommissionSettingRequest: UpdateReferralCommissionSettingRequest,
   options?: RequestInit
 ): Promise<ReferralCommissionSettingDtoApiResponse> => {
-  return customFetch<ReferralCommissionSettingDtoApiResponse>(getPutApiV1AccountSalesSettingsReferralCommissionUrl(), {
-    ...options,
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(updateReferralCommissionSettingRequest)
-  })
+  return customFetch<ReferralCommissionSettingDtoApiResponse>(
+    getPatchApiV1AccountSalesSettingsReferralCommissionUrl(),
+    {
+      ...options,
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', ...options?.headers },
+      body: JSON.stringify(updateReferralCommissionSettingRequest)
+    }
+  )
 }
 
-export const getPutApiV1AccountSalesSettingsReferralCommissionMutationOptions = <
+export const getPatchApiV1AccountSalesSettingsReferralCommissionMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesSettingsReferralCommission>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
     TError,
     { data: UpdateReferralCommissionSettingRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesSettingsReferralCommission>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
   TError,
   { data: UpdateReferralCommissionSettingRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesSettingsReferralCommission']
+  const mutationKey = ['patchApiV1AccountSalesSettingsReferralCommission']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8255,27 +8236,27 @@ export const getPutApiV1AccountSalesSettingsReferralCommissionMutationOptions = 
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesSettingsReferralCommission>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
     { data: UpdateReferralCommissionSettingRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return putApiV1AccountSalesSettingsReferralCommission(data, requestOptions)
+    return patchApiV1AccountSalesSettingsReferralCommission(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesSettingsReferralCommissionMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesSettingsReferralCommission>>
+export type PatchApiV1AccountSalesSettingsReferralCommissionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>
 >
-export type PutApiV1AccountSalesSettingsReferralCommissionMutationBody = UpdateReferralCommissionSettingRequest
-export type PutApiV1AccountSalesSettingsReferralCommissionMutationError = ErrorType<unknown>
+export type PatchApiV1AccountSalesSettingsReferralCommissionMutationBody = UpdateReferralCommissionSettingRequest
+export type PatchApiV1AccountSalesSettingsReferralCommissionMutationError = ErrorType<unknown>
 
-export const usePutApiV1AccountSalesSettingsReferralCommission = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchApiV1AccountSalesSettingsReferralCommission = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesSettingsReferralCommission>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
       TError,
       { data: UpdateReferralCommissionSettingRequest },
       TContext
@@ -8284,12 +8265,12 @@ export const usePutApiV1AccountSalesSettingsReferralCommission = <TError = Error
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesSettingsReferralCommission>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
   TError,
   { data: UpdateReferralCommissionSettingRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesSettingsReferralCommissionMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesSettingsReferralCommissionMutationOptions(options), queryClient)
 }
 
 export const getGetApiV1AccountSalesSettingsReferralCommissionHistoryUrl = () => {
@@ -8739,41 +8720,41 @@ export function useGetApiV1AccountSalesSourceAccountsId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPutApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+export const getPatchApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
   return `/api/v1/account-sales/source-accounts/${id}`
 }
 
-export const putApiV1AccountSalesSourceAccountsId = async (
+export const patchApiV1AccountSalesSourceAccountsId = async (
   id: string,
   updateSourceAccountRequest: UpdateSourceAccountRequest,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiResponse> => {
-  return customFetch<SourceAccountDtoApiResponse>(getPutApiV1AccountSalesSourceAccountsIdUrl(id), {
+  return customFetch<SourceAccountDtoApiResponse>(getPatchApiV1AccountSalesSourceAccountsIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateSourceAccountRequest)
   })
 }
 
-export const getPutApiV1AccountSalesSourceAccountsIdMutationOptions = <
+export const getPatchApiV1AccountSalesSourceAccountsIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
     TError,
     { id: string; data: UpdateSourceAccountRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
   TError,
   { id: string; data: UpdateSourceAccountRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AccountSalesSourceAccountsId']
+  const mutationKey = ['patchApiV1AccountSalesSourceAccountsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8781,27 +8762,27 @@ export const getPutApiV1AccountSalesSourceAccountsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
     { id: string; data: UpdateSourceAccountRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1AccountSalesSourceAccountsId(id, data, requestOptions)
+    return patchApiV1AccountSalesSourceAccountsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>
+export type PatchApiV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>
 >
-export type PutApiV1AccountSalesSourceAccountsIdMutationBody = UpdateSourceAccountRequest
-export type PutApiV1AccountSalesSourceAccountsIdMutationError = ErrorType<unknown>
+export type PatchApiV1AccountSalesSourceAccountsIdMutationBody = UpdateSourceAccountRequest
+export type PatchApiV1AccountSalesSourceAccountsIdMutationError = ErrorType<unknown>
 
-export const usePutApiV1AccountSalesSourceAccountsId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchApiV1AccountSalesSourceAccountsId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+      Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
       TError,
       { id: string; data: UpdateSourceAccountRequest },
       TContext
@@ -8810,12 +8791,12 @@ export const usePutApiV1AccountSalesSourceAccountsId = <TError = ErrorType<unkno
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AccountSalesSourceAccountsId>>,
+  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
   TError,
   { id: string; data: UpdateSourceAccountRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
 }
 
 export const getDeleteApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
@@ -9571,38 +9552,41 @@ export function useGetApiV1AssetsId<
 /**
  * @summary Update an existing asset.
  */
-export const getPutApiV1AssetsIdUrl = (id: string) => {
+export const getPatchApiV1AssetsIdUrl = (id: string) => {
   return `/api/v1/assets/${id}`
 }
 
-export const putApiV1AssetsId = async (
+export const patchApiV1AssetsId = async (
   id: string,
   updateAssetRequest: UpdateAssetRequest,
   options?: RequestInit
 ): Promise<AssetDtoApiResponse> => {
-  return customFetch<AssetDtoApiResponse>(getPutApiV1AssetsIdUrl(id), {
+  return customFetch<AssetDtoApiResponse>(getPatchApiV1AssetsIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateAssetRequest)
   })
 }
 
-export const getPutApiV1AssetsIdMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPatchApiV1AssetsIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1AssetsId>>,
+    Awaited<ReturnType<typeof patchApiV1AssetsId>>,
     TError,
     { id: string; data: UpdateAssetRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1AssetsId>>,
+  Awaited<ReturnType<typeof patchApiV1AssetsId>>,
   TError,
   { id: string; data: UpdateAssetRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1AssetsId']
+  const mutationKey = ['patchApiV1AssetsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9610,28 +9594,28 @@ export const getPutApiV1AssetsIdMutationOptions = <TError = ErrorType<ApiErrorRe
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1AssetsId>>,
+    Awaited<ReturnType<typeof patchApiV1AssetsId>>,
     { id: string; data: UpdateAssetRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1AssetsId(id, data, requestOptions)
+    return patchApiV1AssetsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1AssetsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1AssetsId>>>
-export type PutApiV1AssetsIdMutationBody = UpdateAssetRequest
-export type PutApiV1AssetsIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchApiV1AssetsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1AssetsId>>>
+export type PatchApiV1AssetsIdMutationBody = UpdateAssetRequest
+export type PatchApiV1AssetsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing asset.
  */
-export const usePutApiV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchApiV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1AssetsId>>,
+      Awaited<ReturnType<typeof patchApiV1AssetsId>>,
       TError,
       { id: string; data: UpdateAssetRequest },
       TContext
@@ -9640,12 +9624,12 @@ export const usePutApiV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TConte
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1AssetsId>>,
+  Awaited<ReturnType<typeof patchApiV1AssetsId>>,
   TError,
   { id: string; data: UpdateAssetRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1AssetsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1AssetsIdMutationOptions(options), queryClient)
 }
 
 /**
@@ -10744,38 +10728,41 @@ export function useGetApiV1BrandsId<
 /**
  * @summary Update an existing brand.
  */
-export const getPutApiV1BrandsIdUrl = (id: string) => {
+export const getPatchApiV1BrandsIdUrl = (id: string) => {
   return `/api/v1/brands/${id}`
 }
 
-export const putApiV1BrandsId = async (
+export const patchApiV1BrandsId = async (
   id: string,
   updateBrandRequest: UpdateBrandRequest,
   options?: RequestInit
 ): Promise<BrandDtoApiResponse> => {
-  return customFetch<BrandDtoApiResponse>(getPutApiV1BrandsIdUrl(id), {
+  return customFetch<BrandDtoApiResponse>(getPatchApiV1BrandsIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateBrandRequest)
   })
 }
 
-export const getPutApiV1BrandsIdMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPatchApiV1BrandsIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1BrandsId>>,
+    Awaited<ReturnType<typeof patchApiV1BrandsId>>,
     TError,
     { id: string; data: UpdateBrandRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1BrandsId>>,
+  Awaited<ReturnType<typeof patchApiV1BrandsId>>,
   TError,
   { id: string; data: UpdateBrandRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1BrandsId']
+  const mutationKey = ['patchApiV1BrandsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -10783,28 +10770,28 @@ export const getPutApiV1BrandsIdMutationOptions = <TError = ErrorType<ApiErrorRe
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1BrandsId>>,
+    Awaited<ReturnType<typeof patchApiV1BrandsId>>,
     { id: string; data: UpdateBrandRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1BrandsId(id, data, requestOptions)
+    return patchApiV1BrandsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1BrandsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1BrandsId>>>
-export type PutApiV1BrandsIdMutationBody = UpdateBrandRequest
-export type PutApiV1BrandsIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchApiV1BrandsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1BrandsId>>>
+export type PatchApiV1BrandsIdMutationBody = UpdateBrandRequest
+export type PatchApiV1BrandsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing brand.
  */
-export const usePutApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1BrandsId>>,
+      Awaited<ReturnType<typeof patchApiV1BrandsId>>,
       TError,
       { id: string; data: UpdateBrandRequest },
       TContext
@@ -10813,12 +10800,12 @@ export const usePutApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TConte
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1BrandsId>>,
+  Awaited<ReturnType<typeof patchApiV1BrandsId>>,
   TError,
   { id: string; data: UpdateBrandRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1BrandsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1BrandsIdMutationOptions(options), queryClient)
 }
 
 /**
@@ -11463,41 +11450,41 @@ export function useGetApiV1CategoriesId<
 /**
  * @summary Update an existing category.
  */
-export const getPutApiV1CategoriesIdUrl = (id: string) => {
+export const getPatchApiV1CategoriesIdUrl = (id: string) => {
   return `/api/v1/categories/${id}`
 }
 
-export const putApiV1CategoriesId = async (
+export const patchApiV1CategoriesId = async (
   id: string,
   updateCategoryRequest: UpdateCategoryRequest,
   options?: RequestInit
 ): Promise<CategoryDtoApiResponse> => {
-  return customFetch<CategoryDtoApiResponse>(getPutApiV1CategoriesIdUrl(id), {
+  return customFetch<CategoryDtoApiResponse>(getPatchApiV1CategoriesIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateCategoryRequest)
   })
 }
 
-export const getPutApiV1CategoriesIdMutationOptions = <
+export const getPatchApiV1CategoriesIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1CategoriesId>>,
+    Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
     TError,
     { id: string; data: UpdateCategoryRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1CategoriesId>>,
+  Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
   TError,
   { id: string; data: UpdateCategoryRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1CategoriesId']
+  const mutationKey = ['patchApiV1CategoriesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -11505,28 +11492,28 @@ export const getPutApiV1CategoriesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1CategoriesId>>,
+    Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
     { id: string; data: UpdateCategoryRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1CategoriesId(id, data, requestOptions)
+    return patchApiV1CategoriesId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1CategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1CategoriesId>>>
-export type PutApiV1CategoriesIdMutationBody = UpdateCategoryRequest
-export type PutApiV1CategoriesIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchApiV1CategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1CategoriesId>>>
+export type PatchApiV1CategoriesIdMutationBody = UpdateCategoryRequest
+export type PatchApiV1CategoriesIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing category.
  */
-export const usePutApiV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchApiV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1CategoriesId>>,
+      Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
       TError,
       { id: string; data: UpdateCategoryRequest },
       TContext
@@ -11535,12 +11522,12 @@ export const usePutApiV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TC
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1CategoriesId>>,
+  Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
   TError,
   { id: string; data: UpdateCategoryRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1CategoriesIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1CategoriesIdMutationOptions(options), queryClient)
 }
 
 /**
@@ -12046,41 +12033,41 @@ export function useGetApiV1CommoditiesId<
 /**
  * @summary Update an existing commodity.
  */
-export const getPutApiV1CommoditiesIdUrl = (id: string) => {
+export const getPatchApiV1CommoditiesIdUrl = (id: string) => {
   return `/api/v1/commodities/${id}`
 }
 
-export const putApiV1CommoditiesId = async (
+export const patchApiV1CommoditiesId = async (
   id: string,
   updateCommodityRequest: UpdateCommodityRequest,
   options?: RequestInit
 ): Promise<CommodityDtoApiResponse> => {
-  return customFetch<CommodityDtoApiResponse>(getPutApiV1CommoditiesIdUrl(id), {
+  return customFetch<CommodityDtoApiResponse>(getPatchApiV1CommoditiesIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateCommodityRequest)
   })
 }
 
-export const getPutApiV1CommoditiesIdMutationOptions = <
+export const getPatchApiV1CommoditiesIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+    Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
     TError,
     { id: string; data: UpdateCommodityRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+  Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
   TError,
   { id: string; data: UpdateCommodityRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1CommoditiesId']
+  const mutationKey = ['patchApiV1CommoditiesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -12088,28 +12075,28 @@ export const getPutApiV1CommoditiesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+    Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
     { id: string; data: UpdateCommodityRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1CommoditiesId(id, data, requestOptions)
+    return patchApiV1CommoditiesId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1CommoditiesId>>>
-export type PutApiV1CommoditiesIdMutationBody = UpdateCommodityRequest
-export type PutApiV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchApiV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1CommoditiesId>>>
+export type PatchApiV1CommoditiesIdMutationBody = UpdateCommodityRequest
+export type PatchApiV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing commodity.
  */
-export const usePutApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+      Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
       TError,
       { id: string; data: UpdateCommodityRequest },
       TContext
@@ -12118,12 +12105,12 @@ export const usePutApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, T
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1CommoditiesId>>,
+  Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
   TError,
   { id: string; data: UpdateCommodityRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1CommoditiesIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1CommoditiesIdMutationOptions(options), queryClient)
 }
 
 /**
@@ -13357,38 +13344,41 @@ export function useGetApiV1UnitsId<
 /**
  * @summary Update an existing unit.
  */
-export const getPutApiV1UnitsIdUrl = (id: string) => {
+export const getPatchApiV1UnitsIdUrl = (id: string) => {
   return `/api/v1/units/${id}`
 }
 
-export const putApiV1UnitsId = async (
+export const patchApiV1UnitsId = async (
   id: string,
   updateUnitRequest: UpdateUnitRequest,
   options?: RequestInit
 ): Promise<UnitDtoApiResponse> => {
-  return customFetch<UnitDtoApiResponse>(getPutApiV1UnitsIdUrl(id), {
+  return customFetch<UnitDtoApiResponse>(getPatchApiV1UnitsIdUrl(id), {
     ...options,
-    method: 'PUT',
+    method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     body: JSON.stringify(updateUnitRequest)
   })
 }
 
-export const getPutApiV1UnitsIdMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPatchApiV1UnitsIdMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof putApiV1UnitsId>>,
+    Awaited<ReturnType<typeof patchApiV1UnitsId>>,
     TError,
     { id: string; data: UpdateUnitRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof putApiV1UnitsId>>,
+  Awaited<ReturnType<typeof patchApiV1UnitsId>>,
   TError,
   { id: string; data: UpdateUnitRequest },
   TContext
 > => {
-  const mutationKey = ['putApiV1UnitsId']
+  const mutationKey = ['patchApiV1UnitsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13396,28 +13386,28 @@ export const getPutApiV1UnitsIdMutationOptions = <TError = ErrorType<ApiErrorRes
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof putApiV1UnitsId>>,
+    Awaited<ReturnType<typeof patchApiV1UnitsId>>,
     { id: string; data: UpdateUnitRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return putApiV1UnitsId(id, data, requestOptions)
+    return patchApiV1UnitsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PutApiV1UnitsIdMutationResult = NonNullable<Awaited<ReturnType<typeof putApiV1UnitsId>>>
-export type PutApiV1UnitsIdMutationBody = UpdateUnitRequest
-export type PutApiV1UnitsIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchApiV1UnitsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1UnitsId>>>
+export type PatchApiV1UnitsIdMutationBody = UpdateUnitRequest
+export type PatchApiV1UnitsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing unit.
  */
-export const usePutApiV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchApiV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof putApiV1UnitsId>>,
+      Awaited<ReturnType<typeof patchApiV1UnitsId>>,
       TError,
       { id: string; data: UpdateUnitRequest },
       TContext
@@ -13426,12 +13416,12 @@ export const usePutApiV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContex
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof putApiV1UnitsId>>,
+  Awaited<ReturnType<typeof patchApiV1UnitsId>>,
   TError,
   { id: string; data: UpdateUnitRequest },
   TContext
 > => {
-  return useMutation(getPutApiV1UnitsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchApiV1UnitsIdMutationOptions(options), queryClient)
 }
 
 /**

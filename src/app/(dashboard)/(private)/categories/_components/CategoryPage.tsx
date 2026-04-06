@@ -30,7 +30,7 @@ const CategoryPage = () => {
       setSelectedId(id)
       setMode('edit')
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
   // Helper to update URL without full navigation
@@ -94,11 +94,7 @@ const CategoryPage = () => {
           overflow: 'hidden'
         }}
       >
-        <CategoryTree
-          selectedId={selectedId ?? undefined}
-          onSelect={handleSelect}
-          onCreateNew={handleCreateNew}
-        />
+        <CategoryTree selectedId={selectedId ?? undefined} onSelect={handleSelect} onCreateNew={handleCreateNew} />
       </Card>
 
       {/* Main Content */}
@@ -131,8 +127,8 @@ const CategoryPage = () => {
               Select a category
             </Typography>
             <Typography variant='body2' color='text.disabled' sx={{ maxWidth: 340, textAlign: 'center' }}>
-              Choose a category from the tree on the left to edit its details and form schema,
-              or click <strong>+</strong> to create a new one.
+              Choose a category from the tree on the left to edit its details and form schema, or click{' '}
+              <strong>+</strong> to create a new one.
             </Typography>
           </Box>
         ) : mode === 'new' ? (

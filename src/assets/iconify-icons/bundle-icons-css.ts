@@ -30,7 +30,7 @@ async function generateIconsCSS() {
    * Script configuration
    */
   interface BundleScriptCustomSVGConfig {
-     
+
     // Path to SVG files
     dir: string
 
@@ -42,7 +42,7 @@ async function generateIconsCSS() {
   }
 
   interface BundleScriptCustomJSONConfig {
-     
+
     // Path to JSON file
     filename: string
 
@@ -51,7 +51,7 @@ async function generateIconsCSS() {
   }
 
   interface BundleScriptConfig {
-     
+
     // Custom SVG to import and bundle
     svg?: BundleScriptCustomSVGConfig[]
 

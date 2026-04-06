@@ -15,7 +15,7 @@ const useLayoutInit = (colorSchemeFallback: 'light' | 'dark') => {
   // Hooks
   const { settings } = useSettings()
   const { setMode } = useColorScheme()
-   
+
   const [_, updateCookieColorPref] = useCookie('colorPref')
   const isDark = useMedia('(prefers-color-scheme: dark)', colorSchemeFallback === 'dark')
 

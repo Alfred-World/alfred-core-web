@@ -33,4 +33,7 @@ export const NEXT_PUBLIC_GATEWAY_URL = assertEnv('NEXT_PUBLIC_GATEWAY_URL', proc
 export const NEXT_PUBLIC_SSO_URL = assertEnv('NEXT_PUBLIC_SSO_URL', process.env.NEXT_PUBLIC_SSO_URL)
 
 /** OAuth2 client ID for this frontend app */
-export const NEXT_PUBLIC_OAUTH_CLIENT_ID = assertEnv('NEXT_PUBLIC_OAUTH_CLIENT_ID', process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID)
+export const NEXT_PUBLIC_OAUTH_CLIENT_ID = assertEnv(
+  'NEXT_PUBLIC_OAUTH_CLIENT_ID',
+  process.env.NEXT_PUBLIC_OAUTH_CLIENT_ID
+)

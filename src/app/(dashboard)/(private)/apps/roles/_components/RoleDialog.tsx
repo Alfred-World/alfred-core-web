@@ -22,13 +22,11 @@ import { object, string, minLength, pipe, optional, boolean } from 'valibot'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
-import {
-  postApiV1AccessControlRoles,
-  putApiV1AccessControlRolesId
-} from '@/generated/core-api'
+import { postApiV1AccessControlRoles, patchApiV1AccessControlRolesId } from '@/generated/core-api'
 import type { AccessRoleDto, CreateAccessRoleRequest, UpdateAccessRoleRequest } from '@/generated/core-api'
 
 import RoleIconPicker from './RoleIconPicker'
+import { getChangedFields } from '@/utils/getChangedFields'
 
 interface RoleDialogProps {
   open: boolean
@@ -119,7 +117,7 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
 
   const { mutate: updateRole, isPending: isUpdating } = useMutation({
     mutationFn: async ({ roleId, payload }: { roleId: string; payload: UpdateAccessRoleRequest }) =>
-      putApiV1AccessControlRolesId(roleId, payload),
+      patchApiV1AccessControlRolesId(roleId, payload),
     onSuccess: data => {
       if (data.success) {
         toast.success('Role updated successfully')
@@ -134,15 +132,35 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
   const isLoading = isCreating || isUpdating
 
   const onSubmit = (data: FormData) => {
-    const payload = toRequest(data)
-
     if (isEdit && role?.id) {
-      updateRole({ roleId: role.id, payload })
+      const original: UpdateAccessRoleRequest = {
+        name: role.name || '',
+        icon: role.icon || undefined,
+        isImmutable: role.isImmutable || false,
+        isSystem: role.isSystem || false
+      }
+
+      const current: UpdateAccessRoleRequest = {
+        name: data.name,
+        icon: data.icon || undefined,
+        isImmutable: data.isImmutable || false,
+        isSystem: data.isSystem || false
+      }
+
+      const changes = getChangedFields(original, current)
+
+      if (!changes) {
+        handleClose()
+
+        return
+      }
+
+      updateRole({ roleId: role.id, payload: changes })
 
       return
     }
 
-    createRole(payload)
+    createRole(toRequest(data))
   }
 
   const handleClose = () => {
@@ -151,7 +169,13 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
   }
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm' sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}>
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
+      maxWidth='sm'
+      sx={{ '& .MuiDialog-paper': { overflow: 'visible' } }}
+    >
       <DialogTitle variant='h4' sx={{ textAlign: 'center', p: 5 }}>
         {isEdit ? 'Edit Role' : 'Add New Role'}
         <Typography variant='body2' color='text.secondary' sx={{ mt: 1 }}>
@@ -187,7 +211,12 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
               name='icon'
               control={control}
               render={({ field: { value, onChange } }) => (
-                <RoleIconPicker value={value || ''} onChange={onChange} error={!!errors.icon} helperText={errors.icon?.message} />
+                <RoleIconPicker
+                  value={value || ''}
+                  onChange={onChange}
+                  error={!!errors.icon}
+                  helperText={errors.icon?.message}
+                />
               )}
             />
           </Box>
@@ -221,7 +250,12 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
           <Button variant='outlined' color='secondary' onClick={handleClose} sx={{ mr: 2 }}>
             Discard
           </Button>
-          <Button type='submit' variant='contained' disabled={isLoading} startIcon={isLoading ? <CircularProgress size={20} color='inherit' /> : null}>
+          <Button
+            type='submit'
+            variant='contained'
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={20} color='inherit' /> : null}
+          >
             {isEdit ? 'Save Changes' : 'Create Role'}
           </Button>
         </DialogActions>

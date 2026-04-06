@@ -23,9 +23,15 @@ import {
   AccountProductType,
   getGetApiV1AccountSalesProductsQueryKey,
   usePostApiV1AccountSalesProducts,
-  usePutApiV1AccountSalesProductsId
+  usePatchApiV1AccountSalesProductsId
 } from '@/generated/core-api'
-import type { CreateProductRequest, CreateProductVariantRequest, ProductDto, UpdateProductRequest } from '@/generated/core-api'
+import type {
+  CreateProductRequest,
+  CreateProductVariantRequest,
+  ProductDto,
+  UpdateProductRequest
+} from '@/generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 
 interface ProductCreateEditModalProps {
   open: boolean
@@ -88,7 +94,7 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
       onSuccess: async response => {
         if (!response.success) {
           toast.error(response.errors?.[0]?.message || 'Failed to create product')
-          
+
           return
         }
 
@@ -99,12 +105,12 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
     }
   })
 
-  const updateMutation = usePutApiV1AccountSalesProductsId({
+  const updateMutation = usePatchApiV1AccountSalesProductsId({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
           toast.error(response.errors?.[0]?.message || 'Failed to update product')
-          
+
           return
         }
 
@@ -131,14 +137,29 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
     }))
 
     if (isEdit && editTarget?.id) {
-      const payload: UpdateProductRequest = {
+      const current: UpdateProductRequest = {
         name: form.name,
         productType: form.productType,
-        description: form.description,
+        description: form.description ?? undefined,
         variants: sanitizedVariants
       }
 
-      await updateMutation.mutateAsync({ id: editTarget.id, data: payload })
+      const original: UpdateProductRequest = {
+        name: editTarget.name || '',
+        productType: editTarget.productType || AccountProductType.Other,
+        description: editTarget.description || '',
+        variants: (editTarget.variants || []).map(v => ({
+          name: v.name || 'Default',
+          price: v.price || 0,
+          warrantyDays: v.warrantyDays || 0
+        }))
+      }
+
+      const changes = getChangedFields(original, current)
+
+      if (!changes) return
+
+      await updateMutation.mutateAsync({ id: editTarget.id, data: changes })
     } else {
       const payload: CreateProductRequest = {
         name: form.name,
@@ -183,10 +204,10 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
   }
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={handleClose} 
-      fullWidth 
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      fullWidth
       maxWidth='md' // slightly wider for the horizontal variant rows
       // eslint-disable-next-line @typescript-eslint/no-deprecated
       PaperProps={{
@@ -199,7 +220,16 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
         }
       }}
     >
-      <DialogTitle sx={{ pb: 1, pt: 3.5, px: { xs: 2.5, sm: 4 }, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <DialogTitle
+        sx={{
+          pb: 1,
+          pt: 3.5,
+          px: { xs: 2.5, sm: 4 },
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start'
+        }}
+      >
         <Box>
           <Typography component='span' variant='h5' fontWeight={800} sx={{ display: 'block' }}>
             {isEdit ? 'Edit Product' : 'Add Product'}
@@ -212,20 +242,45 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
           <i className='tabler-x' />
         </IconButton>
       </DialogTitle>
-      
+
       <DialogContent sx={{ px: { xs: 2.5, sm: 4 }, pt: 3, pb: 4, display: 'flex', flexDirection: 'column', gap: 4 }}>
-        
         {/* BASIC INFORMATION */}
         <Box>
-          <Typography variant="subtitle2" fontWeight={700} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2, color: 'text.primary' }}>
-            <Box sx={{ width: 24, height: 24, borderRadius: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography
+            variant='subtitle2'
+            fontWeight={700}
+            sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2, color: 'text.primary' }}
+          >
+            <Box
+              sx={{
+                width: 24,
+                height: 24,
+                borderRadius: 1.5,
+                bgcolor: alpha(theme.palette.primary.main, 0.1),
+                color: 'primary.main',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
               <i className='tabler-info-circle' style={{ fontSize: 14 }} />
             </Box>
             Basic Information
           </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '2fr 1fr' }, gap: 3 }}>
             <Box>
-              <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.75, display: 'block', fontWeight: 600, textTransform: 'uppercase' }}>PRODUCT NAME</Typography>
+              <Typography
+                variant='caption'
+                sx={{
+                  color: 'text.secondary',
+                  mb: 0.75,
+                  display: 'block',
+                  fontWeight: 600,
+                  textTransform: 'uppercase'
+                }}
+              >
+                PRODUCT NAME
+              </Typography>
               <TextField
                 fullWidth
                 placeholder='e.g. Etheris Core'
@@ -235,7 +290,18 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
               />
             </Box>
             <Box>
-              <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.75, display: 'block', fontWeight: 600, textTransform: 'uppercase' }}>TYPE</Typography>
+              <Typography
+                variant='caption'
+                sx={{
+                  color: 'text.secondary',
+                  mb: 0.75,
+                  display: 'block',
+                  fontWeight: 600,
+                  textTransform: 'uppercase'
+                }}
+              >
+                TYPE
+              </Typography>
               <TextField
                 select
                 fullWidth
@@ -244,13 +310,20 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
                 slotProps={{ input: { sx: { borderRadius: 2 } } }}
               >
                 {Object.values(AccountProductType).map(type => (
-                  <MenuItem key={type} value={type}>{type}</MenuItem>
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
                 ))}
               </TextField>
             </Box>
           </Box>
           <Box sx={{ mt: 3 }}>
-            <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.75, display: 'block', fontWeight: 600, textTransform: 'uppercase' }}>DESCRIPTION (OPTIONAL)</Typography>
+            <Typography
+              variant='caption'
+              sx={{ color: 'text.secondary', mb: 0.75, display: 'block', fontWeight: 600, textTransform: 'uppercase' }}
+            >
+              DESCRIPTION (OPTIONAL)
+            </Typography>
             <TextField
               fullWidth
               multiline
@@ -266,18 +339,33 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
         {/* PACKAGE CONFIGURATION */}
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-            <Typography variant="subtitle2" fontWeight={700} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.primary' }}>
-              <Box sx={{ width: 24, height: 24, borderRadius: 1.5, bgcolor: alpha(theme.palette.primary.main, 0.1), color: 'primary.main', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Typography
+              variant='subtitle2'
+              fontWeight={700}
+              sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'text.primary' }}
+            >
+              <Box
+                sx={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: 1.5,
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                  color: 'primary.main',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
                 <i className='tabler-packages' style={{ fontSize: 14 }} />
               </Box>
               Package Configuration
             </Typography>
-            <Button 
-              size='small' 
-              startIcon={<i className='tabler-plus' style={{ fontSize: 14 }}/>} 
+            <Button
+              size='small'
+              startIcon={<i className='tabler-plus' style={{ fontSize: 14 }} />}
               onClick={handleAddPackage}
               sx={{ fontWeight: 600, textTransform: 'none' }}
-              color="primary"
+              color='primary'
             >
               Add Package
             </Button>
@@ -286,17 +374,19 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
           <Stack spacing={1.5}>
             {(form.variants || []).length === 0 && (
               <Box sx={{ p: 4, textAlign: 'center', border: '1px dashed', borderColor: 'divider', borderRadius: 3 }}>
-                <Typography variant='body2' color='text.secondary'>No packages defined. Add a package to continue.</Typography>
+                <Typography variant='body2' color='text.secondary'>
+                  No packages defined. Add a package to continue.
+                </Typography>
               </Box>
             )}
-            
+
             {(form.variants || []).map((variant, index) => (
-              <Card 
+              <Card
                 key={`variant-${index}`}
-                variant="outlined" 
-                sx={{ 
-                  p: 2, 
-                  borderRadius: 3, 
+                variant='outlined'
+                sx={{
+                  p: 2,
+                  borderRadius: 3,
                   bgcolor: 'transparent',
                   borderColor: index === 0 ? 'primary.main' : 'divider',
                   position: 'relative',
@@ -305,16 +395,39 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
                 }}
               >
                 {index === 0 && (
-                  <Box sx={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: 4, bgcolor: 'primary.main', borderTopLeftRadius: 12, borderBottomLeftRadius: 12 }} />
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      width: 4,
+                      bgcolor: 'primary.main',
+                      borderTopLeftRadius: 12,
+                      borderBottomLeftRadius: 12
+                    }}
+                  />
                 )}
-                
+
                 <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start', flexWrap: { xs: 'wrap', sm: 'nowrap' } }}>
                   {/* Name */}
                   <Box sx={{ flex: { xs: '1 1 100%', sm: '2 1 0' } }}>
-                    <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.5, display: 'block', fontWeight: 600, fontSize: '0.65rem', textTransform: 'uppercase' }}>PACKAGE NAME</Typography>
+                    <Typography
+                      variant='caption'
+                      sx={{
+                        color: 'text.secondary',
+                        mb: 0.5,
+                        display: 'block',
+                        fontWeight: 600,
+                        fontSize: '0.65rem',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      PACKAGE NAME
+                    </Typography>
                     <TextField
                       fullWidth
-                      size="small"
+                      size='small'
                       placeholder='e.g. Standard Tier'
                       value={variant.name}
                       onChange={e => handlePackageChange(index, 'name', e.target.value)}
@@ -324,16 +437,34 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
 
                   {/* Price */}
                   <Box sx={{ flex: { xs: '1 1 45%', sm: '1.2 1 0' } }}>
-                    <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.5, display: 'block', fontWeight: 600, fontSize: '0.65rem', textTransform: 'uppercase' }}>PRICE (VND)</Typography>
+                    <Typography
+                      variant='caption'
+                      sx={{
+                        color: 'text.secondary',
+                        mb: 0.5,
+                        display: 'block',
+                        fontWeight: 600,
+                        fontSize: '0.65rem',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      PRICE (VND)
+                    </Typography>
                     <TextField
                       fullWidth
-                      size="small"
+                      size='small'
                       value={formatCurrencyInput(variant.price)}
                       onChange={e => handlePackageChange(index, 'price', e.target.value)}
-                      slotProps={{ 
+                      slotProps={{
                         input: {
                           sx: { bgcolor: 'background.default', borderRadius: 2 },
-                          endAdornment: <InputAdornment position="end"><Typography variant="caption" fontWeight={600}>VND</Typography></InputAdornment>
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <Typography variant='caption' fontWeight={600}>
+                                VND
+                              </Typography>
+                            </InputAdornment>
+                          )
                         }
                       }}
                     />
@@ -341,11 +472,23 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
 
                   {/* Warranty */}
                   <Box sx={{ flex: { xs: '1 1 35%', sm: '1 1 0' } }}>
-                    <Typography variant='caption' sx={{ color: 'text.secondary', mb: 0.5, display: 'block', fontWeight: 600, fontSize: '0.65rem', textTransform: 'uppercase' }}>WARRANTY (DAYS)</Typography>
+                    <Typography
+                      variant='caption'
+                      sx={{
+                        color: 'text.secondary',
+                        mb: 0.5,
+                        display: 'block',
+                        fontWeight: 600,
+                        fontSize: '0.65rem',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      WARRANTY (DAYS)
+                    </Typography>
                     <TextField
                       fullWidth
-                      size="small"
-                      type="number"
+                      size='small'
+                      type='number'
                       value={variant.warrantyDays}
                       onChange={e => handlePackageChange(index, 'warrantyDays', Number(e.target.value))}
                       slotProps={{ input: { sx: { bgcolor: 'background.default', borderRadius: 2 } } }}
@@ -354,13 +497,13 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
 
                   {/* Remove Button */}
                   <Box sx={{ pt: 2.5, pl: 0.5, display: 'flex', alignItems: 'center' }}>
-                    <IconButton 
-                      size="small" 
+                    <IconButton
+                      size='small'
                       onClick={() => handleRemovePackage(index)}
                       disabled={(form.variants || []).length <= 1}
-                      sx={{ 
-                        color: 'text.secondary', 
-                        '&:hover': { color: 'error.main', bgcolor: alpha(theme.palette.error.main, 0.1) } 
+                      sx={{
+                        color: 'text.secondary',
+                        '&:hover': { color: 'error.main', bgcolor: alpha(theme.palette.error.main, 0.1) }
                       }}
                     >
                       <i className='tabler-trash' style={{ fontSize: 18 }} />
@@ -372,17 +515,19 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
           </Stack>
         </Box>
       </DialogContent>
-      
+
       <DialogActions sx={{ px: { xs: 2.5, sm: 4 }, py: 3, borderTop: '1px solid', borderColor: 'divider' }}>
-        <Button onClick={handleClose} color='inherit' sx={{ fontWeight: 600 }}>Cancel</Button>
+        <Button onClick={handleClose} color='inherit' sx={{ fontWeight: 600 }}>
+          Cancel
+        </Button>
         <Button
           variant='contained'
           color='primary'
           disabled={!form.name || (form.variants || []).length === 0 || isPending}
           onClick={handleSave}
-          sx={{ 
-            px: 4, 
-            py: 1, 
+          sx={{
+            px: 4,
+            py: 1,
             borderRadius: 2,
             boxShadow: `0 4px 14px 0 ${alpha(theme.palette.primary.main, 0.39)}`,
             fontWeight: 700

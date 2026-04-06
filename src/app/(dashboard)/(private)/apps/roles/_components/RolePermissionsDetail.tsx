@@ -103,9 +103,7 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
   const [initialPermissionIds, setInitialPermissionIds] = useState<string[]>([])
 
   useEffect(() => {
-    const ids = (role?.permissions || [])
-      .map(p => p.id)
-      .filter((id): id is string => !!id)
+    const ids = (role?.permissions || []).map(p => p.id).filter((id): id is string => !!id)
 
     setSelectedPermissionIds(ids)
     setInitialPermissionIds(ids)
@@ -310,7 +308,9 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
             <Button
               variant='contained'
               size='small'
-              startIcon={isUpdating ? <CircularProgress size={16} color='inherit' /> : <i className='tabler-device-floppy' />}
+              startIcon={
+                isUpdating ? <CircularProgress size={16} color='inherit' /> : <i className='tabler-device-floppy' />
+              }
               onClick={handleSave}
               disabled={isUpdating || !!role.isImmutable}
               sx={{
@@ -352,7 +352,12 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
               ),
               endAdornment: permissionSearch && (
                 <InputAdornment position='end'>
-                  <IconButton size='small' edge='end' onClick={() => setPermissionSearch('')} sx={{ color: 'text.secondary' }}>
+                  <IconButton
+                    size='small'
+                    edge='end'
+                    onClick={() => setPermissionSearch('')}
+                    sx={{ color: 'text.secondary' }}
+                  >
                     <i className='tabler-x' style={{ fontSize: '1.1rem' }} />
                   </IconButton>
                 </InputAdornment>
@@ -452,7 +457,9 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
                             sx={{
                               p: 3,
                               borderRadius: 1,
-                              bgcolor: isSelected ? alpha(themeColor, 0.04) : alpha(theme.palette.background.default, 0.4),
+                              bgcolor: isSelected
+                                ? alpha(themeColor, 0.04)
+                                : alpha(theme.palette.background.default, 0.4),
                               border: '1px solid',
                               borderColor: isSelected ? alpha(themeColor, 0.5) : 'divider',
                               display: 'flex',
@@ -473,7 +480,12 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
                                 {perm.description || 'Allow access to this permission'}
                               </Typography>
                             </Box>
-                            <Switch checked={isSelected} onChange={() => handleToggle(permissionId)} size='small' disabled={!!role.isImmutable} />
+                            <Switch
+                              checked={isSelected}
+                              onChange={() => handleToggle(permissionId)}
+                              size='small'
+                              disabled={!!role.isImmutable}
+                            />
                           </Box>
                         </Grid>
                       )

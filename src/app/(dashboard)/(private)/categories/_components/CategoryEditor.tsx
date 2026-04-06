@@ -35,9 +35,10 @@ import {
   useGetApiV1Categories,
   useGetApiV1CategoriesId,
   usePostApiV1Categories,
-  usePutApiV1CategoriesId
+  usePatchApiV1CategoriesId
 } from '@generated/core-api'
 import type { CategoryDto } from '@generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 import IconPicker from '@/components/icon-picker/IconPicker'
 import { CATEGORY_TYPE_META, CATEGORY_TYPES, TYPE_CHIP_COLORS } from '@/constants/categoryType'
 import { dsl } from '@/utils/dslQueryBuilder'
@@ -54,10 +55,7 @@ export interface SchemaField {
   options?: string[]
 }
 
-const FIELD_TYPE_META: Record<
-  SchemaFieldType,
-  { icon: string; title: string; subtitle: string; color: string }
-> = {
+const FIELD_TYPE_META: Record<SchemaFieldType, { icon: string; title: string; subtitle: string; color: string }> = {
   text: { icon: 'tabler-typography', title: 'Text Input', subtitle: 'Single line string', color: '#7C4DFF' },
   number: { icon: 'tabler-number', title: 'Number', subtitle: 'Integer or decimal', color: '#448AFF' },
   date: { icon: 'tabler-calendar', title: 'Date Picker', subtitle: 'Date or DateTime', color: '#00BFA5' },
@@ -102,7 +100,7 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
   const { data: catData } = useGetApiV1CategoriesId(categoryId!, { query: { enabled: isEditMode } })
 
   const createMutation = usePostApiV1Categories()
-  const updateMutation = usePutApiV1CategoriesId()
+  const updateMutation = usePatchApiV1CategoriesId()
   const category = catData?.result
 
   const {
@@ -212,10 +210,27 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
       let savedId = categoryId
 
       if (isEditMode && categoryId) {
-        await updateMutation.mutateAsync({
-          id: categoryId,
-          data: { name: data.name, icon: data.icon || null, type: data.type, parentId: data.parentId || null, formSchema }
-        })
+        const current = {
+          name: data.name,
+          icon: data.icon || null,
+          type: data.type,
+          parentId: data.parentId || null,
+          formSchema
+        }
+
+        const original = {
+          name: category?.name ?? '',
+          icon: category?.icon ?? null,
+          type: category?.type ?? 'Asset',
+          parentId: category?.parentId ?? null,
+          formSchema: category?.formSchema ?? '[]'
+        }
+
+        const changes = getChangedFields(original as Record<string, unknown>, current as Record<string, unknown>)
+
+        if (changes) {
+          await updateMutation.mutateAsync({ id: categoryId, data: changes })
+        }
       } else {
         const result = await createMutation.mutateAsync({
           data: {
@@ -319,7 +334,11 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
 
             {/* Detail form */}
             <Card sx={{ p: 3 }}>
-              <Typography variant='overline' color='text.secondary' sx={{ mb: 2.5, display: 'block', letterSpacing: 1 }}>
+              <Typography
+                variant='overline'
+                color='text.secondary'
+                sx={{ mb: 2.5, display: 'block', letterSpacing: 1 }}
+              >
                 CATEGORY DETAILS
               </Typography>
 
@@ -390,7 +409,8 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
                         {CATEGORY_TYPES.map(type => (
                           <MenuItem key={type} value={type}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                              <i className={CATEGORY_TYPE_META[type].icon} style={{ fontSize: 16 }} /> {CATEGORY_TYPE_META[type].label}
+                              <i className={CATEGORY_TYPE_META[type].icon} style={{ fontSize: 16 }} />{' '}
+                              {CATEGORY_TYPE_META[type].label}
                             </Box>
                           </MenuItem>
                         ))}
@@ -446,9 +466,7 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
                       renderOption={(props, option) => (
                         <li {...props} key={option.id}>
                           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-                            {option.icon && (
-                              <i className={option.icon} style={{ fontSize: 14, opacity: 0.6 }} />
-                            )}
+                            {option.icon && <i className={option.icon} style={{ fontSize: 14, opacity: 0.6 }} />}
                             <Typography variant='body2' noWrap sx={{ flex: 1 }}>
                               {option.name}
                             </Typography>
@@ -688,9 +706,7 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
                             <Controller
                               name={`formFields.${index}.placeholder`}
                               control={control}
-                              render={({ field: f }) => (
-                                <TextField {...f} label='Placeholder' size='small' fullWidth />
-                              )}
+                              render={({ field: f }) => <TextField {...f} label='Placeholder' size='small' fullWidth />}
                             />
 
                             {fieldType === 'dropdown' && (

@@ -162,7 +162,18 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
         <DialogContent dividers sx={{ px: { xs: 2.5, sm: 4 }, pt: 3, pb: 4, borderColor: 'divider' }}>
           <Stack spacing={4}>
             <Card variant='outlined' sx={{ p: 3, borderRadius: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <Typography variant="caption" fontWeight={700} sx={{ textTransform: 'uppercase', color: 'primary.main', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography
+                variant='caption'
+                fontWeight={700}
+                sx={{
+                  textTransform: 'uppercase',
+                  color: 'primary.main',
+                  letterSpacing: '1px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}
+              >
                 <i className='tabler-server-cog' style={{ fontSize: 16 }} />
                 System Configuration
               </Typography>
@@ -183,7 +194,9 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
                   helperText={products.length === 0 ? 'No product available. Please create product first.' : undefined}
                 >
                   {products.map(product => (
-                    <MenuItem key={product.id} value={product.id}>{product.name}</MenuItem>
+                    <MenuItem key={product.id} value={product.id}>
+                      {product.name}
+                    </MenuItem>
                   ))}
                 </TextField>
                 <TextField
@@ -195,19 +208,39 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
                 >
                   <MenuItem value=''>— Independent Node —</MenuItem>
                   {sourceAccounts.map(sa => (
-                    <MenuItem key={sa.id} value={sa.id}>[{sa.accountType}] {sa.username}</MenuItem>
+                    <MenuItem key={sa.id} value={sa.id}>
+                      [{sa.accountType}] {sa.username}
+                    </MenuItem>
                   ))}
                 </TextField>
               </Stack>
             </Card>
 
             <Card variant='outlined' sx={{ p: 3, borderRadius: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <Typography variant="caption" fontWeight={700} sx={{ textTransform: 'uppercase', color: 'primary.main', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: 1 }}>
+              <Typography
+                variant='caption'
+                fontWeight={700}
+                sx={{
+                  textTransform: 'uppercase',
+                  color: 'primary.main',
+                  letterSpacing: '1px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1
+                }}
+              >
                 <i className='tabler-key' style={{ fontSize: 16 }} />
                 Access Credentials
               </Typography>
 
-              <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, columnGap: { xs: 2.5, sm: 3 }, rowGap: { xs: 2.5, sm: 3 } }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                  columnGap: { xs: 2.5, sm: 3 },
+                  rowGap: { xs: 2.5, sm: 3 }
+                }}
+              >
                 <TextField
                   label='Username'
                   required
@@ -245,12 +278,23 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
                 />
 
                 {isGithubProduct && !githubProfile && (
-                  <Alert severity='warning' sx={{ gridColumn: '1 / -1', borderRadius: 2 }}>You must fetch GitHub profile before creating a GitHub clone.</Alert>
+                  <Alert severity='warning' sx={{ gridColumn: '1 / -1', borderRadius: 2 }}>
+                    You must fetch GitHub profile before creating a GitHub clone.
+                  </Alert>
                 )}
                 {isGithubProduct && githubProfile && (
-                  <Alert severity='info' icon={<i className='tabler-brand-github' style={{ fontSize: 24 }} />} sx={{ gridColumn: '1 / -1', borderRadius: 2 }}>
-                    <Typography variant="subtitle2" fontWeight={700}>{githubProfile.login}</Typography>
-                    <Typography variant="body2">ID: {githubProfile.id} &bull; Followers: {githubProfile.followers} &bull; Repos: {githubProfile.publicRepos}</Typography>
+                  <Alert
+                    severity='info'
+                    icon={<i className='tabler-brand-github' style={{ fontSize: 24 }} />}
+                    sx={{ gridColumn: '1 / -1', borderRadius: 2 }}
+                  >
+                    <Typography variant='subtitle2' fontWeight={700}>
+                      {githubProfile.login}
+                    </Typography>
+                    <Typography variant='body2'>
+                      ID: {githubProfile.id} &bull; Followers: {githubProfile.followers} &bull; Repos:{' '}
+                      {githubProfile.publicRepos}
+                    </Typography>
                   </Alert>
                 )}
 
@@ -308,7 +352,9 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
           </Stack>
         </DialogContent>
         <DialogActions sx={{ px: { xs: 2.5, sm: 4 }, py: 3, mt: 2 }}>
-          <Button onClick={handleClose} color='inherit'>Cancel</Button>
+          <Button onClick={handleClose} color='inherit'>
+            Cancel
+          </Button>
           <Button
             variant='contained'
             disabled={
@@ -320,7 +366,13 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
               createCloneMutation.isPending
             }
             onClick={() => createCloneMutation.mutate({ data: form })}
-            startIcon={createCloneMutation.isPending ? <i className='tabler-loader animate-spin' /> : <i className='tabler-device-floppy' />}
+            startIcon={
+              createCloneMutation.isPending ? (
+                <i className='tabler-loader animate-spin' />
+              ) : (
+                <i className='tabler-device-floppy' />
+              )
+            }
             color='primary'
             sx={{ px: 3 }}
           >
@@ -333,7 +385,8 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
         <DialogTitle>Fetch GitHub Profile</DialogTitle>
         <DialogContent sx={{ px: { xs: 2.5, sm: 3 }, pt: 2, pb: 1 }}>
           <Typography variant='body2' sx={{ mb: 2 }}>
-            Enter the GitHub Username to fetch the External ID (it will be auto-filled into the External Account ID field).
+            Enter the GitHub Username to fetch the External ID (it will be auto-filled into the External Account ID
+            field).
           </Typography>
           <TextField
             fullWidth

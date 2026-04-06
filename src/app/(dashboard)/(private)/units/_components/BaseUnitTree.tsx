@@ -17,9 +17,7 @@ interface BaseUnitTreeProps {
 
 // ─── Component ─────────────────────────────────────────────────────────────────
 const BaseUnitTree = ({ categoryFilter }: BaseUnitTreeProps) => {
-  const { data, isLoading } = useGetApiV1UnitsTree(
-    categoryFilter ? { category: categoryFilter } : undefined
-  )
+  const { data, isLoading } = useGetApiV1UnitsTree(categoryFilter ? { category: categoryFilter } : undefined)
 
   const trees = data?.result ?? []
 
@@ -137,7 +135,10 @@ const DerivedUnitItem = ({ node, depth }: { node: UnitTreeNodeDto; depth: number
         {node.name}
       </Typography>
       <Typography variant='caption' color='primary' fontFamily='monospace' fontWeight={600} sx={{ flexShrink: 0 }}>
-        x {(node.conversionRate ?? 1).toFixed(node.conversionRate && node.conversionRate % 1 !== 0 ? 4 : 0).replace(/\.?0+$/, '')}
+        x{' '}
+        {(node.conversionRate ?? 1)
+          .toFixed(node.conversionRate && node.conversionRate % 1 !== 0 ? 4 : 0)
+          .replace(/\.?0+$/, '')}
       </Typography>
     </Box>
 

@@ -76,7 +76,7 @@ const MenuSection: ForwardRefRenderFunction<HTMLLIElement, MenuSectionProps> = (
   }
 
   return (
-     
+
     // Menu Section
     <StyledVerticalMenuSection
       ref={ref}

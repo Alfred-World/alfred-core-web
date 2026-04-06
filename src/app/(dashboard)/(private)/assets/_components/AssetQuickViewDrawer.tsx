@@ -14,9 +14,9 @@ import { useGetApiV1AssetsId } from '@generated/core-api'
 
 // ─── Config ────────────────────────────────────────────────────────────────────
 const statusConfig: Record<string, { label: string; hex: string }> = {
-  Active:    { label: 'Active',    hex: '#10b981' },
-  Sold:      { label: 'Sold',      hex: '#6366f1' },
-  Broken:    { label: 'Broken',    hex: '#ef4444' },
+  Active: { label: 'Active', hex: '#10b981' },
+  Sold: { label: 'Sold', hex: '#6366f1' },
+  Broken: { label: 'Broken', hex: '#ef4444' },
   Discarded: { label: 'Discarded', hex: '#6b7280' }
 }
 
@@ -43,11 +43,22 @@ const formatCurrency = (n?: number | null) =>
 
 // ─── Info Row ──────────────────────────────────────────────────────────────────
 const InfoRow = ({ label, value }: { label: string; value?: React.ReactNode }) => (
-  <Box sx={{ display: 'grid', gridTemplateColumns: '42% 1fr', alignItems: 'start', py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
+  <Box
+    sx={{
+      display: 'grid',
+      gridTemplateColumns: '42% 1fr',
+      alignItems: 'start',
+      py: 1.5,
+      borderBottom: '1px solid',
+      borderColor: 'divider'
+    }}
+  >
     <Typography variant='caption' color='text.secondary' sx={{ fontWeight: 500, pt: 0.25 }}>
       {label}
     </Typography>
-    <Typography variant='body2' fontWeight={500}>{value ?? '—'}</Typography>
+    <Typography variant='body2' fontWeight={500}>
+      {value ?? '—'}
+    </Typography>
   </Box>
 )
 
@@ -74,7 +85,11 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
 
   // Parse specs
   const specsObj: Record<string, string> = (() => {
-    try { return JSON.parse(asset?.specs ?? '{}') } catch { return {} }
+    try {
+      return JSON.parse(asset?.specs ?? '{}')
+    } catch {
+      return {}
+    }
   })()
 
   const specsEntries = Object.entries(specsObj).filter(([, v]) => v !== '' && v !== null && v !== undefined)
@@ -104,15 +119,30 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
       }}
     >
       {/* ─── Header ────────────────────────────────────────────────── */}
-      <Box sx={{
-        px: 3, py: 2.5, borderBottom: '1px solid', borderColor: 'divider',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0
-      }}>
+      <Box
+        sx={{
+          px: 3,
+          py: 2.5,
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexShrink: 0
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{
-            width: 36, height: 36, borderRadius: 1.5,
-            bgcolor: 'action.selected', display: 'flex', alignItems: 'center', justifyContent: 'center'
-          }}>
+          <Box
+            sx={{
+              width: 36,
+              height: 36,
+              borderRadius: 1.5,
+              bgcolor: 'action.selected',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
             <i className='tabler-package' style={{ fontSize: 20, opacity: 0.5 }} />
           </Box>
           <Box>
@@ -131,7 +161,6 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
 
       {/* ─── Body ──────────────────────────────────────────────────── */}
       <Box sx={{ flex: 1, overflow: 'auto', px: 3, py: 3, display: 'flex', flexDirection: 'column', gap: 3 }}>
-
         {/* Status + ID row */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           {isLoading ? (
@@ -141,9 +170,12 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
               label={status.label}
               size='small'
               sx={{
-                fontWeight: 700, fontSize: 11,
-                bgcolor: alpha(status.hex, 0.12), color: status.hex,
-                border: `1px solid ${alpha(status.hex, 0.3)}`, height: 22
+                fontWeight: 700,
+                fontSize: 11,
+                bgcolor: alpha(status.hex, 0.12),
+                color: status.hex,
+                border: `1px solid ${alpha(status.hex, 0.3)}`,
+                height: 22
               }}
             />
           )}
@@ -155,20 +187,37 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
         {/* KPI strip */}
         <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
           {[
-            { label: 'Initial Cost', value: isLoading ? null : formatCurrency(asset?.initialCost), icon: 'tabler-coin', color: '#7367f0' },
-            { label: 'Days in Use',  value: isLoading ? null : (daysInUse !== null ? `${daysInUse} days` : '—'), icon: 'tabler-clock', color: '#10b981' }
+            {
+              label: 'Initial Cost',
+              value: isLoading ? null : formatCurrency(asset?.initialCost),
+              icon: 'tabler-coin',
+              color: '#7367f0'
+            },
+            {
+              label: 'Days in Use',
+              value: isLoading ? null : daysInUse !== null ? `${daysInUse} days` : '—',
+              icon: 'tabler-clock',
+              color: '#10b981'
+            }
           ].map(({ label, value, icon, color }) => (
             <Box
               key={label}
               sx={{
-                p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider',
-                bgcolor: 'action.hover', position: 'relative', overflow: 'hidden'
+                p: 2,
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'divider',
+                bgcolor: 'action.hover',
+                position: 'relative',
+                overflow: 'hidden'
               }}
             >
               <Box sx={{ position: 'absolute', right: -4, top: -4, opacity: 0.08, color, pointerEvents: 'none' }}>
                 <i className={icon} style={{ fontSize: 52 }} />
               </Box>
-              <Typography variant='caption' color='text.secondary' sx={{ fontWeight: 500 }}>{label}</Typography>
+              <Typography variant='caption' color='text.secondary' sx={{ fontWeight: 500 }}>
+                {label}
+              </Typography>
               <Typography variant='subtitle1' fontWeight={700} sx={{ mt: 0.25 }}>
                 {value ?? <Skeleton width={80} />}
               </Typography>
@@ -180,13 +229,20 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
         {(isLoading || asset?.warrantyExpiryDate) && (
           <Box sx={{ p: 2, borderRadius: 2, border: '1px solid', borderColor: 'divider', bgcolor: 'action.hover' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-              <Typography variant='caption' color='text.secondary' fontWeight={500}>Warranty</Typography>
+              <Typography variant='caption' color='text.secondary' fontWeight={500}>
+                Warranty
+              </Typography>
               {isLoading ? (
                 <Skeleton width={60} />
               ) : isExpired ? (
-                <Typography variant='caption' color='error'>Expired</Typography>
+                <Typography variant='caption' color='error'>
+                  Expired
+                </Typography>
               ) : (
-                <Typography variant='caption' sx={{ color: isExpiringSoon ? '#ff9f43' : 'text.secondary', fontWeight: 600 }}>
+                <Typography
+                  variant='caption'
+                  sx={{ color: isExpiringSoon ? '#ff9f43' : 'text.secondary', fontWeight: 600 }}
+                >
                   {daysLeft} days remaining
                 </Typography>
               )}
@@ -198,15 +254,21 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
                 variant='determinate'
                 value={warrantyPct}
                 sx={{
-                  height: 6, borderRadius: 5, bgcolor: 'action.selected',
+                  height: 6,
+                  borderRadius: 5,
+                  bgcolor: 'action.selected',
                   '& .MuiLinearProgress-bar': { bgcolor: warrantyColor, borderRadius: 5 }
                 }}
               />
             )}
             {!isLoading && (
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 0.75 }}>
-                <Typography variant='caption' color='text.disabled'>{formatDate(asset?.purchaseDate)}</Typography>
-                <Typography variant='caption' color='text.disabled'>{formatDate(asset?.warrantyExpiryDate)}</Typography>
+                <Typography variant='caption' color='text.disabled'>
+                  {formatDate(asset?.purchaseDate)}
+                </Typography>
+                <Typography variant='caption' color='text.disabled'>
+                  {formatDate(asset?.warrantyExpiryDate)}
+                </Typography>
               </Box>
             )}
           </Box>
@@ -222,7 +284,7 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
           ) : (
             <>
               <InfoRow label='Category' value={asset?.categoryName} />
-              <InfoRow label='Brand'    value={asset?.brandName} />
+              <InfoRow label='Brand' value={asset?.brandName} />
               <InfoRow label='Location' value={asset?.location} />
               <InfoRow label='Purchase Date' value={formatDate(asset?.purchaseDate)} />
               <InfoRow label='Warranty Expiry' value={formatDate(asset?.warrantyExpiryDate)} />
@@ -241,8 +303,11 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
                 <Box
                   key={key}
                   sx={{
-                    display: 'grid', gridTemplateColumns: '42% 1fr',
-                    px: 2, py: 1.5, alignItems: 'start',
+                    display: 'grid',
+                    gridTemplateColumns: '42% 1fr',
+                    px: 2,
+                    py: 1.5,
+                    alignItems: 'start',
                     bgcolor: i % 2 === 0 ? 'transparent' : 'action.hover',
                     borderBottom: i < specsEntries.length - 1 ? '1px solid' : 'none',
                     borderColor: 'divider'
@@ -262,10 +327,17 @@ const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQ
       </Box>
 
       {/* ─── Footer actions ─────────────────────────────────────────── */}
-      <Box sx={{
-        px: 3, py: 2.5, borderTop: '1px solid', borderColor: 'divider',
-        display: 'flex', gap: 2, flexShrink: 0
-      }}>
+      <Box
+        sx={{
+          px: 3,
+          py: 2.5,
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          display: 'flex',
+          gap: 2,
+          flexShrink: 0
+        }}
+      >
         <Button
           variant='contained'
           fullWidth

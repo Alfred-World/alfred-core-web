@@ -11,7 +11,7 @@ const horizontalMenuData = (): HorizontalMenuDataType[] => [
         href: '/dashboards'
       }
     ]
-  },
+  }
 ]
 
 export default horizontalMenuData

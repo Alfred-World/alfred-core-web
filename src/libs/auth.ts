@@ -49,16 +49,16 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.OIDC_CLIENT_ID!,
       clientSecret: process.env.OIDC_CLIENT_SECRET,
       client: {
-        token_endpoint_auth_method: 'client_secret_post',
+        token_endpoint_auth_method: 'client_secret_post'
       },
       profile(profile) {
         return {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
-          image: profile.picture,
+          image: profile.picture
         }
-      },
+      }
     },
 
     // Credentials provider for SSO session-based silent authentication
@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
       credentials: {
         userId: { label: 'User ID', type: 'text' },
         email: { label: 'Email', type: 'text' },
-        name: { label: 'Name', type: 'text' },
+        name: { label: 'Name', type: 'text' }
       },
       async authorize(credentials) {
         // This is called when we have a valid SSO session from Gateway
@@ -77,25 +77,24 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
-
         return {
           id: credentials.userId,
           email: credentials.email,
-          name: credentials.name || credentials.email,
+          name: credentials.name || credentials.email
         }
-      },
-    }),
+      }
+    })
   ],
 
   session: {
     strategy: 'jwt',
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60 // 30 days
   },
 
   // Use custom login page that auto-redirects to SSO
   pages: {
     signIn: '/login',
-    signOut: '/signout',
+    signOut: '/signout'
   },
 
   // Use secure cookies for HTTPS
@@ -106,7 +105,8 @@ export const authOptions: NextAuthOptions = {
       // Initial sign in
       if (account) {
         // Calculate expiresAt ourselves using expires_in (more reliable than expires_at)
-        let expiresAt = Math.floor(Date.now() / 1000) + (typeof account.expires_in === 'number' ? account.expires_in : 900)
+        let expiresAt =
+          Math.floor(Date.now() / 1000) + (typeof account.expires_in === 'number' ? account.expires_in : 900)
 
         // Try to get exact exp from token
         const decoded = parseJwt(account.access_token!)
@@ -120,7 +120,7 @@ export const authOptions: NextAuthOptions = {
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           expiresAt: expiresAt,
-          error: undefined, // Clear any stale error from previous broken session
+          error: undefined // Clear any stale error from previous broken session
         }
       }
 
@@ -138,8 +138,8 @@ export const authOptions: NextAuthOptions = {
       }
 
       return session
-    },
+    }
   },
 
-  debug: false,
+  debug: false
 }

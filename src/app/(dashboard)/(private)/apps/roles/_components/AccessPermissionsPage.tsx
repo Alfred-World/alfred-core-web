@@ -135,7 +135,12 @@ const AccessPermissionsPage = () => {
           <Typography variant='body2' color='text.secondary'>
             Showing {permissions.length} of {total} permissions
           </Typography>
-          <Pagination page={page} count={Math.max(1, totalPages)} onChange={(_, value) => setPage(value)} color='primary' />
+          <Pagination
+            page={page}
+            count={Math.max(1, totalPages)}
+            onChange={(_, value) => setPage(value)}
+            color='primary'
+          />
         </Stack>
       </Card>
     </Box>

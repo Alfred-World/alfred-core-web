@@ -36,7 +36,7 @@ const defaultSuggestions: DefaultSuggestionsType[] = [
         icon: 'tabler-file-description'
       }
     ]
-  },
+  }
 ]
 
 // TODO: Add more default suggestions (e.g. from settings, etc.)

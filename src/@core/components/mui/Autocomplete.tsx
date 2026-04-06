@@ -20,7 +20,6 @@ const CustomAutocomplete = forwardRef(
     ref: any
   ) => {
     return (
-
       <Autocomplete
         {...props}
         ref={ref}

@@ -90,12 +90,7 @@ const UnitPage = () => {
       </Box>
 
       {/* Stats Cards */}
-      <StatsCards
-        total={stats.total}
-        active={stats.active}
-        review={stats.review}
-        categoryCount={stats.categoryCount}
-      />
+      <StatsCards total={stats.total} active={stats.active} review={stats.review} categoryCount={stats.categoryCount} />
 
       {/* Main Content */}
       <Box sx={{ display: 'flex', gap: 3, alignItems: 'flex-start' }}>
@@ -117,11 +112,7 @@ const UnitPage = () => {
       </Box>
 
       {/* Editor Dialog */}
-      <UnitEditorDialog
-        open={editorOpen}
-        unitId={editingUnitId}
-        onClose={handleEditorClose}
-      />
+      <UnitEditorDialog open={editorOpen} unitId={editingUnitId} onClose={handleEditorClose} />
     </Box>
   )
 }

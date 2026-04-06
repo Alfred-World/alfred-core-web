@@ -50,13 +50,10 @@ import {
   useGetApiV1AccountSalesSourceAccounts,
   usePatchApiV1AccountSalesSourceAccountsIdActive,
   usePostApiV1AccountSalesSourceAccounts,
-  usePutApiV1AccountSalesSourceAccountsId
+  usePatchApiV1AccountSalesSourceAccountsId
 } from '@/generated/core-api'
-import type {
-  CreateSourceAccountRequest,
-  SourceAccountDto,
-  UpdateSourceAccountRequest
-} from '@/generated/core-api'
+import type { CreateSourceAccountRequest, SourceAccountDto, UpdateSourceAccountRequest } from '@/generated/core-api'
+import { getChangedFields } from '@/utils/getChangedFields'
 
 const ACCOUNT_TYPE_COLOR: Record<AccountProductType, string> = {
   Google: '#4285F4',
@@ -73,14 +70,22 @@ const ACCOUNT_TYPE_COLOR: Record<AccountProductType, string> = {
 
 const getIconForAccountType = (type?: AccountProductType | null) => {
   switch (type) {
-    case AccountProductType.Google: return 'tabler-brand-google'
-    case AccountProductType.Github: return 'tabler-brand-github'
-    case AccountProductType.Facebook: return 'tabler-brand-facebook'
-    case AccountProductType.Apple: return 'tabler-brand-apple'
-    case AccountProductType.Amazon: return 'tabler-brand-amazon'
-    case AccountProductType.OpenAi: return 'tabler-brand-openai'
-    case AccountProductType.Microsoft: return 'tabler-brand-windows'
-    default: return 'tabler-server'
+    case AccountProductType.Google:
+      return 'tabler-brand-google'
+    case AccountProductType.Github:
+      return 'tabler-brand-github'
+    case AccountProductType.Facebook:
+      return 'tabler-brand-facebook'
+    case AccountProductType.Apple:
+      return 'tabler-brand-apple'
+    case AccountProductType.Amazon:
+      return 'tabler-brand-amazon'
+    case AccountProductType.OpenAi:
+      return 'tabler-brand-openai'
+    case AccountProductType.Microsoft:
+      return 'tabler-brand-windows'
+    default:
+      return 'tabler-server'
   }
 }
 
@@ -115,7 +120,12 @@ const PasswordField = ({
 
   return (
     <Stack spacing={0.75}>
-      <Typography variant='caption' fontWeight={700} color='text.secondary' sx={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+      <Typography
+        variant='caption'
+        fontWeight={700}
+        color='text.secondary'
+        sx={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}
+      >
         {label} {required && '*'}
       </Typography>
       <TextField
@@ -167,7 +177,12 @@ const CustomTextField = ({
 }) => {
   return (
     <Stack spacing={0.75}>
-      <Typography variant='caption' fontWeight={700} color='text.secondary' sx={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+      <Typography
+        variant='caption'
+        fontWeight={700}
+        color='text.secondary'
+        sx={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}
+      >
         {label} {required && '*'}
       </Typography>
       <TextField
@@ -192,7 +207,7 @@ const CustomTextField = ({
   )
 }
 
-const CopyableRow = ({ label, value, secret }: { label: string, value?: string | null, secret?: boolean }) => {
+const CopyableRow = ({ label, value, secret }: { label: string; value?: string | null; secret?: boolean }) => {
   const [show, setShow] = useState(false)
 
   const handleCopy = () => {
@@ -205,7 +220,11 @@ const CopyableRow = ({ label, value, secret }: { label: string, value?: string |
   return (
     <ListItem sx={{ py: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
       <ListItemText
-        primary={<Typography variant='caption' color='text.secondary' fontWeight={700} sx={{ letterSpacing: '0.5px' }}>{label}</Typography>}
+        primary={
+          <Typography variant='caption' color='text.secondary' fontWeight={700} sx={{ letterSpacing: '0.5px' }}>
+            {label}
+          </Typography>
+        }
         secondary={
           <Typography variant='body2' fontWeight={600} fontFamily='monospace' mt={0.5} sx={{ wordBreak: 'break-all' }}>
             {value ? (secret && !show ? '••••••••••••••••' : value) : '-'}
@@ -238,12 +257,14 @@ const TotpCodeRow = ({ secret }: { secret?: string | null }) => {
       const epochSeconds = Math.floor(Date.now() / 1000)
 
       try {
-        setCode(generateSync({
-          secret: secretClean,
-          period: OTP_STEP_SECONDS,
-          epoch: epochSeconds,
-          guardrails: OTP_GUARDRAILS
-        }))
+        setCode(
+          generateSync({
+            secret: secretClean,
+            period: OTP_STEP_SECONDS,
+            epoch: epochSeconds,
+            guardrails: OTP_GUARDRAILS
+          })
+        )
       } catch {
         setCode('Error')
       }
@@ -253,7 +274,6 @@ const TotpCodeRow = ({ secret }: { secret?: string | null }) => {
 
     generate()
     const interval = setInterval(generate, 1000)
-
 
     return () => clearInterval(interval)
   }, [secret])
@@ -272,9 +292,17 @@ const TotpCodeRow = ({ secret }: { secret?: string | null }) => {
       <ListItemText
         primary={
           <Stack direction='row' alignItems='center' spacing={1}>
-            <Typography variant='caption' color='text.secondary' fontWeight={700} sx={{ letterSpacing: '0.5px' }}>CURRENT 2FA CODE</Typography>
+            <Typography variant='caption' color='text.secondary' fontWeight={700} sx={{ letterSpacing: '0.5px' }}>
+              CURRENT 2FA CODE
+            </Typography>
             {code !== '-' && code !== 'Error' && (
-              <CircularProgress variant="determinate" value={(countdown / 30) * 100} size={14} thickness={4} sx={{ color: countdown <= 5 ? 'error.main' : 'primary.main' }} />
+              <CircularProgress
+                variant='determinate'
+                value={(countdown / 30) * 100}
+                size={14}
+                thickness={4}
+                sx={{ color: countdown <= 5 ? 'error.main' : 'primary.main' }}
+              />
             )}
           </Stack>
         }
@@ -298,7 +326,17 @@ const TotpCodeRow = ({ secret }: { secret?: string | null }) => {
 }
 
 // Extracted to prevent the full list from re-rendering on every keystroke
-const CreateSourceAccountDialog = ({ open, onClose, isPending, onSubmit }: { open: boolean, onClose: () => void, isPending: boolean, onSubmit: (data: CreateSourceAccountRequest) => void }) => {
+const CreateSourceAccountDialog = ({
+  open,
+  onClose,
+  isPending,
+  onSubmit
+}: {
+  open: boolean
+  onClose: () => void
+  isPending: boolean
+  onSubmit: (data: CreateSourceAccountRequest) => void
+}) => {
   const [createForm, setCreateForm] = useState<CreateSourceAccountRequest>(defaultCreateForm())
 
   useEffect(() => {
@@ -309,10 +347,16 @@ const CreateSourceAccountDialog = ({ open, onClose, isPending, onSubmit }: { ope
     <Dialog open={open} onClose={onClose} maxWidth='md' fullWidth slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
       <DialogTitle sx={{ display: 'flex', flexDirection: 'column', gap: 1, p: 4, pb: 2 }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
-          <Typography variant='h5' fontWeight={800}>Create Source Account</Typography>
-          <IconButton onClick={onClose} size='small'><i className='tabler-x' /></IconButton>
+          <Typography variant='h5' fontWeight={800}>
+            Create Source Account
+          </Typography>
+          <IconButton onClick={onClose} size='small'>
+            <i className='tabler-x' />
+          </IconButton>
         </Stack>
-        <Typography variant='body2' color='text.secondary'>Initialize credentials and security protocols for a new source node.</Typography>
+        <Typography variant='body2' color='text.secondary'>
+          Initialize credentials and security protocols for a new source node.
+        </Typography>
       </DialogTitle>
       <DialogContent sx={{ px: 4, pb: 4 }}>
         <Grid container spacing={3} pt={2}>
@@ -324,7 +368,9 @@ const CreateSourceAccountDialog = ({ open, onClose, isPending, onSubmit }: { ope
               onChange={e => setCreateForm(prev => ({ ...prev, accountType: e.target.value as AccountProductType }))}
             >
               {Object.values(AccountProductType).map(t => (
-                <MenuItem key={t} value={t}>{t}</MenuItem>
+                <MenuItem key={t} value={t}>
+                  {t}
+                </MenuItem>
               ))}
             </CustomTextField>
           </Grid>
@@ -373,13 +419,15 @@ const CreateSourceAccountDialog = ({ open, onClose, isPending, onSubmit }: { ope
               onChange={e => setCreateForm(prev => ({ ...prev, notes: e.target.value || null }))}
               multiline
               minRows={3}
-              placeholder="Include details such as primary user, rotation schedule, etc."
+              placeholder='Include details such as primary user, rotation schedule, etc.'
             />
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions sx={{ p: 3, pt: 0, px: 4 }}>
-        <Button onClick={onClose} color='inherit' sx={{ fontWeight: 600 }}>Cancel</Button>
+        <Button onClick={onClose} color='inherit' sx={{ fontWeight: 600 }}>
+          Cancel
+        </Button>
         <Button
           variant='contained'
           color='primary'
@@ -394,7 +442,17 @@ const CreateSourceAccountDialog = ({ open, onClose, isPending, onSubmit }: { ope
   )
 }
 
-const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { target: SourceAccountDto | null, onClose: () => void, isPending: boolean, onSubmit: (data: UpdateSourceAccountRequest) => void }) => {
+const EditSourceAccountDialog = ({
+  target,
+  onClose,
+  isPending,
+  onSubmit
+}: {
+  target: SourceAccountDto | null
+  onClose: () => void
+  isPending: boolean
+  onSubmit: (data: UpdateSourceAccountRequest) => void
+}) => {
   const [editForm, setEditForm] = useState<UpdateSourceAccountRequest>({})
 
   useEffect(() => {
@@ -412,13 +470,25 @@ const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { tar
   }, [target])
 
   return (
-    <Dialog open={!!target} onClose={onClose} maxWidth='md' fullWidth slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
+    <Dialog
+      open={!!target}
+      onClose={onClose}
+      maxWidth='md'
+      fullWidth
+      slotProps={{ paper: { sx: { borderRadius: 3 } } }}
+    >
       <DialogTitle sx={{ display: 'flex', flexDirection: 'column', gap: 1, p: 4, pb: 2 }}>
         <Stack direction='row' alignItems='center' justifyContent='space-between'>
-          <Typography variant='h5' fontWeight={800}>Edit Source Account</Typography>
-          <IconButton onClick={onClose} size='small'><i className='tabler-x' /></IconButton>
+          <Typography variant='h5' fontWeight={800}>
+            Edit Source Account
+          </Typography>
+          <IconButton onClick={onClose} size='small'>
+            <i className='tabler-x' />
+          </IconButton>
         </Stack>
-        <Typography variant='body2' color='text.secondary'>Update credential details and security protocols</Typography>
+        <Typography variant='body2' color='text.secondary'>
+          Update credential details and security protocols
+        </Typography>
       </DialogTitle>
       <DialogContent sx={{ px: 4, pb: 4 }}>
         <Grid container spacing={3} pt={2}>
@@ -430,7 +500,9 @@ const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { tar
               onChange={e => setEditForm(prev => ({ ...prev, accountType: e.target.value as AccountProductType }))}
             >
               {Object.values(AccountProductType).map(t => (
-                <MenuItem key={t} value={t}>{t}</MenuItem>
+                <MenuItem key={t} value={t}>
+                  {t}
+                </MenuItem>
               ))}
             </CustomTextField>
           </Grid>
@@ -454,7 +526,7 @@ const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { tar
             <PasswordField
               label='2FA SECRET'
               value={editForm.twoFaSecret ?? ''}
-              onChange={v => setEditForm(prev => ({ ...prev, twoFaSecret: v || null }))}
+              onChange={v => setEditForm(prev => ({ ...prev, twoFaSecret: v || undefined }))}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
@@ -462,21 +534,21 @@ const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { tar
               label='RECOVERY EMAIL'
               type='email'
               value={editForm.recoveryEmail ?? ''}
-              onChange={e => setEditForm(prev => ({ ...prev, recoveryEmail: e.target.value || null }))}
+              onChange={e => setEditForm(prev => ({ ...prev, recoveryEmail: e.target.value || undefined }))}
             />
           </Grid>
           <Grid size={{ xs: 12, md: 6 }}>
             <CustomTextField
               label='RECOVERY PHONE'
               value={editForm.recoveryPhone ?? ''}
-              onChange={e => setEditForm(prev => ({ ...prev, recoveryPhone: e.target.value || null }))}
+              onChange={e => setEditForm(prev => ({ ...prev, recoveryPhone: e.target.value || undefined }))}
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
             <CustomTextField
               label='NOTES'
               value={editForm.notes ?? ''}
-              onChange={e => setEditForm(prev => ({ ...prev, notes: e.target.value || null }))}
+              onChange={e => setEditForm(prev => ({ ...prev, notes: e.target.value || undefined }))}
               multiline
               minRows={3}
             />
@@ -484,7 +556,9 @@ const EditSourceAccountDialog = ({ target, onClose, isPending, onSubmit }: { tar
         </Grid>
       </DialogContent>
       <DialogActions sx={{ p: 3, pt: 0, px: 4 }}>
-        <Button onClick={onClose} color='inherit' sx={{ fontWeight: 600 }}>Cancel</Button>
+        <Button onClick={onClose} color='inherit' sx={{ fontWeight: 600 }}>
+          Cancel
+        </Button>
         <Button
           variant='contained'
           color='primary'
@@ -550,7 +624,7 @@ export default function AccountSalesSourceAccounts() {
     }
   })
 
-  const updateMutation = usePutApiV1AccountSalesSourceAccountsId({
+  const updateMutation = usePatchApiV1AccountSalesSourceAccountsId({
     mutation: {
       onSuccess: async data => {
         if (!data.success) {
@@ -601,7 +675,7 @@ export default function AccountSalesSourceAccounts() {
 
   const items = listQuery.data?.result?.items ?? []
   const totalPages = listQuery.data?.result?.totalPages ?? 1
-  const totalCount = listQuery.data?.result?.total ?? 0 
+  const totalCount = listQuery.data?.result?.total ?? 0
   const activeCount = items.filter(i => i.isActive).length
 
   const openEdit = (account: SourceAccountDto) => {
@@ -611,11 +685,20 @@ export default function AccountSalesSourceAccounts() {
   return (
     <Box>
       {/* Header Section */}
-      <Stack direction={{ xs: 'column', md: 'row' }} alignItems={{ xs: 'flex-start', md: 'center' }} justifyContent='space-between' mb={3} spacing={2}>
+      <Stack
+        direction={{ xs: 'column', md: 'row' }}
+        alignItems={{ xs: 'flex-start', md: 'center' }}
+        justifyContent='space-between'
+        mb={3}
+        spacing={2}
+      >
         <Box>
-          <Typography variant='h4' fontWeight={800} gutterBottom>Source Accounts</Typography>
+          <Typography variant='h4' fontWeight={800} gutterBottom>
+            Source Accounts
+          </Typography>
           <Typography variant='body1' color='text.secondary' sx={{ maxWidth: 600 }}>
-            Manage your enterprise-wide data sources. Configure recovery protocols and monitor account synchronization across the cluster.
+            Manage your enterprise-wide data sources. Configure recovery protocols and monitor account synchronization
+            across the cluster.
           </Typography>
         </Box>
         <Button
@@ -636,8 +719,12 @@ export default function AccountSalesSourceAccounts() {
               <i className='tabler-building-bank' style={{ fontSize: 24 }} />
             </Avatar>
             <Box>
-              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>TOTAL ACCOUNTS</Typography>
-              <Typography variant='h5' fontWeight={800}>{totalCount.toLocaleString()}</Typography>
+              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>
+                TOTAL ACCOUNTS
+              </Typography>
+              <Typography variant='h5' fontWeight={800}>
+                {totalCount.toLocaleString()}
+              </Typography>
             </Box>
           </Card>
         </Grid>
@@ -647,8 +734,12 @@ export default function AccountSalesSourceAccounts() {
               <i className='tabler-refresh' style={{ fontSize: 24 }} />
             </Avatar>
             <Box>
-              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>ACTIVE SYNCS</Typography>
-              <Typography variant='h5' fontWeight={800}>{activeCount.toLocaleString()}</Typography>
+              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>
+                ACTIVE SYNCS
+              </Typography>
+              <Typography variant='h5' fontWeight={800}>
+                {activeCount.toLocaleString()}
+              </Typography>
             </Box>
           </Card>
         </Grid>
@@ -658,8 +749,12 @@ export default function AccountSalesSourceAccounts() {
               <i className='tabler-shield-check' style={{ fontSize: 24 }} />
             </Avatar>
             <Box>
-              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>VERIFIED STATUS</Typography>
-              <Typography variant='h5' fontWeight={800}>98.2%</Typography>
+              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>
+                VERIFIED STATUS
+              </Typography>
+              <Typography variant='h5' fontWeight={800}>
+                98.2%
+              </Typography>
             </Box>
           </Card>
         </Grid>
@@ -669,17 +764,39 @@ export default function AccountSalesSourceAccounts() {
               <i className='tabler-alert-circle' style={{ fontSize: 24 }} />
             </Avatar>
             <Box>
-              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>ALERTS</Typography>
-              <Typography variant='h5' fontWeight={800}>12</Typography>
+              <Typography variant='caption' color='text.secondary' fontWeight={600} sx={{ letterSpacing: '0.5px' }}>
+                ALERTS
+              </Typography>
+              <Typography variant='h5' fontWeight={800}>
+                12
+              </Typography>
             </Box>
           </Card>
         </Grid>
       </Grid>
 
       <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 3 }}>
-        <Stack direction='row' alignItems='center' justifyContent='space-between' px={3} pt={2} pb={0} sx={{ borderBottom: '1px solid', borderColor: 'divider' }}>
-          <Tabs value={tabValue} onChange={(_, v) => setTabValue(v)} sx={{ minHeight: 48 }} indicatorColor='primary' textColor='primary'>
-            <Tab value='All Accounts' label='All Accounts' sx={{ minHeight: 48, fontWeight: 600, textTransform: 'none' }} />
+        <Stack
+          direction='row'
+          alignItems='center'
+          justifyContent='space-between'
+          px={3}
+          pt={2}
+          pb={0}
+          sx={{ borderBottom: '1px solid', borderColor: 'divider' }}
+        >
+          <Tabs
+            value={tabValue}
+            onChange={(_, v) => setTabValue(v)}
+            sx={{ minHeight: 48 }}
+            indicatorColor='primary'
+            textColor='primary'
+          >
+            <Tab
+              value='All Accounts'
+              label='All Accounts'
+              sx={{ minHeight: 48, fontWeight: 600, textTransform: 'none' }}
+            />
             <Tab value='Active' label='Active' sx={{ minHeight: 48, fontWeight: 600, textTransform: 'none' }} />
             <Tab value='Pending' label='Pending' sx={{ minHeight: 48, fontWeight: 600, textTransform: 'none' }} />
           </Tabs>
@@ -687,7 +804,18 @@ export default function AccountSalesSourceAccounts() {
             <Typography variant='caption' color='text.secondary' sx={{ display: { xs: 'none', md: 'block' } }}>
               Showing {(page - 1) * PAGE_SIZE + 1}-{Math.min(page * PAGE_SIZE, totalCount)} of {totalCount}
             </Typography>
-            <Button variant='outlined' startIcon={<i className='tabler-filter' style={{ fontSize: 16 }} />} size='small' sx={{ borderRadius: 1.5, textTransform: 'none', color: 'text.secondary', borderColor: 'divider', '&:hover': { borderColor: 'primary.main' } }}>
+            <Button
+              variant='outlined'
+              startIcon={<i className='tabler-filter' style={{ fontSize: 16 }} />}
+              size='small'
+              sx={{
+                borderRadius: 1.5,
+                textTransform: 'none',
+                color: 'text.secondary',
+                borderColor: 'divider',
+                '&:hover': { borderColor: 'primary.main' }
+              }}
+            >
               Filters
             </Button>
           </Stack>
@@ -697,38 +825,76 @@ export default function AccountSalesSourceAccounts() {
           <Table size='medium' sx={{ minWidth: 900 }}>
             <TableHead>
               <TableRow sx={{ bgcolor: 'action.hover' }}>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>PROVIDER</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>USERNAME</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>RECOVERY EMAIL</TableCell>
-                <TableCell align='center' sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>CLONE COUNT</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>STATUS</TableCell>
-                <TableCell sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>CREATED DATE</TableCell>
-                <TableCell align='right' sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}>ACTIONS</TableCell>
+                <TableCell
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  PROVIDER
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  USERNAME
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  RECOVERY EMAIL
+                </TableCell>
+                <TableCell
+                  align='center'
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  CLONE COUNT
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  STATUS
+                </TableCell>
+                <TableCell
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  CREATED DATE
+                </TableCell>
+                <TableCell
+                  align='right'
+                  sx={{ fontWeight: 700, fontSize: '0.75rem', color: 'text.secondary', letterSpacing: '0.5px' }}
+                >
+                  ACTIONS
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {listQuery.isLoading && (
                 <TableRow>
                   <TableCell colSpan={7} align='center'>
-                    <Typography variant='body2' color='text.secondary' py={5}>Loading accounts...</Typography>
+                    <Typography variant='body2' color='text.secondary' py={5}>
+                      Loading accounts...
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}
               {!listQuery.isLoading && items.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} align='center'>
-                    <Typography variant='body2' color='text.secondary' py={5}>No accounts found in this filter.</Typography>
+                    <Typography variant='body2' color='text.secondary' py={5}>
+                      No accounts found in this filter.
+                    </Typography>
                   </TableCell>
                 </TableRow>
               )}
               {items.map(account => {
-                const color = ACCOUNT_TYPE_COLOR[account.accountType ?? AccountProductType.Other] ?? ACCOUNT_TYPE_COLOR.Other
+                const color =
+                  ACCOUNT_TYPE_COLOR[account.accountType ?? AccountProductType.Other] ?? ACCOUNT_TYPE_COLOR.Other
 
                 return (
                   <TableRow key={account.id} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                     <TableCell>
                       <Stack direction='row' alignItems='center' spacing={2}>
-                        <Avatar variant='rounded' sx={{ width: 36, height: 36, bgcolor: alpha(color, 0.1), color: color, borderRadius: 1.5 }}>
+                        <Avatar
+                          variant='rounded'
+                          sx={{ width: 36, height: 36, bgcolor: alpha(color, 0.1), color: color, borderRadius: 1.5 }}
+                        >
                           <i className={getIconForAccountType(account.accountType)} style={{ fontSize: 20 }} />
                         </Avatar>
                         <Box>
@@ -736,7 +902,10 @@ export default function AccountSalesSourceAccounts() {
                             {account.accountType || 'Unknown'}
                           </Typography>
                           <Typography variant='caption' color='text.secondary'>
-                            {account.accountType === AccountProductType.Google || account.accountType === AccountProductType.Amazon ? 'Global Gateway' : 'Primary Cluster'}
+                            {account.accountType === AccountProductType.Google ||
+                            account.accountType === AccountProductType.Amazon
+                              ? 'Global Gateway'
+                              : 'Primary Cluster'}
                           </Typography>
                         </Box>
                       </Stack>
@@ -755,7 +924,11 @@ export default function AccountSalesSourceAccounts() {
                       />
                     </TableCell>
                     <TableCell>
-                      <Typography variant='body2' color='text.secondary' sx={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <Typography
+                        variant='body2'
+                        color='text.secondary'
+                        sx={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis' }}
+                      >
                         {account.recoveryEmail || <span style={{ opacity: 0.5 }}>Not configured</span>}
                       </Typography>
                     </TableCell>
@@ -770,29 +943,49 @@ export default function AccountSalesSourceAccounts() {
                           color='primary'
                           checked={account.isActive ?? false}
                           disabled={toggleActiveMutation.isPending}
-                          onChange={() => toggleActiveMutation.mutate({ id: account.id!, data: { isActive: !account.isActive } })}
+                          onChange={() =>
+                            toggleActiveMutation.mutate({ id: account.id!, data: { isActive: !account.isActive } })
+                          }
                         />
                       </Tooltip>
                     </TableCell>
                     <TableCell>
                       <Typography variant='body2' color='text.primary' fontWeight={500}>
-                        {account.createdAt ? new Date(account.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '-'}
+                        {account.createdAt
+                          ? new Date(account.createdAt).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            })
+                          : '-'}
                       </Typography>
                     </TableCell>
                     <TableCell align='right'>
                       <Stack direction='row' spacing={1} justifyContent='flex-end'>
                         <Tooltip title='View Profile'>
-                          <IconButton size='small' onClick={() => setViewTarget(account)} sx={{ color: 'text.secondary', bgcolor: 'action.hover', borderRadius: 1.5 }}>
+                          <IconButton
+                            size='small'
+                            onClick={() => setViewTarget(account)}
+                            sx={{ color: 'text.secondary', bgcolor: 'action.hover', borderRadius: 1.5 }}
+                          >
                             <i className='tabler-eye' style={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title='Edit Config'>
-                          <IconButton size='small' onClick={() => openEdit(account)} sx={{ color: 'text.secondary', bgcolor: 'action.hover', borderRadius: 1.5 }}>
+                          <IconButton
+                            size='small'
+                            onClick={() => openEdit(account)}
+                            sx={{ color: 'text.secondary', bgcolor: 'action.hover', borderRadius: 1.5 }}
+                          >
                             <i className='tabler-pencil' style={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
                         <Tooltip title='Delete Asset'>
-                          <IconButton size='small' onClick={() => setDeleteTarget(account)} sx={{ color: 'error.main', bgcolor: alpha('#EF4444', 0.1), borderRadius: 1.5 }}>
+                          <IconButton
+                            size='small'
+                            onClick={() => setDeleteTarget(account)}
+                            sx={{ color: 'error.main', bgcolor: alpha('#EF4444', 0.1), borderRadius: 1.5 }}
+                          >
                             <i className='tabler-trash' style={{ fontSize: 18 }} />
                           </IconButton>
                         </Tooltip>
@@ -804,52 +997,108 @@ export default function AccountSalesSourceAccounts() {
             </TableBody>
           </Table>
         </TableContainer>
-        <Stack direction='row' alignItems='center' justifyContent='space-between' p={2} sx={{ borderTop: '1px solid', borderColor: 'divider' }}>
+        <Stack
+          direction='row'
+          alignItems='center'
+          justifyContent='space-between'
+          p={2}
+          sx={{ borderTop: '1px solid', borderColor: 'divider' }}
+        >
           <Stack direction='row' alignItems='center' spacing={1}>
-            <Typography variant='body2' color='text.secondary'>Rows per page:</Typography>
-            <TextField select size='small' value={PAGE_SIZE} variant='outlined' sx={{ '& .MuiOutlinedInput-root': { borderRadius: 1.5, height: 32 } }}>
+            <Typography variant='body2' color='text.secondary'>
+              Rows per page:
+            </Typography>
+            <TextField
+              select
+              size='small'
+              value={PAGE_SIZE}
+              variant='outlined'
+              sx={{ '& .MuiOutlinedInput-root': { borderRadius: 1.5, height: 32 } }}
+            >
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={25}>25</MenuItem>
               <MenuItem value={50}>50</MenuItem>
             </TextField>
           </Stack>
-          <Pagination count={totalPages} page={page} onChange={(_, p) => setPage(p)} size='medium' shape='rounded' color='primary' />
+          <Pagination
+            count={totalPages}
+            page={page}
+            onChange={(_, p) => setPage(p)}
+            size='medium'
+            shape='rounded'
+            color='primary'
+          />
         </Stack>
       </Card>
 
       {/* Bottom Information Cards */}
       <Grid container spacing={3} mt={4}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card sx={{ p: 2.5, borderRadius: 3, display: 'flex', gap: 2, bgcolor: alpha('#7C3AED', 0.04), border: '1px solid', borderColor: alpha('#7C3AED', 0.1) }}>
-            <Avatar sx={{ bgcolor: alpha('#7C3AED', 0.16), color: '#7C3AED', mt: 0.5 }}><i className='tabler-bulb' /></Avatar>
+          <Card
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              display: 'flex',
+              gap: 2,
+              bgcolor: alpha('#7C3AED', 0.04),
+              border: '1px solid',
+              borderColor: alpha('#7C3AED', 0.1)
+            }}
+          >
+            <Avatar sx={{ bgcolor: alpha('#7C3AED', 0.16), color: '#7C3AED', mt: 0.5 }}>
+              <i className='tabler-bulb' />
+            </Avatar>
             <Box>
-              <Typography variant='subtitle1' fontWeight={700} color='text.primary' gutterBottom>Security Recommendation</Typography>
+              <Typography variant='subtitle1' fontWeight={700} color='text.primary' gutterBottom>
+                Security Recommendation
+              </Typography>
               <Typography variant='body2' color='text.secondary'>
-                It is recommended to rotate recovery emails for accounts older than 180 days. 12 accounts currently meet this criteria. <span style={{ color: '#7C3AED', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>View list</span>
+                It is recommended to rotate recovery emails for accounts older than 180 days. 12 accounts currently meet
+                this criteria.{' '}
+                <span style={{ color: '#7C3AED', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>
+                  View list
+                </span>
               </Typography>
             </Box>
           </Card>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Card sx={{ p: 2.5, borderRadius: 3, display: 'flex', gap: 2, bgcolor: alpha('#F59E0B', 0.04), border: '1px solid', borderColor: alpha('#F59E0B', 0.1) }}>
-            <Avatar sx={{ bgcolor: alpha('#F59E0B', 0.16), color: '#F59E0B', mt: 0.5 }}><i className='tabler-info-circle' /></Avatar>
+          <Card
+            sx={{
+              p: 2.5,
+              borderRadius: 3,
+              display: 'flex',
+              gap: 2,
+              bgcolor: alpha('#F59E0B', 0.04),
+              border: '1px solid',
+              borderColor: alpha('#F59E0B', 0.1)
+            }}
+          >
+            <Avatar sx={{ bgcolor: alpha('#F59E0B', 0.16), color: '#F59E0B', mt: 0.5 }}>
+              <i className='tabler-info-circle' />
+            </Avatar>
             <Box>
-              <Typography variant='subtitle1' fontWeight={700} color='text.primary' gutterBottom>New Feature: Clone Clusters</Typography>
+              <Typography variant='subtitle1' fontWeight={700} color='text.primary' gutterBottom>
+                New Feature: Clone Clusters
+              </Typography>
               <Typography variant='body2' color='text.secondary'>
-                You can now group source accounts into &quot;Cloning Clusters&quot; for easier bulk management of data mirroring. <span style={{ color: '#F59E0B', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>Learn more</span>
+                You can now group source accounts into &quot;Cloning Clusters&quot; for easier bulk management of data
+                mirroring.{' '}
+                <span style={{ color: '#F59E0B', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}>
+                  Learn more
+                </span>
               </Typography>
             </Box>
           </Card>
         </Grid>
       </Grid>
 
-
       {/* Create Dialog */}
       <CreateSourceAccountDialog
         open={openCreate}
         onClose={() => setOpenCreate(false)}
         isPending={createMutation.isPending}
-        onSubmit={(data) => createMutation.mutate({ data })}
+        onSubmit={data => createMutation.mutate({ data })}
       />
 
       {/* Edit Dialog */}
@@ -857,22 +1106,55 @@ export default function AccountSalesSourceAccounts() {
         target={editTarget}
         onClose={() => setEditTarget(null)}
         isPending={updateMutation.isPending}
-        onSubmit={(data) => {
-          if (editTarget?.id) updateMutation.mutate({ id: editTarget.id, data })
+        onSubmit={data => {
+          if (!editTarget?.id) return
+
+          const original: UpdateSourceAccountRequest = {
+            accountType: editTarget.accountType,
+            username: editTarget.username ?? undefined,
+            password: editTarget.password ?? undefined,
+            twoFaSecret: editTarget.twoFaSecret ?? undefined,
+            recoveryEmail: editTarget.recoveryEmail ?? undefined,
+            recoveryPhone: editTarget.recoveryPhone ?? undefined,
+            notes: editTarget.notes ?? undefined
+          }
+
+          const changes = getChangedFields(original, data)
+
+          if (!changes) {
+            toast.info('No changes detected')
+            setEditTarget(null)
+
+            return
+          }
+
+          updateMutation.mutate({ id: editTarget.id, data: changes })
         }}
       />
 
       {/* Delete Confirm Dialog */}
-      <Dialog open={!!deleteTarget} onClose={() => setDeleteTarget(null)} maxWidth='xs' fullWidth slotProps={{ paper: { sx: { borderRadius: 3 } } }}>
-        <DialogTitle sx={{ pb: 1 }}><Typography variant='h6' fontWeight={700}>Delete Asset</Typography></DialogTitle>
+      <Dialog
+        open={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        maxWidth='xs'
+        fullWidth
+        slotProps={{ paper: { sx: { borderRadius: 3 } } }}
+      >
+        <DialogTitle sx={{ pb: 1 }}>
+          <Typography variant='h6' fontWeight={700}>
+            Delete Asset
+          </Typography>
+        </DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to permanently delete <strong>{deleteTarget?.username}</strong>? This action will sever
-            all active connections and cannot be undone.
+            Are you sure you want to permanently delete <strong>{deleteTarget?.username}</strong>? This action will
+            sever all active connections and cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ p: 3, pt: 2 }}>
-          <Button onClick={() => setDeleteTarget(null)} color='inherit' sx={{ fontWeight: 600 }}>Cancel</Button>
+          <Button onClick={() => setDeleteTarget(null)} color='inherit' sx={{ fontWeight: 600 }}>
+            Cancel
+          </Button>
           <Button
             variant='contained'
             color='error'
@@ -893,15 +1175,46 @@ export default function AccountSalesSourceAccounts() {
         anchor='right'
         open={!!viewTarget}
         onClose={() => setViewTarget(null)}
-        slotProps={{ paper: { sx: { width: { xs: '100%', sm: 480 }, bgcolor: 'background.default', borderLeft: '1px solid', borderColor: 'divider' } } }}
+        slotProps={{
+          paper: {
+            sx: {
+              width: { xs: '100%', sm: 480 },
+              bgcolor: 'background.default',
+              borderLeft: '1px solid',
+              borderColor: 'divider'
+            }
+          }
+        }}
       >
         {viewTarget && (
           <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ p: 4, pb: 3, bgcolor: 'background.paper', borderBottom: '1px solid', borderColor: 'divider' }}>
               <Stack direction='row' alignItems='center' justifyContent='space-between' mb={3}>
                 <Stack direction='row' spacing={1.5}>
-                  <Chip label='NODE PROFILE' size='small' sx={{ bgcolor: alpha('#7C3AED', 0.16), color: '#7C3AED', fontWeight: 800, fontSize: '0.65rem', borderRadius: 1 }} />
-                  <Chip icon={<i className='tabler-copy' style={{ fontSize: 13 }} />} label={`CLONES: ${viewTarget.cloneCount ?? 0}`} size='small' sx={{ bgcolor: alpha('#D97706', 0.16), color: '#D97706', fontWeight: 800, fontSize: '0.65rem', borderRadius: 1, '& .MuiChip-icon': { color: '#D97706' } }} />
+                  <Chip
+                    label='NODE PROFILE'
+                    size='small'
+                    sx={{
+                      bgcolor: alpha('#7C3AED', 0.16),
+                      color: '#7C3AED',
+                      fontWeight: 800,
+                      fontSize: '0.65rem',
+                      borderRadius: 1
+                    }}
+                  />
+                  <Chip
+                    icon={<i className='tabler-copy' style={{ fontSize: 13 }} />}
+                    label={`CLONES: ${viewTarget.cloneCount ?? 0}`}
+                    size='small'
+                    sx={{
+                      bgcolor: alpha('#D97706', 0.16),
+                      color: '#D97706',
+                      fontWeight: 800,
+                      fontSize: '0.65rem',
+                      borderRadius: 1,
+                      '& .MuiChip-icon': { color: '#D97706' }
+                    }}
+                  />
                 </Stack>
                 <IconButton onClick={() => setViewTarget(null)} size='small' sx={{ bgcolor: 'action.hover' }}>
                   <i className='tabler-x' style={{ fontSize: 18 }} />
@@ -914,18 +1227,34 @@ export default function AccountSalesSourceAccounts() {
 
               <Stack direction='row' alignItems='center' spacing={0.5} color='text.secondary'>
                 <i className='tabler-history' style={{ fontSize: 16 }} />
-                <Typography variant='body2'>Last synced {viewTarget.updatedAt ? new Date(viewTarget.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Just now'}</Typography>
+                <Typography variant='body2'>
+                  Last synced{' '}
+                  {viewTarget.updatedAt
+                    ? new Date(viewTarget.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    : 'Just now'}
+                </Typography>
               </Stack>
             </Box>
 
             <Box sx={{ p: 4, flex: 1, overflowY: 'auto' }}>
               <Stack direction='row' justifyContent='space-between' alignItems='center' mb={2}>
                 <Typography variant='caption' color='text.secondary' fontWeight={800} sx={{ letterSpacing: '1px' }}>
-                  <Stack direction='row' alignItems='center' spacing={0.5}><i className='tabler-lock-square' style={{ fontSize: 16 }} /> SECURITY CREDENTIALS</Stack>
+                  <Stack direction='row' alignItems='center' spacing={0.5}>
+                    <i className='tabler-lock-square' style={{ fontSize: 16 }} /> SECURITY CREDENTIALS
+                  </Stack>
                 </Typography>
               </Stack>
 
-              <Card sx={{ border: '1px solid', borderColor: 'divider', boxShadow: 'none', borderRadius: 2, mb: 4, bgcolor: 'background.paper' }}>
+              <Card
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  boxShadow: 'none',
+                  borderRadius: 2,
+                  mb: 4,
+                  bgcolor: 'background.paper'
+                }}
+              >
                 <List disablePadding>
                   <CopyableRow label='USERNAME' value={viewTarget.username} />
                   <CopyableRow label='PASSWORD' value={viewTarget.password} secret />
@@ -936,29 +1265,85 @@ export default function AccountSalesSourceAccounts() {
 
               <Stack direction='row' justifyContent='space-between' alignItems='center' mb={2}>
                 <Typography variant='caption' color='text.secondary' fontWeight={800} sx={{ letterSpacing: '1px' }}>
-                  <Stack direction='row' alignItems='center' spacing={0.5}><i className='tabler-history-toggle' style={{ fontSize: 16 }} />  RECOVERY CONFIG</Stack>
+                  <Stack direction='row' alignItems='center' spacing={0.5}>
+                    <i className='tabler-history-toggle' style={{ fontSize: 16 }} /> RECOVERY CONFIG
+                  </Stack>
                 </Typography>
               </Stack>
 
               <Stack spacing={2} mb={4}>
-                <Card sx={{ p: 2.5, display: 'flex', alignItems: 'center', gap: 2, border: '1px solid', borderColor: 'divider', boxShadow: 'none', borderRadius: 2, bgcolor: 'background.paper' }}>
-                  <Avatar variant='rounded' sx={{ width: 42, height: 42, bgcolor: 'action.hover', color: 'text.secondary', borderRadius: 1.5 }}>
+                <Card
+                  sx={{
+                    p: 2.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    boxShadow: 'none',
+                    borderRadius: 2,
+                    bgcolor: 'background.paper'
+                  }}
+                >
+                  <Avatar
+                    variant='rounded'
+                    sx={{ width: 42, height: 42, bgcolor: 'action.hover', color: 'text.secondary', borderRadius: 1.5 }}
+                  >
                     <i className='tabler-at' style={{ fontSize: 22 }} />
                   </Avatar>
                   <Box>
-                    <Typography variant='caption' color='text.secondary' fontWeight={700} sx={{ letterSpacing: '0.5px', display: 'block', mb: 0.5 }}>EMERGENCY EMAIL</Typography>
-                    <Typography variant='body2' fontWeight={600} fontFamily={!viewTarget.recoveryEmail ? 'inherit' : 'monospace'} color={!viewTarget.recoveryEmail ? 'text.secondary' : 'text.primary'}>
+                    <Typography
+                      variant='caption'
+                      color='text.secondary'
+                      fontWeight={700}
+                      sx={{ letterSpacing: '0.5px', display: 'block', mb: 0.5 }}
+                    >
+                      EMERGENCY EMAIL
+                    </Typography>
+                    <Typography
+                      variant='body2'
+                      fontWeight={600}
+                      fontFamily={!viewTarget.recoveryEmail ? 'inherit' : 'monospace'}
+                      color={!viewTarget.recoveryEmail ? 'text.secondary' : 'text.primary'}
+                    >
                       {viewTarget.recoveryEmail || 'Not configured'}
                     </Typography>
                   </Box>
                 </Card>
-                <Card sx={{ p: 2.5, display: 'flex', alignItems: 'center', gap: 2, border: '1px solid', borderColor: 'divider', boxShadow: 'none', borderRadius: 2, bgcolor: 'background.paper' }}>
-                  <Avatar variant='rounded' sx={{ width: 42, height: 42, bgcolor: 'action.hover', color: 'text.secondary', borderRadius: 1.5 }}>
+                <Card
+                  sx={{
+                    p: 2.5,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    boxShadow: 'none',
+                    borderRadius: 2,
+                    bgcolor: 'background.paper'
+                  }}
+                >
+                  <Avatar
+                    variant='rounded'
+                    sx={{ width: 42, height: 42, bgcolor: 'action.hover', color: 'text.secondary', borderRadius: 1.5 }}
+                  >
                     <i className='tabler-message-circle' style={{ fontSize: 22 }} />
                   </Avatar>
                   <Box>
-                    <Typography variant='caption' color='text.secondary' fontWeight={700} sx={{ letterSpacing: '0.5px', display: 'block', mb: 0.5 }}>EMERGENCY SMS</Typography>
-                    <Typography variant='body2' fontWeight={600} fontFamily={!viewTarget.recoveryPhone ? 'inherit' : 'monospace'} color={!viewTarget.recoveryPhone ? 'text.secondary' : 'text.primary'}>
+                    <Typography
+                      variant='caption'
+                      color='text.secondary'
+                      fontWeight={700}
+                      sx={{ letterSpacing: '0.5px', display: 'block', mb: 0.5 }}
+                    >
+                      EMERGENCY SMS
+                    </Typography>
+                    <Typography
+                      variant='body2'
+                      fontWeight={600}
+                      fontFamily={!viewTarget.recoveryPhone ? 'inherit' : 'monospace'}
+                      color={!viewTarget.recoveryPhone ? 'text.secondary' : 'text.primary'}
+                    >
                       {viewTarget.recoveryPhone || 'Not configured'}
                     </Typography>
                   </Box>
@@ -967,11 +1352,31 @@ export default function AccountSalesSourceAccounts() {
 
               {viewTarget.notes && (
                 <>
-                  <Typography variant='caption' color='text.secondary' fontWeight={800} sx={{ letterSpacing: '1px', display: 'block', mb: 2 }}>
-                    <Stack direction='row' alignItems='center' spacing={0.5}><i className='tabler-note' style={{ fontSize: 16 }} /> NOTES</Stack>
+                  <Typography
+                    variant='caption'
+                    color='text.secondary'
+                    fontWeight={800}
+                    sx={{ letterSpacing: '1px', display: 'block', mb: 2 }}
+                  >
+                    <Stack direction='row' alignItems='center' spacing={0.5}>
+                      <i className='tabler-note' style={{ fontSize: 16 }} /> NOTES
+                    </Stack>
                   </Typography>
-                  <Card sx={{ p: 3, border: '1px solid', borderColor: 'divider', boxShadow: 'none', borderRadius: 2, bgcolor: 'background.paper', mb: 4 }}>
-                    <Typography variant='body2' sx={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, color: 'text.secondary' }}>
+                  <Card
+                    sx={{
+                      p: 3,
+                      border: '1px solid',
+                      borderColor: 'divider',
+                      boxShadow: 'none',
+                      borderRadius: 2,
+                      bgcolor: 'background.paper',
+                      mb: 4
+                    }}
+                  >
+                    <Typography
+                      variant='body2'
+                      sx={{ whiteSpace: 'pre-wrap', lineHeight: 1.6, color: 'text.secondary' }}
+                    >
                       {viewTarget.notes}
                     </Typography>
                   </Card>
@@ -984,8 +1389,18 @@ export default function AccountSalesSourceAccounts() {
                     variant='outlined'
                     fullWidth
                     startIcon={<i className='tabler-pencil' />}
-                    onClick={() => { setViewTarget(null); openEdit(viewTarget) }}
-                    sx={{ py: 1.5, borderRadius: 2, fontWeight: 700, borderColor: 'divider', color: 'text.primary', '&:hover': { bgcolor: 'action.hover' } }}
+                    onClick={() => {
+                      setViewTarget(null)
+                      openEdit(viewTarget)
+                    }}
+                    sx={{
+                      py: 1.5,
+                      borderRadius: 2,
+                      fontWeight: 700,
+                      borderColor: 'divider',
+                      color: 'text.primary',
+                      '&:hover': { bgcolor: 'action.hover' }
+                    }}
                   >
                     Edit Config
                   </Button>
@@ -994,8 +1409,17 @@ export default function AccountSalesSourceAccounts() {
                     color='error'
                     fullWidth
                     startIcon={<i className='tabler-trash' />}
-                    onClick={() => { setViewTarget(null); setDeleteTarget(viewTarget) }}
-                    sx={{ py: 1.5, borderRadius: 2, fontWeight: 700, borderColor: alpha('#EF4444', 0.5), '&:hover': { bgcolor: alpha('#EF4444', 0.05) } }}
+                    onClick={() => {
+                      setViewTarget(null)
+                      setDeleteTarget(viewTarget)
+                    }}
+                    sx={{
+                      py: 1.5,
+                      borderRadius: 2,
+                      fontWeight: 700,
+                      borderColor: alpha('#EF4444', 0.5),
+                      '&:hover': { bgcolor: alpha('#EF4444', 0.05) }
+                    }}
                   >
                     Delete Asset
                   </Button>

@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 
 import { toast } from 'react-toastify'
 
-
 import { alpha } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -28,20 +27,16 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { useQueryClient } from '@tanstack/react-query'
 
-import {
-  getGetApiV1AssetsQueryKey,
-  useDeleteApiV1AssetsId,
-  useGetApiV1Assets
-} from '@generated/core-api'
+import { getGetApiV1AssetsQueryKey, useDeleteApiV1AssetsId, useGetApiV1Assets } from '@generated/core-api'
 import type { ApiErrorResponse, AssetDto } from '@generated/core-api'
 import { dsl } from '@/utils/dslQueryBuilder'
 import AssetQuickViewDrawer from './AssetQuickViewDrawer'
 
 // ─── Status config ─────────────────────────────────────────────────────────────
 const statusConfig: Record<string, { label: string; hex: string }> = {
-  Active:    { label: 'Active',    hex: '#10b981' },
-  Sold:      { label: 'Sold',      hex: '#6366f1' },
-  Broken:    { label: 'Broken',    hex: '#ef4444' },
+  Active: { label: 'Active', hex: '#10b981' },
+  Sold: { label: 'Sold', hex: '#6366f1' },
+  Broken: { label: 'Broken', hex: '#ef4444' },
   Discarded: { label: 'Discarded', hex: '#6b7280' }
 }
 
@@ -77,13 +72,17 @@ const StatCard = ({ label, value, icon, color, trend, trendUp }: StatCardProps) 
       position: 'relative',
       overflow: 'hidden',
       border: '1px solid',
-      borderColor: 'divider',
+      borderColor: 'divider'
     }}
   >
     <Box
       sx={{
-        position: 'absolute', right: -8, top: -8,
-        opacity: 0.06, pointerEvents: 'none', color
+        position: 'absolute',
+        right: -8,
+        top: -8,
+        opacity: 0.06,
+        pointerEvents: 'none',
+        color
       }}
     >
       <i className={icon} style={{ fontSize: 88 }} />
@@ -97,11 +96,16 @@ const StatCard = ({ label, value, icon, color, trend, trendUp }: StatCardProps) 
     {trend && (
       <Box
         sx={{
-          display: 'inline-flex', alignItems: 'center', gap: 0.4,
-          px: 1, py: 0.3, borderRadius: 1,
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 0.4,
+          px: 1,
+          py: 0.3,
+          borderRadius: 1,
           bgcolor: alpha(trendUp ? '#10b981' : '#ef4444', 0.12),
           color: trendUp ? '#10b981' : '#ef4444',
-          fontSize: 11, fontWeight: 700
+          fontSize: 11,
+          fontWeight: 700
         }}
       >
         <i className={trendUp ? 'tabler-trending-up' : 'tabler-trending-down'} style={{ fontSize: 13 }} />
@@ -132,27 +136,46 @@ const AssetDirectory = () => {
   }, [search, statusFilter])
 
   // ─── Stats queries ─────────────────────────────────────────────────────────
-  const { data: totalData, isError: isTotalError, error: totalError }  = useGetApiV1Assets({ page: 1, pageSize: 1 })
-  const { data: activeData, isError: isActiveError, error: activeError } = useGetApiV1Assets({ page: 1, pageSize: 1, filter: "status == 'Active'" })
-  const { data: brokenData, isError: isBrokenError, error: brokenError } = useGetApiV1Assets({ page: 1, pageSize: 1, filter: "status == 'Broken'" })
+  const { data: totalData, isError: isTotalError, error: totalError } = useGetApiV1Assets({ page: 1, pageSize: 1 })
 
-  const statsTotal  = totalData?.result?.total  ?? 0
+  const {
+    data: activeData,
+    isError: isActiveError,
+    error: activeError
+  } = useGetApiV1Assets({ page: 1, pageSize: 1, filter: "status == 'Active'" })
+
+  const {
+    data: brokenData,
+    isError: isBrokenError,
+    error: brokenError
+  } = useGetApiV1Assets({ page: 1, pageSize: 1, filter: "status == 'Broken'" })
+
+  const statsTotal = totalData?.result?.total ?? 0
   const statsActive = activeData?.result?.total ?? 0
   const statsBroken = brokenData?.result?.total ?? 0
 
   // ─── Main data ──────────────────────────────────────────────────────────────
-  const { data, isLoading, isError: isDataError, error: dataError } = useGetApiV1Assets({ page, pageSize, filter, sort: '-createdAt' })
+  const {
+    data,
+    isLoading,
+    isError: isDataError,
+    error: dataError
+  } = useGetApiV1Assets({ page, pageSize, filter, sort: '-createdAt' })
+
   const deleteMutation = useDeleteApiV1AssetsId()
 
-  const assets     = useMemo(() => data?.result?.items ?? [], [data?.result?.items])
-  const total      = data?.result?.total     ?? 0
+  const assets = useMemo(() => data?.result?.items ?? [], [data?.result?.items])
+  const total = data?.result?.total ?? 0
   const totalPages = data?.result?.totalPages ?? 1
 
   const estimatedValue = useMemo(() => {
     const sum = assets.reduce((acc, a) => acc + (a.initialCost ?? 0), 0)
 
     return new Intl.NumberFormat('vi-VN', {
-      notation: 'compact', currency: 'VND', style: 'currency', maximumFractionDigits: 1
+      notation: 'compact',
+      currency: 'VND',
+      style: 'currency',
+      maximumFractionDigits: 1
     }).format(sum)
   }, [assets])
 
@@ -188,7 +211,6 @@ const AssetDirectory = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-
       {/* ─── Page Header ─────────────────────────────────────────────── */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
@@ -211,10 +233,24 @@ const AssetDirectory = () => {
 
       {/* ─── Stats Cards ─────────────────────────────────────────────── */}
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
-        <StatCard label='Total Assets'  value={statsTotal.toLocaleString()}  icon='tabler-package'        color='#7367f0' />
-        <StatCard label='Active'        value={statsActive.toLocaleString()} icon='tabler-checks'         color='#10b981' trend='active' trendUp />
-        <StatCard label='Needs Repair'  value={statsBroken.toLocaleString()} icon='tabler-alert-triangle' color='#ff9f43' trend='broken' trendUp={false} />
-        <StatCard label='Est. Value'    value={estimatedValue}               icon='tabler-coin'           color='#7367f0' />
+        <StatCard label='Total Assets' value={statsTotal.toLocaleString()} icon='tabler-package' color='#7367f0' />
+        <StatCard
+          label='Active'
+          value={statsActive.toLocaleString()}
+          icon='tabler-checks'
+          color='#10b981'
+          trend='active'
+          trendUp
+        />
+        <StatCard
+          label='Needs Repair'
+          value={statsBroken.toLocaleString()}
+          icon='tabler-alert-triangle'
+          color='#ff9f43'
+          trend='broken'
+          trendUp={false}
+        />
+        <StatCard label='Est. Value' value={estimatedValue} icon='tabler-coin' color='#7367f0' />
       </Box>
 
       {/* ─── Filters Bar ─────────────────────────────────────────────── */}
@@ -225,7 +261,10 @@ const AssetDirectory = () => {
               size='small'
               placeholder='Search assets, tags, locations...'
               value={search}
-              onChange={e => { setSearch(e.target.value); setPage(1) }}
+              onChange={e => {
+                setSearch(e.target.value)
+                setPage(1)
+              }}
               sx={{ minWidth: 260 }}
               slotProps={{
                 input: {
@@ -238,14 +277,21 @@ const AssetDirectory = () => {
               }}
             />
             <TextField
-              select size='small' label='Status'
+              select
+              size='small'
+              label='Status'
               value={statusFilter}
-              onChange={e => { setStatusFilter(e.target.value); setPage(1) }}
+              onChange={e => {
+                setStatusFilter(e.target.value)
+                setPage(1)
+              }}
               sx={{ minWidth: 140 }}
             >
               <MenuItem value=''>All Statuses</MenuItem>
               {Object.entries(statusConfig).map(([k, v]) => (
-                <MenuItem key={k} value={k}>{v.label}</MenuItem>
+                <MenuItem key={k} value={k}>
+                  {v.label}
+                </MenuItem>
               ))}
             </TextField>
             {(search || statusFilter) && (
@@ -253,17 +299,28 @@ const AssetDirectory = () => {
                 label={`Clear filters`}
                 size='small'
                 variant='outlined'
-                onDelete={() => { setSearch(''); setStatusFilter('') }}
+                onDelete={() => {
+                  setSearch('')
+                  setStatusFilter('')
+                }}
               />
             )}
           </Box>
           <Box sx={{ display: 'flex', gap: 1 }}>
             {[
-              { icon: 'tabler-refresh', tip: 'Refresh', onClick: () => queryClient.invalidateQueries({ queryKey: getGetApiV1AssetsQueryKey() }) },
+              {
+                icon: 'tabler-refresh',
+                tip: 'Refresh',
+                onClick: () => queryClient.invalidateQueries({ queryKey: getGetApiV1AssetsQueryKey() })
+              },
               { icon: 'tabler-download', tip: 'Export CSV' }
             ].map(({ icon, tip, onClick }) => (
               <Tooltip key={tip} title={tip}>
-                <IconButton size='small' onClick={onClick} sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5 }}>
+                <IconButton
+                  size='small'
+                  onClick={onClick}
+                  sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5 }}
+                >
                   <i className={icon} style={{ fontSize: 17 }} />
                 </IconButton>
               </Tooltip>
@@ -282,7 +339,14 @@ const AssetDirectory = () => {
                   <TableCell
                     key={h}
                     align={h === '' ? 'right' : 'left'}
-                    sx={{ fontWeight: 700, fontSize: 11, textTransform: 'uppercase', letterSpacing: 0.8, color: 'text.secondary', py: 1.5 }}
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: 11,
+                      textTransform: 'uppercase',
+                      letterSpacing: 0.8,
+                      color: 'text.secondary',
+                      py: 1.5
+                    }}
                   >
                     {h}
                   </TableCell>
@@ -295,7 +359,9 @@ const AssetDirectory = () => {
                   <TableRow key={i}>
                     {Array.from({ length: 7 }).map((_, j) => (
                       <TableCell key={j}>
-                        <Box sx={{ height: 16, borderRadius: 1, bgcolor: 'action.hover', width: j === 0 ? '75%' : '55%' }} />
+                        <Box
+                          sx={{ height: 16, borderRadius: 1, bgcolor: 'action.hover', width: j === 0 ? '75%' : '55%' }}
+                        />
                       </TableCell>
                     ))}
                   </TableRow>
@@ -304,18 +370,28 @@ const AssetDirectory = () => {
                 <TableRow>
                   <TableCell colSpan={7} align='center' sx={{ py: 12 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                      <Box sx={{
-                        width: 80, height: 80, borderRadius: '50%', bgcolor: 'action.hover',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                      }}>
+                      <Box
+                        sx={{
+                          width: 80,
+                          height: 80,
+                          borderRadius: '50%',
+                          bgcolor: 'action.hover',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                      >
                         <i className='tabler-package-off' style={{ fontSize: 40, opacity: 0.35 }} />
                       </Box>
-                      <Typography variant='h6' fontWeight={600} color='text.secondary'>No assets found</Typography>
+                      <Typography variant='h6' fontWeight={600} color='text.secondary'>
+                        No assets found
+                      </Typography>
                       <Typography variant='body2' color='text.disabled'>
                         Try adjusting your filters or add a new asset.
                       </Typography>
                       <Button
-                        variant='outlined' size='small'
+                        variant='outlined'
+                        size='small'
                         startIcon={<i className='tabler-plus' />}
                         onClick={() => router.push('/assets/new')}
                       >
@@ -346,16 +422,30 @@ const AssetDirectory = () => {
                       {/* Asset name + ID */}
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                          <Box sx={{
-                            width: 38, height: 38, borderRadius: 1.5,
-                            bgcolor: 'action.selected',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-                          }}>
+                          <Box
+                            sx={{
+                              width: 38,
+                              height: 38,
+                              borderRadius: 1.5,
+                              bgcolor: 'action.selected',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              flexShrink: 0
+                            }}
+                          >
                             <i className='tabler-package' style={{ fontSize: 20, opacity: 0.45 }} />
                           </Box>
                           <Box>
-                            <Typography variant='body2' fontWeight={600}>{asset.name}</Typography>
-                            <Typography variant='caption' color='text.disabled' fontFamily='monospace' sx={{ fontSize: 10 }}>
+                            <Typography variant='body2' fontWeight={600}>
+                              {asset.name}
+                            </Typography>
+                            <Typography
+                              variant='caption'
+                              color='text.disabled'
+                              fontFamily='monospace'
+                              sx={{ fontSize: 10 }}
+                            >
                               #{asset.id?.slice(0, 8).toUpperCase()}
                             </Typography>
                           </Box>
@@ -366,13 +456,17 @@ const AssetDirectory = () => {
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
                           <i className='tabler-stack-2' style={{ fontSize: 15, opacity: 0.45 }} />
-                          <Typography variant='body2' color='text.secondary'>{asset.categoryName ?? '—'}</Typography>
+                          <Typography variant='body2' color='text.secondary'>
+                            {asset.categoryName ?? '—'}
+                          </Typography>
                         </Box>
                       </TableCell>
 
                       {/* Brand */}
                       <TableCell>
-                        <Typography variant='body2' color='text.secondary'>{asset.brandName ?? '—'}</Typography>
+                        <Typography variant='body2' color='text.secondary'>
+                          {asset.brandName ?? '—'}
+                        </Typography>
                       </TableCell>
 
                       {/* Status badge */}
@@ -381,7 +475,8 @@ const AssetDirectory = () => {
                           label={status.label}
                           size='small'
                           sx={{
-                            fontWeight: 600, fontSize: 11,
+                            fontWeight: 600,
+                            fontSize: 11,
                             bgcolor: alpha(status.hex, 0.12),
                             color: status.hex,
                             border: `1px solid ${alpha(status.hex, 0.28)}`,
@@ -392,31 +487,45 @@ const AssetDirectory = () => {
 
                       {/* Location */}
                       <TableCell>
-                        <Typography variant='body2' color='text.secondary'>{asset.location ?? '—'}</Typography>
+                        <Typography variant='body2' color='text.secondary'>
+                          {asset.location ?? '—'}
+                        </Typography>
                       </TableCell>
 
                       {/* Warranty progress bar */}
                       <TableCell sx={{ minWidth: 140 }}>
                         {asset.warrantyExpiryDate ? (
                           isExpired ? (
-                            <Typography variant='caption' color='text.disabled' fontStyle='italic'>Expired</Typography>
+                            <Typography variant='caption' color='text.disabled' fontStyle='italic'>
+                              Expired
+                            </Typography>
                           ) : (
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                               <LinearProgress
                                 variant='determinate'
                                 value={warrantyPct}
                                 sx={{
-                                  flex: 1, maxWidth: 72, height: 5, borderRadius: 5, bgcolor: 'action.hover',
+                                  flex: 1,
+                                  maxWidth: 72,
+                                  height: 5,
+                                  borderRadius: 5,
+                                  bgcolor: 'action.hover',
                                   '& .MuiLinearProgress-bar': { bgcolor: warrantyColor, borderRadius: 5 }
                                 }}
                               />
-                              <Typography variant='caption' fontWeight={500} sx={{ color: isExpiringSoon ? '#ff9f43' : 'text.secondary', whiteSpace: 'nowrap' }}>
+                              <Typography
+                                variant='caption'
+                                fontWeight={500}
+                                sx={{ color: isExpiringSoon ? '#ff9f43' : 'text.secondary', whiteSpace: 'nowrap' }}
+                              >
                                 {daysLeft}d
                               </Typography>
                             </Box>
                           )
                         ) : (
-                          <Typography variant='caption' color='text.disabled'>—</Typography>
+                          <Typography variant='caption' color='text.disabled'>
+                            —
+                          </Typography>
                         )}
                       </TableCell>
 
@@ -428,12 +537,24 @@ const AssetDirectory = () => {
                           onClick={e => e.stopPropagation()}
                         >
                           <Tooltip title='Quick View'>
-                            <IconButton size='small' onClick={e => { e.stopPropagation(); setQuickViewId(asset.id!) }}>
+                            <IconButton
+                              size='small'
+                              onClick={e => {
+                                e.stopPropagation()
+                                setQuickViewId(asset.id!)
+                              }}
+                            >
                               <i className='tabler-eye' style={{ fontSize: 17 }} />
                             </IconButton>
                           </Tooltip>
                           <Tooltip title='Edit'>
-                            <IconButton size='small' onClick={e => { e.stopPropagation(); router.push(`/assets/${asset.id}/edit`) }}>
+                            <IconButton
+                              size='small'
+                              onClick={e => {
+                                e.stopPropagation()
+                                router.push(`/assets/${asset.id}/edit`)
+                              }}
+                            >
                               <i className='tabler-pencil' style={{ fontSize: 17 }} />
                             </IconButton>
                           </Tooltip>
@@ -453,20 +574,36 @@ const AssetDirectory = () => {
         </TableContainer>
 
         {/* Footer / Pagination */}
-        <Box sx={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          px: 3, py: 2, borderTop: '1px solid', borderColor: 'divider', bgcolor: 'action.hover'
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            px: 3,
+            py: 2,
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            bgcolor: 'action.hover'
+          }}
+        >
           <Typography variant='body2' color='text.secondary'>
-            {total === 0 ? 'No results' : (
+            {total === 0 ? (
+              'No results'
+            ) : (
               <>
                 Showing{' '}
-                <Box component='span' fontWeight={700} color='text.primary'>{((page - 1) * pageSize) + 1}</Box>
-                {' '}–{' '}
-                <Box component='span' fontWeight={700} color='text.primary'>{Math.min(page * pageSize, total)}</Box>
-                {' '}of{' '}
-                <Box component='span' fontWeight={700} color='text.primary'>{total}</Box>
-                {' '}assets
+                <Box component='span' fontWeight={700} color='text.primary'>
+                  {(page - 1) * pageSize + 1}
+                </Box>{' '}
+                –{' '}
+                <Box component='span' fontWeight={700} color='text.primary'>
+                  {Math.min(page * pageSize, total)}
+                </Box>{' '}
+                of{' '}
+                <Box component='span' fontWeight={700} color='text.primary'>
+                  {total}
+                </Box>{' '}
+                assets
               </>
             )}
           </Typography>
@@ -480,8 +617,14 @@ const AssetDirectory = () => {
       <AssetQuickViewDrawer
         assetId={quickViewId}
         onClose={() => setQuickViewId(null)}
-        onViewDetail={id => { setQuickViewId(null); router.push(`/assets/${id}`) }}
-        onEdit={id => { setQuickViewId(null); router.push(`/assets/${id}/edit`) }}
+        onViewDetail={id => {
+          setQuickViewId(null)
+          router.push(`/assets/${id}`)
+        }}
+        onEdit={id => {
+          setQuickViewId(null)
+          router.push(`/assets/${id}/edit`)
+        }}
       />
     </Box>
   )

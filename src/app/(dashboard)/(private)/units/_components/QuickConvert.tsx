@@ -78,11 +78,7 @@ const QuickConvert = () => {
         />
         <FormControl size='small' fullWidth>
           <InputLabel>From Unit</InputLabel>
-          <Select
-            value={fromUnitId}
-            label='From Unit'
-            onChange={e => handleInputChange(setFromUnitId, e.target.value)}
-          >
+          <Select value={fromUnitId} label='From Unit' onChange={e => handleInputChange(setFromUnitId, e.target.value)}>
             {units.map((u: UnitDto) => (
               <MenuItem key={u.id} value={u.id!}>
                 {u.name} ({u.code})
@@ -102,11 +98,7 @@ const QuickConvert = () => {
       {/* To */}
       <FormControl size='small' fullWidth sx={{ mb: 2 }}>
         <InputLabel>To Unit</InputLabel>
-        <Select
-          value={toUnitId}
-          label='To Unit'
-          onChange={e => handleInputChange(setToUnitId, e.target.value)}
-        >
+        <Select value={toUnitId} label='To Unit' onChange={e => handleInputChange(setToUnitId, e.target.value)}>
           {units.map((u: UnitDto) => (
             <MenuItem key={u.id} value={u.id!}>
               {u.name} ({u.code})

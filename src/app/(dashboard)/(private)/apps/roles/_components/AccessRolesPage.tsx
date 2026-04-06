@@ -4,26 +4,14 @@ import { useState, useMemo, useEffect, useCallback } from 'react'
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation'
 
-import {
-  Grid,
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle
-} from '@mui/material'
+import { Grid, Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 
 import RoleList from './RoleList'
 import RolePermissionsDetail from './RolePermissionsDetail'
 import RoleDialog from './RoleDialog'
-import {
-  deleteApiV1AccessControlRolesId,
-  getApiV1AccessControlRoles
-} from '@/generated/core-api'
+import { deleteApiV1AccessControlRolesId, getApiV1AccessControlRoles } from '@/generated/core-api'
 import type { AccessRoleDto, ApiErrorResponse } from '@/generated/core-api'
 
 const AccessRolesPage = () => {

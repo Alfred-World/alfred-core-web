@@ -407,7 +407,7 @@ const SubMenu: ForwardRefRenderFunction<HTMLLIElement, SubMenuProps> = (props, r
                 open: open
               })
             ) : (
-               
+
               /* Expanded Arrow Icon */
               <StyledHorizontalNavExpandIcon level={level}>
                 <ChevronRight fontSize='1rem' />

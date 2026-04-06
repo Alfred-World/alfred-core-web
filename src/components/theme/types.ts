@@ -18,7 +18,7 @@ import type {
 } from '@core/components/custom-inputs/types'
 
 declare module '@mui/material/styles' {
-   
+
   // Theme
   interface Theme {
     shape: {

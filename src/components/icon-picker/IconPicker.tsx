@@ -175,11 +175,7 @@ const IconPicker = ({
                 </InputAdornment>
               ),
               endAdornment: searchTerm ? (
-                <InputAdornment
-                  position='end'
-                  sx={{ cursor: 'pointer' }}
-                  onClick={() => setSearchTerm('')}
-                >
+                <InputAdornment position='end' sx={{ cursor: 'pointer' }} onClick={() => setSearchTerm('')}>
                   <i className='tabler-x' style={{ fontSize: 16 }} />
                 </InputAdornment>
               ) : undefined
