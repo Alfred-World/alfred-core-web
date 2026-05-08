@@ -40,7 +40,6 @@ import type {
   UpdateMemberRequest
 } from '@/generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
-import { dsl } from '@/utils/dslQueryBuilder'
 
 const getApiErrorMessage = (error: unknown, fallback: string) => {
   if (!error) {
@@ -118,19 +117,8 @@ const AccountSalesCustomers = () => {
     note: string
   } | null>(null)
 
-  const filter = useMemo(() => {
-    if (!search.trim()) {
-      return undefined
-    }
-
-    return dsl()
-      .group(g => {
-        g.string('displayName').contains(search.trim()).or().string('sourceId').contains(search.trim())
-      })
-      .build()
-  }, [search])
-
-  const membersQuery = useGetApiV1AccountSalesMembers({ page, pageSize: 12, filter, sort: '-createdAt' })
+  // TODO: member list filtering requires POST search endpoint (GET no longer supports filter)
+  const membersQuery = useGetApiV1AccountSalesMembers({ page, pageSize: 12, sort: '-createdAt' })
 
   const searchQuery = useGetApiV1AccountSalesMembersSearch(
     { keyword: search, take: 20 },
@@ -182,13 +170,13 @@ const AccountSalesCustomers = () => {
   const memberTotalSpend = memberDetailQuery.data?.result?.stats.totalSpend ?? 0
   const totalReferralCommission = memberDetailQuery.data?.result?.stats.totalReferralCommission ?? 0
 
+  // TODO: order filtering by memberId requires POST search endpoint or dedicated API
   // Always-enabled count queries — load stats when member is opened, regardless of active tab
   const orderCountQuery = useGetApiV1AccountSalesOrders(
     {
       page: 1,
       pageSize: 1,
       sort: '-purchaseDate',
-      filter: selectedMemberId ? dsl().string('memberId').eq(selectedMemberId).build() : undefined,
       view: 'list'
     },
     { query: { enabled: !!selectedMemberId } }
@@ -199,7 +187,6 @@ const AccountSalesCustomers = () => {
       page: 1,
       pageSize: 1,
       sort: '-purchaseDate',
-      filter: selectedMemberId ? dsl().string('referrerMemberId').eq(selectedMemberId).build() : undefined,
       view: 'list'
     },
     { query: { enabled: !!selectedMemberId } }
@@ -211,7 +198,6 @@ const AccountSalesCustomers = () => {
       page: ordersPage,
       pageSize: 10,
       sort: '-purchaseDate',
-      filter: selectedMemberId ? dsl().string('memberId').eq(selectedMemberId).build() : undefined,
       view: 'list'
     },
     { query: { enabled: !!selectedMemberId && detailTab === 'purchased' } }
@@ -222,7 +208,6 @@ const AccountSalesCustomers = () => {
       page: referralsPage,
       pageSize: 10,
       sort: '-purchaseDate',
-      filter: selectedMemberId ? dsl().string('referrerMemberId').eq(selectedMemberId).build() : undefined,
       view: 'list'
     },
     { query: { enabled: !!selectedMemberId && detailTab === 'referrals' } }

@@ -315,3 +315,20 @@ export function useUrlSorting(defaultSort = '', sortParamName = 'sort') {
     setSorting
   }
 }
+
+/**
+ * Convert a URL sort string (e.g. "-createdAt,name") to SortField[] for POST search requests.
+ * Works with the sort string from useUrlSorting().
+ */
+export function sortStringToSortFields(sort: string): { field: string; direction: 'Asc' | 'Desc' }[] {
+  if (!sort) return []
+
+  return sort
+    .split(',')
+    .filter(Boolean)
+    .map(part => {
+      const desc = part.startsWith('-')
+
+      return { field: desc ? part.substring(1) : part, direction: (desc ? 'Desc' : 'Asc') as 'Asc' | 'Desc' }
+    })
+}

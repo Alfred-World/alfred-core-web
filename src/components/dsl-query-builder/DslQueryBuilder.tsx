@@ -8,7 +8,7 @@ import { Box, Button, Card, CardHeader, CardContent, Divider, Typography } from 
 
 import type { DslQueryBuilderProps, FilterCondition } from './types'
 import { FilterRow } from './FilterRow'
-import { buildDslQuery } from './buildDslQuery'
+import { buildFilterObject } from './buildFilterObject'
 import { getOperatorsForDataType } from './operators'
 
 // Generate unique ID
@@ -23,10 +23,7 @@ function serializeConditions(conditions: FilterCondition[]): string {
         // Must have a field
         if (!c.field) return false
 
-        // Must have a non-empty value (unless operator doesn't require value)
-        if (c.operator === '@isnull' || c.operator === '@notnull') return true
-
-        // Check for empty values
+        // Check for empty values (all current operators require a value)
         if (c.value === null || c.value === undefined || c.value === '') return false
 
         return true
@@ -120,7 +117,7 @@ export function DslQueryBuilder({
       {
         id: generateId(),
         field: firstField.key,
-        operator: operators[0]?.value || '==',
+        operator: operators[0]?.value || 'eq',
         value: ''
       }
     ]
@@ -152,21 +149,16 @@ export function DslQueryBuilder({
   // Trigger onInitialLoad when restored from URL
   useEffect(() => {
     if (restoredFromUrl && onInitialLoad && !hasCalledInitialLoad) {
-      const dslQuery = buildDslQuery(initialConditions, fields)
+      const filter = buildFilterObject(initialConditions, fields)
 
-      if (dslQuery) {
-        onInitialLoad(dslQuery)
-        setHasCalledInitialLoad(true)
-      }
+      onInitialLoad(filter)
+      setHasCalledInitialLoad(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [restoredFromUrl, hasCalledInitialLoad])
 
   // Sync with URL when conditions change (only if syncWithUrl is true)
   // REMOVED auto-sync useEffect to prevent URL updates while typing
-
-  // Build current DSL query
-  const currentDslQuery = useMemo(() => buildDslQuery(conditions, fields), [conditions, fields])
 
   const handleConditionChange = useCallback((id: string, updates: Partial<FilterCondition>) => {
     setConditions(prev => prev.map(c => (c.id === id ? { ...c, ...updates } : c)))
@@ -196,7 +188,7 @@ export function DslQueryBuilder({
       const newCondition: FilterCondition = {
         id: generateId(),
         field: firstField.key,
-        operator: operators[0]?.value || '==',
+        operator: operators[0]?.value || 'eq',
         value: '',
         logicalOperator
       }
@@ -207,14 +199,14 @@ export function DslQueryBuilder({
   )
 
   const handleSearch = useCallback(() => {
-    const dslQuery = buildDslQuery(conditions, fields)
+    const filter = buildFilterObject(conditions, fields)
 
     if (onSearch) {
-      onSearch(dslQuery)
+      onSearch(filter)
     }
 
     if (onChange) {
-      onChange(conditions, dslQuery)
+      onChange(conditions, filter)
     }
 
     // Sync with URL on explicit search
@@ -269,7 +261,7 @@ export function DslQueryBuilder({
       const initialCondition: FilterCondition = {
         id: generateId(),
         field: firstField.key,
-        operator: operators[0]?.value || '==',
+        operator: operators[0]?.value || 'eq',
         value: '',
         logicalOperator: undefined
       }
@@ -457,26 +449,6 @@ export function DslQueryBuilder({
             </Box>
           ))}
         </Box>
-
-        {/* Expression Preview */}
-        {currentDslQuery && (
-          <Box sx={{ mt: 2, pt: 2, borderTop: 1, borderColor: 'divider' }}>
-            <Typography variant='caption' sx={{ color: 'text.secondary', display: 'block', mb: 1 }}>
-              Expression Preview
-            </Typography>
-            <Box
-              sx={{
-                p: 1.5,
-                bgcolor: 'action.hover',
-                borderRadius: 1,
-                fontFamily: 'monospace',
-                fontSize: '0.875rem'
-              }}
-            >
-              {currentDslQuery}
-            </Box>
-          </Box>
-        )}
 
         {/* Search and Reset Buttons */}
         <Box sx={{ display: 'flex', gap: 1, mt: 2, justifyContent: 'flex-end' }}>

@@ -223,8 +223,6 @@ const AccountSalesOrders = () => {
   const [searchMember, setSearchMember] = useState('')
   const [searchOrderCode, setSearchOrderCode] = useState('')
   const [searchSeller, setSearchSeller] = useState('')
-  const [debouncedMember, setDebouncedMember] = useState('')
-  const [debouncedOrderCode, setDebouncedOrderCode] = useState('')
   const [page, setPage] = useState(1)
   const [openSell, setOpenSell] = useState(false)
   const [openCreateProduct, setOpenCreateProduct] = useState(false)
@@ -264,13 +262,13 @@ const AccountSalesOrders = () => {
     enabled: !!selectedOrder?.accountCloneId,
     staleTime: 30_000,
     queryFn: async () => {
+      // TODO: Filtering by clone id requires POST search endpoint or dedicated GET-by-id
       const res = await getApiV1AccountSalesAccountClones({
-        filter: `id == '${selectedOrder!.accountCloneId}'`,
-        pageSize: 1,
+        pageSize: 500,
         view: 'detail'
       })
 
-      return res.result?.items?.[0] ?? null
+      return res.result?.items?.find(c => c.id === selectedOrder!.accountCloneId) ?? null
     }
   })
 
@@ -340,30 +338,11 @@ const AccountSalesOrders = () => {
     return `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(account)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`
   }, [cloneDetailQuery.data?.twoFaSecret, cloneDetailQuery.data?.username, selectedOrder?.productName, otpView.valid])
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedMember(searchMember)
-      setDebouncedOrderCode(searchOrderCode)
-      setPage(1)
-    }, 400)
-
-    return () => clearTimeout(timer)
-  }, [searchMember, searchOrderCode])
-
-  const ordersFilter = useMemo(() => {
-    const parts: string[] = []
-
-    if (debouncedMember.trim()) parts.push(`memberDisplayName @contains('${debouncedMember.trim()}')`)
-    if (debouncedOrderCode.trim()) parts.push(`orderCode @contains('${debouncedOrderCode.trim()}')`)
-
-    return parts.join(' and ') || undefined
-  }, [debouncedMember, debouncedOrderCode])
-
+  // TODO: Order search by member/orderCode requires POST search endpoint
   const ordersQuery = useGetApiV1AccountSalesOrders({
     page,
     pageSize: 10,
     sort: '-purchaseDate',
-    filter: ordersFilter,
     view: 'list'
   })
 
@@ -475,17 +454,37 @@ const AccountSalesOrders = () => {
   const allOrders = useMemo(() => ordersQuery.data?.result?.items ?? [], [ordersQuery.data?.result?.items])
 
   const orders = useMemo(() => {
-    if (!searchSeller.trim()) return allOrders
+    let filtered = allOrders
 
-    const lower = searchSeller.trim().toLowerCase()
+    if (searchMember.trim()) {
+      const lower = searchMember.trim().toLowerCase()
 
-    return allOrders.filter(o => {
-      const name = o.soldByUser?.fullName?.toLowerCase() ?? ''
-      const email = o.soldByUser?.email?.toLowerCase() ?? ''
+      filtered = filtered.filter(o => (o.memberDisplayName?.toLowerCase() ?? '').includes(lower))
+    }
 
-      return name.includes(lower) || email.includes(lower)
-    })
-  }, [allOrders, searchSeller])
+    if (searchOrderCode.trim()) {
+      const lower = searchOrderCode.trim().toLowerCase()
+
+      filtered = filtered.filter(o => {
+        const code = (o.orderCode ?? o.id ?? '').toLowerCase()
+
+        return code.includes(lower)
+      })
+    }
+
+    if (searchSeller.trim()) {
+      const lower = searchSeller.trim().toLowerCase()
+
+      filtered = filtered.filter(o => {
+        const name = o.soldByUser?.fullName?.toLowerCase() ?? ''
+        const email = o.soldByUser?.email?.toLowerCase() ?? ''
+
+        return name.includes(lower) || email.includes(lower)
+      })
+    }
+
+    return filtered
+  }, [allOrders, searchMember, searchOrderCode, searchSeller])
 
   const replaceOrder = useMemo(() => {
     if (!replaceOrderId) {

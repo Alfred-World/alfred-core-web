@@ -25,11 +25,10 @@ import TableRow from '@mui/material/TableRow'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { getGetApiV1AssetsQueryKey, useDeleteApiV1AssetsId, useGetApiV1Assets } from '@generated/core-api'
+import { postApiV1AssetsSearch, useDeleteApiV1AssetsId } from '@generated/core-api'
 import type { ApiErrorResponse, AssetDto } from '@generated/core-api'
-import { dsl } from '@/utils/dslQueryBuilder'
 import AssetQuickViewDrawer from './AssetQuickViewDrawer'
 
 // ─── Status config ─────────────────────────────────────────────────────────────
@@ -127,40 +126,62 @@ const AssetDirectory = () => {
 
   // ─── Filters ────────────────────────────────────────────────────────────────
   const filter = useMemo(() => {
-    const builder = dsl()
+    const conditions: Record<string, unknown>[] = []
 
-    if (search.trim()) builder.string('name').contains(search.trim())
-    if (statusFilter) builder.string('status').eq(statusFilter)
+    if (search.trim()) conditions.push({ name: { contains: search.trim() } })
+    if (statusFilter) conditions.push({ status: { eq: statusFilter } })
 
-    return builder.build() || undefined
+    if (conditions.length === 0) return undefined
+    if (conditions.length === 1) return conditions[0]
+
+    return { and: conditions }
   }, [search, statusFilter])
 
   // ─── Stats queries ─────────────────────────────────────────────────────────
-  const { data: totalData, isError: isTotalError, error: totalError } = useGetApiV1Assets({ page: 1, pageSize: 1 })
+  const { data: totalData, isError: isTotalError, error: totalError } = useQuery({
+    queryKey: ['core', 'assets', 'search', 'stats-total'],
+    queryFn: () => postApiV1AssetsSearch({ page: 1, pageSize: 1 })
+  })
 
   const {
     data: activeData,
     isError: isActiveError,
     error: activeError
-  } = useGetApiV1Assets({ page: 1, pageSize: 1, filter: "status == 'Active'" })
+  } = useQuery({
+    queryKey: ['core', 'assets', 'search', 'stats-active'],
+    queryFn: () => postApiV1AssetsSearch({ page: 1, pageSize: 1, filter: { status: { eq: 'Active' } } })
+  })
 
   const {
     data: brokenData,
     isError: isBrokenError,
     error: brokenError
-  } = useGetApiV1Assets({ page: 1, pageSize: 1, filter: "status == 'Broken'" })
+  } = useQuery({
+    queryKey: ['core', 'assets', 'search', 'stats-broken'],
+    queryFn: () => postApiV1AssetsSearch({ page: 1, pageSize: 1, filter: { status: { eq: 'Broken' } } })
+  })
 
   const statsTotal = totalData?.result?.total ?? 0
   const statsActive = activeData?.result?.total ?? 0
   const statsBroken = brokenData?.result?.total ?? 0
 
   // ─── Main data ──────────────────────────────────────────────────────────────
+  const mainRequest = useMemo(() => ({
+    page,
+    pageSize,
+    filter,
+    order: [{ field: 'createdAt', direction: 'Desc' as const }]
+  }), [page, pageSize, filter])
+
   const {
     data,
     isLoading,
     isError: isDataError,
     error: dataError
-  } = useGetApiV1Assets({ page, pageSize, filter, sort: '-createdAt' })
+  } = useQuery({
+    queryKey: ['core', 'assets', 'search', mainRequest],
+    queryFn: () => postApiV1AssetsSearch(mainRequest)
+  })
 
   const deleteMutation = useDeleteApiV1AssetsId()
 
@@ -183,7 +204,7 @@ const AssetDirectory = () => {
     e.stopPropagation()
     if (!confirm('Delete this asset?')) return
     await deleteMutation.mutateAsync({ id })
-    await queryClient.invalidateQueries({ queryKey: getGetApiV1AssetsQueryKey() })
+    await queryClient.invalidateQueries({ queryKey: ['core', 'assets'] })
   }
 
   const apiErrorMessage = useMemo(() => {
@@ -311,7 +332,7 @@ const AssetDirectory = () => {
               {
                 icon: 'tabler-refresh',
                 tip: 'Refresh',
-                onClick: () => queryClient.invalidateQueries({ queryKey: getGetApiV1AssetsQueryKey() })
+                onClick: () => queryClient.invalidateQueries({ queryKey: ['core', 'assets'] })
               },
               { icon: 'tabler-download', tip: 'Export CSV' }
             ].map(({ icon, tip, onClick }) => (

@@ -16,9 +16,10 @@ import Typography from '@mui/material/Typography'
 
 import { toast } from 'react-toastify'
 
-import { useGetApiV1Brands, useGetApiV1Categories } from '@generated/core-api'
+import { useQuery } from '@tanstack/react-query'
+
+import { postApiV1BrandsSearch, postApiV1CategoriesSearch } from '@generated/core-api'
 import type { ApiErrorResponse, CategoryDto } from '@generated/core-api'
-import { dsl } from '@/utils/dslQueryBuilder'
 
 import BrandCard from './BrandCard'
 
@@ -26,44 +27,60 @@ const BrandDirectory = () => {
   const router = useRouter()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null)
   const pageSize = 10
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search)
+      setPage(1)
+    }, 400)
+
+    return () => clearTimeout(timer)
+  }, [search])
+
   // Fetch brand-type categories from API
+  const categoriesRequest = useMemo(() => ({
+    filter: { type: { eq: 'Brand' } },
+    pageSize: 100,
+    order: [{ field: 'name', direction: 'Asc' as const }]
+  }), [])
+
   const {
     data: categoriesData,
     isLoading: loadingCategories,
     isError: isCategoriesError,
     error: categoriesError
-  } = useGetApiV1Categories({
-    filter: "type == 'Brand'",
-    pageSize: 100,
-    sort: 'name'
+  } = useQuery({
+    queryKey: ['core', 'categories', 'search', categoriesRequest],
+    queryFn: () => postApiV1CategoriesSearch(categoriesRequest)
   })
 
   const categories = useMemo<CategoryDto[]>(() => categoriesData?.result?.items ?? [], [categoriesData])
 
-  // Build DSL filter (search only — category filtering is done via categoryId param)
+  // Build filter object (search only — category filtering is done via categoryId param)
   const filter = useMemo(() => {
-    if (!search.trim()) return undefined
-    const builder = dsl()
+    if (!debouncedSearch.trim()) return undefined
 
-    builder.string('name').contains(search.trim())
+    return { name: { contains: debouncedSearch.trim() } }
+  }, [debouncedSearch])
 
-    return builder.build() || undefined
-  }, [search])
+  const brandsRequest = useMemo(() => ({
+    page,
+    pageSize,
+    filter,
+    order: [{ field: 'createdAt', direction: 'Desc' as const }]
+  }), [page, pageSize, filter])
 
   const {
     data,
     isLoading,
     isError: isBrandsError,
     error: brandsError
-  } = useGetApiV1Brands({
-    page,
-    pageSize,
-    filter,
-    sort: '-createdAt',
-    ...(activeCategoryId ? { categoryId: activeCategoryId } : {})
+  } = useQuery({
+    queryKey: ['core', 'brands', 'search', brandsRequest, activeCategoryId],
+    queryFn: () => postApiV1BrandsSearch(brandsRequest, activeCategoryId ? { categoryId: activeCategoryId } : undefined)
   })
 
   const brands = data?.result?.items ?? []

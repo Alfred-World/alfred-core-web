@@ -76,6 +76,106 @@ export interface AccessPermissionDtoApiPagedResponse {
   errors?: ApiError[] | null
 }
 
+export interface GuidFilterInput {
+  /** @nullable */
+  eq?: string | null
+  /** @nullable */
+  neq?: string | null
+  /** @nullable */
+  in?: string[] | null
+  /** @nullable */
+  nin?: string[] | null
+}
+
+export interface StringFilterInput {
+  /** @nullable */
+  eq?: string | null
+  /** @nullable */
+  neq?: string | null
+  /** @nullable */
+  contains?: string | null
+  /** @nullable */
+  ncontains?: string | null
+  /** @nullable */
+  startsWith?: string | null
+  /** @nullable */
+  nstartsWith?: string | null
+  /** @nullable */
+  endsWith?: string | null
+  /** @nullable */
+  nendsWith?: string | null
+  /** @nullable */
+  in?: string[] | null
+  /** @nullable */
+  nin?: string[] | null
+}
+
+export interface BoolFilterInput {
+  /** @nullable */
+  eq?: boolean | null
+  /** @nullable */
+  neq?: boolean | null
+}
+
+export interface DateTimeFilterInput {
+  /** @nullable */
+  eq?: string | null
+  /** @nullable */
+  neq?: string | null
+  /** @nullable */
+  gt?: string | null
+  /** @nullable */
+  gte?: string | null
+  /** @nullable */
+  lt?: string | null
+  /** @nullable */
+  lte?: string | null
+}
+
+export interface AccessPermissionFilterInput {
+  /** @nullable */
+  and?: AccessPermissionFilterInput[] | null
+  /** @nullable */
+  or?: AccessPermissionFilterInput[] | null
+  id?: GuidFilterInput | null
+  code?: StringFilterInput | null
+  name?: StringFilterInput | null
+  resource?: StringFilterInput | null
+  action?: StringFilterInput | null
+  description?: StringFilterInput | null
+  isActive?: BoolFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+  updatedAt?: DateTimeFilterInput | null
+}
+
+export interface AccessPermissionFilterInputCollectionFilterInput {
+  some?: AccessPermissionFilterInput | null
+  all?: AccessPermissionFilterInput | null
+  none?: AccessPermissionFilterInput | null
+}
+
+export type SortDirection = (typeof SortDirection)[keyof typeof SortDirection]
+
+export const SortDirection = {
+  Asc: 'Asc',
+  Desc: 'Desc'
+} as const
+
+export interface SortField {
+  field?: string
+  direction?: SortDirection
+}
+
+export interface AccessPermissionFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: AccessPermissionFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
+}
+
 export interface AccessRoleDto {
   id?: string
   /** @nullable */
@@ -142,6 +242,39 @@ export interface AccessRoleDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface AccessRoleFilterInput {
+  /** @nullable */
+  and?: AccessRoleFilterInput[] | null
+  /** @nullable */
+  or?: AccessRoleFilterInput[] | null
+  id?: GuidFilterInput | null
+  name?: StringFilterInput | null
+  normalizedName?: StringFilterInput | null
+  isImmutable?: BoolFilterInput | null
+  isSystem?: BoolFilterInput | null
+  icon?: StringFilterInput | null
+  isDeleted?: BoolFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+  updatedAt?: DateTimeFilterInput | null
+  permissions?: AccessPermissionFilterInputCollectionFilterInput | null
+}
+
+export interface AccessRoleFilterInputCollectionFilterInput {
+  some?: AccessRoleFilterInput | null
+  all?: AccessRoleFilterInput | null
+  none?: AccessRoleFilterInput | null
+}
+
+export interface AccessRoleFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: AccessRoleFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
+}
+
 export interface AccessUserDto {
   id?: string
   userName?: string
@@ -197,6 +330,31 @@ export interface AccessUserDtoApiResponse {
   result?: AccessUserDto | null
   /** @nullable */
   errors?: ApiError[] | null
+}
+
+export interface AccessUserFilterInput {
+  /** @nullable */
+  and?: AccessUserFilterInput[] | null
+  /** @nullable */
+  or?: AccessUserFilterInput[] | null
+  id?: GuidFilterInput | null
+  userName?: StringFilterInput | null
+  email?: StringFilterInput | null
+  fullName?: StringFilterInput | null
+  avatar?: StringFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+  updatedAt?: DateTimeFilterInput | null
+  roles?: AccessRoleFilterInputCollectionFilterInput | null
+}
+
+export interface AccessUserFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: AccessUserFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
 }
 
 export type AccountProductType = (typeof AccountProductType)[keyof typeof AccountProductType]
@@ -531,6 +689,33 @@ export interface AssetDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface AssetFilterInput {
+  /** @nullable */
+  and?: AssetFilterInput[] | null
+  /** @nullable */
+  or?: AssetFilterInput[] | null
+  id?: GuidFilterInput | null
+  name?: StringFilterInput | null
+  categoryId?: GuidFilterInput | null
+  brandId?: GuidFilterInput | null
+  status?: StringFilterInput | null
+  location?: StringFilterInput | null
+  purchaseDate?: DateTimeFilterInput | null
+  warrantyExpiryDate?: DateTimeFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+  updatedAt?: DateTimeFilterInput | null
+}
+
+export interface AssetFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: AssetFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
+}
+
 export interface AssetLogDto {
   id?: string
   assetId?: string
@@ -751,6 +936,31 @@ export interface BrandDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface BrandFilterInput {
+  /** @nullable */
+  and?: BrandFilterInput[] | null
+  /** @nullable */
+  or?: BrandFilterInput[] | null
+  id?: GuidFilterInput | null
+  name?: StringFilterInput | null
+  website?: StringFilterInput | null
+  supportPhone?: StringFilterInput | null
+  description?: StringFilterInput | null
+  logoUrl?: StringFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+  updatedAt?: DateTimeFilterInput | null
+}
+
+export interface BrandFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: BrandFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
+}
+
 export interface CancelBonusTransactionRequest {
   /** @nullable */
   note?: string | null
@@ -848,6 +1058,30 @@ export interface CategoryDtoApiResponse {
   result?: CategoryDto | null
   /** @nullable */
   errors?: ApiError[] | null
+}
+
+export interface CategoryFilterInput {
+  /** @nullable */
+  and?: CategoryFilterInput[] | null
+  /** @nullable */
+  or?: CategoryFilterInput[] | null
+  id?: GuidFilterInput | null
+  code?: StringFilterInput | null
+  name?: StringFilterInput | null
+  type?: StringFilterInput | null
+  parentId?: GuidFilterInput | null
+  icon?: StringFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+}
+
+export interface CategoryFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: CategoryFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
 }
 
 export interface CategoryTreeNodeDto {
@@ -1142,6 +1376,30 @@ export interface CommodityDtoApiResponse {
   result?: CommodityDto | null
   /** @nullable */
   errors?: ApiError[] | null
+}
+
+export interface CommodityFilterInput {
+  /** @nullable */
+  and?: CommodityFilterInput[] | null
+  /** @nullable */
+  or?: CommodityFilterInput[] | null
+  id?: GuidFilterInput | null
+  code?: StringFilterInput | null
+  name?: StringFilterInput | null
+  assetClass?: StringFilterInput | null
+  defaultUnitId?: GuidFilterInput | null
+  description?: StringFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+}
+
+export interface CommodityFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: CommodityFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
 }
 
 export interface ConvertResultDto {
@@ -2369,6 +2627,33 @@ export interface UnitDtoApiResponse {
   errors?: ApiError[] | null
 }
 
+export interface UnitFilterInput {
+  /** @nullable */
+  and?: UnitFilterInput[] | null
+  /** @nullable */
+  or?: UnitFilterInput[] | null
+  id?: GuidFilterInput | null
+  code?: StringFilterInput | null
+  name?: StringFilterInput | null
+  symbol?: StringFilterInput | null
+  category?: StringFilterInput | null
+  status?: StringFilterInput | null
+  baseUnitId?: GuidFilterInput | null
+  description?: StringFilterInput | null
+  createdAt?: DateTimeFilterInput | null
+  updatedAt?: DateTimeFilterInput | null
+}
+
+export interface UnitFilterInputSearchRequest {
+  page?: number
+  pageSize?: number
+  filter?: UnitFilterInput | null
+  /** @nullable */
+  order?: SortField[] | null
+  /** @nullable */
+  view?: string | null
+}
+
 export interface UnitTreeNodeDto {
   id?: string
   code?: string
@@ -2562,106 +2847,58 @@ export interface WarrantyCheckResultDtoApiResponse {
 }
 
 export type GetApiV1AccessControlPermissionsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AccessControlRolesParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AccessControlUsersParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AccountSalesAccountClonesParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
@@ -2673,28 +2910,16 @@ export type GetApiV1AccountSalesBonusTransactionsParams = {
 }
 
 export type GetApiV1AccountSalesMembersParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
@@ -2704,132 +2929,72 @@ export type GetApiV1AccountSalesMembersSearchParams = {
 }
 
 export type GetApiV1AccountSalesOrdersParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AccountSalesProductsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AccountSalesSourceAccountsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AssetsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1AssetsAssetIdLogsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
@@ -2846,55 +3011,35 @@ export type GetApiV1AttachmentsParams = {
 }
 
 export type GetApiV1BrandsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
   categoryId?: string
 }
 
+export type PostApiV1BrandsSearchParams = {
+  categoryId?: string
+}
+
 export type GetApiV1CategoriesParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
@@ -2905,54 +3050,30 @@ export type GetApiV1CategoriesTreeParams = {
 }
 
 export type GetApiV1CommoditiesParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
 export type GetApiV1CommoditiesCommodityIdTransactionsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
@@ -2962,28 +3083,16 @@ export type PostApiV1FilesUploadBody = {
 }
 
 export type GetApiV1UnitsParams = {
-  /**
-   * Page number (1-based)
-   */
   page?: number
-  /**
-   * Number of items per page
-   */
   pageSize?: number
   /**
- * Filter expression using DSL syntax
-Examples: "name @contains('abc')", "phone == '123' or phone == '321'"
- */
-  filter?: string
-  /**
- * Sort expression (comma-separated)
+ * Sort expression (comma-separated).
 Example: "name,-createdAt" (ascending by name, descending by createdAt)
  */
   sort?: string
   /**
- * View name to determine which fields to return.
-Available views depend on the endpoint (e.g., "list", "detail", "minimal").
- */
+   * View name to determine which fields to return.
+   */
   view?: string
 }
 
@@ -3126,6 +3235,84 @@ export function useGetApiV1AccessControlPermissions<
   }
 
   return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getPostApiV1AccessControlPermissionsSearchUrl = () => {
+  return `/api/v1/access-control/permissions/search`
+}
+
+export const postApiV1AccessControlPermissionsSearch = async (
+  accessPermissionFilterInputSearchRequest: AccessPermissionFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<AccessPermissionDtoApiPagedResponse> => {
+  return customFetch<AccessPermissionDtoApiPagedResponse>(getPostApiV1AccessControlPermissionsSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(accessPermissionFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1AccessControlPermissionsSearchMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+    TError,
+    { data: AccessPermissionFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+  TError,
+  { data: AccessPermissionFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccessControlPermissionsSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+    { data: AccessPermissionFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccessControlPermissionsSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccessControlPermissionsSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>
+>
+export type PostApiV1AccessControlPermissionsSearchMutationBody = AccessPermissionFilterInputSearchRequest
+export type PostApiV1AccessControlPermissionsSearchMutationError = ErrorType<unknown>
+
+export const usePostApiV1AccessControlPermissionsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+      TError,
+      { data: AccessPermissionFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+  TError,
+  { data: AccessPermissionFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccessControlPermissionsSearchMutationOptions(options), queryClient)
 }
 
 export const getGetApiV1AccessControlRolesUrl = (params?: GetApiV1AccessControlRolesParams) => {
@@ -3331,6 +3518,84 @@ export const usePostApiV1AccessControlRoles = <TError = ErrorType<unknown>, TCon
   TContext
 > => {
   return useMutation(getPostApiV1AccessControlRolesMutationOptions(options), queryClient)
+}
+
+export const getPostApiV1AccessControlRolesSearchUrl = () => {
+  return `/api/v1/access-control/roles/search`
+}
+
+export const postApiV1AccessControlRolesSearch = async (
+  accessRoleFilterInputSearchRequest: AccessRoleFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<AccessRoleDtoApiPagedResponse> => {
+  return customFetch<AccessRoleDtoApiPagedResponse>(getPostApiV1AccessControlRolesSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(accessRoleFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1AccessControlRolesSearchMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+    TError,
+    { data: AccessRoleFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+  TError,
+  { data: AccessRoleFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccessControlRolesSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+    { data: AccessRoleFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccessControlRolesSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccessControlRolesSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>
+>
+export type PostApiV1AccessControlRolesSearchMutationBody = AccessRoleFilterInputSearchRequest
+export type PostApiV1AccessControlRolesSearchMutationError = ErrorType<unknown>
+
+export const usePostApiV1AccessControlRolesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+      TError,
+      { data: AccessRoleFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+  TError,
+  { data: AccessRoleFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccessControlRolesSearchMutationOptions(options), queryClient)
 }
 
 export const getGetApiV1AccessControlRolesIdUrl = (id: string) => {
@@ -3883,6 +4148,84 @@ export function useGetApiV1AccessControlUsers<
   }
 
   return { ...query, queryKey: queryOptions.queryKey }
+}
+
+export const getPostApiV1AccessControlUsersSearchUrl = () => {
+  return `/api/v1/access-control/users/search`
+}
+
+export const postApiV1AccessControlUsersSearch = async (
+  accessUserFilterInputSearchRequest: AccessUserFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<AccessUserDtoApiPagedResponse> => {
+  return customFetch<AccessUserDtoApiPagedResponse>(getPostApiV1AccessControlUsersSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(accessUserFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1AccessControlUsersSearchMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+    TError,
+    { data: AccessUserFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+  TError,
+  { data: AccessUserFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AccessControlUsersSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+    { data: AccessUserFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AccessControlUsersSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AccessControlUsersSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>
+>
+export type PostApiV1AccessControlUsersSearchMutationBody = AccessUserFilterInputSearchRequest
+export type PostApiV1AccessControlUsersSearchMutationError = ErrorType<unknown>
+
+export const usePostApiV1AccessControlUsersSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+      TError,
+      { data: AccessUserFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+  TError,
+  { data: AccessUserFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AccessControlUsersSearchMutationOptions(options), queryClient)
 }
 
 export const getPostApiV1AccessControlUsersIdRolesUrl = (id: string) => {
@@ -9232,7 +9575,7 @@ export const usePostApiV1AiChat = <TError = ErrorType<ApiErrorResponse>, TContex
 }
 
 /**
- * @summary Get paginated list of assets with optional DSL filtering and sorting.
+ * @summary Get paginated list of assets with optional sorting.
  */
 export const getGetApiV1AssetsUrl = (params?: GetApiV1AssetsParams) => {
   const normalizedParams = new URLSearchParams()
@@ -9339,7 +9682,7 @@ export function useGetApiV1Assets<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get paginated list of assets with optional DSL filtering and sorting.
+ * @summary Get paginated list of assets with optional sorting.
  */
 
 export function useGetApiV1Assets<
@@ -9429,6 +9772,85 @@ export const usePostApiV1Assets = <TError = ErrorType<ApiErrorResponse>, TContex
   queryClient?: QueryClient
 ): UseMutationResult<Awaited<ReturnType<typeof postApiV1Assets>>, TError, { data: CreateAssetRequest }, TContext> => {
   return useMutation(getPostApiV1AssetsMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Search assets with JSON filter DSL.
+ */
+export const getPostApiV1AssetsSearchUrl = () => {
+  return `/api/v1/assets/search`
+}
+
+export const postApiV1AssetsSearch = async (
+  assetFilterInputSearchRequest: AssetFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<AssetDtoApiPagedResponse> => {
+  return customFetch<AssetDtoApiPagedResponse>(getPostApiV1AssetsSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(assetFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1AssetsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+    TError,
+    { data: AssetFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+  TError,
+  { data: AssetFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1AssetsSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+    { data: AssetFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1AssetsSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1AssetsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1AssetsSearch>>>
+export type PostApiV1AssetsSearchMutationBody = AssetFilterInputSearchRequest
+export type PostApiV1AssetsSearchMutationError = ErrorType<unknown>
+
+/**
+ * @summary Search assets with JSON filter DSL.
+ */
+export const usePostApiV1AssetsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+      TError,
+      { data: AssetFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+  TError,
+  { data: AssetFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1AssetsSearchMutationOptions(options), queryClient)
 }
 
 /**
@@ -10408,7 +10830,7 @@ export const useDeleteApiV1AttachmentsId = <TError = ErrorType<ApiErrorResponse>
 }
 
 /**
- * @summary Get paginated list of brands with optional DSL filtering and sorting.
+ * @summary Get paginated list of brands with optional sorting.
  */
 export const getGetApiV1BrandsUrl = (params?: GetApiV1BrandsParams) => {
   const normalizedParams = new URLSearchParams()
@@ -10515,7 +10937,7 @@ export function useGetApiV1Brands<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get paginated list of brands with optional DSL filtering and sorting.
+ * @summary Get paginated list of brands with optional sorting.
  */
 
 export function useGetApiV1Brands<
@@ -10605,6 +11027,96 @@ export const usePostApiV1Brands = <TError = ErrorType<ApiErrorResponse>, TContex
   queryClient?: QueryClient
 ): UseMutationResult<Awaited<ReturnType<typeof postApiV1Brands>>, TError, { data: CreateBrandRequest }, TContext> => {
   return useMutation(getPostApiV1BrandsMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Search brands with JSON filter DSL.
+ */
+export const getPostApiV1BrandsSearchUrl = (params?: PostApiV1BrandsSearchParams) => {
+  const normalizedParams = new URLSearchParams()
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  })
+
+  const stringifiedParams = normalizedParams.toString()
+
+  return stringifiedParams.length > 0 ? `/api/v1/brands/search?${stringifiedParams}` : `/api/v1/brands/search`
+}
+
+export const postApiV1BrandsSearch = async (
+  brandFilterInputSearchRequest: BrandFilterInputSearchRequest,
+  params?: PostApiV1BrandsSearchParams,
+  options?: RequestInit
+): Promise<BrandDtoApiPagedResponse> => {
+  return customFetch<BrandDtoApiPagedResponse>(getPostApiV1BrandsSearchUrl(params), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(brandFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1BrandsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+    TError,
+    { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+  TError,
+  { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+  TContext
+> => {
+  const mutationKey = ['postApiV1BrandsSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+    { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams }
+  > = props => {
+    const { data, params } = props ?? {}
+
+    return postApiV1BrandsSearch(data, params, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1BrandsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1BrandsSearch>>>
+export type PostApiV1BrandsSearchMutationBody = BrandFilterInputSearchRequest
+export type PostApiV1BrandsSearchMutationError = ErrorType<unknown>
+
+/**
+ * @summary Search brands with JSON filter DSL.
+ */
+export const usePostApiV1BrandsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+      TError,
+      { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+  TError,
+  { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+  TContext
+> => {
+  return useMutation(getPostApiV1BrandsSearchMutationOptions(options), queryClient)
 }
 
 /**
@@ -10863,7 +11375,7 @@ export const useDeleteApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TCo
 }
 
 /**
- * @summary Get paginated list of categories with optional DSL filtering and sorting.
+ * @summary Get paginated list of categories with optional sorting.
  */
 export const getGetApiV1CategoriesUrl = (params?: GetApiV1CategoriesParams) => {
   const normalizedParams = new URLSearchParams()
@@ -10970,7 +11482,7 @@ export function useGetApiV1Categories<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get paginated list of categories with optional DSL filtering and sorting.
+ * @summary Get paginated list of categories with optional sorting.
  */
 
 export function useGetApiV1Categories<
@@ -11073,6 +11585,85 @@ export const usePostApiV1Categories = <TError = ErrorType<ApiErrorResponse>, TCo
   TContext
 > => {
   return useMutation(getPostApiV1CategoriesMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Search categories with JSON filter DSL.
+ */
+export const getPostApiV1CategoriesSearchUrl = () => {
+  return `/api/v1/categories/search`
+}
+
+export const postApiV1CategoriesSearch = async (
+  categoryFilterInputSearchRequest: CategoryFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<CategoryDtoApiPagedResponse> => {
+  return customFetch<CategoryDtoApiPagedResponse>(getPostApiV1CategoriesSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(categoryFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1CategoriesSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+    TError,
+    { data: CategoryFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+  TError,
+  { data: CategoryFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1CategoriesSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+    { data: CategoryFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1CategoriesSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1CategoriesSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1CategoriesSearch>>>
+export type PostApiV1CategoriesSearchMutationBody = CategoryFilterInputSearchRequest
+export type PostApiV1CategoriesSearchMutationError = ErrorType<unknown>
+
+/**
+ * @summary Search categories with JSON filter DSL.
+ */
+export const usePostApiV1CategoriesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+      TError,
+      { data: CategoryFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+  TError,
+  { data: CategoryFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1CategoriesSearchMutationOptions(options), queryClient)
 }
 
 /**
@@ -11700,7 +12291,7 @@ export function useGetApiV1CategoriesCountsByType<
 }
 
 /**
- * @summary Get paginated list of commodities with optional DSL filtering and sorting.
+ * @summary Get paginated list of commodities with optional sorting.
  */
 export const getGetApiV1CommoditiesUrl = (params?: GetApiV1CommoditiesParams) => {
   const normalizedParams = new URLSearchParams()
@@ -11807,7 +12398,7 @@ export function useGetApiV1Commodities<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get paginated list of commodities with optional DSL filtering and sorting.
+ * @summary Get paginated list of commodities with optional sorting.
  */
 
 export function useGetApiV1Commodities<
@@ -11910,6 +12501,90 @@ export const usePostApiV1Commodities = <TError = ErrorType<ApiErrorResponse>, TC
   TContext
 > => {
   return useMutation(getPostApiV1CommoditiesMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Search commodities with JSON filter DSL.
+ */
+export const getPostApiV1CommoditiesSearchUrl = () => {
+  return `/api/v1/commodities/search`
+}
+
+export const postApiV1CommoditiesSearch = async (
+  commodityFilterInputSearchRequest: CommodityFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<CommodityDtoApiPagedResponse> => {
+  return customFetch<CommodityDtoApiPagedResponse>(getPostApiV1CommoditiesSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(commodityFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1CommoditiesSearchMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+    TError,
+    { data: CommodityFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+  TError,
+  { data: CommodityFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1CommoditiesSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+    { data: CommodityFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1CommoditiesSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1CommoditiesSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>
+>
+export type PostApiV1CommoditiesSearchMutationBody = CommodityFilterInputSearchRequest
+export type PostApiV1CommoditiesSearchMutationError = ErrorType<unknown>
+
+/**
+ * @summary Search commodities with JSON filter DSL.
+ */
+export const usePostApiV1CommoditiesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+      TError,
+      { data: CommodityFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+  TError,
+  { data: CommodityFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1CommoditiesSearchMutationOptions(options), queryClient)
 }
 
 /**
@@ -13024,7 +13699,7 @@ export const usePostApiV1FilesUpload = <TError = ErrorType<ApiErrorResponse>, TC
 }
 
 /**
- * @summary Get paginated list of units with optional DSL filtering and sorting.
+ * @summary Get paginated list of units with optional sorting.
  */
 export const getGetApiV1UnitsUrl = (params?: GetApiV1UnitsParams) => {
   const normalizedParams = new URLSearchParams()
@@ -13131,7 +13806,7 @@ export function useGetApiV1Units<
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
- * @summary Get paginated list of units with optional DSL filtering and sorting.
+ * @summary Get paginated list of units with optional sorting.
  */
 
 export function useGetApiV1Units<
@@ -13221,6 +13896,85 @@ export const usePostApiV1Units = <TError = ErrorType<ApiErrorResponse>, TContext
   queryClient?: QueryClient
 ): UseMutationResult<Awaited<ReturnType<typeof postApiV1Units>>, TError, { data: CreateUnitRequest }, TContext> => {
   return useMutation(getPostApiV1UnitsMutationOptions(options), queryClient)
+}
+
+/**
+ * @summary Search units with JSON filter DSL.
+ */
+export const getPostApiV1UnitsSearchUrl = () => {
+  return `/api/v1/units/search`
+}
+
+export const postApiV1UnitsSearch = async (
+  unitFilterInputSearchRequest: UnitFilterInputSearchRequest,
+  options?: RequestInit
+): Promise<UnitDtoApiPagedResponse> => {
+  return customFetch<UnitDtoApiPagedResponse>(getPostApiV1UnitsSearchUrl(), {
+    ...options,
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(unitFilterInputSearchRequest)
+  })
+}
+
+export const getPostApiV1UnitsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+    TError,
+    { data: UnitFilterInputSearchRequest },
+    TContext
+  >
+  request?: SecondParameter<typeof customFetch>
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+  TError,
+  { data: UnitFilterInputSearchRequest },
+  TContext
+> => {
+  const mutationKey = ['postApiV1UnitsSearch']
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined }
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+    { data: UnitFilterInputSearchRequest }
+  > = props => {
+    const { data } = props ?? {}
+
+    return postApiV1UnitsSearch(data, requestOptions)
+  }
+
+  return { mutationFn, ...mutationOptions }
+}
+
+export type PostApiV1UnitsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1UnitsSearch>>>
+export type PostApiV1UnitsSearchMutationBody = UnitFilterInputSearchRequest
+export type PostApiV1UnitsSearchMutationError = ErrorType<unknown>
+
+/**
+ * @summary Search units with JSON filter DSL.
+ */
+export const usePostApiV1UnitsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+  options?: {
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+      TError,
+      { data: UnitFilterInputSearchRequest },
+      TContext
+    >
+    request?: SecondParameter<typeof customFetch>
+  },
+  queryClient?: QueryClient
+): UseMutationResult<
+  Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+  TError,
+  { data: UnitFilterInputSearchRequest },
+  TContext
+> => {
+  return useMutation(getPostApiV1UnitsSearchMutationOptions(options), queryClient)
 }
 
 /**

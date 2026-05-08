@@ -1,4 +1,4 @@
-// DSL Query Builder Types
+// Search Filter Builder Types
 
 export type { DataType } from '@/types/field'
 import type { DataType } from '@/types/field'
@@ -27,6 +27,17 @@ export interface FieldConfig {
    * When provided, a dropdown will be shown instead of free text input
    */
   enumOptions?: EnumOption[]
+
+  /**
+   * Optional collection wrapping config.
+   * When provided, the filter value is wrapped in a collection predicate.
+   * Example: { operator: 'some', innerField: 'name' } on field 'roles'
+   * produces: { roles: { some: { name: { eq: 'Admin' } } } }
+   */
+  collectionWrap?: {
+    operator: 'some' | 'all' | 'none'
+    innerField: string
+  }
 }
 
 export interface FilterCondition {
@@ -34,22 +45,25 @@ export interface FilterCondition {
   field: string
   operator: string
   value: string | number | boolean | null
-  secondValue?: string | number | null // For @between operator
+  secondValue?: string | number | null // For between operator
   logicalOperator?: 'AND' | 'OR' // Connection to next condition
 }
+
+/** The filter object shape produced by the builder, matching generated API filter input types. */
+export type FilterObject = Record<string, unknown> | undefined
 
 export interface DslQueryBuilderProps {
   fields: FieldConfig[]
   value?: FilterCondition[]
-  onChange?: (conditions: FilterCondition[], dslQuery: string) => void
-  onSearch?: (dslQuery: string) => void
+  onChange?: (conditions: FilterCondition[], filter: FilterObject) => void
+  onSearch?: (filter: FilterObject) => void
   onReset?: () => void
 
   /**
    * Callback fired when conditions are restored from URL on initial load
    * Use this to trigger API call with the restored query
    */
-  onInitialLoad?: (dslQuery: string) => void
+  onInitialLoad?: (filter: FilterObject) => void
   title?: string
 
   /**

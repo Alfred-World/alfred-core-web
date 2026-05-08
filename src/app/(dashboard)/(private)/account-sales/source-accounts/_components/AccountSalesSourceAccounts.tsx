@@ -41,8 +41,6 @@ import { alpha } from '@mui/material/styles'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
-import { dsl } from '@/utils/dslQueryBuilder'
-
 import {
   AccountProductType,
   getGetApiV1AccountSalesSourceAccountsQueryKey,
@@ -590,20 +588,9 @@ export default function AccountSalesSourceAccounts() {
     setPage(1)
   }, [tabValue])
 
-  const filter = React.useMemo(() => {
-    let builder = dsl()
-
-    if (tabValue === 'Active') {
-      builder = builder.bool('isActive').eq(true)
-    } else if (tabValue === 'Pending') {
-      builder = builder.bool('isActive').eq(false)
-    }
-
-    return builder.build()
-  }, [tabValue])
-
+  // TODO: Tab-based isActive filtering requires POST search endpoint or dedicated query param
   const listQuery = useGetApiV1AccountSalesSourceAccounts(
-    { page, pageSize: PAGE_SIZE, sort: '-createdAt', filter: filter ? filter : undefined },
+    { page, pageSize: PAGE_SIZE, sort: '-createdAt' },
     { query: { refetchOnWindowFocus: false } }
   )
 

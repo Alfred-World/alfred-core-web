@@ -30,14 +30,15 @@ import {
 } from '@mui/material'
 import { toast } from 'react-toastify'
 
+import { useQuery } from '@tanstack/react-query'
+
 import {
   useDeleteApiV1AccessControlUsersIdRoles,
-  useGetApiV1AccessControlRoles,
-  useGetApiV1AccessControlUsers,
+  postApiV1AccessControlUsersSearch,
+  postApiV1AccessControlRolesSearch,
   usePostApiV1AccessControlUsersIdRoles
 } from '@/generated/core-api'
 import type { AccessRoleDto, AccessUserDto, ApiErrorResponse } from '@/generated/core-api'
-import { dsl } from '@/utils/dslQueryBuilder'
 
 const PAGE_SIZE = 12
 
@@ -72,32 +73,29 @@ const AccessUsersPage = () => {
   const [isUpdatingRoles, setIsUpdatingRoles] = useState(false)
 
   const filter = useMemo(() => {
-    let builder = dsl()
     const value = submittedKeyword.trim()
 
-    if (value) {
-      builder = builder.group(g => {
-        g.string('fullName')
-          .contains(value)
-          .or()
-          .string('userName')
-          .contains(value)
-          .or()
-          .string('email')
-          .contains(value)
-      })
+    if (!value) return undefined
+
+    return {
+      or: [
+        { fullName: { contains: value } },
+        { userName: { contains: value } },
+        { email: { contains: value } }
+      ]
     }
-
-    const compiled = builder.build()
-
-    return compiled === '' ? undefined : compiled
   }, [submittedKeyword])
 
-  const usersQuery = useGetApiV1AccessControlUsers({
+  const usersRequest = useMemo(() => ({
     page,
     pageSize: PAGE_SIZE,
-    sort: '-createdAt',
-    filter
+    filter,
+    order: [{ field: 'createdAt', direction: 'Desc' as const }]
+  }), [page, filter])
+
+  const usersQuery = useQuery({
+    queryKey: ['core', 'access-users', 'search', usersRequest],
+    queryFn: () => postApiV1AccessControlUsersSearch(usersRequest)
   })
 
   const users = useMemo(() => {
@@ -110,10 +108,13 @@ const AccessUsersPage = () => {
     return data.result.items
   }, [usersQuery.data])
 
-  const rolesQuery = useGetApiV1AccessControlRoles({
-    page: 1,
-    pageSize: 100,
-    sort: 'name'
+  const rolesQuery = useQuery({
+    queryKey: ['core', 'access-roles', 'search', 'all'],
+    queryFn: () => postApiV1AccessControlRolesSearch({
+      page: 1,
+      pageSize: 100,
+      order: [{ field: 'name', direction: 'Asc' }]
+    })
   })
 
   const roles = useMemo(() => {

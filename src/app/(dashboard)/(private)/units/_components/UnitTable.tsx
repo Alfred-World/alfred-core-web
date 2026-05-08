@@ -26,19 +26,17 @@ import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   getGetApiV1UnitsCountsByCategoryQueryKey,
   getGetApiV1UnitsCountsByStatusQueryKey,
-  getGetApiV1UnitsQueryKey,
-  useDeleteApiV1UnitsId,
-  useGetApiV1Units
+  postApiV1UnitsSearch,
+  useDeleteApiV1UnitsId
 } from '@generated/core-api'
 import type { UnitDto } from '@generated/core-api'
 import { UNIT_CATEGORY_META, UNIT_CATEGORY_TABS, UNIT_STATUS_META } from '@/constants/unitType'
 import type { UnitCategoryValue } from '@/constants/unitType'
-import { dsl } from '@/utils/dslQueryBuilder'
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 interface UnitTableProps {
@@ -57,32 +55,40 @@ const UnitTable = ({ categoryFilter, onCategoryFilterChange, onCreateNew, onEdit
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
   const [menuUnitId, setMenuUnitId] = useState<string | null>(null)
 
-  // Build DSL filter
+  // Build filter object
   const filter = useMemo(() => {
-    const builder = dsl()
+    const conditions: Record<string, unknown>[] = []
 
     if (categoryFilter) {
-      builder.string('category').eq(categoryFilter)
+      conditions.push({ category: { eq: categoryFilter } })
     }
 
     if (search.trim()) {
-      if (builder.parts.length > 0) builder.and()
-      builder.group(g => {
-        g.string('name').contains(search.trim())
-        g.or()
-        g.string('code').contains(search.trim())
+      conditions.push({
+        or: [
+          { name: { contains: search.trim() } },
+          { code: { contains: search.trim() } }
+        ]
       })
     }
 
-    return builder.build() || undefined
+    if (conditions.length === 0) return undefined
+    if (conditions.length === 1) return conditions[0]
+
+    return { and: conditions }
   }, [categoryFilter, search])
 
   // Fetch units
-  const { data, isLoading } = useGetApiV1Units({
+  const searchRequest = useMemo(() => ({
     page: page + 1,
     pageSize: rowsPerPage,
     filter,
-    sort: '-createdAt'
+    order: [{ field: 'createdAt', direction: 'Desc' as const }]
+  }), [page, rowsPerPage, filter])
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['core', 'units', 'search', searchRequest],
+    queryFn: () => postApiV1UnitsSearch(searchRequest)
   })
 
   const units = data?.result?.items ?? []
@@ -92,7 +98,7 @@ const UnitTable = ({ categoryFilter, onCategoryFilterChange, onCreateNew, onEdit
   const { mutate: deleteUnit } = useDeleteApiV1UnitsId({
     mutation: {
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsQueryKey() })
+        queryClient.invalidateQueries({ queryKey: ['core', 'units'] })
         queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsCountsByStatusQueryKey() })
         queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsCountsByCategoryQueryKey() })
       }

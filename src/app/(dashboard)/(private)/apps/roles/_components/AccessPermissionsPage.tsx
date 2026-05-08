@@ -19,7 +19,7 @@ import {
 import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 
-import { getApiV1AccessControlPermissions } from '@/generated/core-api'
+import { postApiV1AccessControlPermissionsSearch } from '@/generated/core-api'
 import type { ApiErrorResponse } from '@/generated/core-api'
 
 const PAGE_SIZE = 20
@@ -28,18 +28,31 @@ const AccessPermissionsPage = () => {
   const [keyword, setKeyword] = useState('')
   const [page, setPage] = useState(1)
 
+  const searchRequest = useMemo(() => {
+    const trimmed = keyword.trim()
+    const filter = trimmed
+      ? {
+          or: [
+            { code: { contains: trimmed } },
+            { name: { contains: trimmed } },
+            { resource: { contains: trimmed } },
+            { action: { contains: trimmed } }
+          ]
+        }
+      : undefined
+
+    return {
+      page,
+      pageSize: PAGE_SIZE,
+      filter,
+      order: [{ field: 'resource', direction: 'Asc' as const }, { field: 'action', direction: 'Asc' as const }],
+      view: 'detail'
+    }
+  }, [page, keyword])
+
   const permissionsQuery = useQuery({
-    queryKey: ['access-control', 'permissions', page, keyword],
-    queryFn: () =>
-      getApiV1AccessControlPermissions({
-        page,
-        pageSize: PAGE_SIZE,
-        filter: keyword
-          ? `code @contains('${keyword.replace(/'/g, "''")}') or name @contains('${keyword.replace(/'/g, "''")}') or resource @contains('${keyword.replace(/'/g, "''")}') or action @contains('${keyword.replace(/'/g, "''")}')`
-          : undefined,
-        sort: 'resource,action',
-        view: 'detail'
-      })
+    queryKey: ['core', 'permissions', 'search', searchRequest],
+    queryFn: () => postApiV1AccessControlPermissionsSearch(searchRequest)
   })
 
   const permissions = permissionsQuery.data?.success ? (permissionsQuery.data.result?.items ?? []) : []

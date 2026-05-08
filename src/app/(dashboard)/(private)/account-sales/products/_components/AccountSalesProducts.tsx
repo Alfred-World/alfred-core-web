@@ -22,7 +22,6 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { toast } from 'react-toastify'
 
-import { dsl } from '@/utils/dslQueryBuilder'
 import { AccountProductType, useGetApiV1AccountSalesProducts } from '@/generated/core-api'
 import type { ApiErrorResponse, ProductDto } from '@/generated/core-api'
 
@@ -75,20 +74,7 @@ const AccountSalesProducts = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<ProductDto | null>(null)
 
-  const filter = useMemo(() => {
-    let builder = dsl()
-    const value = debouncedKeyword.trim().toLowerCase()
-
-    if (value) {
-      builder = builder.group(g => {
-        g.string('name').contains(value)
-      })
-    }
-
-    return builder.build()
-  }, [debouncedKeyword])
-
-  const productsQuery = useGetApiV1AccountSalesProducts({ page, pageSize: 10, sort: '-createdAt', filter })
+  const productsQuery = useGetApiV1AccountSalesProducts({ page, pageSize: 10, sort: '-createdAt' })
   const products = useMemo(() => productsQuery.data?.result?.items ?? [], [productsQuery.data?.result?.items])
 
   const productsApiErrorMessage = useMemo(

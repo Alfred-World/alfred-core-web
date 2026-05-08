@@ -24,7 +24,7 @@ import Switch from '@mui/material/Switch'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import * as v from 'valibot'
 
@@ -32,7 +32,7 @@ import {
   getGetApiV1CategoriesCountsByTypeQueryKey,
   getGetApiV1CategoriesQueryKey,
   getGetApiV1CategoriesTreeQueryKey,
-  useGetApiV1Categories,
+  postApiV1CategoriesSearch,
   useGetApiV1CategoriesId,
   usePostApiV1Categories,
   usePatchApiV1CategoriesId
@@ -41,7 +41,6 @@ import type { CategoryDto } from '@generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
 import IconPicker from '@/components/icon-picker/IconPicker'
 import { CATEGORY_TYPE_META, CATEGORY_TYPES, TYPE_CHIP_COLORS } from '@/constants/categoryType'
-import { dsl } from '@/utils/dslQueryBuilder'
 import FormPreviewDialog from './FormPreviewDialog'
 
 // ─── Schema Field Types ────────────────────────────────────────────────────────
@@ -122,26 +121,30 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
   const watchedName = watch('name')
   const watchedType = watch('type')
 
-  // Search parent categories via the paginated API with DSL filter
-  const parentFilter = useMemo(() => {
-    const builder = dsl()
+  // Search parent categories via POST search with typed filter
+  const parentSearchRequest = useMemo(() => {
+    const conditions: Record<string, unknown>[] = []
 
     if (parentSearch) {
-      builder.string('name').contains(parentSearch)
+      conditions.push({ name: { contains: parentSearch } })
     }
 
     if (watchedType) {
-      if (parentSearch) builder.and()
-      builder.string('type').eq(watchedType)
+      conditions.push({ type: { eq: watchedType } })
     }
 
-    return builder.build() || undefined
+    return {
+      page: 1,
+      pageSize: 20,
+      filter: conditions.length > 1 ? { and: conditions } : conditions[0] ?? undefined
+    }
   }, [parentSearch, watchedType])
 
-  const { data: parentData, isLoading: parentLoading } = useGetApiV1Categories(
-    { page: 1, pageSize: 20, filter: parentFilter },
-    { query: { staleTime: 10_000 } }
-  )
+  const { data: parentData, isLoading: parentLoading } = useQuery({
+    queryKey: ['core', 'categories', 'parent-search', parentSearchRequest],
+    queryFn: () => postApiV1CategoriesSearch(parentSearchRequest),
+    staleTime: 10_000
+  })
 
   const parentOptions: CategoryDto[] = useMemo(() => {
     const items = parentData?.result?.items ?? []

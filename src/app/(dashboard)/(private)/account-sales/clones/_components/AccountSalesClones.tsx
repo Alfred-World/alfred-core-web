@@ -23,7 +23,6 @@ import Typography from '@mui/material/Typography'
 import { toast } from 'react-toastify'
 import dayjs from 'dayjs'
 
-import { dsl } from '@/utils/dslQueryBuilder'
 import {
   AccountCloneStatus,
   useGetApiV1AccountSalesAccountClones,
@@ -89,34 +88,10 @@ const AccountSalesClones = () => {
 
   const products = useMemo(() => productsQuery.data?.result?.items ?? [], [productsQuery.data?.result?.items])
 
-  const filter = useMemo(() => {
-    let builder = dsl()
-    const value = debouncedKeyword.trim().toLowerCase()
-
-    if (value) {
-      builder = builder.group(g => {
-        g.string('username').contains(value).or().string('externalAccountId').contains(value)
-      })
-    }
-
-    if (productFilter !== 'all') {
-      builder = builder.and().string('productId').eq(productFilter)
-    }
-
-    if (statusFilter !== 'all') {
-      builder = builder.and().string('status').eq(statusFilter)
-    }
-
-    const compiled = builder.build()
-
-    return compiled === '' ? undefined : compiled
-  }, [debouncedKeyword, productFilter, statusFilter])
-
   const clonesQuery = useGetApiV1AccountSalesAccountClones({
     page,
     pageSize: PAGE_SIZE,
-    sort: '-createdAt',
-    filter
+    sort: '-createdAt'
   })
 
   // Aggregation for stats manually or from totals

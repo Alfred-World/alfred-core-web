@@ -24,15 +24,13 @@ import TableRow from '@mui/material/TableRow'
 import TextField from '@mui/material/TextField'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
-  getGetApiV1CommoditiesQueryKey,
-  useDeleteApiV1CommoditiesId,
-  useGetApiV1Commodities
+  postApiV1CommoditiesSearch,
+  useDeleteApiV1CommoditiesId
 } from '@generated/core-api'
 import type { ApiErrorResponse, CommodityDto } from '@generated/core-api'
-import { dsl } from '@/utils/dslQueryBuilder'
 
 // ─── Asset class config ─────────────────────────────────────────────────────────
 const assetClassConfig: Record<string, { label: string; icon: string; hex: string; sparkPath: string }> = {
@@ -144,27 +142,32 @@ const CommodityDirectory = () => {
   const pageSize = 15
 
   // ─── Stats per asset class ─────────────────────────────────────────────────
-  const metalFilter = useMemo(() => dsl().string('assetClass').eq('Metal').build(), [])
-  const forexFilter = useMemo(() => dsl().string('assetClass').eq('Forex').build(), [])
-  const stockFilter = useMemo(() => dsl().string('assetClass').eq('Stock').build(), [])
-
   const {
     data: metalData,
     isError: isMetalError,
     error: metalError
-  } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: metalFilter })
+  } = useQuery({
+    queryKey: ['core', 'commodities', 'search', 'stats-metal'],
+    queryFn: () => postApiV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Metal' } } })
+  })
 
   const {
     data: forexData,
     isError: isForexError,
     error: forexError
-  } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: forexFilter })
+  } = useQuery({
+    queryKey: ['core', 'commodities', 'search', 'stats-forex'],
+    queryFn: () => postApiV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Forex' } } })
+  })
 
   const {
     data: stockData,
     isError: isStockError,
     error: stockError
-  } = useGetApiV1Commodities({ page: 1, pageSize: 1, filter: stockFilter })
+  } = useQuery({
+    queryKey: ['core', 'commodities', 'search', 'stats-stock'],
+    queryFn: () => postApiV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Stock' } } })
+  })
 
   const classCounts: Record<string, number> = {
     Metal: metalData?.result?.total ?? 0,
@@ -174,21 +177,34 @@ const CommodityDirectory = () => {
 
   // ─── Filters ────────────────────────────────────────────────────────────────
   const filter = useMemo(() => {
-    const builder = dsl()
+    const conditions: Record<string, unknown>[] = []
 
-    if (search.trim()) builder.string('name').contains(search.trim())
-    if (classFilter) builder.string('assetClass').eq(classFilter)
+    if (search.trim()) conditions.push({ name: { contains: search.trim() } })
+    if (classFilter) conditions.push({ assetClass: { eq: classFilter } })
 
-    return builder.build() || undefined
+    if (conditions.length === 0) return undefined
+    if (conditions.length === 1) return conditions[0]
+
+    return { and: conditions }
   }, [search, classFilter])
 
   // ─── Main data ──────────────────────────────────────────────────────────────
+  const mainRequest = useMemo(() => ({
+    page,
+    pageSize,
+    filter,
+    order: [{ field: 'code', direction: 'Asc' as const }]
+  }), [page, pageSize, filter])
+
   const {
     data,
     isLoading,
     isError: isDataError,
     error: dataError
-  } = useGetApiV1Commodities({ page, pageSize, filter, sort: 'code' })
+  } = useQuery({
+    queryKey: ['core', 'commodities', 'search', mainRequest],
+    queryFn: () => postApiV1CommoditiesSearch(mainRequest)
+  })
 
   const deleteMutation = useDeleteApiV1CommoditiesId()
 
@@ -200,7 +216,7 @@ const CommodityDirectory = () => {
     e.stopPropagation()
     if (!confirm('Delete this commodity?')) return
     await deleteMutation.mutateAsync({ id })
-    await queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesQueryKey() })
+    await queryClient.invalidateQueries({ queryKey: ['core', 'commodities'] })
   }
 
   const apiErrorMessage = useMemo(() => {
@@ -327,7 +343,7 @@ const CommodityDirectory = () => {
             <Tooltip title='Refresh'>
               <IconButton
                 size='small'
-                onClick={() => queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesQueryKey() })}
+                onClick={() => queryClient.invalidateQueries({ queryKey: ['core', 'commodities'] })}
                 sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1.5 }}
               >
                 <i className='tabler-refresh' style={{ fontSize: 17 }} />
