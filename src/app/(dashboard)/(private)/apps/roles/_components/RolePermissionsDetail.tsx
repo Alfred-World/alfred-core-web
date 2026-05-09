@@ -22,9 +22,9 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 
 import {
-  deleteApiV1AccessControlRolesIdPermissions,
-  getApiV1AccessControlPermissions,
-  postApiV1AccessControlRolesIdPermissions
+  deleteCoreV1AccessControlRolesIdPermissions,
+  getCoreV1AccessControlPermissions,
+  postCoreV1AccessControlRolesIdPermissions
 } from '@/generated/core-api'
 import type { AccessPermissionDto, AccessPermissionDtoApiPagedResponse, AccessRoleDto } from '@/generated/core-api'
 
@@ -58,7 +58,7 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
     queryKey: ['access-control', 'permissions'],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
-      return getApiV1AccessControlPermissions({
+      return getCoreV1AccessControlPermissions({
         page: pageParam as number,
         pageSize: 30,
         sort: 'resource,action'
@@ -129,7 +129,7 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
       const toRemove = initialPermissionIds.filter(id => !selectedPermissionIds.includes(id))
 
       if (toAdd.length > 0) {
-        const addResult = await postApiV1AccessControlRolesIdPermissions(role.id, toAdd)
+        const addResult = await postCoreV1AccessControlRolesIdPermissions(role.id, toAdd)
 
         if (!addResult.success) {
           throw new Error(addResult.errors?.[0]?.message || addResult.message || 'Failed to add permissions')
@@ -137,7 +137,7 @@ const RolePermissionsDetail = ({ role, isLoading, onPermissionsUpdated }: RolePe
       }
 
       if (toRemove.length > 0) {
-        const removeResult = await deleteApiV1AccessControlRolesIdPermissions(role.id, toRemove)
+        const removeResult = await deleteCoreV1AccessControlRolesIdPermissions(role.id, toRemove)
 
         if (!removeResult.success) {
           throw new Error(removeResult.errors?.[0]?.message || removeResult.message || 'Failed to remove permissions')

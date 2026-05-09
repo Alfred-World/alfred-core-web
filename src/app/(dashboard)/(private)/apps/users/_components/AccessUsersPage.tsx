@@ -33,10 +33,10 @@ import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 
 import {
-  useDeleteApiV1AccessControlUsersIdRoles,
-  postApiV1AccessControlUsersSearch,
-  postApiV1AccessControlRolesSearch,
-  usePostApiV1AccessControlUsersIdRoles
+  useDeleteCoreV1AccessControlUsersIdRoles,
+  postCoreV1AccessControlUsersSearch,
+  postCoreV1AccessControlRolesSearch,
+  usePostCoreV1AccessControlUsersIdRoles
 } from '@/generated/core-api'
 import type { AccessRoleDto, AccessUserDto, ApiErrorResponse } from '@/generated/core-api'
 
@@ -95,7 +95,7 @@ const AccessUsersPage = () => {
 
   const usersQuery = useQuery({
     queryKey: ['core', 'access-users', 'search', usersRequest],
-    queryFn: () => postApiV1AccessControlUsersSearch(usersRequest)
+    queryFn: () => postCoreV1AccessControlUsersSearch(usersRequest)
   })
 
   const users = useMemo(() => {
@@ -110,7 +110,7 @@ const AccessUsersPage = () => {
 
   const rolesQuery = useQuery({
     queryKey: ['core', 'access-roles', 'search', 'all'],
-    queryFn: () => postApiV1AccessControlRolesSearch({
+    queryFn: () => postCoreV1AccessControlRolesSearch({
       page: 1,
       pageSize: 100,
       order: [{ field: 'name', direction: 'Asc' }]
@@ -125,8 +125,16 @@ const AccessUsersPage = () => {
     return rolesQuery.data.result.items
   }, [rolesQuery.data])
 
-  const { mutateAsync: addRolesToUser } = usePostApiV1AccessControlUsersIdRoles()
-  const { mutateAsync: removeRolesFromUser } = useDeleteApiV1AccessControlUsersIdRoles()
+  const immutableRoleIds = useMemo(() => {
+    return new Set(roles.filter(role => role.isImmutable && role.id).map(role => role.id as string))
+  }, [roles])
+
+  const mutableRoleIds = useMemo(() => {
+    return new Set(roles.filter(role => !role.isImmutable && role.id).map(role => role.id as string))
+  }, [roles])
+
+  const { mutateAsync: addRolesToUser } = usePostCoreV1AccessControlUsersIdRoles()
+  const { mutateAsync: removeRolesFromUser } = useDeleteCoreV1AccessControlUsersIdRoles()
 
   const total = usersQuery.data?.success ? (usersQuery.data.result?.total ?? 0) : 0
   const totalPages = usersQuery.data?.success ? (usersQuery.data.result?.totalPages ?? 1) : 1
@@ -158,6 +166,12 @@ const AccessUsersPage = () => {
   }
 
   const handleToggleRole = (roleId: string) => {
+    if (immutableRoleIds.has(roleId)) {
+      toast.info('Immutable roles are protected and cannot be assigned or removed.')
+
+      return
+    }
+
     setSelectedRoleIds(prev => (prev.includes(roleId) ? prev.filter(id => id !== roleId) : [...prev, roleId]))
   }
 
@@ -173,8 +187,8 @@ const AccessUsersPage = () => {
         .map(role => role.id)
         .filter((id): id is string => Boolean(id))
 
-      const roleIdsToAdd = selectedRoleIds.filter(roleId => !initialRoleIds.includes(roleId))
-      const roleIdsToRemove = initialRoleIds.filter(roleId => !selectedRoleIds.includes(roleId))
+      const roleIdsToAdd = selectedRoleIds.filter(roleId => !initialRoleIds.includes(roleId) && mutableRoleIds.has(roleId))
+      const roleIdsToRemove = initialRoleIds.filter(roleId => !selectedRoleIds.includes(roleId) && mutableRoleIds.has(roleId))
 
       const pendingRequests: Promise<unknown>[] = []
 
@@ -355,14 +369,20 @@ const AccessUsersPage = () => {
                 }
 
                 const isSelected = selectedRoleIds.includes(roleId)
+                const isImmutable = Boolean(role.isImmutable)
 
                 return (
                   <Grid size={{ xs: 12, sm: 6 }} key={roleId}>
                     <Card
-                      onClick={() => handleToggleRole(roleId)}
+                      onClick={() => {
+                        if (!isImmutable) {
+                          handleToggleRole(roleId)
+                        }
+                      }}
                       sx={{
                         p: 2,
-                        cursor: 'pointer',
+                        cursor: isImmutable ? 'not-allowed' : 'pointer',
+                        opacity: isImmutable ? 0.72 : 1,
                         border: '1px solid',
                         borderColor: isSelected ? 'primary.main' : 'divider',
                         bgcolor: isSelected
@@ -393,16 +413,20 @@ const AccessUsersPage = () => {
                           <Typography variant='subtitle2' fontWeight={600}>
                             {role.name || 'Unknown role'}
                           </Typography>
-                          {role.isSystem && (
-                            <Typography variant='caption' color='info.main'>
-                              System Core
-                            </Typography>
-                          )}
+                          <Stack direction='row' spacing={0.75} sx={{ mt: 0.25 }} useFlexGap flexWrap='wrap'>
+                            {role.isSystem && (
+                              <Typography variant='caption' color='info.main'>
+                                System Core
+                              </Typography>
+                            )}
+                            {isImmutable && <Chip label='Protected' size='small' color='warning' variant='tonal' />}
+                          </Stack>
                         </Box>
                       </Stack>
 
                       <Switch
                         checked={isSelected}
+                        disabled={isImmutable}
                         onChange={() => handleToggleRole(roleId)}
                         onClick={event => event.stopPropagation()}
                         size='small'

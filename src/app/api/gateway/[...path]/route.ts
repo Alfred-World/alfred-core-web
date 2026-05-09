@@ -219,8 +219,10 @@ async function handler(request: NextRequest) {
       headers: buildResponseHeaders(response)
     })
   } catch {
+    const message = 'The server is temporarily unavailable. Please try again.'
+
     return NextResponse.json(
-      { success: false, errors: [{ message: 'Gateway unreachable', code: 'BAD_GATEWAY' }] },
+      { success: false, message, errors: [{ message, code: 'BAD_GATEWAY' }] },
       { status: 502 }
     )
   }

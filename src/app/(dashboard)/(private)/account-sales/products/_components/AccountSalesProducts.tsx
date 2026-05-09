@@ -22,7 +22,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { toast } from 'react-toastify'
 
-import { AccountProductType, useGetApiV1AccountSalesProducts } from '@/generated/core-api'
+import { AccountProductType, useGetCoreV1AccountSalesProducts } from '@/generated/core-api'
 import type { ApiErrorResponse, ProductDto } from '@/generated/core-api'
 
 import ProductCreateEditModal from './ProductCreateEditModal'
@@ -74,7 +74,7 @@ const AccountSalesProducts = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<ProductDto | null>(null)
 
-  const productsQuery = useGetApiV1AccountSalesProducts({ page, pageSize: 10, sort: '-createdAt' })
+  const productsQuery = useGetCoreV1AccountSalesProducts({ page, pageSize: 10, sort: '-createdAt' })
   const products = useMemo(() => productsQuery.data?.result?.items ?? [], [productsQuery.data?.result?.items])
 
   const productsApiErrorMessage = useMemo(

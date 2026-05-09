@@ -1431,7 +1431,6 @@ export interface CreateAccessRoleRequest {
   name?: string
   /** @nullable */
   icon?: string | null
-  isImmutable?: boolean
   isSystem?: boolean
   /** @nullable */
   permissions?: string[] | null
@@ -2687,7 +2686,6 @@ export interface UnitTreeNodeDtoListApiResponse {
 export interface UpdateAccessRoleRequest {
   name?: string
   icon?: string
-  isImmutable?: boolean
   isSystem?: boolean
   permissions?: string[]
 }
@@ -2846,7 +2844,7 @@ export interface WarrantyCheckResultDtoApiResponse {
   errors?: ApiError[] | null
 }
 
-export type GetApiV1AccessControlPermissionsParams = {
+export type GetCoreV1AccessControlPermissionsParams = {
   page?: number
   pageSize?: number
   /**
@@ -2860,7 +2858,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccessControlRolesParams = {
+export type GetCoreV1AccessControlRolesParams = {
   page?: number
   pageSize?: number
   /**
@@ -2874,7 +2872,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccessControlUsersParams = {
+export type GetCoreV1AccessControlUsersParams = {
   page?: number
   pageSize?: number
   /**
@@ -2888,7 +2886,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccountSalesAccountClonesParams = {
+export type GetCoreV1AccountSalesAccountClonesParams = {
   page?: number
   pageSize?: number
   /**
@@ -2902,14 +2900,14 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccountSalesBonusTransactionsParams = {
+export type GetCoreV1AccountSalesBonusTransactionsParams = {
   year?: number
   month?: number
   status?: SalesBonusTransactionStatus
   soldByMemberId?: string
 }
 
-export type GetApiV1AccountSalesMembersParams = {
+export type GetCoreV1AccountSalesMembersParams = {
   page?: number
   pageSize?: number
   /**
@@ -2923,12 +2921,12 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccountSalesMembersSearchParams = {
+export type GetCoreV1AccountSalesMembersSearchParams = {
   keyword?: string
   take?: number
 }
 
-export type GetApiV1AccountSalesOrdersParams = {
+export type GetCoreV1AccountSalesOrdersParams = {
   page?: number
   pageSize?: number
   /**
@@ -2942,7 +2940,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccountSalesProductsParams = {
+export type GetCoreV1AccountSalesProductsParams = {
   page?: number
   pageSize?: number
   /**
@@ -2956,7 +2954,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AccountSalesSourceAccountsParams = {
+export type GetCoreV1AccountSalesSourceAccountsParams = {
   page?: number
   pageSize?: number
   /**
@@ -2970,7 +2968,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AssetsParams = {
+export type GetCoreV1AssetsParams = {
   page?: number
   pageSize?: number
   /**
@@ -2984,7 +2982,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1AssetsAssetIdLogsParams = {
+export type GetCoreV1AssetsAssetIdLogsParams = {
   page?: number
   pageSize?: number
   /**
@@ -2998,19 +2996,19 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type PostApiV1AttachmentsBody = {
+export type PostCoreV1AttachmentsBody = {
   file?: Blob
   targetId?: string
   targetType?: string
   purpose?: string
 }
 
-export type GetApiV1AttachmentsParams = {
+export type GetCoreV1AttachmentsParams = {
   targetId?: string
   targetType?: string
 }
 
-export type GetApiV1BrandsParams = {
+export type GetCoreV1BrandsParams = {
   page?: number
   pageSize?: number
   /**
@@ -3025,11 +3023,11 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   categoryId?: string
 }
 
-export type PostApiV1BrandsSearchParams = {
+export type PostCoreV1BrandsSearchParams = {
   categoryId?: string
 }
 
-export type GetApiV1CategoriesParams = {
+export type GetCoreV1CategoriesParams = {
   page?: number
   pageSize?: number
   /**
@@ -3043,13 +3041,13 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1CategoriesTreeParams = {
+export type GetCoreV1CategoriesTreeParams = {
   type?: CategoryType
   page?: number
   pageSize?: number
 }
 
-export type GetApiV1CommoditiesParams = {
+export type GetCoreV1CommoditiesParams = {
   page?: number
   pageSize?: number
   /**
@@ -3063,7 +3061,7 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1CommoditiesCommodityIdTransactionsParams = {
+export type GetCoreV1CommoditiesCommodityIdTransactionsParams = {
   page?: number
   pageSize?: number
   /**
@@ -3077,12 +3075,12 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type PostApiV1FilesUploadBody = {
+export type PostCoreV1FilesUploadBody = {
   file?: Blob
   folder?: string
 }
 
-export type GetApiV1UnitsParams = {
+export type GetCoreV1UnitsParams = {
   page?: number
   pageSize?: number
   /**
@@ -3096,11 +3094,11 @@ Example: "name,-createdAt" (ascending by name, descending by createdAt)
   view?: string
 }
 
-export type GetApiV1UnitsTreeParams = {
+export type GetCoreV1UnitsTreeParams = {
   category?: UnitCategory
 }
 
-export type GetApiV1UnitsConvertParams = {
+export type GetCoreV1UnitsConvertParams = {
   fromUnitId?: string
   toUnitId?: string
   value?: number
@@ -3108,7 +3106,7 @@ export type GetApiV1UnitsConvertParams = {
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1]
 
-export const getGetApiV1AccessControlPermissionsUrl = (params?: GetApiV1AccessControlPermissionsParams) => {
+export const getGetCoreV1AccessControlPermissionsUrl = (params?: GetCoreV1AccessControlPermissionsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -3120,65 +3118,65 @@ export const getGetApiV1AccessControlPermissionsUrl = (params?: GetApiV1AccessCo
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/access-control/permissions?${stringifiedParams}`
-    : `/api/v1/access-control/permissions`
+    ? `/core/v1/access-control/permissions?${stringifiedParams}`
+    : `/core/v1/access-control/permissions`
 }
 
-export const getApiV1AccessControlPermissions = async (
-  params?: GetApiV1AccessControlPermissionsParams,
+export const getCoreV1AccessControlPermissions = async (
+  params?: GetCoreV1AccessControlPermissionsParams,
   options?: RequestInit
 ): Promise<AccessPermissionDtoApiPagedResponse> => {
-  return customFetch<AccessPermissionDtoApiPagedResponse>(getGetApiV1AccessControlPermissionsUrl(params), {
+  return customFetch<AccessPermissionDtoApiPagedResponse>(getGetCoreV1AccessControlPermissionsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccessControlPermissionsQueryKey = (params?: GetApiV1AccessControlPermissionsParams) => {
-  return [`/api/v1/access-control/permissions`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccessControlPermissionsQueryKey = (params?: GetCoreV1AccessControlPermissionsParams) => {
+  return [`/core/v1/access-control/permissions`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccessControlPermissionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+export const getGetCoreV1AccessControlPermissionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlPermissionsParams,
+  params?: GetCoreV1AccessControlPermissionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccessControlPermissionsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccessControlPermissionsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>> = ({ signal }) =>
-    getApiV1AccessControlPermissions(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>> = ({ signal }) =>
+    getCoreV1AccessControlPermissions(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+    Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccessControlPermissionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>
+export type GetCoreV1AccessControlPermissionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>
 >
-export type GetApiV1AccessControlPermissionsQueryError = ErrorType<unknown>
+export type GetCoreV1AccessControlPermissionsQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccessControlPermissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+export function useGetCoreV1AccessControlPermissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccessControlPermissionsParams,
+  params: undefined | GetCoreV1AccessControlPermissionsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>
         >,
         'initialData'
       >
@@ -3186,18 +3184,18 @@ export function useGetApiV1AccessControlPermissions<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlPermissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+export function useGetCoreV1AccessControlPermissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlPermissionsParams,
+  params?: GetCoreV1AccessControlPermissionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>
         >,
         'initialData'
       >
@@ -3205,30 +3203,30 @@ export function useGetApiV1AccessControlPermissions<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlPermissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+export function useGetCoreV1AccessControlPermissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlPermissionsParams,
+  params?: GetCoreV1AccessControlPermissionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccessControlPermissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>,
+export function useGetCoreV1AccessControlPermissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlPermissionsParams,
+  params?: GetCoreV1AccessControlPermissionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlPermissions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlPermissions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccessControlPermissionsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccessControlPermissionsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -3237,15 +3235,15 @@ export function useGetApiV1AccessControlPermissions<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccessControlPermissionsSearchUrl = () => {
-  return `/api/v1/access-control/permissions/search`
+export const getPostCoreV1AccessControlPermissionsSearchUrl = () => {
+  return `/core/v1/access-control/permissions/search`
 }
 
-export const postApiV1AccessControlPermissionsSearch = async (
+export const postCoreV1AccessControlPermissionsSearch = async (
   accessPermissionFilterInputSearchRequest: AccessPermissionFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<AccessPermissionDtoApiPagedResponse> => {
-  return customFetch<AccessPermissionDtoApiPagedResponse>(getPostApiV1AccessControlPermissionsSearchUrl(), {
+  return customFetch<AccessPermissionDtoApiPagedResponse>(getPostCoreV1AccessControlPermissionsSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -3253,24 +3251,24 @@ export const postApiV1AccessControlPermissionsSearch = async (
   })
 }
 
-export const getPostApiV1AccessControlPermissionsSearchMutationOptions = <
+export const getPostCoreV1AccessControlPermissionsSearchMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlPermissionsSearch>>,
     TError,
     { data: AccessPermissionFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlPermissionsSearch>>,
   TError,
   { data: AccessPermissionFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccessControlPermissionsSearch']
+  const mutationKey = ['postCoreV1AccessControlPermissionsSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3278,27 +3276,27 @@ export const getPostApiV1AccessControlPermissionsSearchMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlPermissionsSearch>>,
     { data: AccessPermissionFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccessControlPermissionsSearch(data, requestOptions)
+    return postCoreV1AccessControlPermissionsSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccessControlPermissionsSearchMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>
+export type PostCoreV1AccessControlPermissionsSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccessControlPermissionsSearch>>
 >
-export type PostApiV1AccessControlPermissionsSearchMutationBody = AccessPermissionFilterInputSearchRequest
-export type PostApiV1AccessControlPermissionsSearchMutationError = ErrorType<unknown>
+export type PostCoreV1AccessControlPermissionsSearchMutationBody = AccessPermissionFilterInputSearchRequest
+export type PostCoreV1AccessControlPermissionsSearchMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccessControlPermissionsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccessControlPermissionsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+      Awaited<ReturnType<typeof postCoreV1AccessControlPermissionsSearch>>,
       TError,
       { data: AccessPermissionFilterInputSearchRequest },
       TContext
@@ -3307,15 +3305,15 @@ export const usePostApiV1AccessControlPermissionsSearch = <TError = ErrorType<un
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccessControlPermissionsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlPermissionsSearch>>,
   TError,
   { data: AccessPermissionFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccessControlPermissionsSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccessControlPermissionsSearchMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccessControlRolesUrl = (params?: GetApiV1AccessControlRolesParams) => {
+export const getGetCoreV1AccessControlRolesUrl = (params?: GetCoreV1AccessControlRolesParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -3327,63 +3325,65 @@ export const getGetApiV1AccessControlRolesUrl = (params?: GetApiV1AccessControlR
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/access-control/roles?${stringifiedParams}`
-    : `/api/v1/access-control/roles`
+    ? `/core/v1/access-control/roles?${stringifiedParams}`
+    : `/core/v1/access-control/roles`
 }
 
-export const getApiV1AccessControlRoles = async (
-  params?: GetApiV1AccessControlRolesParams,
+export const getCoreV1AccessControlRoles = async (
+  params?: GetCoreV1AccessControlRolesParams,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiPagedResponse> => {
-  return customFetch<AccessRoleDtoApiPagedResponse>(getGetApiV1AccessControlRolesUrl(params), {
+  return customFetch<AccessRoleDtoApiPagedResponse>(getGetCoreV1AccessControlRolesUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccessControlRolesQueryKey = (params?: GetApiV1AccessControlRolesParams) => {
-  return [`/api/v1/access-control/roles`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccessControlRolesQueryKey = (params?: GetCoreV1AccessControlRolesParams) => {
+  return [`/core/v1/access-control/roles`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccessControlRolesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+export const getGetCoreV1AccessControlRolesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlRolesParams,
+  params?: GetCoreV1AccessControlRolesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccessControlRolesQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccessControlRolesQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>> = ({ signal }) =>
-    getApiV1AccessControlRoles(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>> = ({ signal }) =>
+    getCoreV1AccessControlRoles(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+    Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccessControlRolesQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>>
-export type GetApiV1AccessControlRolesQueryError = ErrorType<unknown>
+export type GetCoreV1AccessControlRolesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>
+>
+export type GetCoreV1AccessControlRolesQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccessControlRoles<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+export function useGetCoreV1AccessControlRoles<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccessControlRolesParams,
+  params: undefined | GetCoreV1AccessControlRolesParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlRoles>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>
         >,
         'initialData'
       >
@@ -3391,18 +3391,18 @@ export function useGetApiV1AccessControlRoles<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlRoles<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+export function useGetCoreV1AccessControlRoles<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlRolesParams,
+  params?: GetCoreV1AccessControlRolesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlRoles>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>
         >,
         'initialData'
       >
@@ -3410,30 +3410,30 @@ export function useGetApiV1AccessControlRoles<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlRoles<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+export function useGetCoreV1AccessControlRoles<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlRolesParams,
+  params?: GetCoreV1AccessControlRolesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccessControlRoles<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRoles>>,
+export function useGetCoreV1AccessControlRoles<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlRolesParams,
+  params?: GetCoreV1AccessControlRolesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRoles>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRoles>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccessControlRolesQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccessControlRolesQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -3442,15 +3442,15 @@ export function useGetApiV1AccessControlRoles<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccessControlRolesUrl = () => {
-  return `/api/v1/access-control/roles`
+export const getPostCoreV1AccessControlRolesUrl = () => {
+  return `/core/v1/access-control/roles`
 }
 
-export const postApiV1AccessControlRoles = async (
+export const postCoreV1AccessControlRoles = async (
   createAccessRoleRequest: CreateAccessRoleRequest,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getPostApiV1AccessControlRolesUrl(), {
+  return customFetch<AccessRoleDtoApiResponse>(getPostCoreV1AccessControlRolesUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -3458,24 +3458,24 @@ export const postApiV1AccessControlRoles = async (
   })
 }
 
-export const getPostApiV1AccessControlRolesMutationOptions = <
+export const getPostCoreV1AccessControlRolesMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccessControlRoles>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlRoles>>,
     TError,
     { data: CreateAccessRoleRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccessControlRoles>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlRoles>>,
   TError,
   { data: CreateAccessRoleRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccessControlRoles']
+  const mutationKey = ['postCoreV1AccessControlRoles']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3483,27 +3483,27 @@ export const getPostApiV1AccessControlRolesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccessControlRoles>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlRoles>>,
     { data: CreateAccessRoleRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccessControlRoles(data, requestOptions)
+    return postCoreV1AccessControlRoles(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccessControlRolesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccessControlRoles>>
+export type PostCoreV1AccessControlRolesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccessControlRoles>>
 >
-export type PostApiV1AccessControlRolesMutationBody = CreateAccessRoleRequest
-export type PostApiV1AccessControlRolesMutationError = ErrorType<unknown>
+export type PostCoreV1AccessControlRolesMutationBody = CreateAccessRoleRequest
+export type PostCoreV1AccessControlRolesMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccessControlRoles = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccessControlRoles = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccessControlRoles>>,
+      Awaited<ReturnType<typeof postCoreV1AccessControlRoles>>,
       TError,
       { data: CreateAccessRoleRequest },
       TContext
@@ -3512,23 +3512,23 @@ export const usePostApiV1AccessControlRoles = <TError = ErrorType<unknown>, TCon
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccessControlRoles>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlRoles>>,
   TError,
   { data: CreateAccessRoleRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccessControlRolesMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccessControlRolesMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccessControlRolesSearchUrl = () => {
-  return `/api/v1/access-control/roles/search`
+export const getPostCoreV1AccessControlRolesSearchUrl = () => {
+  return `/core/v1/access-control/roles/search`
 }
 
-export const postApiV1AccessControlRolesSearch = async (
+export const postCoreV1AccessControlRolesSearch = async (
   accessRoleFilterInputSearchRequest: AccessRoleFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiPagedResponse> => {
-  return customFetch<AccessRoleDtoApiPagedResponse>(getPostApiV1AccessControlRolesSearchUrl(), {
+  return customFetch<AccessRoleDtoApiPagedResponse>(getPostCoreV1AccessControlRolesSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -3536,24 +3536,24 @@ export const postApiV1AccessControlRolesSearch = async (
   })
 }
 
-export const getPostApiV1AccessControlRolesSearchMutationOptions = <
+export const getPostCoreV1AccessControlRolesSearchMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlRolesSearch>>,
     TError,
     { data: AccessRoleFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlRolesSearch>>,
   TError,
   { data: AccessRoleFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccessControlRolesSearch']
+  const mutationKey = ['postCoreV1AccessControlRolesSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3561,27 +3561,27 @@ export const getPostApiV1AccessControlRolesSearchMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlRolesSearch>>,
     { data: AccessRoleFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccessControlRolesSearch(data, requestOptions)
+    return postCoreV1AccessControlRolesSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccessControlRolesSearchMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>
+export type PostCoreV1AccessControlRolesSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccessControlRolesSearch>>
 >
-export type PostApiV1AccessControlRolesSearchMutationBody = AccessRoleFilterInputSearchRequest
-export type PostApiV1AccessControlRolesSearchMutationError = ErrorType<unknown>
+export type PostCoreV1AccessControlRolesSearchMutationBody = AccessRoleFilterInputSearchRequest
+export type PostCoreV1AccessControlRolesSearchMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccessControlRolesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccessControlRolesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+      Awaited<ReturnType<typeof postCoreV1AccessControlRolesSearch>>,
       TError,
       { data: AccessRoleFilterInputSearchRequest },
       TContext
@@ -3590,73 +3590,73 @@ export const usePostApiV1AccessControlRolesSearch = <TError = ErrorType<unknown>
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccessControlRolesSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlRolesSearch>>,
   TError,
   { data: AccessRoleFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccessControlRolesSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccessControlRolesSearchMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccessControlRolesIdUrl = (id: string) => {
-  return `/api/v1/access-control/roles/${id}`
+export const getGetCoreV1AccessControlRolesIdUrl = (id: string) => {
+  return `/core/v1/access-control/roles/${id}`
 }
 
-export const getApiV1AccessControlRolesId = async (
+export const getCoreV1AccessControlRolesId = async (
   id: string,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getGetApiV1AccessControlRolesIdUrl(id), {
+  return customFetch<AccessRoleDtoApiResponse>(getGetCoreV1AccessControlRolesIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccessControlRolesIdQueryKey = (id: string) => {
-  return [`/api/v1/access-control/roles/${id}`] as const
+export const getGetCoreV1AccessControlRolesIdQueryKey = (id: string) => {
+  return [`/core/v1/access-control/roles/${id}`] as const
 }
 
-export const getGetApiV1AccessControlRolesIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+export const getGetCoreV1AccessControlRolesIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccessControlRolesIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccessControlRolesIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>> = ({ signal }) =>
-    getApiV1AccessControlRolesId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>> = ({ signal }) =>
+    getCoreV1AccessControlRolesId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccessControlRolesIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>
+export type GetCoreV1AccessControlRolesIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>
 >
-export type GetApiV1AccessControlRolesIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1AccessControlRolesIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1AccessControlRolesId<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+export function useGetCoreV1AccessControlRolesId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>
         >,
         'initialData'
       >
@@ -3664,18 +3664,18 @@ export function useGetApiV1AccessControlRolesId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlRolesId<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+export function useGetCoreV1AccessControlRolesId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>
         >,
         'initialData'
       >
@@ -3683,30 +3683,30 @@ export function useGetApiV1AccessControlRolesId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlRolesId<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+export function useGetCoreV1AccessControlRolesId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccessControlRolesId<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>,
+export function useGetCoreV1AccessControlRolesId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlRolesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlRolesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccessControlRolesIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AccessControlRolesIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -3715,16 +3715,16 @@ export function useGetApiV1AccessControlRolesId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPatchApiV1AccessControlRolesIdUrl = (id: string) => {
-  return `/api/v1/access-control/roles/${id}`
+export const getPatchCoreV1AccessControlRolesIdUrl = (id: string) => {
+  return `/core/v1/access-control/roles/${id}`
 }
 
-export const patchApiV1AccessControlRolesId = async (
+export const patchCoreV1AccessControlRolesId = async (
   id: string,
   updateAccessRoleRequest: UpdateAccessRoleRequest,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getPatchApiV1AccessControlRolesIdUrl(id), {
+  return customFetch<AccessRoleDtoApiResponse>(getPatchCoreV1AccessControlRolesIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -3732,24 +3732,24 @@ export const patchApiV1AccessControlRolesId = async (
   })
 }
 
-export const getPatchApiV1AccessControlRolesIdMutationOptions = <
+export const getPatchCoreV1AccessControlRolesIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccessControlRolesId>>,
     TError,
     { id: string; data: UpdateAccessRoleRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccessControlRolesId>>,
   TError,
   { id: string; data: UpdateAccessRoleRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccessControlRolesId']
+  const mutationKey = ['patchCoreV1AccessControlRolesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3757,27 +3757,27 @@ export const getPatchApiV1AccessControlRolesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccessControlRolesId>>,
     { id: string; data: UpdateAccessRoleRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1AccessControlRolesId(id, data, requestOptions)
+    return patchCoreV1AccessControlRolesId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccessControlRolesIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>
+export type PatchCoreV1AccessControlRolesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccessControlRolesId>>
 >
-export type PatchApiV1AccessControlRolesIdMutationBody = UpdateAccessRoleRequest
-export type PatchApiV1AccessControlRolesIdMutationError = ErrorType<unknown>
+export type PatchCoreV1AccessControlRolesIdMutationBody = UpdateAccessRoleRequest
+export type PatchCoreV1AccessControlRolesIdMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccessControlRolesId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccessControlRolesId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
+      Awaited<ReturnType<typeof patchCoreV1AccessControlRolesId>>,
       TError,
       { id: string; data: UpdateAccessRoleRequest },
       TContext
@@ -3786,46 +3786,46 @@ export const usePatchApiV1AccessControlRolesId = <TError = ErrorType<unknown>, T
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccessControlRolesId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccessControlRolesId>>,
   TError,
   { id: string; data: UpdateAccessRoleRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccessControlRolesIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccessControlRolesIdMutationOptions(options), queryClient)
 }
 
-export const getDeleteApiV1AccessControlRolesIdUrl = (id: string) => {
-  return `/api/v1/access-control/roles/${id}`
+export const getDeleteCoreV1AccessControlRolesIdUrl = (id: string) => {
+  return `/core/v1/access-control/roles/${id}`
 }
 
-export const deleteApiV1AccessControlRolesId = async (
+export const deleteCoreV1AccessControlRolesId = async (
   id: string,
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getDeleteApiV1AccessControlRolesIdUrl(id), {
+  return customFetch<AccessRoleDtoApiResponse>(getDeleteCoreV1AccessControlRolesIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1AccessControlRolesIdMutationOptions = <
+export const getDeleteCoreV1AccessControlRolesIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesId>>,
     TError,
     { id: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlRolesId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesId>>,
   TError,
   { id: string },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1AccessControlRolesId']
+  const mutationKey = ['deleteCoreV1AccessControlRolesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3833,27 +3833,27 @@ export const getDeleteApiV1AccessControlRolesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1AccessControlRolesId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesId>>,
     { id: string }
   > = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1AccessControlRolesId(id, requestOptions)
+    return deleteCoreV1AccessControlRolesId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AccessControlRolesIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlRolesId>>
+export type DeleteCoreV1AccessControlRolesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesId>>
 >
 
-export type DeleteApiV1AccessControlRolesIdMutationError = ErrorType<unknown>
+export type DeleteCoreV1AccessControlRolesIdMutationError = ErrorType<unknown>
 
-export const useDeleteApiV1AccessControlRolesId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const useDeleteCoreV1AccessControlRolesId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AccessControlRolesId>>,
+      Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesId>>,
       TError,
       { id: string },
       TContext
@@ -3861,45 +3861,50 @@ export const useDeleteApiV1AccessControlRolesId = <TError = ErrorType<unknown>, 
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1AccessControlRolesId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1AccessControlRolesIdMutationOptions(options), queryClient)
+): UseMutationResult<
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesId>>,
+  TError,
+  { id: string },
+  TContext
+> => {
+  return useMutation(getDeleteCoreV1AccessControlRolesIdMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccessControlRolesIdPermissionsUrl = (id: string) => {
-  return `/api/v1/access-control/roles/${id}/permissions`
+export const getPostCoreV1AccessControlRolesIdPermissionsUrl = (id: string) => {
+  return `/core/v1/access-control/roles/${id}/permissions`
 }
 
-export const postApiV1AccessControlRolesIdPermissions = async (
+export const postCoreV1AccessControlRolesIdPermissions = async (
   id: string,
-  postApiV1AccessControlRolesIdPermissionsBody: string[],
+  postCoreV1AccessControlRolesIdPermissionsBody: string[],
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getPostApiV1AccessControlRolesIdPermissionsUrl(id), {
+  return customFetch<AccessRoleDtoApiResponse>(getPostCoreV1AccessControlRolesIdPermissionsUrl(id), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(postApiV1AccessControlRolesIdPermissionsBody)
+    body: JSON.stringify(postCoreV1AccessControlRolesIdPermissionsBody)
   })
 }
 
-export const getPostApiV1AccessControlRolesIdPermissionsMutationOptions = <
+export const getPostCoreV1AccessControlRolesIdPermissionsMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccessControlRolesIdPermissions>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlRolesIdPermissions>>,
     TError,
     { id: string; data: string[] },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccessControlRolesIdPermissions>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlRolesIdPermissions>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccessControlRolesIdPermissions']
+  const mutationKey = ['postCoreV1AccessControlRolesIdPermissions']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3907,27 +3912,27 @@ export const getPostApiV1AccessControlRolesIdPermissionsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccessControlRolesIdPermissions>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlRolesIdPermissions>>,
     { id: string; data: string[] }
   > = props => {
     const { id, data } = props ?? {}
 
-    return postApiV1AccessControlRolesIdPermissions(id, data, requestOptions)
+    return postCoreV1AccessControlRolesIdPermissions(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccessControlRolesIdPermissionsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccessControlRolesIdPermissions>>
+export type PostCoreV1AccessControlRolesIdPermissionsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccessControlRolesIdPermissions>>
 >
-export type PostApiV1AccessControlRolesIdPermissionsMutationBody = string[]
-export type PostApiV1AccessControlRolesIdPermissionsMutationError = ErrorType<unknown>
+export type PostCoreV1AccessControlRolesIdPermissionsMutationBody = string[]
+export type PostCoreV1AccessControlRolesIdPermissionsMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccessControlRolesIdPermissions = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccessControlRolesIdPermissions = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccessControlRolesIdPermissions>>,
+      Awaited<ReturnType<typeof postCoreV1AccessControlRolesIdPermissions>>,
       TError,
       { id: string; data: string[] },
       TContext
@@ -3936,49 +3941,49 @@ export const usePostApiV1AccessControlRolesIdPermissions = <TError = ErrorType<u
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccessControlRolesIdPermissions>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlRolesIdPermissions>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  return useMutation(getPostApiV1AccessControlRolesIdPermissionsMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccessControlRolesIdPermissionsMutationOptions(options), queryClient)
 }
 
-export const getDeleteApiV1AccessControlRolesIdPermissionsUrl = (id: string) => {
-  return `/api/v1/access-control/roles/${id}/permissions`
+export const getDeleteCoreV1AccessControlRolesIdPermissionsUrl = (id: string) => {
+  return `/core/v1/access-control/roles/${id}/permissions`
 }
 
-export const deleteApiV1AccessControlRolesIdPermissions = async (
+export const deleteCoreV1AccessControlRolesIdPermissions = async (
   id: string,
-  deleteApiV1AccessControlRolesIdPermissionsBody: string[],
+  deleteCoreV1AccessControlRolesIdPermissionsBody: string[],
   options?: RequestInit
 ): Promise<AccessRoleDtoApiResponse> => {
-  return customFetch<AccessRoleDtoApiResponse>(getDeleteApiV1AccessControlRolesIdPermissionsUrl(id), {
+  return customFetch<AccessRoleDtoApiResponse>(getDeleteCoreV1AccessControlRolesIdPermissionsUrl(id), {
     ...options,
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(deleteApiV1AccessControlRolesIdPermissionsBody)
+    body: JSON.stringify(deleteCoreV1AccessControlRolesIdPermissionsBody)
   })
 }
 
-export const getDeleteApiV1AccessControlRolesIdPermissionsMutationOptions = <
+export const getDeleteCoreV1AccessControlRolesIdPermissionsMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1AccessControlRolesIdPermissions>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesIdPermissions>>,
     TError,
     { id: string; data: string[] },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlRolesIdPermissions>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesIdPermissions>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1AccessControlRolesIdPermissions']
+  const mutationKey = ['deleteCoreV1AccessControlRolesIdPermissions']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -3986,27 +3991,27 @@ export const getDeleteApiV1AccessControlRolesIdPermissionsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1AccessControlRolesIdPermissions>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesIdPermissions>>,
     { id: string; data: string[] }
   > = props => {
     const { id, data } = props ?? {}
 
-    return deleteApiV1AccessControlRolesIdPermissions(id, data, requestOptions)
+    return deleteCoreV1AccessControlRolesIdPermissions(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AccessControlRolesIdPermissionsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlRolesIdPermissions>>
+export type DeleteCoreV1AccessControlRolesIdPermissionsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesIdPermissions>>
 >
-export type DeleteApiV1AccessControlRolesIdPermissionsMutationBody = string[]
-export type DeleteApiV1AccessControlRolesIdPermissionsMutationError = ErrorType<unknown>
+export type DeleteCoreV1AccessControlRolesIdPermissionsMutationBody = string[]
+export type DeleteCoreV1AccessControlRolesIdPermissionsMutationError = ErrorType<unknown>
 
-export const useDeleteApiV1AccessControlRolesIdPermissions = <TError = ErrorType<unknown>, TContext = unknown>(
+export const useDeleteCoreV1AccessControlRolesIdPermissions = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AccessControlRolesIdPermissions>>,
+      Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesIdPermissions>>,
       TError,
       { id: string; data: string[] },
       TContext
@@ -4015,15 +4020,15 @@ export const useDeleteApiV1AccessControlRolesIdPermissions = <TError = ErrorType
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlRolesIdPermissions>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlRolesIdPermissions>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  return useMutation(getDeleteApiV1AccessControlRolesIdPermissionsMutationOptions(options), queryClient)
+  return useMutation(getDeleteCoreV1AccessControlRolesIdPermissionsMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccessControlUsersUrl = (params?: GetApiV1AccessControlUsersParams) => {
+export const getGetCoreV1AccessControlUsersUrl = (params?: GetCoreV1AccessControlUsersParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -4035,63 +4040,65 @@ export const getGetApiV1AccessControlUsersUrl = (params?: GetApiV1AccessControlU
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/access-control/users?${stringifiedParams}`
-    : `/api/v1/access-control/users`
+    ? `/core/v1/access-control/users?${stringifiedParams}`
+    : `/core/v1/access-control/users`
 }
 
-export const getApiV1AccessControlUsers = async (
-  params?: GetApiV1AccessControlUsersParams,
+export const getCoreV1AccessControlUsers = async (
+  params?: GetCoreV1AccessControlUsersParams,
   options?: RequestInit
 ): Promise<AccessUserDtoApiPagedResponse> => {
-  return customFetch<AccessUserDtoApiPagedResponse>(getGetApiV1AccessControlUsersUrl(params), {
+  return customFetch<AccessUserDtoApiPagedResponse>(getGetCoreV1AccessControlUsersUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccessControlUsersQueryKey = (params?: GetApiV1AccessControlUsersParams) => {
-  return [`/api/v1/access-control/users`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccessControlUsersQueryKey = (params?: GetCoreV1AccessControlUsersParams) => {
+  return [`/core/v1/access-control/users`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccessControlUsersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+export const getGetCoreV1AccessControlUsersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlUsersParams,
+  params?: GetCoreV1AccessControlUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccessControlUsersQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccessControlUsersQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>> = ({ signal }) =>
-    getApiV1AccessControlUsers(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>> = ({ signal }) =>
+    getCoreV1AccessControlUsers(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+    Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccessControlUsersQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>>
-export type GetApiV1AccessControlUsersQueryError = ErrorType<unknown>
+export type GetCoreV1AccessControlUsersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>
+>
+export type GetCoreV1AccessControlUsersQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccessControlUsers<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+export function useGetCoreV1AccessControlUsers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccessControlUsersParams,
+  params: undefined | GetCoreV1AccessControlUsersParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlUsers>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>
         >,
         'initialData'
       >
@@ -4099,18 +4106,18 @@ export function useGetApiV1AccessControlUsers<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlUsers<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+export function useGetCoreV1AccessControlUsers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlUsersParams,
+  params?: GetCoreV1AccessControlUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+          Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccessControlUsers>>
+          Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>
         >,
         'initialData'
       >
@@ -4118,30 +4125,30 @@ export function useGetApiV1AccessControlUsers<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccessControlUsers<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+export function useGetCoreV1AccessControlUsers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlUsersParams,
+  params?: GetCoreV1AccessControlUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccessControlUsers<
-  TData = Awaited<ReturnType<typeof getApiV1AccessControlUsers>>,
+export function useGetCoreV1AccessControlUsers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccessControlUsersParams,
+  params?: GetCoreV1AccessControlUsersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccessControlUsers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccessControlUsers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccessControlUsersQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccessControlUsersQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -4150,15 +4157,15 @@ export function useGetApiV1AccessControlUsers<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccessControlUsersSearchUrl = () => {
-  return `/api/v1/access-control/users/search`
+export const getPostCoreV1AccessControlUsersSearchUrl = () => {
+  return `/core/v1/access-control/users/search`
 }
 
-export const postApiV1AccessControlUsersSearch = async (
+export const postCoreV1AccessControlUsersSearch = async (
   accessUserFilterInputSearchRequest: AccessUserFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<AccessUserDtoApiPagedResponse> => {
-  return customFetch<AccessUserDtoApiPagedResponse>(getPostApiV1AccessControlUsersSearchUrl(), {
+  return customFetch<AccessUserDtoApiPagedResponse>(getPostCoreV1AccessControlUsersSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -4166,24 +4173,24 @@ export const postApiV1AccessControlUsersSearch = async (
   })
 }
 
-export const getPostApiV1AccessControlUsersSearchMutationOptions = <
+export const getPostCoreV1AccessControlUsersSearchMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlUsersSearch>>,
     TError,
     { data: AccessUserFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlUsersSearch>>,
   TError,
   { data: AccessUserFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccessControlUsersSearch']
+  const mutationKey = ['postCoreV1AccessControlUsersSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4191,27 +4198,27 @@ export const getPostApiV1AccessControlUsersSearchMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlUsersSearch>>,
     { data: AccessUserFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccessControlUsersSearch(data, requestOptions)
+    return postCoreV1AccessControlUsersSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccessControlUsersSearchMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>
+export type PostCoreV1AccessControlUsersSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccessControlUsersSearch>>
 >
-export type PostApiV1AccessControlUsersSearchMutationBody = AccessUserFilterInputSearchRequest
-export type PostApiV1AccessControlUsersSearchMutationError = ErrorType<unknown>
+export type PostCoreV1AccessControlUsersSearchMutationBody = AccessUserFilterInputSearchRequest
+export type PostCoreV1AccessControlUsersSearchMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccessControlUsersSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccessControlUsersSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+      Awaited<ReturnType<typeof postCoreV1AccessControlUsersSearch>>,
       TError,
       { data: AccessUserFilterInputSearchRequest },
       TContext
@@ -4220,49 +4227,49 @@ export const usePostApiV1AccessControlUsersSearch = <TError = ErrorType<unknown>
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccessControlUsersSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlUsersSearch>>,
   TError,
   { data: AccessUserFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccessControlUsersSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccessControlUsersSearchMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccessControlUsersIdRolesUrl = (id: string) => {
-  return `/api/v1/access-control/users/${id}/roles`
+export const getPostCoreV1AccessControlUsersIdRolesUrl = (id: string) => {
+  return `/core/v1/access-control/users/${id}/roles`
 }
 
-export const postApiV1AccessControlUsersIdRoles = async (
+export const postCoreV1AccessControlUsersIdRoles = async (
   id: string,
-  postApiV1AccessControlUsersIdRolesBody: string[],
+  postCoreV1AccessControlUsersIdRolesBody: string[],
   options?: RequestInit
 ): Promise<AccessUserDtoApiResponse> => {
-  return customFetch<AccessUserDtoApiResponse>(getPostApiV1AccessControlUsersIdRolesUrl(id), {
+  return customFetch<AccessUserDtoApiResponse>(getPostCoreV1AccessControlUsersIdRolesUrl(id), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(postApiV1AccessControlUsersIdRolesBody)
+    body: JSON.stringify(postCoreV1AccessControlUsersIdRolesBody)
   })
 }
 
-export const getPostApiV1AccessControlUsersIdRolesMutationOptions = <
+export const getPostCoreV1AccessControlUsersIdRolesMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccessControlUsersIdRoles>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlUsersIdRoles>>,
     TError,
     { id: string; data: string[] },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccessControlUsersIdRoles>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlUsersIdRoles>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccessControlUsersIdRoles']
+  const mutationKey = ['postCoreV1AccessControlUsersIdRoles']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4270,27 +4277,27 @@ export const getPostApiV1AccessControlUsersIdRolesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccessControlUsersIdRoles>>,
+    Awaited<ReturnType<typeof postCoreV1AccessControlUsersIdRoles>>,
     { id: string; data: string[] }
   > = props => {
     const { id, data } = props ?? {}
 
-    return postApiV1AccessControlUsersIdRoles(id, data, requestOptions)
+    return postCoreV1AccessControlUsersIdRoles(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccessControlUsersIdRolesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccessControlUsersIdRoles>>
+export type PostCoreV1AccessControlUsersIdRolesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccessControlUsersIdRoles>>
 >
-export type PostApiV1AccessControlUsersIdRolesMutationBody = string[]
-export type PostApiV1AccessControlUsersIdRolesMutationError = ErrorType<unknown>
+export type PostCoreV1AccessControlUsersIdRolesMutationBody = string[]
+export type PostCoreV1AccessControlUsersIdRolesMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccessControlUsersIdRoles = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccessControlUsersIdRoles = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccessControlUsersIdRoles>>,
+      Awaited<ReturnType<typeof postCoreV1AccessControlUsersIdRoles>>,
       TError,
       { id: string; data: string[] },
       TContext
@@ -4299,49 +4306,49 @@ export const usePostApiV1AccessControlUsersIdRoles = <TError = ErrorType<unknown
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccessControlUsersIdRoles>>,
+  Awaited<ReturnType<typeof postCoreV1AccessControlUsersIdRoles>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  return useMutation(getPostApiV1AccessControlUsersIdRolesMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccessControlUsersIdRolesMutationOptions(options), queryClient)
 }
 
-export const getDeleteApiV1AccessControlUsersIdRolesUrl = (id: string) => {
-  return `/api/v1/access-control/users/${id}/roles`
+export const getDeleteCoreV1AccessControlUsersIdRolesUrl = (id: string) => {
+  return `/core/v1/access-control/users/${id}/roles`
 }
 
-export const deleteApiV1AccessControlUsersIdRoles = async (
+export const deleteCoreV1AccessControlUsersIdRoles = async (
   id: string,
-  deleteApiV1AccessControlUsersIdRolesBody: string[],
+  deleteCoreV1AccessControlUsersIdRolesBody: string[],
   options?: RequestInit
 ): Promise<AccessUserDtoApiResponse> => {
-  return customFetch<AccessUserDtoApiResponse>(getDeleteApiV1AccessControlUsersIdRolesUrl(id), {
+  return customFetch<AccessUserDtoApiResponse>(getDeleteCoreV1AccessControlUsersIdRolesUrl(id), {
     ...options,
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(deleteApiV1AccessControlUsersIdRolesBody)
+    body: JSON.stringify(deleteCoreV1AccessControlUsersIdRolesBody)
   })
 }
 
-export const getDeleteApiV1AccessControlUsersIdRolesMutationOptions = <
+export const getDeleteCoreV1AccessControlUsersIdRolesMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1AccessControlUsersIdRoles>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccessControlUsersIdRoles>>,
     TError,
     { id: string; data: string[] },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlUsersIdRoles>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlUsersIdRoles>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1AccessControlUsersIdRoles']
+  const mutationKey = ['deleteCoreV1AccessControlUsersIdRoles']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4349,27 +4356,27 @@ export const getDeleteApiV1AccessControlUsersIdRolesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1AccessControlUsersIdRoles>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccessControlUsersIdRoles>>,
     { id: string; data: string[] }
   > = props => {
     const { id, data } = props ?? {}
 
-    return deleteApiV1AccessControlUsersIdRoles(id, data, requestOptions)
+    return deleteCoreV1AccessControlUsersIdRoles(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AccessControlUsersIdRolesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlUsersIdRoles>>
+export type DeleteCoreV1AccessControlUsersIdRolesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlUsersIdRoles>>
 >
-export type DeleteApiV1AccessControlUsersIdRolesMutationBody = string[]
-export type DeleteApiV1AccessControlUsersIdRolesMutationError = ErrorType<unknown>
+export type DeleteCoreV1AccessControlUsersIdRolesMutationBody = string[]
+export type DeleteCoreV1AccessControlUsersIdRolesMutationError = ErrorType<unknown>
 
-export const useDeleteApiV1AccessControlUsersIdRoles = <TError = ErrorType<unknown>, TContext = unknown>(
+export const useDeleteCoreV1AccessControlUsersIdRoles = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AccessControlUsersIdRoles>>,
+      Awaited<ReturnType<typeof deleteCoreV1AccessControlUsersIdRoles>>,
       TError,
       { id: string; data: string[] },
       TContext
@@ -4378,15 +4385,15 @@ export const useDeleteApiV1AccessControlUsersIdRoles = <TError = ErrorType<unkno
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteApiV1AccessControlUsersIdRoles>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccessControlUsersIdRoles>>,
   TError,
   { id: string; data: string[] },
   TContext
 > => {
-  return useMutation(getDeleteApiV1AccessControlUsersIdRolesMutationOptions(options), queryClient)
+  return useMutation(getDeleteCoreV1AccessControlUsersIdRolesMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesAccountClonesUrl = (params?: GetApiV1AccountSalesAccountClonesParams) => {
+export const getGetCoreV1AccountSalesAccountClonesUrl = (params?: GetCoreV1AccountSalesAccountClonesParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -4398,65 +4405,65 @@ export const getGetApiV1AccountSalesAccountClonesUrl = (params?: GetApiV1Account
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/account-clones?${stringifiedParams}`
-    : `/api/v1/account-sales/account-clones`
+    ? `/core/v1/account-sales/account-clones?${stringifiedParams}`
+    : `/core/v1/account-sales/account-clones`
 }
 
-export const getApiV1AccountSalesAccountClones = async (
-  params?: GetApiV1AccountSalesAccountClonesParams,
+export const getCoreV1AccountSalesAccountClones = async (
+  params?: GetCoreV1AccountSalesAccountClonesParams,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiPagedResponse> => {
-  return customFetch<AccountCloneDtoApiPagedResponse>(getGetApiV1AccountSalesAccountClonesUrl(params), {
+  return customFetch<AccountCloneDtoApiPagedResponse>(getGetCoreV1AccountSalesAccountClonesUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesAccountClonesQueryKey = (params?: GetApiV1AccountSalesAccountClonesParams) => {
-  return [`/api/v1/account-sales/account-clones`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccountSalesAccountClonesQueryKey = (params?: GetCoreV1AccountSalesAccountClonesParams) => {
+  return [`/core/v1/account-sales/account-clones`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesAccountClonesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+export const getGetCoreV1AccountSalesAccountClonesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesAccountClonesParams,
+  params?: GetCoreV1AccountSalesAccountClonesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesAccountClonesQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesAccountClonesQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>> = ({ signal }) =>
-    getApiV1AccountSalesAccountClones(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>> = ({ signal }) =>
+    getCoreV1AccountSalesAccountClones(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesAccountClonesQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>
+export type GetCoreV1AccountSalesAccountClonesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>
 >
-export type GetApiV1AccountSalesAccountClonesQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesAccountClonesQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesAccountClones<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+export function useGetCoreV1AccountSalesAccountClones<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesAccountClonesParams,
+  params: undefined | GetCoreV1AccountSalesAccountClonesParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>
         >,
         'initialData'
       >
@@ -4464,18 +4471,18 @@ export function useGetApiV1AccountSalesAccountClones<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesAccountClones<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+export function useGetCoreV1AccountSalesAccountClones<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesAccountClonesParams,
+  params?: GetCoreV1AccountSalesAccountClonesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>
         >,
         'initialData'
       >
@@ -4483,30 +4490,30 @@ export function useGetApiV1AccountSalesAccountClones<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesAccountClones<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+export function useGetCoreV1AccountSalesAccountClones<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesAccountClonesParams,
+  params?: GetCoreV1AccountSalesAccountClonesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesAccountClones<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>,
+export function useGetCoreV1AccountSalesAccountClones<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesAccountClonesParams,
+  params?: GetCoreV1AccountSalesAccountClonesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesAccountClones>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesAccountClones>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesAccountClonesQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesAccountClonesQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -4515,15 +4522,15 @@ export function useGetApiV1AccountSalesAccountClones<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccountSalesAccountClonesUrl = () => {
-  return `/api/v1/account-sales/account-clones`
+export const getPostCoreV1AccountSalesAccountClonesUrl = () => {
+  return `/core/v1/account-sales/account-clones`
 }
 
-export const postApiV1AccountSalesAccountClones = async (
+export const postCoreV1AccountSalesAccountClones = async (
   createAccountCloneRequest: CreateAccountCloneRequest,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiResponse> => {
-  return customFetch<AccountCloneDtoApiResponse>(getPostApiV1AccountSalesAccountClonesUrl(), {
+  return customFetch<AccountCloneDtoApiResponse>(getPostCoreV1AccountSalesAccountClonesUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -4531,24 +4538,24 @@ export const postApiV1AccountSalesAccountClones = async (
   })
 }
 
-export const getPostApiV1AccountSalesAccountClonesMutationOptions = <
+export const getPostCoreV1AccountSalesAccountClonesMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesAccountClones>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClones>>,
     TError,
     { data: CreateAccountCloneRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesAccountClones>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClones>>,
   TError,
   { data: CreateAccountCloneRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesAccountClones']
+  const mutationKey = ['postCoreV1AccountSalesAccountClones']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4556,27 +4563,27 @@ export const getPostApiV1AccountSalesAccountClonesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesAccountClones>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClones>>,
     { data: CreateAccountCloneRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesAccountClones(data, requestOptions)
+    return postCoreV1AccountSalesAccountClones(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesAccountClonesMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesAccountClones>>
+export type PostCoreV1AccountSalesAccountClonesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClones>>
 >
-export type PostApiV1AccountSalesAccountClonesMutationBody = CreateAccountCloneRequest
-export type PostApiV1AccountSalesAccountClonesMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesAccountClonesMutationBody = CreateAccountCloneRequest
+export type PostCoreV1AccountSalesAccountClonesMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesAccountClones = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesAccountClones = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesAccountClones>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClones>>,
       TError,
       { data: CreateAccountCloneRequest },
       TContext
@@ -4585,25 +4592,25 @@ export const usePostApiV1AccountSalesAccountClones = <TError = ErrorType<unknown
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesAccountClones>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClones>>,
   TError,
   { data: CreateAccountCloneRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesAccountClonesMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesAccountClonesMutationOptions(options), queryClient)
 }
 
-export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdUrl = (accountCloneId: string) => {
-  return `/api/v1/account-sales/account-clones/${accountCloneId}`
+export const getPatchCoreV1AccountSalesAccountClonesAccountCloneIdUrl = (accountCloneId: string) => {
+  return `/core/v1/account-sales/account-clones/${accountCloneId}`
 }
 
-export const patchApiV1AccountSalesAccountClonesAccountCloneId = async (
+export const patchCoreV1AccountSalesAccountClonesAccountCloneId = async (
   accountCloneId: string,
   updateAccountCloneRequest: UpdateAccountCloneRequest,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiResponse> => {
   return customFetch<AccountCloneDtoApiResponse>(
-    getPatchApiV1AccountSalesAccountClonesAccountCloneIdUrl(accountCloneId),
+    getPatchCoreV1AccountSalesAccountClonesAccountCloneIdUrl(accountCloneId),
     {
       ...options,
       method: 'PATCH',
@@ -4613,24 +4620,24 @@ export const patchApiV1AccountSalesAccountClonesAccountCloneId = async (
   )
 }
 
-export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions = <
+export const getPatchCoreV1AccountSalesAccountClonesAccountCloneIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneId>>,
     TError,
     { accountCloneId: string; data: UpdateAccountCloneRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneId>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesAccountClonesAccountCloneId']
+  const mutationKey = ['patchCoreV1AccountSalesAccountClonesAccountCloneId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4638,27 +4645,27 @@ export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneId>>,
     { accountCloneId: string; data: UpdateAccountCloneRequest }
   > = props => {
     const { accountCloneId, data } = props ?? {}
 
-    return patchApiV1AccountSalesAccountClonesAccountCloneId(accountCloneId, data, requestOptions)
+    return patchCoreV1AccountSalesAccountClonesAccountCloneId(accountCloneId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesAccountClonesAccountCloneIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>
+export type PatchCoreV1AccountSalesAccountClonesAccountCloneIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneId>>
 >
-export type PatchApiV1AccountSalesAccountClonesAccountCloneIdMutationBody = UpdateAccountCloneRequest
-export type PatchApiV1AccountSalesAccountClonesAccountCloneIdMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesAccountClonesAccountCloneIdMutationBody = UpdateAccountCloneRequest
+export type PatchCoreV1AccountSalesAccountClonesAccountCloneIdMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccountSalesAccountClonesAccountCloneId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesAccountClonesAccountCloneId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneId>>,
       TError,
       { accountCloneId: string; data: UpdateAccountCloneRequest },
       TContext
@@ -4667,25 +4674,25 @@ export const usePatchApiV1AccountSalesAccountClonesAccountCloneId = <TError = Er
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneId>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesAccountClonesAccountCloneIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesAccountClonesAccountCloneIdMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewUrl = (accountCloneId: string) => {
-  return `/api/v1/account-sales/account-clones/${accountCloneId}/review`
+export const getPostCoreV1AccountSalesAccountClonesAccountCloneIdReviewUrl = (accountCloneId: string) => {
+  return `/core/v1/account-sales/account-clones/${accountCloneId}/review`
 }
 
-export const postApiV1AccountSalesAccountClonesAccountCloneIdReview = async (
+export const postCoreV1AccountSalesAccountClonesAccountCloneIdReview = async (
   accountCloneId: string,
   reviewAccountCloneRequest: ReviewAccountCloneRequest,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiResponse> => {
   return customFetch<AccountCloneDtoApiResponse>(
-    getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewUrl(accountCloneId),
+    getPostCoreV1AccountSalesAccountClonesAccountCloneIdReviewUrl(accountCloneId),
     {
       ...options,
       method: 'POST',
@@ -4695,24 +4702,24 @@ export const postApiV1AccountSalesAccountClonesAccountCloneIdReview = async (
   )
 }
 
-export const getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationOptions = <
+export const getPostCoreV1AccountSalesAccountClonesAccountCloneIdReviewMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesAccountClonesAccountCloneIdReview>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClonesAccountCloneIdReview>>,
     TError,
     { accountCloneId: string; data: ReviewAccountCloneRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesAccountClonesAccountCloneIdReview>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClonesAccountCloneIdReview>>,
   TError,
   { accountCloneId: string; data: ReviewAccountCloneRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesAccountClonesAccountCloneIdReview']
+  const mutationKey = ['postCoreV1AccountSalesAccountClonesAccountCloneIdReview']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4720,30 +4727,30 @@ export const getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationOp
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesAccountClonesAccountCloneIdReview>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClonesAccountCloneIdReview>>,
     { accountCloneId: string; data: ReviewAccountCloneRequest }
   > = props => {
     const { accountCloneId, data } = props ?? {}
 
-    return postApiV1AccountSalesAccountClonesAccountCloneIdReview(accountCloneId, data, requestOptions)
+    return postCoreV1AccountSalesAccountClonesAccountCloneIdReview(accountCloneId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesAccountClonesAccountCloneIdReview>>
+export type PostCoreV1AccountSalesAccountClonesAccountCloneIdReviewMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClonesAccountCloneIdReview>>
 >
-export type PostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationBody = ReviewAccountCloneRequest
-export type PostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesAccountClonesAccountCloneIdReviewMutationBody = ReviewAccountCloneRequest
+export type PostCoreV1AccountSalesAccountClonesAccountCloneIdReviewMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesAccountClonesAccountCloneIdReview = <
+export const usePostCoreV1AccountSalesAccountClonesAccountCloneIdReview = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesAccountClonesAccountCloneIdReview>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClonesAccountCloneIdReview>>,
       TError,
       { accountCloneId: string; data: ReviewAccountCloneRequest },
       TContext
@@ -4752,25 +4759,25 @@ export const usePostApiV1AccountSalesAccountClonesAccountCloneIdReview = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesAccountClonesAccountCloneIdReview>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesAccountClonesAccountCloneIdReview>>,
   TError,
   { accountCloneId: string; data: ReviewAccountCloneRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesAccountClonesAccountCloneIdReviewMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesAccountClonesAccountCloneIdReviewMutationOptions(options), queryClient)
 }
 
-export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusUrl = (accountCloneId: string) => {
-  return `/api/v1/account-sales/account-clones/${accountCloneId}/status`
+export const getPatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusUrl = (accountCloneId: string) => {
+  return `/core/v1/account-sales/account-clones/${accountCloneId}/status`
 }
 
-export const patchApiV1AccountSalesAccountClonesAccountCloneIdStatus = async (
+export const patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus = async (
   accountCloneId: string,
   updateAccountCloneStatusRequest: UpdateAccountCloneStatusRequest,
   options?: RequestInit
 ): Promise<AccountCloneDtoApiResponse> => {
   return customFetch<AccountCloneDtoApiResponse>(
-    getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusUrl(accountCloneId),
+    getPatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusUrl(accountCloneId),
     {
       ...options,
       method: 'PATCH',
@@ -4780,24 +4787,24 @@ export const patchApiV1AccountSalesAccountClonesAccountCloneIdStatus = async (
   )
 }
 
-export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions = <
+export const getPatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus>>,
     TError,
     { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesAccountClonesAccountCloneIdStatus']
+  const mutationKey = ['patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -4805,30 +4812,30 @@ export const getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationO
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus>>,
     { accountCloneId: string; data: UpdateAccountCloneStatusRequest }
   > = props => {
     const { accountCloneId, data } = props ?? {}
 
-    return patchApiV1AccountSalesAccountClonesAccountCloneIdStatus(accountCloneId, data, requestOptions)
+    return patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus(accountCloneId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>
+export type PatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus>>
 >
-export type PatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationBody = UpdateAccountCloneStatusRequest
-export type PatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusMutationBody = UpdateAccountCloneStatusRequest
+export type PatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccountSalesAccountClonesAccountCloneIdStatus = <
+export const usePatchCoreV1AccountSalesAccountClonesAccountCloneIdStatus = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus>>,
       TError,
       { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
       TContext
@@ -4837,71 +4844,71 @@ export const usePatchApiV1AccountSalesAccountClonesAccountCloneIdStatus = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesAccountClonesAccountCloneIdStatus>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesAccountClonesAccountCloneIdStatus>>,
   TError,
   { accountCloneId: string; data: UpdateAccountCloneStatusRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesAccountClonesAccountCloneIdStatusMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get all bonus tier configurations.
  */
-export const getGetApiV1AccountSalesBonusTiersUrl = () => {
-  return `/api/v1/account-sales/bonus/tiers`
+export const getGetCoreV1AccountSalesBonusTiersUrl = () => {
+  return `/core/v1/account-sales/bonus/tiers`
 }
 
-export const getApiV1AccountSalesBonusTiers = async (
+export const getCoreV1AccountSalesBonusTiers = async (
   options?: RequestInit
 ): Promise<SalesBonusTierDtoListApiResponse> => {
-  return customFetch<SalesBonusTierDtoListApiResponse>(getGetApiV1AccountSalesBonusTiersUrl(), {
+  return customFetch<SalesBonusTierDtoListApiResponse>(getGetCoreV1AccountSalesBonusTiersUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesBonusTiersQueryKey = () => {
-  return [`/api/v1/account-sales/bonus/tiers`] as const
+export const getGetCoreV1AccountSalesBonusTiersQueryKey = () => {
+  return [`/core/v1/account-sales/bonus/tiers`] as const
 }
 
-export const getGetApiV1AccountSalesBonusTiersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+export const getGetCoreV1AccountSalesBonusTiersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
   TError = ErrorType<unknown>
 >(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>>
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>, TError, TData>>
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusTiersQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesBonusTiersQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>> = ({ signal }) =>
-    getApiV1AccountSalesBonusTiers({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>> = ({ signal }) =>
+    getCoreV1AccountSalesBonusTiers({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesBonusTiersQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>
+export type GetCoreV1AccountSalesBonusTiersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>
 >
-export type GetApiV1AccountSalesBonusTiersQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesBonusTiersQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesBonusTiers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+export function useGetCoreV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
   TError = ErrorType<unknown>
 >(
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>
         >,
         'initialData'
       >
@@ -4909,17 +4916,17 @@ export function useGetApiV1AccountSalesBonusTiers<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusTiers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+export function useGetCoreV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>
         >,
         'initialData'
       >
@@ -4927,12 +4934,12 @@ export function useGetApiV1AccountSalesBonusTiers<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusTiers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+export function useGetCoreV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -4941,17 +4948,17 @@ export function useGetApiV1AccountSalesBonusTiers<
  * @summary Get all bonus tier configurations.
  */
 
-export function useGetApiV1AccountSalesBonusTiers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>,
+export function useGetCoreV1AccountSalesBonusTiers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTiers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTiers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesBonusTiersQueryOptions(options)
+  const queryOptions = getGetCoreV1AccountSalesBonusTiersQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -4963,15 +4970,15 @@ export function useGetApiV1AccountSalesBonusTiers<
 /**
  * @summary Create a new bonus tier milestone.
  */
-export const getPostApiV1AccountSalesBonusTiersUrl = () => {
-  return `/api/v1/account-sales/bonus/tiers`
+export const getPostCoreV1AccountSalesBonusTiersUrl = () => {
+  return `/core/v1/account-sales/bonus/tiers`
 }
 
-export const postApiV1AccountSalesBonusTiers = async (
+export const postCoreV1AccountSalesBonusTiers = async (
   createSalesBonusTierRequest: CreateSalesBonusTierRequest,
   options?: RequestInit
 ): Promise<SalesBonusTierDtoApiResponse> => {
-  return customFetch<SalesBonusTierDtoApiResponse>(getPostApiV1AccountSalesBonusTiersUrl(), {
+  return customFetch<SalesBonusTierDtoApiResponse>(getPostCoreV1AccountSalesBonusTiersUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -4979,24 +4986,24 @@ export const postApiV1AccountSalesBonusTiers = async (
   })
 }
 
-export const getPostApiV1AccountSalesBonusTiersMutationOptions = <
+export const getPostCoreV1AccountSalesBonusTiersMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTiers>>,
     TError,
     { data: CreateSalesBonusTierRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTiers>>,
   TError,
   { data: CreateSalesBonusTierRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesBonusTiers']
+  const mutationKey = ['postCoreV1AccountSalesBonusTiers']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -5004,30 +5011,30 @@ export const getPostApiV1AccountSalesBonusTiersMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTiers>>,
     { data: CreateSalesBonusTierRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesBonusTiers(data, requestOptions)
+    return postCoreV1AccountSalesBonusTiers(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesBonusTiersMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>
+export type PostCoreV1AccountSalesBonusTiersMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTiers>>
 >
-export type PostApiV1AccountSalesBonusTiersMutationBody = CreateSalesBonusTierRequest
-export type PostApiV1AccountSalesBonusTiersMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesBonusTiersMutationBody = CreateSalesBonusTierRequest
+export type PostCoreV1AccountSalesBonusTiersMutationError = ErrorType<unknown>
 
 /**
  * @summary Create a new bonus tier milestone.
  */
-export const usePostApiV1AccountSalesBonusTiers = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesBonusTiers = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTiers>>,
       TError,
       { data: CreateSalesBonusTierRequest },
       TContext
@@ -5036,27 +5043,27 @@ export const usePostApiV1AccountSalesBonusTiers = <TError = ErrorType<unknown>, 
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTiers>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTiers>>,
   TError,
   { data: CreateSalesBonusTierRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesBonusTiersMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesBonusTiersMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Update an existing bonus tier.
  */
-export const getPatchApiV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
-  return `/api/v1/account-sales/bonus/tiers/${tierId}`
+export const getPatchCoreV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
+  return `/core/v1/account-sales/bonus/tiers/${tierId}`
 }
 
-export const patchApiV1AccountSalesBonusTiersTierId = async (
+export const patchCoreV1AccountSalesBonusTiersTierId = async (
   tierId: string,
   updateSalesBonusTierRequest: UpdateSalesBonusTierRequest,
   options?: RequestInit
 ): Promise<SalesBonusTierDtoApiResponse> => {
-  return customFetch<SalesBonusTierDtoApiResponse>(getPatchApiV1AccountSalesBonusTiersTierIdUrl(tierId), {
+  return customFetch<SalesBonusTierDtoApiResponse>(getPatchCoreV1AccountSalesBonusTiersTierIdUrl(tierId), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -5064,24 +5071,24 @@ export const patchApiV1AccountSalesBonusTiersTierId = async (
   })
 }
 
-export const getPatchApiV1AccountSalesBonusTiersTierIdMutationOptions = <
+export const getPatchCoreV1AccountSalesBonusTiersTierIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesBonusTiersTierId>>,
     TError,
     { tierId: string; data: UpdateSalesBonusTierRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesBonusTiersTierId>>,
   TError,
   { tierId: string; data: UpdateSalesBonusTierRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesBonusTiersTierId']
+  const mutationKey = ['patchCoreV1AccountSalesBonusTiersTierId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -5089,30 +5096,30 @@ export const getPatchApiV1AccountSalesBonusTiersTierIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesBonusTiersTierId>>,
     { tierId: string; data: UpdateSalesBonusTierRequest }
   > = props => {
     const { tierId, data } = props ?? {}
 
-    return patchApiV1AccountSalesBonusTiersTierId(tierId, data, requestOptions)
+    return patchCoreV1AccountSalesBonusTiersTierId(tierId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>
+export type PatchCoreV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesBonusTiersTierId>>
 >
-export type PatchApiV1AccountSalesBonusTiersTierIdMutationBody = UpdateSalesBonusTierRequest
-export type PatchApiV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesBonusTiersTierIdMutationBody = UpdateSalesBonusTierRequest
+export type PatchCoreV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
 
 /**
  * @summary Update an existing bonus tier.
  */
-export const usePatchApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesBonusTiersTierId>>,
       TError,
       { tierId: string; data: UpdateSalesBonusTierRequest },
       TContext
@@ -5121,46 +5128,49 @@ export const usePatchApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unk
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesBonusTiersTierId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesBonusTiersTierId>>,
   TError,
   { tierId: string; data: UpdateSalesBonusTierRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete a bonus tier (hard delete).
  */
-export const getDeleteApiV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
-  return `/api/v1/account-sales/bonus/tiers/${tierId}`
+export const getDeleteCoreV1AccountSalesBonusTiersTierIdUrl = (tierId: string) => {
+  return `/core/v1/account-sales/bonus/tiers/${tierId}`
 }
 
-export const deleteApiV1AccountSalesBonusTiersTierId = async (tierId: string, options?: RequestInit): Promise<void> => {
-  return customFetch<void>(getDeleteApiV1AccountSalesBonusTiersTierIdUrl(tierId), {
+export const deleteCoreV1AccountSalesBonusTiersTierId = async (
+  tierId: string,
+  options?: RequestInit
+): Promise<void> => {
+  return customFetch<void>(getDeleteCoreV1AccountSalesBonusTiersTierIdUrl(tierId), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1AccountSalesBonusTiersTierIdMutationOptions = <
+export const getDeleteCoreV1AccountSalesBonusTiersTierIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccountSalesBonusTiersTierId>>,
     TError,
     { tierId: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccountSalesBonusTiersTierId>>,
   TError,
   { tierId: string },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1AccountSalesBonusTiersTierId']
+  const mutationKey = ['deleteCoreV1AccountSalesBonusTiersTierId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -5168,30 +5178,30 @@ export const getDeleteApiV1AccountSalesBonusTiersTierIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccountSalesBonusTiersTierId>>,
     { tierId: string }
   > = props => {
     const { tierId } = props ?? {}
 
-    return deleteApiV1AccountSalesBonusTiersTierId(tierId, requestOptions)
+    return deleteCoreV1AccountSalesBonusTiersTierId(tierId, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>
+export type DeleteCoreV1AccountSalesBonusTiersTierIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1AccountSalesBonusTiersTierId>>
 >
 
-export type DeleteApiV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
+export type DeleteCoreV1AccountSalesBonusTiersTierIdMutationError = ErrorType<unknown>
 
 /**
  * @summary Delete a bonus tier (hard delete).
  */
-export const useDeleteApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const useDeleteCoreV1AccountSalesBonusTiersTierId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+      Awaited<ReturnType<typeof deleteCoreV1AccountSalesBonusTiersTierId>>,
       TError,
       { tierId: string },
       TContext
@@ -5200,27 +5210,27 @@ export const useDeleteApiV1AccountSalesBonusTiersTierId = <TError = ErrorType<un
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteApiV1AccountSalesBonusTiersTierId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccountSalesBonusTiersTierId>>,
   TError,
   { tierId: string },
   TContext
 > => {
-  return useMutation(getDeleteApiV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
+  return useMutation(getDeleteCoreV1AccountSalesBonusTiersTierIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get all monthly sales summaries for a seller (history across all months).
  */
-export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdUrl = (soldByMemberId: string) => {
-  return `/api/v1/account-sales/bonus/summaries/${soldByMemberId}`
+export const getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdUrl = (soldByMemberId: string) => {
+  return `/core/v1/account-sales/bonus/summaries/${soldByMemberId}`
 }
 
-export const getApiV1AccountSalesBonusSummariesSoldByMemberId = async (
+export const getCoreV1AccountSalesBonusSummariesSoldByMemberId = async (
   soldByMemberId: string,
   options?: RequestInit
 ): Promise<MemberMonthlySalesSummaryDtoListApiResponse> => {
   return customFetch<MemberMonthlySalesSummaryDtoListApiResponse>(
-    getGetApiV1AccountSalesBonusSummariesSoldByMemberIdUrl(soldByMemberId),
+    getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdUrl(soldByMemberId),
     {
       ...options,
       method: 'GET'
@@ -5228,56 +5238,57 @@ export const getApiV1AccountSalesBonusSummariesSoldByMemberId = async (
   )
 }
 
-export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryKey = (soldByMemberId: string) => {
-  return [`/api/v1/account-sales/bonus/summaries/${soldByMemberId}`] as const
+export const getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdQueryKey = (soldByMemberId: string) => {
+  return [`/core/v1/account-sales/bonus/summaries/${soldByMemberId}`] as const
 }
 
-export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+export const getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryKey(soldByMemberId)
+  const queryKey =
+    queryOptions?.queryKey ?? getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdQueryKey(soldByMemberId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>> = ({
     signal
-  }) => getApiV1AccountSalesBonusSummariesSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
+  }) => getCoreV1AccountSalesBonusSummariesSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!soldByMemberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>
+export type GetCoreV1AccountSalesBonusSummariesSoldByMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>
 >
-export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesBonusSummariesSoldByMemberIdQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>
         >,
         'initialData'
       >
@@ -5285,20 +5296,20 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>
         >,
         'initialData'
       >
@@ -5306,14 +5317,14 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
@@ -5323,20 +5334,20 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
  * @summary Get all monthly sales summaries for a seller (history across all months).
  */
 
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesBonusSummariesSoldByMemberIdQueryOptions(soldByMemberId, options)
+  const queryOptions = getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdQueryOptions(soldByMemberId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -5348,22 +5359,22 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberId<
 /**
  * @summary Get the monthly sales summary for a referrer member for a specific month.
  */
-export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthUrl = (
+export const getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthUrl = (
   soldByMemberId: string,
   year: number,
   month: number
 ) => {
-  return `/api/v1/account-sales/bonus/summaries/${soldByMemberId}/${year}/${month}`
+  return `/core/v1/account-sales/bonus/summaries/${soldByMemberId}/${year}/${month}`
 }
 
-export const getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth = async (
+export const getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth = async (
   soldByMemberId: string,
   year: number,
   month: number,
   options?: RequestInit
 ): Promise<MemberMonthlySalesSummaryDtoApiResponse> => {
   return customFetch<MemberMonthlySalesSummaryDtoApiResponse>(
-    getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthUrl(soldByMemberId, year, month),
+    getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthUrl(soldByMemberId, year, month),
     {
       ...options,
       method: 'GET'
@@ -5371,16 +5382,16 @@ export const getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth = async (
   )
 }
 
-export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryKey = (
+export const getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryKey = (
   soldByMemberId: string,
   year: number,
   month: number
 ) => {
-  return [`/api/v1/account-sales/bonus/summaries/${soldByMemberId}/${year}/${month}`] as const
+  return [`/core/v1/account-sales/bonus/summaries/${soldByMemberId}/${year}/${month}`] as const
 }
 
-export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+export const getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
@@ -5389,7 +5400,7 @@ export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOp
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
         TError,
         TData
       >
@@ -5401,12 +5412,12 @@ export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOp
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryKey(soldByMemberId, year, month)
+    getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryKey(soldByMemberId, year, month)
 
   const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
   > = ({ signal }) =>
-    getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth(soldByMemberId, year, month, {
+    getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth(soldByMemberId, year, month, {
       signal,
       ...requestOptions
     })
@@ -5418,19 +5429,19 @@ export const getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOp
     staleTime: 10000,
     ...queryOptions
   } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+export type GetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
 >
-export type GetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
@@ -5439,16 +5450,16 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   options: {
     query: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
         TError,
         TData
       >
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
         >,
         'initialData'
       >
@@ -5456,8 +5467,8 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
@@ -5466,16 +5477,16 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
         TError,
         TData
       >
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>
         >,
         'initialData'
       >
@@ -5483,8 +5494,8 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
@@ -5493,7 +5504,7 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
         TError,
         TData
       >
@@ -5506,8 +5517,8 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
  * @summary Get the monthly sales summary for a referrer member for a specific month.
  */
 
-export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+export function useGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
@@ -5516,7 +5527,7 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
+        Awaited<ReturnType<typeof getCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonth>>,
         TError,
         TData
       >
@@ -5525,7 +5536,7 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOptions(
+  const queryOptions = getGetCoreV1AccountSalesBonusSummariesSoldByMemberIdYearMonthQueryOptions(
     soldByMemberId,
     year,
     month,
@@ -5542,16 +5553,16 @@ export function useGetApiV1AccountSalesBonusSummariesSoldByMemberIdYearMonth<
 /**
  * @summary Get all bonus transactions for a referrer member.
  */
-export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdUrl = (soldByMemberId: string) => {
-  return `/api/v1/account-sales/bonus/transactions/${soldByMemberId}`
+export const getGetCoreV1AccountSalesBonusTransactionsSoldByMemberIdUrl = (soldByMemberId: string) => {
+  return `/core/v1/account-sales/bonus/transactions/${soldByMemberId}`
 }
 
-export const getApiV1AccountSalesBonusTransactionsSoldByMemberId = async (
+export const getCoreV1AccountSalesBonusTransactionsSoldByMemberId = async (
   soldByMemberId: string,
   options?: RequestInit
 ): Promise<SalesBonusTransactionDtoListApiResponse> => {
   return customFetch<SalesBonusTransactionDtoListApiResponse>(
-    getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdUrl(soldByMemberId),
+    getGetCoreV1AccountSalesBonusTransactionsSoldByMemberIdUrl(soldByMemberId),
     {
       ...options,
       method: 'GET'
@@ -5559,18 +5570,18 @@ export const getApiV1AccountSalesBonusTransactionsSoldByMemberId = async (
   )
 }
 
-export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryKey = (soldByMemberId: string) => {
-  return [`/api/v1/account-sales/bonus/transactions/${soldByMemberId}`] as const
+export const getGetCoreV1AccountSalesBonusTransactionsSoldByMemberIdQueryKey = (soldByMemberId: string) => {
+  return [`/core/v1/account-sales/bonus/transactions/${soldByMemberId}`] as const
 }
 
-export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+export const getGetCoreV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   }
@@ -5578,38 +5589,38 @@ export const getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions 
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
   const queryKey =
-    queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryKey(soldByMemberId)
+    queryOptions?.queryKey ?? getGetCoreV1AccountSalesBonusTransactionsSoldByMemberIdQueryKey(soldByMemberId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>> = ({
     signal
-  }) => getApiV1AccountSalesBonusTransactionsSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
+  }) => getCoreV1AccountSalesBonusTransactionsSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!soldByMemberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>
+export type GetCoreV1AccountSalesBonusTransactionsSoldByMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>
 >
-export type GetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesBonusTransactionsSoldByMemberIdQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>
         >,
         'initialData'
       >
@@ -5617,20 +5628,20 @@ export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>
         >,
         'initialData'
       >
@@ -5638,14 +5649,14 @@ export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
@@ -5655,20 +5666,20 @@ export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
  * @summary Get all bonus transactions for a referrer member.
  */
 
-export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusTransactionsSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactionsSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions(soldByMemberId, options)
+  const queryOptions = getGetCoreV1AccountSalesBonusTransactionsSoldByMemberIdQueryOptions(soldByMemberId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -5680,7 +5691,7 @@ export function useGetApiV1AccountSalesBonusTransactionsSoldByMemberId<
 /**
  * @summary Get all bonus transactions across all sellers (admin). Filter by year, month, or status.
  */
-export const getGetApiV1AccountSalesBonusTransactionsUrl = (params?: GetApiV1AccountSalesBonusTransactionsParams) => {
+export const getGetCoreV1AccountSalesBonusTransactionsUrl = (params?: GetCoreV1AccountSalesBonusTransactionsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -5692,67 +5703,67 @@ export const getGetApiV1AccountSalesBonusTransactionsUrl = (params?: GetApiV1Acc
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/bonus/transactions?${stringifiedParams}`
-    : `/api/v1/account-sales/bonus/transactions`
+    ? `/core/v1/account-sales/bonus/transactions?${stringifiedParams}`
+    : `/core/v1/account-sales/bonus/transactions`
 }
 
-export const getApiV1AccountSalesBonusTransactions = async (
-  params?: GetApiV1AccountSalesBonusTransactionsParams,
+export const getCoreV1AccountSalesBonusTransactions = async (
+  params?: GetCoreV1AccountSalesBonusTransactionsParams,
   options?: RequestInit
 ): Promise<SalesBonusTransactionDtoListApiResponse> => {
-  return customFetch<SalesBonusTransactionDtoListApiResponse>(getGetApiV1AccountSalesBonusTransactionsUrl(params), {
+  return customFetch<SalesBonusTransactionDtoListApiResponse>(getGetCoreV1AccountSalesBonusTransactionsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesBonusTransactionsQueryKey = (
-  params?: GetApiV1AccountSalesBonusTransactionsParams
+export const getGetCoreV1AccountSalesBonusTransactionsQueryKey = (
+  params?: GetCoreV1AccountSalesBonusTransactionsParams
 ) => {
-  return [`/api/v1/account-sales/bonus/transactions`, ...(params ? [params] : [])] as const
+  return [`/core/v1/account-sales/bonus/transactions`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesBonusTransactionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+export const getGetCoreV1AccountSalesBonusTransactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  params?: GetCoreV1AccountSalesBonusTransactionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusTransactionsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesBonusTransactionsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>> = ({ signal }) =>
-    getApiV1AccountSalesBonusTransactions(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>> = ({ signal }) =>
+    getCoreV1AccountSalesBonusTransactions(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesBonusTransactionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>
+export type GetCoreV1AccountSalesBonusTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>
 >
-export type GetApiV1AccountSalesBonusTransactionsQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesBonusTransactionsQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesBonusTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+export function useGetCoreV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesBonusTransactionsParams,
+  params: undefined | GetCoreV1AccountSalesBonusTransactionsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>
         >,
         'initialData'
       >
@@ -5760,18 +5771,20 @@ export function useGetApiV1AccountSalesBonusTransactions<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+export function useGetCoreV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  params?: GetCoreV1AccountSalesBonusTransactionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>> &
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>, TError, TData>
+    > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>
         >,
         'initialData'
       >
@@ -5779,13 +5792,13 @@ export function useGetApiV1AccountSalesBonusTransactions<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+export function useGetCoreV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  params?: GetCoreV1AccountSalesBonusTransactionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -5794,18 +5807,18 @@ export function useGetApiV1AccountSalesBonusTransactions<
  * @summary Get all bonus transactions across all sellers (admin). Filter by year, month, or status.
  */
 
-export function useGetApiV1AccountSalesBonusTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>,
+export function useGetCoreV1AccountSalesBonusTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesBonusTransactionsParams,
+  params?: GetCoreV1AccountSalesBonusTransactionsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusTransactions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusTransactions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesBonusTransactionsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesBonusTransactionsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -5817,16 +5830,16 @@ export function useGetApiV1AccountSalesBonusTransactions<
 /**
  * @summary Get current-month bonus progress for a seller (order count vs tier thresholds).
  */
-export const getGetApiV1AccountSalesBonusProgressSoldByMemberIdUrl = (soldByMemberId: string) => {
-  return `/api/v1/account-sales/bonus/progress/${soldByMemberId}`
+export const getGetCoreV1AccountSalesBonusProgressSoldByMemberIdUrl = (soldByMemberId: string) => {
+  return `/core/v1/account-sales/bonus/progress/${soldByMemberId}`
 }
 
-export const getApiV1AccountSalesBonusProgressSoldByMemberId = async (
+export const getCoreV1AccountSalesBonusProgressSoldByMemberId = async (
   soldByMemberId: string,
   options?: RequestInit
 ): Promise<SellerBonusProgressDtoApiResponse> => {
   return customFetch<SellerBonusProgressDtoApiResponse>(
-    getGetApiV1AccountSalesBonusProgressSoldByMemberIdUrl(soldByMemberId),
+    getGetCoreV1AccountSalesBonusProgressSoldByMemberIdUrl(soldByMemberId),
     {
       ...options,
       method: 'GET'
@@ -5834,56 +5847,56 @@ export const getApiV1AccountSalesBonusProgressSoldByMemberId = async (
   )
 }
 
-export const getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryKey = (soldByMemberId: string) => {
-  return [`/api/v1/account-sales/bonus/progress/${soldByMemberId}`] as const
+export const getGetCoreV1AccountSalesBonusProgressSoldByMemberIdQueryKey = (soldByMemberId: string) => {
+  return [`/core/v1/account-sales/bonus/progress/${soldByMemberId}`] as const
 }
 
-export const getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+export const getGetCoreV1AccountSalesBonusProgressSoldByMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryKey(soldByMemberId)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesBonusProgressSoldByMemberIdQueryKey(soldByMemberId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>> = ({
     signal
-  }) => getApiV1AccountSalesBonusProgressSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
+  }) => getCoreV1AccountSalesBonusProgressSoldByMemberId(soldByMemberId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!soldByMemberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesBonusProgressSoldByMemberIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>
+export type GetCoreV1AccountSalesBonusProgressSoldByMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>
 >
-export type GetApiV1AccountSalesBonusProgressSoldByMemberIdQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesBonusProgressSoldByMemberIdQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>
         >,
         'initialData'
       >
@@ -5891,20 +5904,20 @@ export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>
         >,
         'initialData'
       >
@@ -5912,14 +5925,14 @@ export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
@@ -5929,20 +5942,20 @@ export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
  * @summary Get current-month bonus progress for a seller (order count vs tier thresholds).
  */
 
-export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>,
+export function useGetCoreV1AccountSalesBonusProgressSoldByMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>,
   TError = ErrorType<unknown>
 >(
   soldByMemberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesBonusProgressSoldByMemberId>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesBonusProgressSoldByMemberIdQueryOptions(soldByMemberId, options)
+  const queryOptions = getGetCoreV1AccountSalesBonusProgressSoldByMemberIdQueryOptions(soldByMemberId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -5954,17 +5967,17 @@ export function useGetApiV1AccountSalesBonusProgressSoldByMemberId<
 /**
  * @summary Mark a pending bonus transaction as paid. Admin only.
  */
-export const getPostApiV1AccountSalesBonusTransactionsTransactionIdPayUrl = (transactionId: string) => {
-  return `/api/v1/account-sales/bonus/transactions/${transactionId}/pay`
+export const getPostCoreV1AccountSalesBonusTransactionsTransactionIdPayUrl = (transactionId: string) => {
+  return `/core/v1/account-sales/bonus/transactions/${transactionId}/pay`
 }
 
-export const postApiV1AccountSalesBonusTransactionsTransactionIdPay = async (
+export const postCoreV1AccountSalesBonusTransactionsTransactionIdPay = async (
   transactionId: string,
   markBonusPaidRequest: MarkBonusPaidRequest,
   options?: RequestInit
 ): Promise<SalesBonusTransactionDtoApiResponse> => {
   return customFetch<SalesBonusTransactionDtoApiResponse>(
-    getPostApiV1AccountSalesBonusTransactionsTransactionIdPayUrl(transactionId),
+    getPostCoreV1AccountSalesBonusTransactionsTransactionIdPayUrl(transactionId),
     {
       ...options,
       method: 'POST',
@@ -5974,24 +5987,24 @@ export const postApiV1AccountSalesBonusTransactionsTransactionIdPay = async (
   )
 }
 
-export const getPostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationOptions = <
+export const getPostCoreV1AccountSalesBonusTransactionsTransactionIdPayMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdPay>>,
     TError,
     { transactionId: string; data: MarkBonusPaidRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdPay>>,
   TError,
   { transactionId: string; data: MarkBonusPaidRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesBonusTransactionsTransactionIdPay']
+  const mutationKey = ['postCoreV1AccountSalesBonusTransactionsTransactionIdPay']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -5999,33 +6012,33 @@ export const getPostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationOp
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdPay>>,
     { transactionId: string; data: MarkBonusPaidRequest }
   > = props => {
     const { transactionId, data } = props ?? {}
 
-    return postApiV1AccountSalesBonusTransactionsTransactionIdPay(transactionId, data, requestOptions)
+    return postCoreV1AccountSalesBonusTransactionsTransactionIdPay(transactionId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>
+export type PostCoreV1AccountSalesBonusTransactionsTransactionIdPayMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdPay>>
 >
-export type PostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationBody = MarkBonusPaidRequest
-export type PostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesBonusTransactionsTransactionIdPayMutationBody = MarkBonusPaidRequest
+export type PostCoreV1AccountSalesBonusTransactionsTransactionIdPayMutationError = ErrorType<unknown>
 
 /**
  * @summary Mark a pending bonus transaction as paid. Admin only.
  */
-export const usePostApiV1AccountSalesBonusTransactionsTransactionIdPay = <
+export const usePostCoreV1AccountSalesBonusTransactionsTransactionIdPay = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdPay>>,
       TError,
       { transactionId: string; data: MarkBonusPaidRequest },
       TContext
@@ -6034,28 +6047,28 @@ export const usePostApiV1AccountSalesBonusTransactionsTransactionIdPay = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdPay>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdPay>>,
   TError,
   { transactionId: string; data: MarkBonusPaidRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesBonusTransactionsTransactionIdPayMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesBonusTransactionsTransactionIdPayMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Cancel a pending bonus transaction. Admin only.
  */
-export const getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelUrl = (transactionId: string) => {
-  return `/api/v1/account-sales/bonus/transactions/${transactionId}/cancel`
+export const getPostCoreV1AccountSalesBonusTransactionsTransactionIdCancelUrl = (transactionId: string) => {
+  return `/core/v1/account-sales/bonus/transactions/${transactionId}/cancel`
 }
 
-export const postApiV1AccountSalesBonusTransactionsTransactionIdCancel = async (
+export const postCoreV1AccountSalesBonusTransactionsTransactionIdCancel = async (
   transactionId: string,
   cancelBonusTransactionRequest: CancelBonusTransactionRequest,
   options?: RequestInit
 ): Promise<SalesBonusTransactionDtoApiResponse> => {
   return customFetch<SalesBonusTransactionDtoApiResponse>(
-    getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelUrl(transactionId),
+    getPostCoreV1AccountSalesBonusTransactionsTransactionIdCancelUrl(transactionId),
     {
       ...options,
       method: 'POST',
@@ -6065,24 +6078,24 @@ export const postApiV1AccountSalesBonusTransactionsTransactionIdCancel = async (
   )
 }
 
-export const getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationOptions = <
+export const getPostCoreV1AccountSalesBonusTransactionsTransactionIdCancelMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdCancel>>,
     TError,
     { transactionId: string; data: CancelBonusTransactionRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdCancel>>,
   TError,
   { transactionId: string; data: CancelBonusTransactionRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesBonusTransactionsTransactionIdCancel']
+  const mutationKey = ['postCoreV1AccountSalesBonusTransactionsTransactionIdCancel']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6090,33 +6103,33 @@ export const getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutatio
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdCancel>>,
     { transactionId: string; data: CancelBonusTransactionRequest }
   > = props => {
     const { transactionId, data } = props ?? {}
 
-    return postApiV1AccountSalesBonusTransactionsTransactionIdCancel(transactionId, data, requestOptions)
+    return postCoreV1AccountSalesBonusTransactionsTransactionIdCancel(transactionId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>
+export type PostCoreV1AccountSalesBonusTransactionsTransactionIdCancelMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdCancel>>
 >
-export type PostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationBody = CancelBonusTransactionRequest
-export type PostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesBonusTransactionsTransactionIdCancelMutationBody = CancelBonusTransactionRequest
+export type PostCoreV1AccountSalesBonusTransactionsTransactionIdCancelMutationError = ErrorType<unknown>
 
 /**
  * @summary Cancel a pending bonus transaction. Admin only.
  */
-export const usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel = <
+export const usePostCoreV1AccountSalesBonusTransactionsTransactionIdCancel = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdCancel>>,
       TError,
       { transactionId: string; data: CancelBonusTransactionRequest },
       TContext
@@ -6125,27 +6138,27 @@ export const usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsTransactionIdCancel>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsTransactionIdCancel>>,
   TError,
   { transactionId: string; data: CancelBonusTransactionRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesBonusTransactionsTransactionIdCancelMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesBonusTransactionsTransactionIdCancelMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Manually settle (create + pay) a bonus tier for a member for the current month. 
 Creates a Paid transaction if none exists, or marks an existing Pending one as Paid.
  */
-export const getPostApiV1AccountSalesBonusTransactionsSettleTierUrl = () => {
-  return `/api/v1/account-sales/bonus/transactions/settle-tier`
+export const getPostCoreV1AccountSalesBonusTransactionsSettleTierUrl = () => {
+  return `/core/v1/account-sales/bonus/transactions/settle-tier`
 }
 
-export const postApiV1AccountSalesBonusTransactionsSettleTier = async (
+export const postCoreV1AccountSalesBonusTransactionsSettleTier = async (
   settleBonusTierRequest: SettleBonusTierRequest,
   options?: RequestInit
 ): Promise<SalesBonusTransactionDtoApiResponse> => {
-  return customFetch<SalesBonusTransactionDtoApiResponse>(getPostApiV1AccountSalesBonusTransactionsSettleTierUrl(), {
+  return customFetch<SalesBonusTransactionDtoApiResponse>(getPostCoreV1AccountSalesBonusTransactionsSettleTierUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -6153,24 +6166,24 @@ export const postApiV1AccountSalesBonusTransactionsSettleTier = async (
   })
 }
 
-export const getPostApiV1AccountSalesBonusTransactionsSettleTierMutationOptions = <
+export const getPostCoreV1AccountSalesBonusTransactionsSettleTierMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsSettleTier>>,
     TError,
     { data: SettleBonusTierRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsSettleTier>>,
   TError,
   { data: SettleBonusTierRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesBonusTransactionsSettleTier']
+  const mutationKey = ['postCoreV1AccountSalesBonusTransactionsSettleTier']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6178,31 +6191,31 @@ export const getPostApiV1AccountSalesBonusTransactionsSettleTierMutationOptions 
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsSettleTier>>,
     { data: SettleBonusTierRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesBonusTransactionsSettleTier(data, requestOptions)
+    return postCoreV1AccountSalesBonusTransactionsSettleTier(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesBonusTransactionsSettleTierMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>
+export type PostCoreV1AccountSalesBonusTransactionsSettleTierMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsSettleTier>>
 >
-export type PostApiV1AccountSalesBonusTransactionsSettleTierMutationBody = SettleBonusTierRequest
-export type PostApiV1AccountSalesBonusTransactionsSettleTierMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesBonusTransactionsSettleTierMutationBody = SettleBonusTierRequest
+export type PostCoreV1AccountSalesBonusTransactionsSettleTierMutationError = ErrorType<unknown>
 
 /**
  * @summary Manually settle (create + pay) a bonus tier for a member for the current month. 
 Creates a Paid transaction if none exists, or marks an existing Pending one as Paid.
  */
-export const usePostApiV1AccountSalesBonusTransactionsSettleTier = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesBonusTransactionsSettleTier = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsSettleTier>>,
       TError,
       { data: SettleBonusTierRequest },
       TContext
@@ -6211,69 +6224,71 @@ export const usePostApiV1AccountSalesBonusTransactionsSettleTier = <TError = Err
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesBonusTransactionsSettleTier>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesBonusTransactionsSettleTier>>,
   TError,
   { data: SettleBonusTierRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesBonusTransactionsSettleTierMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesBonusTransactionsSettleTierMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get all member commission balances.
  */
-export const getGetApiV1AccountSalesCommissionsUrl = () => {
-  return `/api/v1/account-sales/commissions`
+export const getGetCoreV1AccountSalesCommissionsUrl = () => {
+  return `/core/v1/account-sales/commissions`
 }
 
-export const getApiV1AccountSalesCommissions = async (options?: RequestInit): Promise<CommissionDtoListApiResponse> => {
-  return customFetch<CommissionDtoListApiResponse>(getGetApiV1AccountSalesCommissionsUrl(), {
+export const getCoreV1AccountSalesCommissions = async (
+  options?: RequestInit
+): Promise<CommissionDtoListApiResponse> => {
+  return customFetch<CommissionDtoListApiResponse>(getGetCoreV1AccountSalesCommissionsUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesCommissionsQueryKey = () => {
-  return [`/api/v1/account-sales/commissions`] as const
+export const getGetCoreV1AccountSalesCommissionsQueryKey = () => {
+  return [`/core/v1/account-sales/commissions`] as const
 }
 
-export const getGetApiV1AccountSalesCommissionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+export const getGetCoreV1AccountSalesCommissionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
   TError = ErrorType<unknown>
 >(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>>
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>, TError, TData>>
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesCommissionsQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesCommissionsQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>> = ({ signal }) =>
-    getApiV1AccountSalesCommissions({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>> = ({ signal }) =>
+    getCoreV1AccountSalesCommissions({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesCommissionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>
+export type GetCoreV1AccountSalesCommissionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>
 >
-export type GetApiV1AccountSalesCommissionsQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesCommissionsQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesCommissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+export function useGetCoreV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
   TError = ErrorType<unknown>
 >(
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>
         >,
         'initialData'
       >
@@ -6281,17 +6296,17 @@ export function useGetApiV1AccountSalesCommissions<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesCommissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+export function useGetCoreV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>
         >,
         'initialData'
       >
@@ -6299,12 +6314,12 @@ export function useGetApiV1AccountSalesCommissions<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesCommissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+export function useGetCoreV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -6313,17 +6328,17 @@ export function useGetApiV1AccountSalesCommissions<
  * @summary Get all member commission balances.
  */
 
-export function useGetApiV1AccountSalesCommissions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>,
+export function useGetCoreV1AccountSalesCommissions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissions>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissions>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesCommissionsQueryOptions(options)
+  const queryOptions = getGetCoreV1AccountSalesCommissionsQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6335,67 +6350,69 @@ export function useGetApiV1AccountSalesCommissions<
 /**
  * @summary Get commission balance for a specific member.
  */
-export const getGetApiV1AccountSalesCommissionsMemberIdUrl = (memberId: string) => {
-  return `/api/v1/account-sales/commissions/${memberId}`
+export const getGetCoreV1AccountSalesCommissionsMemberIdUrl = (memberId: string) => {
+  return `/core/v1/account-sales/commissions/${memberId}`
 }
 
-export const getApiV1AccountSalesCommissionsMemberId = async (
+export const getCoreV1AccountSalesCommissionsMemberId = async (
   memberId: string,
   options?: RequestInit
 ): Promise<CommissionDtoApiResponse> => {
-  return customFetch<CommissionDtoApiResponse>(getGetApiV1AccountSalesCommissionsMemberIdUrl(memberId), {
+  return customFetch<CommissionDtoApiResponse>(getGetCoreV1AccountSalesCommissionsMemberIdUrl(memberId), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesCommissionsMemberIdQueryKey = (memberId: string) => {
-  return [`/api/v1/account-sales/commissions/${memberId}`] as const
+export const getGetCoreV1AccountSalesCommissionsMemberIdQueryKey = (memberId: string) => {
+  return [`/core/v1/account-sales/commissions/${memberId}`] as const
 }
 
-export const getGetApiV1AccountSalesCommissionsMemberIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+export const getGetCoreV1AccountSalesCommissionsMemberIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>>
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>, TError, TData>
+    >
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesCommissionsMemberIdQueryKey(memberId)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesCommissionsMemberIdQueryKey(memberId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>> = ({ signal }) =>
-    getApiV1AccountSalesCommissionsMemberId(memberId, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>> = ({ signal }) =>
+    getCoreV1AccountSalesCommissionsMemberId(memberId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!memberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesCommissionsMemberIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>
+export type GetCoreV1AccountSalesCommissionsMemberIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>
 >
-export type GetApiV1AccountSalesCommissionsMemberIdQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesCommissionsMemberIdQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesCommissionsMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+export function useGetCoreV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>
         >,
         'initialData'
       >
@@ -6403,20 +6420,20 @@ export function useGetApiV1AccountSalesCommissionsMemberId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesCommissionsMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+export function useGetCoreV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>
         >,
         'initialData'
       >
@@ -6424,13 +6441,15 @@ export function useGetApiV1AccountSalesCommissionsMemberId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesCommissionsMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+export function useGetCoreV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>>
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>, TError, TData>
+    >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -6439,18 +6458,20 @@ export function useGetApiV1AccountSalesCommissionsMemberId<
  * @summary Get commission balance for a specific member.
  */
 
-export function useGetApiV1AccountSalesCommissionsMemberId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>,
+export function useGetCoreV1AccountSalesCommissionsMemberId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberId>>, TError, TData>>
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberId>>, TError, TData>
+    >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesCommissionsMemberIdQueryOptions(memberId, options)
+  const queryOptions = getGetCoreV1AccountSalesCommissionsMemberIdQueryOptions(memberId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6462,16 +6483,16 @@ export function useGetApiV1AccountSalesCommissionsMemberId<
 /**
  * @summary Get commission transaction history for a member.
  */
-export const getGetApiV1AccountSalesCommissionsMemberIdTransactionsUrl = (memberId: string) => {
-  return `/api/v1/account-sales/commissions/${memberId}/transactions`
+export const getGetCoreV1AccountSalesCommissionsMemberIdTransactionsUrl = (memberId: string) => {
+  return `/core/v1/account-sales/commissions/${memberId}/transactions`
 }
 
-export const getApiV1AccountSalesCommissionsMemberIdTransactions = async (
+export const getCoreV1AccountSalesCommissionsMemberIdTransactions = async (
   memberId: string,
   options?: RequestInit
 ): Promise<CommissionTransactionDtoListApiResponse> => {
   return customFetch<CommissionTransactionDtoListApiResponse>(
-    getGetApiV1AccountSalesCommissionsMemberIdTransactionsUrl(memberId),
+    getGetCoreV1AccountSalesCommissionsMemberIdTransactionsUrl(memberId),
     {
       ...options,
       method: 'GET'
@@ -6479,56 +6500,56 @@ export const getApiV1AccountSalesCommissionsMemberIdTransactions = async (
   )
 }
 
-export const getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryKey = (memberId: string) => {
-  return [`/api/v1/account-sales/commissions/${memberId}/transactions`] as const
+export const getGetCoreV1AccountSalesCommissionsMemberIdTransactionsQueryKey = (memberId: string) => {
+  return [`/core/v1/account-sales/commissions/${memberId}/transactions`] as const
 }
 
-export const getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+export const getGetCoreV1AccountSalesCommissionsMemberIdTransactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryKey(memberId)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesCommissionsMemberIdTransactionsQueryKey(memberId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>> = ({
     signal
-  }) => getApiV1AccountSalesCommissionsMemberIdTransactions(memberId, { signal, ...requestOptions })
+  }) => getCoreV1AccountSalesCommissionsMemberIdTransactions(memberId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!memberId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesCommissionsMemberIdTransactionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>
+export type GetCoreV1AccountSalesCommissionsMemberIdTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>
 >
-export type GetApiV1AccountSalesCommissionsMemberIdTransactionsQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesCommissionsMemberIdTransactionsQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+export function useGetCoreV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>
         >,
         'initialData'
       >
@@ -6536,20 +6557,20 @@ export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+export function useGetCoreV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>
         >,
         'initialData'
       >
@@ -6557,14 +6578,14 @@ export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+export function useGetCoreV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
@@ -6574,20 +6595,20 @@ export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
  * @summary Get commission transaction history for a member.
  */
 
-export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>,
+export function useGetCoreV1AccountSalesCommissionsMemberIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>,
   TError = ErrorType<unknown>
 >(
   memberId: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesCommissionsMemberIdTransactions>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesCommissionsMemberIdTransactionsQueryOptions(memberId, options)
+  const queryOptions = getGetCoreV1AccountSalesCommissionsMemberIdTransactionsQueryOptions(memberId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6599,15 +6620,15 @@ export function useGetApiV1AccountSalesCommissionsMemberIdTransactions<
 /**
  * @summary Pay out the available commission balance to a member. Admin only.
  */
-export const getPostApiV1AccountSalesCommissionsPayoutUrl = () => {
-  return `/api/v1/account-sales/commissions/payout`
+export const getPostCoreV1AccountSalesCommissionsPayoutUrl = () => {
+  return `/core/v1/account-sales/commissions/payout`
 }
 
-export const postApiV1AccountSalesCommissionsPayout = async (
+export const postCoreV1AccountSalesCommissionsPayout = async (
   payoutCommissionRequest: PayoutCommissionRequest,
   options?: RequestInit
 ): Promise<PayoutResultDtoApiResponse> => {
-  return customFetch<PayoutResultDtoApiResponse>(getPostApiV1AccountSalesCommissionsPayoutUrl(), {
+  return customFetch<PayoutResultDtoApiResponse>(getPostCoreV1AccountSalesCommissionsPayoutUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -6615,24 +6636,24 @@ export const postApiV1AccountSalesCommissionsPayout = async (
   })
 }
 
-export const getPostApiV1AccountSalesCommissionsPayoutMutationOptions = <
+export const getPostCoreV1AccountSalesCommissionsPayoutMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesCommissionsPayout>>,
     TError,
     { data: PayoutCommissionRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesCommissionsPayout>>,
   TError,
   { data: PayoutCommissionRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesCommissionsPayout']
+  const mutationKey = ['postCoreV1AccountSalesCommissionsPayout']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6640,30 +6661,30 @@ export const getPostApiV1AccountSalesCommissionsPayoutMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesCommissionsPayout>>,
     { data: PayoutCommissionRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesCommissionsPayout(data, requestOptions)
+    return postCoreV1AccountSalesCommissionsPayout(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesCommissionsPayoutMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>
+export type PostCoreV1AccountSalesCommissionsPayoutMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesCommissionsPayout>>
 >
-export type PostApiV1AccountSalesCommissionsPayoutMutationBody = PayoutCommissionRequest
-export type PostApiV1AccountSalesCommissionsPayoutMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesCommissionsPayoutMutationBody = PayoutCommissionRequest
+export type PostCoreV1AccountSalesCommissionsPayoutMutationError = ErrorType<unknown>
 
 /**
  * @summary Pay out the available commission balance to a member. Admin only.
  */
-export const usePostApiV1AccountSalesCommissionsPayout = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesCommissionsPayout = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesCommissionsPayout>>,
       TError,
       { data: PayoutCommissionRequest },
       TContext
@@ -6672,15 +6693,15 @@ export const usePostApiV1AccountSalesCommissionsPayout = <TError = ErrorType<unk
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesCommissionsPayout>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesCommissionsPayout>>,
   TError,
   { data: PayoutCommissionRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesCommissionsPayoutMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesCommissionsPayoutMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesMembersUrl = (params?: GetApiV1AccountSalesMembersParams) => {
+export const getGetCoreV1AccountSalesMembersUrl = (params?: GetCoreV1AccountSalesMembersParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -6692,65 +6713,65 @@ export const getGetApiV1AccountSalesMembersUrl = (params?: GetApiV1AccountSalesM
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/members?${stringifiedParams}`
-    : `/api/v1/account-sales/members`
+    ? `/core/v1/account-sales/members?${stringifiedParams}`
+    : `/core/v1/account-sales/members`
 }
 
-export const getApiV1AccountSalesMembers = async (
-  params?: GetApiV1AccountSalesMembersParams,
+export const getCoreV1AccountSalesMembers = async (
+  params?: GetCoreV1AccountSalesMembersParams,
   options?: RequestInit
 ): Promise<MemberDtoApiPagedResponse> => {
-  return customFetch<MemberDtoApiPagedResponse>(getGetApiV1AccountSalesMembersUrl(params), {
+  return customFetch<MemberDtoApiPagedResponse>(getGetCoreV1AccountSalesMembersUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesMembersQueryKey = (params?: GetApiV1AccountSalesMembersParams) => {
-  return [`/api/v1/account-sales/members`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccountSalesMembersQueryKey = (params?: GetCoreV1AccountSalesMembersParams) => {
+  return [`/core/v1/account-sales/members`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesMembersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+export const getGetCoreV1AccountSalesMembersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersParams,
+  params?: GetCoreV1AccountSalesMembersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesMembersQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>> = ({ signal }) =>
-    getApiV1AccountSalesMembers(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>> = ({ signal }) =>
+    getCoreV1AccountSalesMembers(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesMembersQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>
+export type GetCoreV1AccountSalesMembersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>
 >
-export type GetApiV1AccountSalesMembersQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesMembersQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesMembers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+export function useGetCoreV1AccountSalesMembers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesMembersParams,
+  params: undefined | GetCoreV1AccountSalesMembersParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>
         >,
         'initialData'
       >
@@ -6758,18 +6779,18 @@ export function useGetApiV1AccountSalesMembers<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+export function useGetCoreV1AccountSalesMembers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersParams,
+  params?: GetCoreV1AccountSalesMembersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>
         >,
         'initialData'
       >
@@ -6777,30 +6798,30 @@ export function useGetApiV1AccountSalesMembers<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+export function useGetCoreV1AccountSalesMembers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersParams,
+  params?: GetCoreV1AccountSalesMembersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesMembers<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>,
+export function useGetCoreV1AccountSalesMembers<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersParams,
+  params?: GetCoreV1AccountSalesMembersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembers>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembers>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesMembersQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesMembersQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -6809,15 +6830,15 @@ export function useGetApiV1AccountSalesMembers<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccountSalesMembersUrl = () => {
-  return `/api/v1/account-sales/members`
+export const getPostCoreV1AccountSalesMembersUrl = () => {
+  return `/core/v1/account-sales/members`
 }
 
-export const postApiV1AccountSalesMembers = async (
+export const postCoreV1AccountSalesMembers = async (
   createMemberRequest: CreateMemberRequest,
   options?: RequestInit
 ): Promise<MemberDtoApiResponse> => {
-  return customFetch<MemberDtoApiResponse>(getPostApiV1AccountSalesMembersUrl(), {
+  return customFetch<MemberDtoApiResponse>(getPostCoreV1AccountSalesMembersUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -6825,24 +6846,24 @@ export const postApiV1AccountSalesMembers = async (
   })
 }
 
-export const getPostApiV1AccountSalesMembersMutationOptions = <
+export const getPostCoreV1AccountSalesMembersMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesMembers>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesMembers>>,
     TError,
     { data: CreateMemberRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesMembers>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesMembers>>,
   TError,
   { data: CreateMemberRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesMembers']
+  const mutationKey = ['postCoreV1AccountSalesMembers']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -6850,27 +6871,27 @@ export const getPostApiV1AccountSalesMembersMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesMembers>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesMembers>>,
     { data: CreateMemberRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesMembers(data, requestOptions)
+    return postCoreV1AccountSalesMembers(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesMembersMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesMembers>>
+export type PostCoreV1AccountSalesMembersMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesMembers>>
 >
-export type PostApiV1AccountSalesMembersMutationBody = CreateMemberRequest
-export type PostApiV1AccountSalesMembersMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesMembersMutationBody = CreateMemberRequest
+export type PostCoreV1AccountSalesMembersMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesMembers = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesMembers = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesMembers>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesMembers>>,
       TError,
       { data: CreateMemberRequest },
       TContext
@@ -6879,73 +6900,73 @@ export const usePostApiV1AccountSalesMembers = <TError = ErrorType<unknown>, TCo
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesMembers>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesMembers>>,
   TError,
   { data: CreateMemberRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesMembersMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesMembersMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesMembersIdUrl = (id: string) => {
-  return `/api/v1/account-sales/members/${id}`
+export const getGetCoreV1AccountSalesMembersIdUrl = (id: string) => {
+  return `/core/v1/account-sales/members/${id}`
 }
 
-export const getApiV1AccountSalesMembersId = async (
+export const getCoreV1AccountSalesMembersId = async (
   id: string,
   options?: RequestInit
 ): Promise<MemberDtoApiResponse> => {
-  return customFetch<MemberDtoApiResponse>(getGetApiV1AccountSalesMembersIdUrl(id), {
+  return customFetch<MemberDtoApiResponse>(getGetCoreV1AccountSalesMembersIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesMembersIdQueryKey = (id: string) => {
-  return [`/api/v1/account-sales/members/${id}`] as const
+export const getGetCoreV1AccountSalesMembersIdQueryKey = (id: string) => {
+  return [`/core/v1/account-sales/members/${id}`] as const
 }
 
-export const getGetApiV1AccountSalesMembersIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+export const getGetCoreV1AccountSalesMembersIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesMembersIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>> = ({ signal }) =>
-    getApiV1AccountSalesMembersId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>> = ({ signal }) =>
+    getCoreV1AccountSalesMembersId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesMembersIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>
+export type GetCoreV1AccountSalesMembersIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>
 >
-export type GetApiV1AccountSalesMembersIdQueryError = ErrorType<ProblemDetails>
+export type GetCoreV1AccountSalesMembersIdQueryError = ErrorType<ProblemDetails>
 
-export function useGetApiV1AccountSalesMembersId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+export function useGetCoreV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>
         >,
         'initialData'
       >
@@ -6953,18 +6974,18 @@ export function useGetApiV1AccountSalesMembersId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+export function useGetCoreV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>
         >,
         'initialData'
       >
@@ -6972,30 +6993,30 @@ export function useGetApiV1AccountSalesMembersId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+export function useGetCoreV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesMembersId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>,
+export function useGetCoreV1AccountSalesMembersId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesMembersIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AccountSalesMembersIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -7004,16 +7025,16 @@ export function useGetApiV1AccountSalesMembersId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPatchApiV1AccountSalesMembersIdUrl = (id: string) => {
-  return `/api/v1/account-sales/members/${id}`
+export const getPatchCoreV1AccountSalesMembersIdUrl = (id: string) => {
+  return `/core/v1/account-sales/members/${id}`
 }
 
-export const patchApiV1AccountSalesMembersId = async (
+export const patchCoreV1AccountSalesMembersId = async (
   id: string,
   updateMemberRequest: UpdateMemberRequest,
   options?: RequestInit
 ): Promise<MemberDtoApiResponse> => {
-  return customFetch<MemberDtoApiResponse>(getPatchApiV1AccountSalesMembersIdUrl(id), {
+  return customFetch<MemberDtoApiResponse>(getPatchCoreV1AccountSalesMembersIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -7021,24 +7042,24 @@ export const patchApiV1AccountSalesMembersId = async (
   })
 }
 
-export const getPatchApiV1AccountSalesMembersIdMutationOptions = <
+export const getPatchCoreV1AccountSalesMembersIdMutationOptions = <
   TError = ErrorType<ProblemDetails>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesMembersId>>,
     TError,
     { id: string; data: UpdateMemberRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesMembersId>>,
   TError,
   { id: string; data: UpdateMemberRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesMembersId']
+  const mutationKey = ['patchCoreV1AccountSalesMembersId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -7046,27 +7067,27 @@ export const getPatchApiV1AccountSalesMembersIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesMembersId>>,
     { id: string; data: UpdateMemberRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1AccountSalesMembersId(id, data, requestOptions)
+    return patchCoreV1AccountSalesMembersId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesMembersIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>
+export type PatchCoreV1AccountSalesMembersIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesMembersId>>
 >
-export type PatchApiV1AccountSalesMembersIdMutationBody = UpdateMemberRequest
-export type PatchApiV1AccountSalesMembersIdMutationError = ErrorType<ProblemDetails>
+export type PatchCoreV1AccountSalesMembersIdMutationBody = UpdateMemberRequest
+export type PatchCoreV1AccountSalesMembersIdMutationError = ErrorType<ProblemDetails>
 
-export const usePatchApiV1AccountSalesMembersId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesMembersId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesMembersId>>,
       TError,
       { id: string; data: UpdateMemberRequest },
       TContext
@@ -7075,15 +7096,15 @@ export const usePatchApiV1AccountSalesMembersId = <TError = ErrorType<ProblemDet
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesMembersId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesMembersId>>,
   TError,
   { id: string; data: UpdateMemberRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesMembersIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesMembersIdMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesMembersSearchUrl = (params?: GetApiV1AccountSalesMembersSearchParams) => {
+export const getGetCoreV1AccountSalesMembersSearchUrl = (params?: GetCoreV1AccountSalesMembersSearchParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -7095,65 +7116,65 @@ export const getGetApiV1AccountSalesMembersSearchUrl = (params?: GetApiV1Account
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/members/search?${stringifiedParams}`
-    : `/api/v1/account-sales/members/search`
+    ? `/core/v1/account-sales/members/search?${stringifiedParams}`
+    : `/core/v1/account-sales/members/search`
 }
 
-export const getApiV1AccountSalesMembersSearch = async (
-  params?: GetApiV1AccountSalesMembersSearchParams,
+export const getCoreV1AccountSalesMembersSearch = async (
+  params?: GetCoreV1AccountSalesMembersSearchParams,
   options?: RequestInit
 ): Promise<MemberDtoListApiResponse> => {
-  return customFetch<MemberDtoListApiResponse>(getGetApiV1AccountSalesMembersSearchUrl(params), {
+  return customFetch<MemberDtoListApiResponse>(getGetCoreV1AccountSalesMembersSearchUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesMembersSearchQueryKey = (params?: GetApiV1AccountSalesMembersSearchParams) => {
-  return [`/api/v1/account-sales/members/search`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccountSalesMembersSearchQueryKey = (params?: GetCoreV1AccountSalesMembersSearchParams) => {
+  return [`/core/v1/account-sales/members/search`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesMembersSearchQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+export const getGetCoreV1AccountSalesMembersSearchQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersSearchParams,
+  params?: GetCoreV1AccountSalesMembersSearchParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersSearchQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesMembersSearchQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>> = ({ signal }) =>
-    getApiV1AccountSalesMembersSearch(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>> = ({ signal }) =>
+    getCoreV1AccountSalesMembersSearch(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesMembersSearchQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>
+export type GetCoreV1AccountSalesMembersSearchQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>
 >
-export type GetApiV1AccountSalesMembersSearchQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesMembersSearchQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesMembersSearch<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+export function useGetCoreV1AccountSalesMembersSearch<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesMembersSearchParams,
+  params: undefined | GetCoreV1AccountSalesMembersSearchParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>
         >,
         'initialData'
       >
@@ -7161,18 +7182,18 @@ export function useGetApiV1AccountSalesMembersSearch<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersSearch<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+export function useGetCoreV1AccountSalesMembersSearch<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersSearchParams,
+  params?: GetCoreV1AccountSalesMembersSearchParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>
         >,
         'initialData'
       >
@@ -7180,30 +7201,30 @@ export function useGetApiV1AccountSalesMembersSearch<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersSearch<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+export function useGetCoreV1AccountSalesMembersSearch<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersSearchParams,
+  params?: GetCoreV1AccountSalesMembersSearchParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesMembersSearch<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>,
+export function useGetCoreV1AccountSalesMembersSearch<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesMembersSearchParams,
+  params?: GetCoreV1AccountSalesMembersSearchParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersSearch>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersSearch>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesMembersSearchQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesMembersSearchQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -7212,65 +7233,65 @@ export function useGetApiV1AccountSalesMembersSearch<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getGetApiV1AccountSalesMembersIdDetailUrl = (id: string) => {
-  return `/api/v1/account-sales/members/${id}/detail`
+export const getGetCoreV1AccountSalesMembersIdDetailUrl = (id: string) => {
+  return `/core/v1/account-sales/members/${id}/detail`
 }
 
-export const getApiV1AccountSalesMembersIdDetail = async (
+export const getCoreV1AccountSalesMembersIdDetail = async (
   id: string,
   options?: RequestInit
 ): Promise<MemberDetailDtoApiResponse> => {
-  return customFetch<MemberDetailDtoApiResponse>(getGetApiV1AccountSalesMembersIdDetailUrl(id), {
+  return customFetch<MemberDetailDtoApiResponse>(getGetCoreV1AccountSalesMembersIdDetailUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesMembersIdDetailQueryKey = (id: string) => {
-  return [`/api/v1/account-sales/members/${id}/detail`] as const
+export const getGetCoreV1AccountSalesMembersIdDetailQueryKey = (id: string) => {
+  return [`/core/v1/account-sales/members/${id}/detail`] as const
 }
 
-export const getGetApiV1AccountSalesMembersIdDetailQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+export const getGetCoreV1AccountSalesMembersIdDetailQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersIdDetailQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesMembersIdDetailQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>> = ({ signal }) =>
-    getApiV1AccountSalesMembersIdDetail(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>> = ({ signal }) =>
+    getCoreV1AccountSalesMembersIdDetail(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesMembersIdDetailQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>
+export type GetCoreV1AccountSalesMembersIdDetailQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>
 >
-export type GetApiV1AccountSalesMembersIdDetailQueryError = ErrorType<ProblemDetails>
+export type GetCoreV1AccountSalesMembersIdDetailQueryError = ErrorType<ProblemDetails>
 
-export function useGetApiV1AccountSalesMembersIdDetail<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+export function useGetCoreV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>
         >,
         'initialData'
       >
@@ -7278,18 +7299,18 @@ export function useGetApiV1AccountSalesMembersIdDetail<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersIdDetail<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+export function useGetCoreV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>
         >,
         'initialData'
       >
@@ -7297,30 +7318,30 @@ export function useGetApiV1AccountSalesMembersIdDetail<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersIdDetail<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+export function useGetCoreV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesMembersIdDetail<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>,
+export function useGetCoreV1AccountSalesMembersIdDetail<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdDetail>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdDetail>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesMembersIdDetailQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AccountSalesMembersIdDetailQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -7329,65 +7350,65 @@ export function useGetApiV1AccountSalesMembersIdDetail<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getGetApiV1AccountSalesMembersIdStatsUrl = (id: string) => {
-  return `/api/v1/account-sales/members/${id}/stats`
+export const getGetCoreV1AccountSalesMembersIdStatsUrl = (id: string) => {
+  return `/core/v1/account-sales/members/${id}/stats`
 }
 
-export const getApiV1AccountSalesMembersIdStats = async (
+export const getCoreV1AccountSalesMembersIdStats = async (
   id: string,
   options?: RequestInit
 ): Promise<MemberStatsDtoApiResponse> => {
-  return customFetch<MemberStatsDtoApiResponse>(getGetApiV1AccountSalesMembersIdStatsUrl(id), {
+  return customFetch<MemberStatsDtoApiResponse>(getGetCoreV1AccountSalesMembersIdStatsUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesMembersIdStatsQueryKey = (id: string) => {
-  return [`/api/v1/account-sales/members/${id}/stats`] as const
+export const getGetCoreV1AccountSalesMembersIdStatsQueryKey = (id: string) => {
+  return [`/core/v1/account-sales/members/${id}/stats`] as const
 }
 
-export const getGetApiV1AccountSalesMembersIdStatsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+export const getGetCoreV1AccountSalesMembersIdStatsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesMembersIdStatsQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesMembersIdStatsQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>> = ({ signal }) =>
-    getApiV1AccountSalesMembersIdStats(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>> = ({ signal }) =>
+    getCoreV1AccountSalesMembersIdStats(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesMembersIdStatsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>
+export type GetCoreV1AccountSalesMembersIdStatsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>
 >
-export type GetApiV1AccountSalesMembersIdStatsQueryError = ErrorType<ProblemDetails>
+export type GetCoreV1AccountSalesMembersIdStatsQueryError = ErrorType<ProblemDetails>
 
-export function useGetApiV1AccountSalesMembersIdStats<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+export function useGetCoreV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>
         >,
         'initialData'
       >
@@ -7395,18 +7416,18 @@ export function useGetApiV1AccountSalesMembersIdStats<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersIdStats<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+export function useGetCoreV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>
         >,
         'initialData'
       >
@@ -7414,30 +7435,30 @@ export function useGetApiV1AccountSalesMembersIdStats<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesMembersIdStats<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+export function useGetCoreV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesMembersIdStats<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>,
+export function useGetCoreV1AccountSalesMembersIdStats<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesMembersIdStats>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesMembersIdStats>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesMembersIdStatsQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AccountSalesMembersIdStatsQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -7451,7 +7472,7 @@ export function useGetApiV1AccountSalesMembersIdStats<
 Filter example: memberId == '019d19ea-f221-760c-9ca2-3fb4c58230e5'
 Views: list (default), detail
  */
-export const getGetApiV1AccountSalesOrdersUrl = (params?: GetApiV1AccountSalesOrdersParams) => {
+export const getGetCoreV1AccountSalesOrdersUrl = (params?: GetCoreV1AccountSalesOrdersParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -7463,63 +7484,65 @@ export const getGetApiV1AccountSalesOrdersUrl = (params?: GetApiV1AccountSalesOr
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/orders?${stringifiedParams}`
-    : `/api/v1/account-sales/orders`
+    ? `/core/v1/account-sales/orders?${stringifiedParams}`
+    : `/core/v1/account-sales/orders`
 }
 
-export const getApiV1AccountSalesOrders = async (
-  params?: GetApiV1AccountSalesOrdersParams,
+export const getCoreV1AccountSalesOrders = async (
+  params?: GetCoreV1AccountSalesOrdersParams,
   options?: RequestInit
 ): Promise<AccountOrderDtoApiPagedResponse> => {
-  return customFetch<AccountOrderDtoApiPagedResponse>(getGetApiV1AccountSalesOrdersUrl(params), {
+  return customFetch<AccountOrderDtoApiPagedResponse>(getGetCoreV1AccountSalesOrdersUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesOrdersQueryKey = (params?: GetApiV1AccountSalesOrdersParams) => {
-  return [`/api/v1/account-sales/orders`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccountSalesOrdersQueryKey = (params?: GetCoreV1AccountSalesOrdersParams) => {
+  return [`/core/v1/account-sales/orders`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesOrdersQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+export const getGetCoreV1AccountSalesOrdersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesOrdersParams,
+  params?: GetCoreV1AccountSalesOrdersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesOrdersQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesOrdersQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>> = ({ signal }) =>
-    getApiV1AccountSalesOrders(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>> = ({ signal }) =>
+    getCoreV1AccountSalesOrders(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesOrdersQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>>
-export type GetApiV1AccountSalesOrdersQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesOrdersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>
+>
+export type GetCoreV1AccountSalesOrdersQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesOrders<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+export function useGetCoreV1AccountSalesOrders<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesOrdersParams,
+  params: undefined | GetCoreV1AccountSalesOrdersParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>
         >,
         'initialData'
       >
@@ -7527,18 +7550,18 @@ export function useGetApiV1AccountSalesOrders<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesOrders<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+export function useGetCoreV1AccountSalesOrders<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesOrdersParams,
+  params?: GetCoreV1AccountSalesOrdersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>
         >,
         'initialData'
       >
@@ -7546,13 +7569,13 @@ export function useGetApiV1AccountSalesOrders<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesOrders<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+export function useGetCoreV1AccountSalesOrders<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesOrdersParams,
+  params?: GetCoreV1AccountSalesOrdersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -7563,18 +7586,18 @@ Filter example: memberId == '019d19ea-f221-760c-9ca2-3fb4c58230e5'
 Views: list (default), detail
  */
 
-export function useGetApiV1AccountSalesOrders<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>,
+export function useGetCoreV1AccountSalesOrders<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesOrdersParams,
+  params?: GetCoreV1AccountSalesOrdersParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrders>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrders>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesOrdersQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesOrdersQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -7583,15 +7606,15 @@ export function useGetApiV1AccountSalesOrders<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccountSalesOrdersSellUrl = () => {
-  return `/api/v1/account-sales/orders/sell`
+export const getPostCoreV1AccountSalesOrdersSellUrl = () => {
+  return `/core/v1/account-sales/orders/sell`
 }
 
-export const postApiV1AccountSalesOrdersSell = async (
+export const postCoreV1AccountSalesOrdersSell = async (
   createAccountOrderRequest: CreateAccountOrderRequest,
   options?: RequestInit
 ): Promise<SellAccountResultDtoApiResponse> => {
-  return customFetch<SellAccountResultDtoApiResponse>(getPostApiV1AccountSalesOrdersSellUrl(), {
+  return customFetch<SellAccountResultDtoApiResponse>(getPostCoreV1AccountSalesOrdersSellUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -7599,24 +7622,24 @@ export const postApiV1AccountSalesOrdersSell = async (
   })
 }
 
-export const getPostApiV1AccountSalesOrdersSellMutationOptions = <
+export const getPostCoreV1AccountSalesOrdersSellMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersSell>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersSell>>,
     TError,
     { data: CreateAccountOrderRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersSell>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersSell>>,
   TError,
   { data: CreateAccountOrderRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesOrdersSell']
+  const mutationKey = ['postCoreV1AccountSalesOrdersSell']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -7624,27 +7647,27 @@ export const getPostApiV1AccountSalesOrdersSellMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersSell>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersSell>>,
     { data: CreateAccountOrderRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesOrdersSell(data, requestOptions)
+    return postCoreV1AccountSalesOrdersSell(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesOrdersSellMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersSell>>
+export type PostCoreV1AccountSalesOrdersSellMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersSell>>
 >
-export type PostApiV1AccountSalesOrdersSellMutationBody = CreateAccountOrderRequest
-export type PostApiV1AccountSalesOrdersSellMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesOrdersSellMutationBody = CreateAccountOrderRequest
+export type PostCoreV1AccountSalesOrdersSellMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesOrdersSell = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesOrdersSell = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesOrdersSell>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersSell>>,
       TError,
       { data: CreateAccountOrderRequest },
       TContext
@@ -7653,24 +7676,24 @@ export const usePostApiV1AccountSalesOrdersSell = <TError = ErrorType<unknown>, 
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersSell>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersSell>>,
   TError,
   { data: CreateAccountOrderRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesOrdersSellMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesOrdersSellMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccountSalesOrdersOrderIdReplaceUrl = (orderId: string) => {
-  return `/api/v1/account-sales/orders/${orderId}/replace`
+export const getPostCoreV1AccountSalesOrdersOrderIdReplaceUrl = (orderId: string) => {
+  return `/core/v1/account-sales/orders/${orderId}/replace`
 }
 
-export const postApiV1AccountSalesOrdersOrderIdReplace = async (
+export const postCoreV1AccountSalesOrdersOrderIdReplace = async (
   orderId: string,
   replaceAccountOrderRequest: ReplaceAccountOrderRequest,
   options?: RequestInit
 ): Promise<SellAccountResultDtoApiResponse> => {
-  return customFetch<SellAccountResultDtoApiResponse>(getPostApiV1AccountSalesOrdersOrderIdReplaceUrl(orderId), {
+  return customFetch<SellAccountResultDtoApiResponse>(getPostCoreV1AccountSalesOrdersOrderIdReplaceUrl(orderId), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -7678,24 +7701,24 @@ export const postApiV1AccountSalesOrdersOrderIdReplace = async (
   })
 }
 
-export const getPostApiV1AccountSalesOrdersOrderIdReplaceMutationOptions = <
+export const getPostCoreV1AccountSalesOrdersOrderIdReplaceMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdReplace>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdReplace>>,
     TError,
     { orderId: string; data: ReplaceAccountOrderRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdReplace>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdReplace>>,
   TError,
   { orderId: string; data: ReplaceAccountOrderRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesOrdersOrderIdReplace']
+  const mutationKey = ['postCoreV1AccountSalesOrdersOrderIdReplace']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -7703,27 +7726,27 @@ export const getPostApiV1AccountSalesOrdersOrderIdReplaceMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdReplace>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdReplace>>,
     { orderId: string; data: ReplaceAccountOrderRequest }
   > = props => {
     const { orderId, data } = props ?? {}
 
-    return postApiV1AccountSalesOrdersOrderIdReplace(orderId, data, requestOptions)
+    return postCoreV1AccountSalesOrdersOrderIdReplace(orderId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesOrdersOrderIdReplaceMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdReplace>>
+export type PostCoreV1AccountSalesOrdersOrderIdReplaceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdReplace>>
 >
-export type PostApiV1AccountSalesOrdersOrderIdReplaceMutationBody = ReplaceAccountOrderRequest
-export type PostApiV1AccountSalesOrdersOrderIdReplaceMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesOrdersOrderIdReplaceMutationBody = ReplaceAccountOrderRequest
+export type PostCoreV1AccountSalesOrdersOrderIdReplaceMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesOrdersOrderIdReplace = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesOrdersOrderIdReplace = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdReplace>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdReplace>>,
       TError,
       { orderId: string; data: ReplaceAccountOrderRequest },
       TContext
@@ -7732,70 +7755,72 @@ export const usePostApiV1AccountSalesOrdersOrderIdReplace = <TError = ErrorType<
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdReplace>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdReplace>>,
   TError,
   { orderId: string; data: ReplaceAccountOrderRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesOrdersOrderIdReplaceMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesOrdersOrderIdReplaceMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesOrdersRevenueBySellerUrl = () => {
-  return `/api/v1/account-sales/orders/revenue-by-seller`
+export const getGetCoreV1AccountSalesOrdersRevenueBySellerUrl = () => {
+  return `/core/v1/account-sales/orders/revenue-by-seller`
 }
 
-export const getApiV1AccountSalesOrdersRevenueBySeller = async (
+export const getCoreV1AccountSalesOrdersRevenueBySeller = async (
   options?: RequestInit
 ): Promise<SellerRevenueDtoListApiResponse> => {
-  return customFetch<SellerRevenueDtoListApiResponse>(getGetApiV1AccountSalesOrdersRevenueBySellerUrl(), {
+  return customFetch<SellerRevenueDtoListApiResponse>(getGetCoreV1AccountSalesOrdersRevenueBySellerUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesOrdersRevenueBySellerQueryKey = () => {
-  return [`/api/v1/account-sales/orders/revenue-by-seller`] as const
+export const getGetCoreV1AccountSalesOrdersRevenueBySellerQueryKey = () => {
+  return [`/core/v1/account-sales/orders/revenue-by-seller`] as const
 }
 
-export const getGetApiV1AccountSalesOrdersRevenueBySellerQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+export const getGetCoreV1AccountSalesOrdersRevenueBySellerQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
   TError = ErrorType<unknown>
 >(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>, TError, TData>>
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
+  >
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesOrdersRevenueBySellerQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesOrdersRevenueBySellerQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>> = ({ signal }) =>
-    getApiV1AccountSalesOrdersRevenueBySeller({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>> = ({ signal }) =>
+    getCoreV1AccountSalesOrdersRevenueBySeller({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesOrdersRevenueBySellerQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>
+export type GetCoreV1AccountSalesOrdersRevenueBySellerQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>
 >
-export type GetApiV1AccountSalesOrdersRevenueBySellerQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesOrdersRevenueBySellerQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesOrdersRevenueBySeller<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+export function useGetCoreV1AccountSalesOrdersRevenueBySeller<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
   TError = ErrorType<unknown>
 >(
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>
         >,
         'initialData'
       >
@@ -7803,19 +7828,19 @@ export function useGetApiV1AccountSalesOrdersRevenueBySeller<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesOrdersRevenueBySeller<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+export function useGetCoreV1AccountSalesOrdersRevenueBySeller<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>
         >,
         'initialData'
       >
@@ -7823,32 +7848,32 @@ export function useGetApiV1AccountSalesOrdersRevenueBySeller<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesOrdersRevenueBySeller<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+export function useGetCoreV1AccountSalesOrdersRevenueBySeller<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesOrdersRevenueBySeller<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>,
+export function useGetCoreV1AccountSalesOrdersRevenueBySeller<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesOrdersRevenueBySeller>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesOrdersRevenueBySellerQueryOptions(options)
+  const queryOptions = getGetCoreV1AccountSalesOrdersRevenueBySellerQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -7857,38 +7882,38 @@ export function useGetApiV1AccountSalesOrdersRevenueBySeller<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentUrl = (orderId: string) => {
-  return `/api/v1/account-sales/orders/${orderId}/confirm-payment`
+export const getPostCoreV1AccountSalesOrdersOrderIdConfirmPaymentUrl = (orderId: string) => {
+  return `/core/v1/account-sales/orders/${orderId}/confirm-payment`
 }
 
-export const postApiV1AccountSalesOrdersOrderIdConfirmPayment = async (
+export const postCoreV1AccountSalesOrdersOrderIdConfirmPayment = async (
   orderId: string,
   options?: RequestInit
 ): Promise<AccountOrderDtoApiResponse> => {
-  return customFetch<AccountOrderDtoApiResponse>(getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentUrl(orderId), {
+  return customFetch<AccountOrderDtoApiResponse>(getPostCoreV1AccountSalesOrdersOrderIdConfirmPaymentUrl(orderId), {
     ...options,
     method: 'POST'
   })
 }
 
-export const getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions = <
+export const getPostCoreV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdConfirmPayment>>,
     TError,
     { orderId: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdConfirmPayment>>,
   TError,
   { orderId: string },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesOrdersOrderIdConfirmPayment']
+  const mutationKey = ['postCoreV1AccountSalesOrdersOrderIdConfirmPayment']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -7896,27 +7921,27 @@ export const getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions 
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdConfirmPayment>>,
     { orderId: string }
   > = props => {
     const { orderId } = props ?? {}
 
-    return postApiV1AccountSalesOrdersOrderIdConfirmPayment(orderId, requestOptions)
+    return postCoreV1AccountSalesOrdersOrderIdConfirmPayment(orderId, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>
+export type PostCoreV1AccountSalesOrdersOrderIdConfirmPaymentMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdConfirmPayment>>
 >
 
-export type PostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesOrdersOrderIdConfirmPaymentMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesOrdersOrderIdConfirmPayment = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesOrdersOrderIdConfirmPayment = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdConfirmPayment>>,
       TError,
       { orderId: string },
       TContext
@@ -7925,24 +7950,24 @@ export const usePostApiV1AccountSalesOrdersOrderIdConfirmPayment = <TError = Err
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdConfirmPayment>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdConfirmPayment>>,
   TError,
   { orderId: string },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesOrdersOrderIdConfirmPaymentMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccountSalesOrdersOrderIdRefundUrl = (orderId: string) => {
-  return `/api/v1/account-sales/orders/${orderId}/refund`
+export const getPostCoreV1AccountSalesOrdersOrderIdRefundUrl = (orderId: string) => {
+  return `/core/v1/account-sales/orders/${orderId}/refund`
 }
 
-export const postApiV1AccountSalesOrdersOrderIdRefund = async (
+export const postCoreV1AccountSalesOrdersOrderIdRefund = async (
   orderId: string,
   refundOrderRequest: RefundOrderRequest,
   options?: RequestInit
 ): Promise<RefundResultDtoApiResponse> => {
-  return customFetch<RefundResultDtoApiResponse>(getPostApiV1AccountSalesOrdersOrderIdRefundUrl(orderId), {
+  return customFetch<RefundResultDtoApiResponse>(getPostCoreV1AccountSalesOrdersOrderIdRefundUrl(orderId), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -7950,24 +7975,24 @@ export const postApiV1AccountSalesOrdersOrderIdRefund = async (
   })
 }
 
-export const getPostApiV1AccountSalesOrdersOrderIdRefundMutationOptions = <
+export const getPostCoreV1AccountSalesOrdersOrderIdRefundMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdRefund>>,
     TError,
     { orderId: string; data: RefundOrderRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdRefund>>,
   TError,
   { orderId: string; data: RefundOrderRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesOrdersOrderIdRefund']
+  const mutationKey = ['postCoreV1AccountSalesOrdersOrderIdRefund']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -7975,27 +8000,27 @@ export const getPostApiV1AccountSalesOrdersOrderIdRefundMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdRefund>>,
     { orderId: string; data: RefundOrderRequest }
   > = props => {
     const { orderId, data } = props ?? {}
 
-    return postApiV1AccountSalesOrdersOrderIdRefund(orderId, data, requestOptions)
+    return postCoreV1AccountSalesOrdersOrderIdRefund(orderId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesOrdersOrderIdRefundMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>
+export type PostCoreV1AccountSalesOrdersOrderIdRefundMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdRefund>>
 >
-export type PostApiV1AccountSalesOrdersOrderIdRefundMutationBody = RefundOrderRequest
-export type PostApiV1AccountSalesOrdersOrderIdRefundMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesOrdersOrderIdRefundMutationBody = RefundOrderRequest
+export type PostCoreV1AccountSalesOrdersOrderIdRefundMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesOrdersOrderIdRefund = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesOrdersOrderIdRefund = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdRefund>>,
       TError,
       { orderId: string; data: RefundOrderRequest },
       TContext
@@ -8004,15 +8029,15 @@ export const usePostApiV1AccountSalesOrdersOrderIdRefund = <TError = ErrorType<u
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesOrdersOrderIdRefund>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesOrdersOrderIdRefund>>,
   TError,
   { orderId: string; data: RefundOrderRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesOrdersOrderIdRefundMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesOrdersOrderIdRefundMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesProductsUrl = (params?: GetApiV1AccountSalesProductsParams) => {
+export const getGetCoreV1AccountSalesProductsUrl = (params?: GetCoreV1AccountSalesProductsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -8024,65 +8049,65 @@ export const getGetApiV1AccountSalesProductsUrl = (params?: GetApiV1AccountSales
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/products?${stringifiedParams}`
-    : `/api/v1/account-sales/products`
+    ? `/core/v1/account-sales/products?${stringifiedParams}`
+    : `/core/v1/account-sales/products`
 }
 
-export const getApiV1AccountSalesProducts = async (
-  params?: GetApiV1AccountSalesProductsParams,
+export const getCoreV1AccountSalesProducts = async (
+  params?: GetCoreV1AccountSalesProductsParams,
   options?: RequestInit
 ): Promise<ProductDtoApiPagedResponse> => {
-  return customFetch<ProductDtoApiPagedResponse>(getGetApiV1AccountSalesProductsUrl(params), {
+  return customFetch<ProductDtoApiPagedResponse>(getGetCoreV1AccountSalesProductsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesProductsQueryKey = (params?: GetApiV1AccountSalesProductsParams) => {
-  return [`/api/v1/account-sales/products`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccountSalesProductsQueryKey = (params?: GetCoreV1AccountSalesProductsParams) => {
+  return [`/core/v1/account-sales/products`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesProductsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+export const getGetCoreV1AccountSalesProductsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesProductsParams,
+  params?: GetCoreV1AccountSalesProductsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesProductsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesProductsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>> = ({ signal }) =>
-    getApiV1AccountSalesProducts(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>> = ({ signal }) =>
+    getCoreV1AccountSalesProducts(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesProductsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>
+export type GetCoreV1AccountSalesProductsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>
 >
-export type GetApiV1AccountSalesProductsQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesProductsQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesProducts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+export function useGetCoreV1AccountSalesProducts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesProductsParams,
+  params: undefined | GetCoreV1AccountSalesProductsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>
         >,
         'initialData'
       >
@@ -8090,18 +8115,18 @@ export function useGetApiV1AccountSalesProducts<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesProducts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+export function useGetCoreV1AccountSalesProducts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesProductsParams,
+  params?: GetCoreV1AccountSalesProductsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>
         >,
         'initialData'
       >
@@ -8109,30 +8134,30 @@ export function useGetApiV1AccountSalesProducts<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesProducts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+export function useGetCoreV1AccountSalesProducts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesProductsParams,
+  params?: GetCoreV1AccountSalesProductsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesProducts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>,
+export function useGetCoreV1AccountSalesProducts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesProductsParams,
+  params?: GetCoreV1AccountSalesProductsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProducts>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProducts>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesProductsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesProductsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -8141,15 +8166,15 @@ export function useGetApiV1AccountSalesProducts<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccountSalesProductsUrl = () => {
-  return `/api/v1/account-sales/products`
+export const getPostCoreV1AccountSalesProductsUrl = () => {
+  return `/core/v1/account-sales/products`
 }
 
-export const postApiV1AccountSalesProducts = async (
+export const postCoreV1AccountSalesProducts = async (
   createProductRequest: CreateProductRequest,
   options?: RequestInit
 ): Promise<ProductDtoApiResponse> => {
-  return customFetch<ProductDtoApiResponse>(getPostApiV1AccountSalesProductsUrl(), {
+  return customFetch<ProductDtoApiResponse>(getPostCoreV1AccountSalesProductsUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -8157,24 +8182,24 @@ export const postApiV1AccountSalesProducts = async (
   })
 }
 
-export const getPostApiV1AccountSalesProductsMutationOptions = <
+export const getPostCoreV1AccountSalesProductsMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesProducts>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesProducts>>,
     TError,
     { data: CreateProductRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesProducts>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesProducts>>,
   TError,
   { data: CreateProductRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesProducts']
+  const mutationKey = ['postCoreV1AccountSalesProducts']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8182,27 +8207,27 @@ export const getPostApiV1AccountSalesProductsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesProducts>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesProducts>>,
     { data: CreateProductRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesProducts(data, requestOptions)
+    return postCoreV1AccountSalesProducts(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesProductsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesProducts>>
+export type PostCoreV1AccountSalesProductsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesProducts>>
 >
-export type PostApiV1AccountSalesProductsMutationBody = CreateProductRequest
-export type PostApiV1AccountSalesProductsMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesProductsMutationBody = CreateProductRequest
+export type PostCoreV1AccountSalesProductsMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesProducts = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesProducts = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesProducts>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesProducts>>,
       TError,
       { data: CreateProductRequest },
       TContext
@@ -8211,73 +8236,73 @@ export const usePostApiV1AccountSalesProducts = <TError = ErrorType<unknown>, TC
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesProducts>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesProducts>>,
   TError,
   { data: CreateProductRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesProductsMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesProductsMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesProductsIdUrl = (id: string) => {
-  return `/api/v1/account-sales/products/${id}`
+export const getGetCoreV1AccountSalesProductsIdUrl = (id: string) => {
+  return `/core/v1/account-sales/products/${id}`
 }
 
-export const getApiV1AccountSalesProductsId = async (
+export const getCoreV1AccountSalesProductsId = async (
   id: string,
   options?: RequestInit
 ): Promise<ProductDtoApiResponse> => {
-  return customFetch<ProductDtoApiResponse>(getGetApiV1AccountSalesProductsIdUrl(id), {
+  return customFetch<ProductDtoApiResponse>(getGetCoreV1AccountSalesProductsIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesProductsIdQueryKey = (id: string) => {
-  return [`/api/v1/account-sales/products/${id}`] as const
+export const getGetCoreV1AccountSalesProductsIdQueryKey = (id: string) => {
+  return [`/core/v1/account-sales/products/${id}`] as const
 }
 
-export const getGetApiV1AccountSalesProductsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+export const getGetCoreV1AccountSalesProductsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesProductsIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesProductsIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>> = ({ signal }) =>
-    getApiV1AccountSalesProductsId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>> = ({ signal }) =>
+    getCoreV1AccountSalesProductsId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesProductsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>
+export type GetCoreV1AccountSalesProductsIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>
 >
-export type GetApiV1AccountSalesProductsIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1AccountSalesProductsIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1AccountSalesProductsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+export function useGetCoreV1AccountSalesProductsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>
         >,
         'initialData'
       >
@@ -8285,18 +8310,18 @@ export function useGetApiV1AccountSalesProductsId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesProductsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+export function useGetCoreV1AccountSalesProductsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>
         >,
         'initialData'
       >
@@ -8304,30 +8329,30 @@ export function useGetApiV1AccountSalesProductsId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesProductsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+export function useGetCoreV1AccountSalesProductsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesProductsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>,
+export function useGetCoreV1AccountSalesProductsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesProductsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesProductsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesProductsIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AccountSalesProductsIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -8336,16 +8361,16 @@ export function useGetApiV1AccountSalesProductsId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPatchApiV1AccountSalesProductsIdUrl = (id: string) => {
-  return `/api/v1/account-sales/products/${id}`
+export const getPatchCoreV1AccountSalesProductsIdUrl = (id: string) => {
+  return `/core/v1/account-sales/products/${id}`
 }
 
-export const patchApiV1AccountSalesProductsId = async (
+export const patchCoreV1AccountSalesProductsId = async (
   id: string,
   updateProductRequest: UpdateProductRequest,
   options?: RequestInit
 ): Promise<ProductDtoApiResponse> => {
-  return customFetch<ProductDtoApiResponse>(getPatchApiV1AccountSalesProductsIdUrl(id), {
+  return customFetch<ProductDtoApiResponse>(getPatchCoreV1AccountSalesProductsIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -8353,24 +8378,24 @@ export const patchApiV1AccountSalesProductsId = async (
   })
 }
 
-export const getPatchApiV1AccountSalesProductsIdMutationOptions = <
+export const getPatchCoreV1AccountSalesProductsIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesProductsId>>,
     TError,
     { id: string; data: UpdateProductRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesProductsId>>,
   TError,
   { id: string; data: UpdateProductRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesProductsId']
+  const mutationKey = ['patchCoreV1AccountSalesProductsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8378,27 +8403,27 @@ export const getPatchApiV1AccountSalesProductsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesProductsId>>,
     { id: string; data: UpdateProductRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1AccountSalesProductsId(id, data, requestOptions)
+    return patchCoreV1AccountSalesProductsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesProductsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>
+export type PatchCoreV1AccountSalesProductsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesProductsId>>
 >
-export type PatchApiV1AccountSalesProductsIdMutationBody = UpdateProductRequest
-export type PatchApiV1AccountSalesProductsIdMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesProductsIdMutationBody = UpdateProductRequest
+export type PatchCoreV1AccountSalesProductsIdMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccountSalesProductsId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesProductsId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesProductsId>>,
       TError,
       { id: string; data: UpdateProductRequest },
       TContext
@@ -8407,73 +8432,73 @@ export const usePatchApiV1AccountSalesProductsId = <TError = ErrorType<unknown>,
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesProductsId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesProductsId>>,
   TError,
   { id: string; data: UpdateProductRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesProductsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesProductsIdMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesSettingsReferralCommissionUrl = () => {
-  return `/api/v1/account-sales/settings/referral-commission`
+export const getGetCoreV1AccountSalesSettingsReferralCommissionUrl = () => {
+  return `/core/v1/account-sales/settings/referral-commission`
 }
 
-export const getApiV1AccountSalesSettingsReferralCommission = async (
+export const getCoreV1AccountSalesSettingsReferralCommission = async (
   options?: RequestInit
 ): Promise<ReferralCommissionSettingDtoApiResponse> => {
-  return customFetch<ReferralCommissionSettingDtoApiResponse>(getGetApiV1AccountSalesSettingsReferralCommissionUrl(), {
+  return customFetch<ReferralCommissionSettingDtoApiResponse>(getGetCoreV1AccountSalesSettingsReferralCommissionUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesSettingsReferralCommissionQueryKey = () => {
-  return [`/api/v1/account-sales/settings/referral-commission`] as const
+export const getGetCoreV1AccountSalesSettingsReferralCommissionQueryKey = () => {
+  return [`/core/v1/account-sales/settings/referral-commission`] as const
 }
 
-export const getGetApiV1AccountSalesSettingsReferralCommissionQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+export const getGetCoreV1AccountSalesSettingsReferralCommissionQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
   TError = ErrorType<unknown>
 >(options?: {
   query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>, TError, TData>
+    UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>, TError, TData>
   >
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesSettingsReferralCommissionQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesSettingsReferralCommissionQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>> = ({
     signal
-  }) => getApiV1AccountSalesSettingsReferralCommission({ signal, ...requestOptions })
+  }) => getCoreV1AccountSalesSettingsReferralCommission({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesSettingsReferralCommissionQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>
+export type GetCoreV1AccountSalesSettingsReferralCommissionQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>
 >
-export type GetApiV1AccountSalesSettingsReferralCommissionQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesSettingsReferralCommissionQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesSettingsReferralCommission<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommission<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
   TError = ErrorType<unknown>
 >(
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>
         >,
         'initialData'
       >
@@ -8481,19 +8506,19 @@ export function useGetApiV1AccountSalesSettingsReferralCommission<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSettingsReferralCommission<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommission<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>
         >,
         'initialData'
       >
@@ -8501,32 +8526,32 @@ export function useGetApiV1AccountSalesSettingsReferralCommission<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSettingsReferralCommission<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommission<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesSettingsReferralCommission<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommission<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommission>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommission>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesSettingsReferralCommissionQueryOptions(options)
+  const queryOptions = getGetCoreV1AccountSalesSettingsReferralCommissionQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -8535,16 +8560,16 @@ export function useGetApiV1AccountSalesSettingsReferralCommission<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPatchApiV1AccountSalesSettingsReferralCommissionUrl = () => {
-  return `/api/v1/account-sales/settings/referral-commission`
+export const getPatchCoreV1AccountSalesSettingsReferralCommissionUrl = () => {
+  return `/core/v1/account-sales/settings/referral-commission`
 }
 
-export const patchApiV1AccountSalesSettingsReferralCommission = async (
+export const patchCoreV1AccountSalesSettingsReferralCommission = async (
   updateReferralCommissionSettingRequest: UpdateReferralCommissionSettingRequest,
   options?: RequestInit
 ): Promise<ReferralCommissionSettingDtoApiResponse> => {
   return customFetch<ReferralCommissionSettingDtoApiResponse>(
-    getPatchApiV1AccountSalesSettingsReferralCommissionUrl(),
+    getPatchCoreV1AccountSalesSettingsReferralCommissionUrl(),
     {
       ...options,
       method: 'PATCH',
@@ -8554,24 +8579,24 @@ export const patchApiV1AccountSalesSettingsReferralCommission = async (
   )
 }
 
-export const getPatchApiV1AccountSalesSettingsReferralCommissionMutationOptions = <
+export const getPatchCoreV1AccountSalesSettingsReferralCommissionMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesSettingsReferralCommission>>,
     TError,
     { data: UpdateReferralCommissionSettingRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSettingsReferralCommission>>,
   TError,
   { data: UpdateReferralCommissionSettingRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesSettingsReferralCommission']
+  const mutationKey = ['patchCoreV1AccountSalesSettingsReferralCommission']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8579,27 +8604,27 @@ export const getPatchApiV1AccountSalesSettingsReferralCommissionMutationOptions 
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesSettingsReferralCommission>>,
     { data: UpdateReferralCommissionSettingRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return patchApiV1AccountSalesSettingsReferralCommission(data, requestOptions)
+    return patchCoreV1AccountSalesSettingsReferralCommission(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesSettingsReferralCommissionMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>
+export type PatchCoreV1AccountSalesSettingsReferralCommissionMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSettingsReferralCommission>>
 >
-export type PatchApiV1AccountSalesSettingsReferralCommissionMutationBody = UpdateReferralCommissionSettingRequest
-export type PatchApiV1AccountSalesSettingsReferralCommissionMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesSettingsReferralCommissionMutationBody = UpdateReferralCommissionSettingRequest
+export type PatchCoreV1AccountSalesSettingsReferralCommissionMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccountSalesSettingsReferralCommission = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesSettingsReferralCommission = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesSettingsReferralCommission>>,
       TError,
       { data: UpdateReferralCommissionSettingRequest },
       TContext
@@ -8608,23 +8633,23 @@ export const usePatchApiV1AccountSalesSettingsReferralCommission = <TError = Err
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSettingsReferralCommission>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSettingsReferralCommission>>,
   TError,
   { data: UpdateReferralCommissionSettingRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesSettingsReferralCommissionMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesSettingsReferralCommissionMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesSettingsReferralCommissionHistoryUrl = () => {
-  return `/api/v1/account-sales/settings/referral-commission/history`
+export const getGetCoreV1AccountSalesSettingsReferralCommissionHistoryUrl = () => {
+  return `/core/v1/account-sales/settings/referral-commission/history`
 }
 
-export const getApiV1AccountSalesSettingsReferralCommissionHistory = async (
+export const getCoreV1AccountSalesSettingsReferralCommissionHistory = async (
   options?: RequestInit
 ): Promise<ReferralCommissionSettingHistoryDtoListApiResponse> => {
   return customFetch<ReferralCommissionSettingHistoryDtoListApiResponse>(
-    getGetApiV1AccountSalesSettingsReferralCommissionHistoryUrl(),
+    getGetCoreV1AccountSalesSettingsReferralCommissionHistoryUrl(),
     {
       ...options,
       method: 'GET'
@@ -8632,52 +8657,52 @@ export const getApiV1AccountSalesSettingsReferralCommissionHistory = async (
   )
 }
 
-export const getGetApiV1AccountSalesSettingsReferralCommissionHistoryQueryKey = () => {
-  return [`/api/v1/account-sales/settings/referral-commission/history`] as const
+export const getGetCoreV1AccountSalesSettingsReferralCommissionHistoryQueryKey = () => {
+  return [`/core/v1/account-sales/settings/referral-commission/history`] as const
 }
 
-export const getGetApiV1AccountSalesSettingsReferralCommissionHistoryQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+export const getGetCoreV1AccountSalesSettingsReferralCommissionHistoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
   TError = ErrorType<unknown>
 >(options?: {
   query?: Partial<
-    UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
+    UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
   >
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesSettingsReferralCommissionHistoryQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesSettingsReferralCommissionHistoryQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>> = ({
     signal
-  }) => getApiV1AccountSalesSettingsReferralCommissionHistory({ signal, ...requestOptions })
+  }) => getCoreV1AccountSalesSettingsReferralCommissionHistory({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesSettingsReferralCommissionHistoryQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>
+export type GetCoreV1AccountSalesSettingsReferralCommissionHistoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>
 >
-export type GetApiV1AccountSalesSettingsReferralCommissionHistoryQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesSettingsReferralCommissionHistoryQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommissionHistory<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
   TError = ErrorType<unknown>
 >(
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>
         >,
         'initialData'
       >
@@ -8685,19 +8710,19 @@ export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommissionHistory<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>
         >,
         'initialData'
       >
@@ -8705,32 +8730,32 @@ export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommissionHistory<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>,
+export function useGetCoreV1AccountSalesSettingsReferralCommissionHistory<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>,
   TError = ErrorType<unknown>
 >(
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSettingsReferralCommissionHistory>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesSettingsReferralCommissionHistoryQueryOptions(options)
+  const queryOptions = getGetCoreV1AccountSalesSettingsReferralCommissionHistoryQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -8739,7 +8764,7 @@ export function useGetApiV1AccountSalesSettingsReferralCommissionHistory<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getGetApiV1AccountSalesSourceAccountsUrl = (params?: GetApiV1AccountSalesSourceAccountsParams) => {
+export const getGetCoreV1AccountSalesSourceAccountsUrl = (params?: GetCoreV1AccountSalesSourceAccountsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -8751,65 +8776,65 @@ export const getGetApiV1AccountSalesSourceAccountsUrl = (params?: GetApiV1Accoun
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/account-sales/source-accounts?${stringifiedParams}`
-    : `/api/v1/account-sales/source-accounts`
+    ? `/core/v1/account-sales/source-accounts?${stringifiedParams}`
+    : `/core/v1/account-sales/source-accounts`
 }
 
-export const getApiV1AccountSalesSourceAccounts = async (
-  params?: GetApiV1AccountSalesSourceAccountsParams,
+export const getCoreV1AccountSalesSourceAccounts = async (
+  params?: GetCoreV1AccountSalesSourceAccountsParams,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiPagedResponse> => {
-  return customFetch<SourceAccountDtoApiPagedResponse>(getGetApiV1AccountSalesSourceAccountsUrl(params), {
+  return customFetch<SourceAccountDtoApiPagedResponse>(getGetCoreV1AccountSalesSourceAccountsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesSourceAccountsQueryKey = (params?: GetApiV1AccountSalesSourceAccountsParams) => {
-  return [`/api/v1/account-sales/source-accounts`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AccountSalesSourceAccountsQueryKey = (params?: GetCoreV1AccountSalesSourceAccountsParams) => {
+  return [`/core/v1/account-sales/source-accounts`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AccountSalesSourceAccountsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+export const getGetCoreV1AccountSalesSourceAccountsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesSourceAccountsParams,
+  params?: GetCoreV1AccountSalesSourceAccountsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesSourceAccountsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesSourceAccountsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>> = ({ signal }) =>
-    getApiV1AccountSalesSourceAccounts(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>> = ({ signal }) =>
+    getCoreV1AccountSalesSourceAccounts(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesSourceAccountsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>
+export type GetCoreV1AccountSalesSourceAccountsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>
 >
-export type GetApiV1AccountSalesSourceAccountsQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesSourceAccountsQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesSourceAccounts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+export function useGetCoreV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AccountSalesSourceAccountsParams,
+  params: undefined | GetCoreV1AccountSalesSourceAccountsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>
         >,
         'initialData'
       >
@@ -8817,18 +8842,18 @@ export function useGetApiV1AccountSalesSourceAccounts<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSourceAccounts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+export function useGetCoreV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesSourceAccountsParams,
+  params?: GetCoreV1AccountSalesSourceAccountsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>
         >,
         'initialData'
       >
@@ -8836,30 +8861,30 @@ export function useGetApiV1AccountSalesSourceAccounts<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSourceAccounts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+export function useGetCoreV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesSourceAccountsParams,
+  params?: GetCoreV1AccountSalesSourceAccountsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesSourceAccounts<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>,
+export function useGetCoreV1AccountSalesSourceAccounts<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AccountSalesSourceAccountsParams,
+  params?: GetCoreV1AccountSalesSourceAccountsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccounts>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccounts>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesSourceAccountsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AccountSalesSourceAccountsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -8868,15 +8893,15 @@ export function useGetApiV1AccountSalesSourceAccounts<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPostApiV1AccountSalesSourceAccountsUrl = () => {
-  return `/api/v1/account-sales/source-accounts`
+export const getPostCoreV1AccountSalesSourceAccountsUrl = () => {
+  return `/core/v1/account-sales/source-accounts`
 }
 
-export const postApiV1AccountSalesSourceAccounts = async (
+export const postCoreV1AccountSalesSourceAccounts = async (
   createSourceAccountRequest: CreateSourceAccountRequest,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiResponse> => {
-  return customFetch<SourceAccountDtoApiResponse>(getPostApiV1AccountSalesSourceAccountsUrl(), {
+  return customFetch<SourceAccountDtoApiResponse>(getPostCoreV1AccountSalesSourceAccountsUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -8884,24 +8909,24 @@ export const postApiV1AccountSalesSourceAccounts = async (
   })
 }
 
-export const getPostApiV1AccountSalesSourceAccountsMutationOptions = <
+export const getPostCoreV1AccountSalesSourceAccountsMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesSourceAccounts>>,
     TError,
     { data: CreateSourceAccountRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesSourceAccounts>>,
   TError,
   { data: CreateSourceAccountRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesSourceAccounts']
+  const mutationKey = ['postCoreV1AccountSalesSourceAccounts']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -8909,27 +8934,27 @@ export const getPostApiV1AccountSalesSourceAccountsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesSourceAccounts>>,
     { data: CreateSourceAccountRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesSourceAccounts(data, requestOptions)
+    return postCoreV1AccountSalesSourceAccounts(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesSourceAccountsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>
+export type PostCoreV1AccountSalesSourceAccountsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesSourceAccounts>>
 >
-export type PostApiV1AccountSalesSourceAccountsMutationBody = CreateSourceAccountRequest
-export type PostApiV1AccountSalesSourceAccountsMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesSourceAccountsMutationBody = CreateSourceAccountRequest
+export type PostCoreV1AccountSalesSourceAccountsMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesSourceAccounts = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesSourceAccounts = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesSourceAccounts>>,
       TError,
       { data: CreateSourceAccountRequest },
       TContext
@@ -8938,73 +8963,73 @@ export const usePostApiV1AccountSalesSourceAccounts = <TError = ErrorType<unknow
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesSourceAccounts>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesSourceAccounts>>,
   TError,
   { data: CreateSourceAccountRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesSourceAccountsMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesSourceAccountsMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
-  return `/api/v1/account-sales/source-accounts/${id}`
+export const getGetCoreV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+  return `/core/v1/account-sales/source-accounts/${id}`
 }
 
-export const getApiV1AccountSalesSourceAccountsId = async (
+export const getCoreV1AccountSalesSourceAccountsId = async (
   id: string,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiResponse> => {
-  return customFetch<SourceAccountDtoApiResponse>(getGetApiV1AccountSalesSourceAccountsIdUrl(id), {
+  return customFetch<SourceAccountDtoApiResponse>(getGetCoreV1AccountSalesSourceAccountsIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AccountSalesSourceAccountsIdQueryKey = (id: string) => {
-  return [`/api/v1/account-sales/source-accounts/${id}`] as const
+export const getGetCoreV1AccountSalesSourceAccountsIdQueryKey = (id: string) => {
+  return [`/core/v1/account-sales/source-accounts/${id}`] as const
 }
 
-export const getGetApiV1AccountSalesSourceAccountsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+export const getGetCoreV1AccountSalesSourceAccountsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesSourceAccountsIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesSourceAccountsIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>> = ({ signal }) =>
-    getApiV1AccountSalesSourceAccountsId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>> = ({ signal }) =>
+    getCoreV1AccountSalesSourceAccountsId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesSourceAccountsIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>
+export type GetCoreV1AccountSalesSourceAccountsIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>
 >
-export type GetApiV1AccountSalesSourceAccountsIdQueryError = ErrorType<ProblemDetails>
+export type GetCoreV1AccountSalesSourceAccountsIdQueryError = ErrorType<ProblemDetails>
 
-export function useGetApiV1AccountSalesSourceAccountsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+export function useGetCoreV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>
         >,
         'initialData'
       >
@@ -9012,18 +9037,18 @@ export function useGetApiV1AccountSalesSourceAccountsId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSourceAccountsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+export function useGetCoreV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>
         >,
         'initialData'
       >
@@ -9031,30 +9056,30 @@ export function useGetApiV1AccountSalesSourceAccountsId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesSourceAccountsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+export function useGetCoreV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesSourceAccountsId<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>,
+export function useGetCoreV1AccountSalesSourceAccountsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>,
   TError = ErrorType<ProblemDetails>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesSourceAccountsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesSourceAccountsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesSourceAccountsIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AccountSalesSourceAccountsIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -9063,16 +9088,16 @@ export function useGetApiV1AccountSalesSourceAccountsId<
   return { ...query, queryKey: queryOptions.queryKey }
 }
 
-export const getPatchApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
-  return `/api/v1/account-sales/source-accounts/${id}`
+export const getPatchCoreV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+  return `/core/v1/account-sales/source-accounts/${id}`
 }
 
-export const patchApiV1AccountSalesSourceAccountsId = async (
+export const patchCoreV1AccountSalesSourceAccountsId = async (
   id: string,
   updateSourceAccountRequest: UpdateSourceAccountRequest,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiResponse> => {
-  return customFetch<SourceAccountDtoApiResponse>(getPatchApiV1AccountSalesSourceAccountsIdUrl(id), {
+  return customFetch<SourceAccountDtoApiResponse>(getPatchCoreV1AccountSalesSourceAccountsIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9080,24 +9105,24 @@ export const patchApiV1AccountSalesSourceAccountsId = async (
   })
 }
 
-export const getPatchApiV1AccountSalesSourceAccountsIdMutationOptions = <
+export const getPatchCoreV1AccountSalesSourceAccountsIdMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsId>>,
     TError,
     { id: string; data: UpdateSourceAccountRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsId>>,
   TError,
   { id: string; data: UpdateSourceAccountRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesSourceAccountsId']
+  const mutationKey = ['patchCoreV1AccountSalesSourceAccountsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9105,27 +9130,27 @@ export const getPatchApiV1AccountSalesSourceAccountsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsId>>,
     { id: string; data: UpdateSourceAccountRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1AccountSalesSourceAccountsId(id, data, requestOptions)
+    return patchCoreV1AccountSalesSourceAccountsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>
+export type PatchCoreV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsId>>
 >
-export type PatchApiV1AccountSalesSourceAccountsIdMutationBody = UpdateSourceAccountRequest
-export type PatchApiV1AccountSalesSourceAccountsIdMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesSourceAccountsIdMutationBody = UpdateSourceAccountRequest
+export type PatchCoreV1AccountSalesSourceAccountsIdMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccountSalesSourceAccountsId = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesSourceAccountsId = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsId>>,
       TError,
       { id: string; data: UpdateSourceAccountRequest },
       TContext
@@ -9134,46 +9159,46 @@ export const usePatchApiV1AccountSalesSourceAccountsId = <TError = ErrorType<unk
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsId>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsId>>,
   TError,
   { id: string; data: UpdateSourceAccountRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
 }
 
-export const getDeleteApiV1AccountSalesSourceAccountsIdUrl = (id: string) => {
-  return `/api/v1/account-sales/source-accounts/${id}`
+export const getDeleteCoreV1AccountSalesSourceAccountsIdUrl = (id: string) => {
+  return `/core/v1/account-sales/source-accounts/${id}`
 }
 
-export const deleteApiV1AccountSalesSourceAccountsId = async (
+export const deleteCoreV1AccountSalesSourceAccountsId = async (
   id: string,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiResponse> => {
-  return customFetch<SourceAccountDtoApiResponse>(getDeleteApiV1AccountSalesSourceAccountsIdUrl(id), {
+  return customFetch<SourceAccountDtoApiResponse>(getDeleteCoreV1AccountSalesSourceAccountsIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1AccountSalesSourceAccountsIdMutationOptions = <
+export const getDeleteCoreV1AccountSalesSourceAccountsIdMutationOptions = <
   TError = ErrorType<ProblemDetails>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccountSalesSourceAccountsId>>,
     TError,
     { id: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccountSalesSourceAccountsId>>,
   TError,
   { id: string },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1AccountSalesSourceAccountsId']
+  const mutationKey = ['deleteCoreV1AccountSalesSourceAccountsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9181,27 +9206,27 @@ export const getDeleteApiV1AccountSalesSourceAccountsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AccountSalesSourceAccountsId>>,
     { id: string }
   > = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1AccountSalesSourceAccountsId(id, requestOptions)
+    return deleteCoreV1AccountSalesSourceAccountsId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>
+export type DeleteCoreV1AccountSalesSourceAccountsIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1AccountSalesSourceAccountsId>>
 >
 
-export type DeleteApiV1AccountSalesSourceAccountsIdMutationError = ErrorType<ProblemDetails>
+export type DeleteCoreV1AccountSalesSourceAccountsIdMutationError = ErrorType<ProblemDetails>
 
-export const useDeleteApiV1AccountSalesSourceAccountsId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
+export const useDeleteCoreV1AccountSalesSourceAccountsId = <TError = ErrorType<ProblemDetails>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+      Awaited<ReturnType<typeof deleteCoreV1AccountSalesSourceAccountsId>>,
       TError,
       { id: string },
       TContext
@@ -9210,24 +9235,24 @@ export const useDeleteApiV1AccountSalesSourceAccountsId = <TError = ErrorType<Pr
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteApiV1AccountSalesSourceAccountsId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AccountSalesSourceAccountsId>>,
   TError,
   { id: string },
   TContext
 > => {
-  return useMutation(getDeleteApiV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
+  return useMutation(getDeleteCoreV1AccountSalesSourceAccountsIdMutationOptions(options), queryClient)
 }
 
-export const getPatchApiV1AccountSalesSourceAccountsIdActiveUrl = (id: string) => {
-  return `/api/v1/account-sales/source-accounts/${id}/active`
+export const getPatchCoreV1AccountSalesSourceAccountsIdActiveUrl = (id: string) => {
+  return `/core/v1/account-sales/source-accounts/${id}/active`
 }
 
-export const patchApiV1AccountSalesSourceAccountsIdActive = async (
+export const patchCoreV1AccountSalesSourceAccountsIdActive = async (
   id: string,
   setSourceAccountActiveRequest: SetSourceAccountActiveRequest,
   options?: RequestInit
 ): Promise<SourceAccountDtoApiResponse> => {
-  return customFetch<SourceAccountDtoApiResponse>(getPatchApiV1AccountSalesSourceAccountsIdActiveUrl(id), {
+  return customFetch<SourceAccountDtoApiResponse>(getPatchCoreV1AccountSalesSourceAccountsIdActiveUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9235,24 +9260,24 @@ export const patchApiV1AccountSalesSourceAccountsIdActive = async (
   })
 }
 
-export const getPatchApiV1AccountSalesSourceAccountsIdActiveMutationOptions = <
+export const getPatchCoreV1AccountSalesSourceAccountsIdActiveMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsIdActive>>,
     TError,
     { id: string; data: SetSourceAccountActiveRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsIdActive>>,
   TError,
   { id: string; data: SetSourceAccountActiveRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AccountSalesSourceAccountsIdActive']
+  const mutationKey = ['patchCoreV1AccountSalesSourceAccountsIdActive']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9260,27 +9285,27 @@ export const getPatchApiV1AccountSalesSourceAccountsIdActiveMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+    Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsIdActive>>,
     { id: string; data: SetSourceAccountActiveRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1AccountSalesSourceAccountsIdActive(id, data, requestOptions)
+    return patchCoreV1AccountSalesSourceAccountsIdActive(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AccountSalesSourceAccountsIdActiveMutationResult = NonNullable<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>
+export type PatchCoreV1AccountSalesSourceAccountsIdActiveMutationResult = NonNullable<
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsIdActive>>
 >
-export type PatchApiV1AccountSalesSourceAccountsIdActiveMutationBody = SetSourceAccountActiveRequest
-export type PatchApiV1AccountSalesSourceAccountsIdActiveMutationError = ErrorType<unknown>
+export type PatchCoreV1AccountSalesSourceAccountsIdActiveMutationBody = SetSourceAccountActiveRequest
+export type PatchCoreV1AccountSalesSourceAccountsIdActiveMutationError = ErrorType<unknown>
 
-export const usePatchApiV1AccountSalesSourceAccountsIdActive = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePatchCoreV1AccountSalesSourceAccountsIdActive = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+      Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsIdActive>>,
       TError,
       { id: string; data: SetSourceAccountActiveRequest },
       TContext
@@ -9289,23 +9314,23 @@ export const usePatchApiV1AccountSalesSourceAccountsIdActive = <TError = ErrorTy
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AccountSalesSourceAccountsIdActive>>,
+  Awaited<ReturnType<typeof patchCoreV1AccountSalesSourceAccountsIdActive>>,
   TError,
   { id: string; data: SetSourceAccountActiveRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AccountSalesSourceAccountsIdActiveMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AccountSalesSourceAccountsIdActiveMutationOptions(options), queryClient)
 }
 
-export const getPostApiV1AccountSalesWarrantyCheckUrl = () => {
-  return `/api/v1/account-sales/warranty/check`
+export const getPostCoreV1AccountSalesWarrantyCheckUrl = () => {
+  return `/core/v1/account-sales/warranty/check`
 }
 
-export const postApiV1AccountSalesWarrantyCheck = async (
+export const postCoreV1AccountSalesWarrantyCheck = async (
   checkWarrantyRequest: CheckWarrantyRequest,
   options?: RequestInit
 ): Promise<WarrantyCheckResultDtoApiResponse> => {
-  return customFetch<WarrantyCheckResultDtoApiResponse>(getPostApiV1AccountSalesWarrantyCheckUrl(), {
+  return customFetch<WarrantyCheckResultDtoApiResponse>(getPostCoreV1AccountSalesWarrantyCheckUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9313,24 +9338,24 @@ export const postApiV1AccountSalesWarrantyCheck = async (
   })
 }
 
-export const getPostApiV1AccountSalesWarrantyCheckMutationOptions = <
+export const getPostCoreV1AccountSalesWarrantyCheckMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AccountSalesWarrantyCheck>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesWarrantyCheck>>,
     TError,
     { data: CheckWarrantyRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AccountSalesWarrantyCheck>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesWarrantyCheck>>,
   TError,
   { data: CheckWarrantyRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AccountSalesWarrantyCheck']
+  const mutationKey = ['postCoreV1AccountSalesWarrantyCheck']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9338,27 +9363,27 @@ export const getPostApiV1AccountSalesWarrantyCheckMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AccountSalesWarrantyCheck>>,
+    Awaited<ReturnType<typeof postCoreV1AccountSalesWarrantyCheck>>,
     { data: CheckWarrantyRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AccountSalesWarrantyCheck(data, requestOptions)
+    return postCoreV1AccountSalesWarrantyCheck(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AccountSalesWarrantyCheckMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AccountSalesWarrantyCheck>>
+export type PostCoreV1AccountSalesWarrantyCheckMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AccountSalesWarrantyCheck>>
 >
-export type PostApiV1AccountSalesWarrantyCheckMutationBody = CheckWarrantyRequest
-export type PostApiV1AccountSalesWarrantyCheckMutationError = ErrorType<unknown>
+export type PostCoreV1AccountSalesWarrantyCheckMutationBody = CheckWarrantyRequest
+export type PostCoreV1AccountSalesWarrantyCheckMutationError = ErrorType<unknown>
 
-export const usePostApiV1AccountSalesWarrantyCheck = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AccountSalesWarrantyCheck = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AccountSalesWarrantyCheck>>,
+      Awaited<ReturnType<typeof postCoreV1AccountSalesWarrantyCheck>>,
       TError,
       { data: CheckWarrantyRequest },
       TContext
@@ -9367,78 +9392,81 @@ export const usePostApiV1AccountSalesWarrantyCheck = <TError = ErrorType<unknown
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AccountSalesWarrantyCheck>>,
+  Awaited<ReturnType<typeof postCoreV1AccountSalesWarrantyCheck>>,
   TError,
   { data: CheckWarrantyRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AccountSalesWarrantyCheckMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AccountSalesWarrantyCheckMutationOptions(options), queryClient)
 }
 
-export const getGetApiV1AccountSalesWarrantyGithubUsersUsernameUrl = (username: string) => {
-  return `/api/v1/account-sales/warranty/github-users/${username}`
+export const getGetCoreV1AccountSalesWarrantyGithubUsersUsernameUrl = (username: string) => {
+  return `/core/v1/account-sales/warranty/github-users/${username}`
 }
 
-export const getApiV1AccountSalesWarrantyGithubUsersUsername = async (
+export const getCoreV1AccountSalesWarrantyGithubUsersUsername = async (
   username: string,
   options?: RequestInit
 ): Promise<GithubUserProfileDtoApiResponse> => {
-  return customFetch<GithubUserProfileDtoApiResponse>(getGetApiV1AccountSalesWarrantyGithubUsersUsernameUrl(username), {
-    ...options,
-    method: 'GET'
-  })
+  return customFetch<GithubUserProfileDtoApiResponse>(
+    getGetCoreV1AccountSalesWarrantyGithubUsersUsernameUrl(username),
+    {
+      ...options,
+      method: 'GET'
+    }
+  )
 }
 
-export const getGetApiV1AccountSalesWarrantyGithubUsersUsernameQueryKey = (username: string) => {
-  return [`/api/v1/account-sales/warranty/github-users/${username}`] as const
+export const getGetCoreV1AccountSalesWarrantyGithubUsersUsernameQueryKey = (username: string) => {
+  return [`/core/v1/account-sales/warranty/github-users/${username}`] as const
 }
 
-export const getGetApiV1AccountSalesWarrantyGithubUsersUsernameQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+export const getGetCoreV1AccountSalesWarrantyGithubUsersUsernameQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
   TError = ErrorType<unknown>
 >(
   username: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AccountSalesWarrantyGithubUsersUsernameQueryKey(username)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AccountSalesWarrantyGithubUsersUsernameQueryKey(username)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>> = ({
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>> = ({
     signal
-  }) => getApiV1AccountSalesWarrantyGithubUsersUsername(username, { signal, ...requestOptions })
+  }) => getCoreV1AccountSalesWarrantyGithubUsersUsername(username, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!username, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+    Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AccountSalesWarrantyGithubUsersUsernameQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>
+export type GetCoreV1AccountSalesWarrantyGithubUsersUsernameQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>
 >
-export type GetApiV1AccountSalesWarrantyGithubUsersUsernameQueryError = ErrorType<unknown>
+export type GetCoreV1AccountSalesWarrantyGithubUsersUsernameQueryError = ErrorType<unknown>
 
-export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+export function useGetCoreV1AccountSalesWarrantyGithubUsersUsername<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
   TError = ErrorType<unknown>
 >(
   username: string,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>
         >,
         'initialData'
       >
@@ -9446,20 +9474,20 @@ export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+export function useGetCoreV1AccountSalesWarrantyGithubUsersUsername<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
   TError = ErrorType<unknown>
 >(
   username: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+          Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>
+          Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>
         >,
         'initialData'
       >
@@ -9467,34 +9495,34 @@ export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+export function useGetCoreV1AccountSalesWarrantyGithubUsersUsername<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
   TError = ErrorType<unknown>
 >(
   username: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 
-export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
-  TData = Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>,
+export function useGetCoreV1AccountSalesWarrantyGithubUsersUsername<
+  TData = Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>,
   TError = ErrorType<unknown>
 >(
   username: string,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AccountSalesWarrantyGithubUsersUsername>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AccountSalesWarrantyGithubUsersUsernameQueryOptions(username, options)
+  const queryOptions = getGetCoreV1AccountSalesWarrantyGithubUsersUsernameQueryOptions(username, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -9507,15 +9535,15 @@ export function useGetApiV1AccountSalesWarrantyGithubUsersUsername<
  * @summary Send a chat message to the AI assistant.
 The frontend manages conversation context in-memory and sends it along with each request.
  */
-export const getPostApiV1AiChatUrl = () => {
-  return `/api/v1/ai/chat`
+export const getPostCoreV1AiChatUrl = () => {
+  return `/core/v1/ai/chat`
 }
 
-export const postApiV1AiChat = async (
+export const postCoreV1AiChat = async (
   sendChatRequest: SendChatRequest,
   options?: RequestInit
 ): Promise<ChatResponseApiResponse> => {
-  return customFetch<ChatResponseApiResponse>(getPostApiV1AiChatUrl(), {
+  return customFetch<ChatResponseApiResponse>(getPostCoreV1AiChatUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9523,16 +9551,16 @@ export const postApiV1AiChat = async (
   })
 }
 
-export const getPostApiV1AiChatMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPostCoreV1AiChatMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AiChat>>,
+    Awaited<ReturnType<typeof postCoreV1AiChat>>,
     TError,
     { data: SendChatRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof postApiV1AiChat>>, TError, { data: SendChatRequest }, TContext> => {
-  const mutationKey = ['postApiV1AiChat']
+}): UseMutationOptions<Awaited<ReturnType<typeof postCoreV1AiChat>>, TError, { data: SendChatRequest }, TContext> => {
+  const mutationKey = ['postCoreV1AiChat']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9540,29 +9568,29 @@ export const getPostApiV1AiChatMutationOptions = <TError = ErrorType<ApiErrorRes
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AiChat>>,
+    Awaited<ReturnType<typeof postCoreV1AiChat>>,
     { data: SendChatRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AiChat(data, requestOptions)
+    return postCoreV1AiChat(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AiChatMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1AiChat>>>
-export type PostApiV1AiChatMutationBody = SendChatRequest
-export type PostApiV1AiChatMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1AiChatMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1AiChat>>>
+export type PostCoreV1AiChatMutationBody = SendChatRequest
+export type PostCoreV1AiChatMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Send a chat message to the AI assistant.
 The frontend manages conversation context in-memory and sends it along with each request.
  */
-export const usePostApiV1AiChat = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1AiChat = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AiChat>>,
+      Awaited<ReturnType<typeof postCoreV1AiChat>>,
       TError,
       { data: SendChatRequest },
       TContext
@@ -9570,14 +9598,14 @@ export const usePostApiV1AiChat = <TError = ErrorType<ApiErrorResponse>, TContex
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof postApiV1AiChat>>, TError, { data: SendChatRequest }, TContext> => {
-  return useMutation(getPostApiV1AiChatMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof postCoreV1AiChat>>, TError, { data: SendChatRequest }, TContext> => {
+  return useMutation(getPostCoreV1AiChatMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get paginated list of assets with optional sorting.
  */
-export const getGetApiV1AssetsUrl = (params?: GetApiV1AssetsParams) => {
+export const getGetCoreV1AssetsUrl = (params?: GetCoreV1AssetsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -9588,62 +9616,62 @@ export const getGetApiV1AssetsUrl = (params?: GetApiV1AssetsParams) => {
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/assets?${stringifiedParams}` : `/api/v1/assets`
+  return stringifiedParams.length > 0 ? `/core/v1/assets?${stringifiedParams}` : `/core/v1/assets`
 }
 
-export const getApiV1Assets = async (
-  params?: GetApiV1AssetsParams,
+export const getCoreV1Assets = async (
+  params?: GetCoreV1AssetsParams,
   options?: RequestInit
 ): Promise<AssetDtoApiPagedResponse> => {
-  return customFetch<AssetDtoApiPagedResponse>(getGetApiV1AssetsUrl(params), {
+  return customFetch<AssetDtoApiPagedResponse>(getGetCoreV1AssetsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AssetsQueryKey = (params?: GetApiV1AssetsParams) => {
-  return [`/api/v1/assets`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AssetsQueryKey = (params?: GetCoreV1AssetsParams) => {
+  return [`/core/v1/assets`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AssetsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1Assets>>,
+export const getGetCoreV1AssetsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1Assets>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1AssetsParams,
+  params?: GetCoreV1AssetsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Assets>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Assets>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AssetsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AssetsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Assets>>> = ({ signal }) =>
-    getApiV1Assets(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1Assets>>> = ({ signal }) =>
+    getCoreV1Assets(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1Assets>>,
+    Awaited<ReturnType<typeof getCoreV1Assets>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AssetsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Assets>>>
-export type GetApiV1AssetsQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1AssetsQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1Assets>>>
+export type GetCoreV1AssetsQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1Assets<
-  TData = Awaited<ReturnType<typeof getApiV1Assets>>,
+export function useGetCoreV1Assets<
+  TData = Awaited<ReturnType<typeof getCoreV1Assets>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetApiV1AssetsParams,
+  params: undefined | GetCoreV1AssetsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Assets>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Assets>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Assets>>,
+          Awaited<ReturnType<typeof getCoreV1Assets>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Assets>>
+          Awaited<ReturnType<typeof getCoreV1Assets>>
         >,
         'initialData'
       >
@@ -9651,18 +9679,18 @@ export function useGetApiV1Assets<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Assets<
-  TData = Awaited<ReturnType<typeof getApiV1Assets>>,
+export function useGetCoreV1Assets<
+  TData = Awaited<ReturnType<typeof getCoreV1Assets>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1AssetsParams,
+  params?: GetCoreV1AssetsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Assets>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Assets>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Assets>>,
+          Awaited<ReturnType<typeof getCoreV1Assets>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Assets>>
+          Awaited<ReturnType<typeof getCoreV1Assets>>
         >,
         'initialData'
       >
@@ -9670,13 +9698,13 @@ export function useGetApiV1Assets<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Assets<
-  TData = Awaited<ReturnType<typeof getApiV1Assets>>,
+export function useGetCoreV1Assets<
+  TData = Awaited<ReturnType<typeof getCoreV1Assets>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1AssetsParams,
+  params?: GetCoreV1AssetsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Assets>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Assets>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -9685,18 +9713,18 @@ export function useGetApiV1Assets<
  * @summary Get paginated list of assets with optional sorting.
  */
 
-export function useGetApiV1Assets<
-  TData = Awaited<ReturnType<typeof getApiV1Assets>>,
+export function useGetCoreV1Assets<
+  TData = Awaited<ReturnType<typeof getCoreV1Assets>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1AssetsParams,
+  params?: GetCoreV1AssetsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Assets>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Assets>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AssetsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AssetsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -9708,15 +9736,15 @@ export function useGetApiV1Assets<
 /**
  * @summary Create a new asset.
  */
-export const getPostApiV1AssetsUrl = () => {
-  return `/api/v1/assets`
+export const getPostCoreV1AssetsUrl = () => {
+  return `/core/v1/assets`
 }
 
-export const postApiV1Assets = async (
+export const postCoreV1Assets = async (
   createAssetRequest: CreateAssetRequest,
   options?: RequestInit
 ): Promise<AssetDtoApiResponse> => {
-  return customFetch<AssetDtoApiResponse>(getPostApiV1AssetsUrl(), {
+  return customFetch<AssetDtoApiResponse>(getPostCoreV1AssetsUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9724,16 +9752,21 @@ export const postApiV1Assets = async (
   })
 }
 
-export const getPostApiV1AssetsMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPostCoreV1AssetsMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1Assets>>,
+    Awaited<ReturnType<typeof postCoreV1Assets>>,
     TError,
     { data: CreateAssetRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof postApiV1Assets>>, TError, { data: CreateAssetRequest }, TContext> => {
-  const mutationKey = ['postApiV1Assets']
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postCoreV1Assets>>,
+  TError,
+  { data: CreateAssetRequest },
+  TContext
+> => {
+  const mutationKey = ['postCoreV1Assets']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9741,28 +9774,28 @@ export const getPostApiV1AssetsMutationOptions = <TError = ErrorType<ApiErrorRes
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1Assets>>,
+    Awaited<ReturnType<typeof postCoreV1Assets>>,
     { data: CreateAssetRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1Assets(data, requestOptions)
+    return postCoreV1Assets(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AssetsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Assets>>>
-export type PostApiV1AssetsMutationBody = CreateAssetRequest
-export type PostApiV1AssetsMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1AssetsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1Assets>>>
+export type PostCoreV1AssetsMutationBody = CreateAssetRequest
+export type PostCoreV1AssetsMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Create a new asset.
  */
-export const usePostApiV1Assets = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1Assets = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1Assets>>,
+      Awaited<ReturnType<typeof postCoreV1Assets>>,
       TError,
       { data: CreateAssetRequest },
       TContext
@@ -9770,22 +9803,22 @@ export const usePostApiV1Assets = <TError = ErrorType<ApiErrorResponse>, TContex
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof postApiV1Assets>>, TError, { data: CreateAssetRequest }, TContext> => {
-  return useMutation(getPostApiV1AssetsMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof postCoreV1Assets>>, TError, { data: CreateAssetRequest }, TContext> => {
+  return useMutation(getPostCoreV1AssetsMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Search assets with JSON filter DSL.
  */
-export const getPostApiV1AssetsSearchUrl = () => {
-  return `/api/v1/assets/search`
+export const getPostCoreV1AssetsSearchUrl = () => {
+  return `/core/v1/assets/search`
 }
 
-export const postApiV1AssetsSearch = async (
+export const postCoreV1AssetsSearch = async (
   assetFilterInputSearchRequest: AssetFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<AssetDtoApiPagedResponse> => {
-  return customFetch<AssetDtoApiPagedResponse>(getPostApiV1AssetsSearchUrl(), {
+  return customFetch<AssetDtoApiPagedResponse>(getPostCoreV1AssetsSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9793,21 +9826,21 @@ export const postApiV1AssetsSearch = async (
   })
 }
 
-export const getPostApiV1AssetsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+export const getPostCoreV1AssetsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AssetsSearch>>,
     TError,
     { data: AssetFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AssetsSearch>>,
   TError,
   { data: AssetFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AssetsSearch']
+  const mutationKey = ['postCoreV1AssetsSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -9815,28 +9848,28 @@ export const getPostApiV1AssetsSearchMutationOptions = <TError = ErrorType<unkno
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1AssetsSearch>>,
     { data: AssetFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1AssetsSearch(data, requestOptions)
+    return postCoreV1AssetsSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AssetsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1AssetsSearch>>>
-export type PostApiV1AssetsSearchMutationBody = AssetFilterInputSearchRequest
-export type PostApiV1AssetsSearchMutationError = ErrorType<unknown>
+export type PostCoreV1AssetsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1AssetsSearch>>>
+export type PostCoreV1AssetsSearchMutationBody = AssetFilterInputSearchRequest
+export type PostCoreV1AssetsSearchMutationError = ErrorType<unknown>
 
 /**
  * @summary Search assets with JSON filter DSL.
  */
-export const usePostApiV1AssetsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1AssetsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+      Awaited<ReturnType<typeof postCoreV1AssetsSearch>>,
       TError,
       { data: AssetFilterInputSearchRequest },
       TContext
@@ -9845,71 +9878,71 @@ export const usePostApiV1AssetsSearch = <TError = ErrorType<unknown>, TContext =
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AssetsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1AssetsSearch>>,
   TError,
   { data: AssetFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AssetsSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AssetsSearchMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get a single asset by ID.
  */
-export const getGetApiV1AssetsIdUrl = (id: string) => {
-  return `/api/v1/assets/${id}`
+export const getGetCoreV1AssetsIdUrl = (id: string) => {
+  return `/core/v1/assets/${id}`
 }
 
-export const getApiV1AssetsId = async (id: string, options?: RequestInit): Promise<AssetDtoApiResponse> => {
-  return customFetch<AssetDtoApiResponse>(getGetApiV1AssetsIdUrl(id), {
+export const getCoreV1AssetsId = async (id: string, options?: RequestInit): Promise<AssetDtoApiResponse> => {
+  return customFetch<AssetDtoApiResponse>(getGetCoreV1AssetsIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AssetsIdQueryKey = (id: string) => {
-  return [`/api/v1/assets/${id}`] as const
+export const getGetCoreV1AssetsIdQueryKey = (id: string) => {
+  return [`/core/v1/assets/${id}`] as const
 }
 
-export const getGetApiV1AssetsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AssetsId>>,
+export const getGetCoreV1AssetsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AssetsIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AssetsIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AssetsId>>> = ({ signal }) =>
-    getApiV1AssetsId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AssetsId>>> = ({ signal }) =>
+    getCoreV1AssetsId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AssetsId>>,
+    Awaited<ReturnType<typeof getCoreV1AssetsId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AssetsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1AssetsId>>>
-export type GetApiV1AssetsIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1AssetsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1AssetsId>>>
+export type GetCoreV1AssetsIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1AssetsId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsId>>,
+export function useGetCoreV1AssetsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AssetsId>>,
+          Awaited<ReturnType<typeof getCoreV1AssetsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AssetsId>>
+          Awaited<ReturnType<typeof getCoreV1AssetsId>>
         >,
         'initialData'
       >
@@ -9917,18 +9950,18 @@ export function useGetApiV1AssetsId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AssetsId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsId>>,
+export function useGetCoreV1AssetsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AssetsId>>,
+          Awaited<ReturnType<typeof getCoreV1AssetsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AssetsId>>
+          Awaited<ReturnType<typeof getCoreV1AssetsId>>
         >,
         'initialData'
       >
@@ -9936,13 +9969,13 @@ export function useGetApiV1AssetsId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AssetsId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsId>>,
+export function useGetCoreV1AssetsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -9951,18 +9984,18 @@ export function useGetApiV1AssetsId<
  * @summary Get a single asset by ID.
  */
 
-export function useGetApiV1AssetsId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsId>>,
+export function useGetCoreV1AssetsId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AssetsIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1AssetsIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -9974,16 +10007,16 @@ export function useGetApiV1AssetsId<
 /**
  * @summary Update an existing asset.
  */
-export const getPatchApiV1AssetsIdUrl = (id: string) => {
-  return `/api/v1/assets/${id}`
+export const getPatchCoreV1AssetsIdUrl = (id: string) => {
+  return `/core/v1/assets/${id}`
 }
 
-export const patchApiV1AssetsId = async (
+export const patchCoreV1AssetsId = async (
   id: string,
   updateAssetRequest: UpdateAssetRequest,
   options?: RequestInit
 ): Promise<AssetDtoApiResponse> => {
-  return customFetch<AssetDtoApiResponse>(getPatchApiV1AssetsIdUrl(id), {
+  return customFetch<AssetDtoApiResponse>(getPatchCoreV1AssetsIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -9991,24 +10024,24 @@ export const patchApiV1AssetsId = async (
   })
 }
 
-export const getPatchApiV1AssetsIdMutationOptions = <
+export const getPatchCoreV1AssetsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1AssetsId>>,
+    Awaited<ReturnType<typeof patchCoreV1AssetsId>>,
     TError,
     { id: string; data: UpdateAssetRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1AssetsId>>,
+  Awaited<ReturnType<typeof patchCoreV1AssetsId>>,
   TError,
   { id: string; data: UpdateAssetRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1AssetsId']
+  const mutationKey = ['patchCoreV1AssetsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -10016,28 +10049,28 @@ export const getPatchApiV1AssetsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1AssetsId>>,
+    Awaited<ReturnType<typeof patchCoreV1AssetsId>>,
     { id: string; data: UpdateAssetRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1AssetsId(id, data, requestOptions)
+    return patchCoreV1AssetsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1AssetsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1AssetsId>>>
-export type PatchApiV1AssetsIdMutationBody = UpdateAssetRequest
-export type PatchApiV1AssetsIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchCoreV1AssetsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchCoreV1AssetsId>>>
+export type PatchCoreV1AssetsIdMutationBody = UpdateAssetRequest
+export type PatchCoreV1AssetsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing asset.
  */
-export const usePatchApiV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchCoreV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1AssetsId>>,
+      Awaited<ReturnType<typeof patchCoreV1AssetsId>>,
       TError,
       { id: string; data: UpdateAssetRequest },
       TContext
@@ -10046,72 +10079,72 @@ export const usePatchApiV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TCon
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1AssetsId>>,
+  Awaited<ReturnType<typeof patchCoreV1AssetsId>>,
   TError,
   { id: string; data: UpdateAssetRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1AssetsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1AssetsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete an asset by ID.
  */
-export const getDeleteApiV1AssetsIdUrl = (id: string) => {
-  return `/api/v1/assets/${id}`
+export const getDeleteCoreV1AssetsIdUrl = (id: string) => {
+  return `/core/v1/assets/${id}`
 }
 
-export const deleteApiV1AssetsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1AssetsIdUrl(id), {
+export const deleteCoreV1AssetsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1AssetsIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1AssetsIdMutationOptions = <
+export const getDeleteCoreV1AssetsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
-  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AssetsId>>, TError, { id: string }, TContext>
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1AssetsId>>, TError, { id: string }, TContext>
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AssetsId>>, TError, { id: string }, TContext> => {
-  const mutationKey = ['deleteApiV1AssetsId']
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1AssetsId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteCoreV1AssetsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1AssetsId>>, { id: string }> = props => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCoreV1AssetsId>>, { id: string }> = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1AssetsId(id, requestOptions)
+    return deleteCoreV1AssetsId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AssetsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1AssetsId>>>
+export type DeleteCoreV1AssetsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1AssetsId>>>
 
-export type DeleteApiV1AssetsIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1AssetsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete an asset by ID.
  */
-export const useDeleteApiV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1AssetsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
-    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AssetsId>>, TError, { id: string }, TContext>
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1AssetsId>>, TError, { id: string }, TContext>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1AssetsId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1AssetsIdMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1AssetsId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteCoreV1AssetsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get paginated operational logs for a specific asset.
  */
-export const getGetApiV1AssetsAssetIdLogsUrl = (assetId: string, params?: GetApiV1AssetsAssetIdLogsParams) => {
+export const getGetCoreV1AssetsAssetIdLogsUrl = (assetId: string, params?: GetCoreV1AssetsAssetIdLogsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -10123,66 +10156,66 @@ export const getGetApiV1AssetsAssetIdLogsUrl = (assetId: string, params?: GetApi
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/assets/${assetId}/logs?${stringifiedParams}`
-    : `/api/v1/assets/${assetId}/logs`
+    ? `/core/v1/assets/${assetId}/logs?${stringifiedParams}`
+    : `/core/v1/assets/${assetId}/logs`
 }
 
-export const getApiV1AssetsAssetIdLogs = async (
+export const getCoreV1AssetsAssetIdLogs = async (
   assetId: string,
-  params?: GetApiV1AssetsAssetIdLogsParams,
+  params?: GetCoreV1AssetsAssetIdLogsParams,
   options?: RequestInit
 ): Promise<AssetLogDtoApiPagedResponse> => {
-  return customFetch<AssetLogDtoApiPagedResponse>(getGetApiV1AssetsAssetIdLogsUrl(assetId, params), {
+  return customFetch<AssetLogDtoApiPagedResponse>(getGetCoreV1AssetsAssetIdLogsUrl(assetId, params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AssetsAssetIdLogsQueryKey = (assetId: string, params?: GetApiV1AssetsAssetIdLogsParams) => {
-  return [`/api/v1/assets/${assetId}/logs`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AssetsAssetIdLogsQueryKey = (assetId: string, params?: GetCoreV1AssetsAssetIdLogsParams) => {
+  return [`/core/v1/assets/${assetId}/logs`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AssetsAssetIdLogsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+export const getGetCoreV1AssetsAssetIdLogsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
-  params?: GetApiV1AssetsAssetIdLogsParams,
+  params?: GetCoreV1AssetsAssetIdLogsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AssetsAssetIdLogsQueryKey(assetId, params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AssetsAssetIdLogsQueryKey(assetId, params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>> = ({ signal }) =>
-    getApiV1AssetsAssetIdLogs(assetId, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>> = ({ signal }) =>
+    getCoreV1AssetsAssetIdLogs(assetId, params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!assetId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+    Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AssetsAssetIdLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>>
-export type GetApiV1AssetsAssetIdLogsQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1AssetsAssetIdLogsQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>>
+export type GetCoreV1AssetsAssetIdLogsQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1AssetsAssetIdLogs<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+export function useGetCoreV1AssetsAssetIdLogs<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
-  params: undefined | GetApiV1AssetsAssetIdLogsParams,
+  params: undefined | GetCoreV1AssetsAssetIdLogsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>
         >,
         'initialData'
       >
@@ -10190,19 +10223,19 @@ export function useGetApiV1AssetsAssetIdLogs<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AssetsAssetIdLogs<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+export function useGetCoreV1AssetsAssetIdLogs<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
-  params?: GetApiV1AssetsAssetIdLogsParams,
+  params?: GetCoreV1AssetsAssetIdLogsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>
         >,
         'initialData'
       >
@@ -10210,14 +10243,14 @@ export function useGetApiV1AssetsAssetIdLogs<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AssetsAssetIdLogs<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+export function useGetCoreV1AssetsAssetIdLogs<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
-  params?: GetApiV1AssetsAssetIdLogsParams,
+  params?: GetCoreV1AssetsAssetIdLogsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -10226,19 +10259,19 @@ export function useGetApiV1AssetsAssetIdLogs<
  * @summary Get paginated operational logs for a specific asset.
  */
 
-export function useGetApiV1AssetsAssetIdLogs<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>,
+export function useGetCoreV1AssetsAssetIdLogs<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
-  params?: GetApiV1AssetsAssetIdLogsParams,
+  params?: GetCoreV1AssetsAssetIdLogsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogs>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogs>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AssetsAssetIdLogsQueryOptions(assetId, params, options)
+  const queryOptions = getGetCoreV1AssetsAssetIdLogsQueryOptions(assetId, params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -10250,16 +10283,16 @@ export function useGetApiV1AssetsAssetIdLogs<
 /**
  * @summary Record a new operational log (Refill, Repair, Maintain) for an asset.
  */
-export const getPostApiV1AssetsAssetIdLogsUrl = (assetId: string) => {
-  return `/api/v1/assets/${assetId}/logs`
+export const getPostCoreV1AssetsAssetIdLogsUrl = (assetId: string) => {
+  return `/core/v1/assets/${assetId}/logs`
 }
 
-export const postApiV1AssetsAssetIdLogs = async (
+export const postCoreV1AssetsAssetIdLogs = async (
   assetId: string,
   createAssetLogRequest: CreateAssetLogRequest,
   options?: RequestInit
 ): Promise<AssetLogDtoApiResponse> => {
-  return customFetch<AssetLogDtoApiResponse>(getPostApiV1AssetsAssetIdLogsUrl(assetId), {
+  return customFetch<AssetLogDtoApiResponse>(getPostCoreV1AssetsAssetIdLogsUrl(assetId), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -10267,24 +10300,24 @@ export const postApiV1AssetsAssetIdLogs = async (
   })
 }
 
-export const getPostApiV1AssetsAssetIdLogsMutationOptions = <
+export const getPostCoreV1AssetsAssetIdLogsMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1AssetsAssetIdLogs>>,
+    Awaited<ReturnType<typeof postCoreV1AssetsAssetIdLogs>>,
     TError,
     { assetId: string; data: CreateAssetLogRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1AssetsAssetIdLogs>>,
+  Awaited<ReturnType<typeof postCoreV1AssetsAssetIdLogs>>,
   TError,
   { assetId: string; data: CreateAssetLogRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1AssetsAssetIdLogs']
+  const mutationKey = ['postCoreV1AssetsAssetIdLogs']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -10292,30 +10325,30 @@ export const getPostApiV1AssetsAssetIdLogsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1AssetsAssetIdLogs>>,
+    Awaited<ReturnType<typeof postCoreV1AssetsAssetIdLogs>>,
     { assetId: string; data: CreateAssetLogRequest }
   > = props => {
     const { assetId, data } = props ?? {}
 
-    return postApiV1AssetsAssetIdLogs(assetId, data, requestOptions)
+    return postCoreV1AssetsAssetIdLogs(assetId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AssetsAssetIdLogsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1AssetsAssetIdLogs>>
+export type PostCoreV1AssetsAssetIdLogsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1AssetsAssetIdLogs>>
 >
-export type PostApiV1AssetsAssetIdLogsMutationBody = CreateAssetLogRequest
-export type PostApiV1AssetsAssetIdLogsMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1AssetsAssetIdLogsMutationBody = CreateAssetLogRequest
+export type PostCoreV1AssetsAssetIdLogsMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Record a new operational log (Refill, Repair, Maintain) for an asset.
  */
-export const usePostApiV1AssetsAssetIdLogs = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1AssetsAssetIdLogs = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1AssetsAssetIdLogs>>,
+      Awaited<ReturnType<typeof postCoreV1AssetsAssetIdLogs>>,
       TError,
       { assetId: string; data: CreateAssetLogRequest },
       TContext
@@ -10324,79 +10357,79 @@ export const usePostApiV1AssetsAssetIdLogs = <TError = ErrorType<ApiErrorRespons
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1AssetsAssetIdLogs>>,
+  Awaited<ReturnType<typeof postCoreV1AssetsAssetIdLogs>>,
   TError,
   { assetId: string; data: CreateAssetLogRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1AssetsAssetIdLogsMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AssetsAssetIdLogsMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get a single asset log entry by ID.
  */
-export const getGetApiV1AssetsAssetIdLogsLogIdUrl = (assetId: string, logId: string) => {
-  return `/api/v1/assets/${assetId}/logs/${logId}`
+export const getGetCoreV1AssetsAssetIdLogsLogIdUrl = (assetId: string, logId: string) => {
+  return `/core/v1/assets/${assetId}/logs/${logId}`
 }
 
-export const getApiV1AssetsAssetIdLogsLogId = async (
+export const getCoreV1AssetsAssetIdLogsLogId = async (
   assetId: string,
   logId: string,
   options?: RequestInit
 ): Promise<AssetLogDtoApiResponse> => {
-  return customFetch<AssetLogDtoApiResponse>(getGetApiV1AssetsAssetIdLogsLogIdUrl(assetId, logId), {
+  return customFetch<AssetLogDtoApiResponse>(getGetCoreV1AssetsAssetIdLogsLogIdUrl(assetId, logId), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AssetsAssetIdLogsLogIdQueryKey = (assetId: string, logId: string) => {
-  return [`/api/v1/assets/${assetId}/logs/${logId}`] as const
+export const getGetCoreV1AssetsAssetIdLogsLogIdQueryKey = (assetId: string, logId: string) => {
+  return [`/core/v1/assets/${assetId}/logs/${logId}`] as const
 }
 
-export const getGetApiV1AssetsAssetIdLogsLogIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+export const getGetCoreV1AssetsAssetIdLogsLogIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
   logId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AssetsAssetIdLogsLogIdQueryKey(assetId, logId)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AssetsAssetIdLogsLogIdQueryKey(assetId, logId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>> = ({ signal }) =>
-    getApiV1AssetsAssetIdLogsLogId(assetId, logId, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>> = ({ signal }) =>
+    getCoreV1AssetsAssetIdLogsLogId(assetId, logId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!(assetId && logId), staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+    Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AssetsAssetIdLogsLogIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>
+export type GetCoreV1AssetsAssetIdLogsLogIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>
 >
-export type GetApiV1AssetsAssetIdLogsLogIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1AssetsAssetIdLogsLogIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1AssetsAssetIdLogsLogId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+export function useGetCoreV1AssetsAssetIdLogsLogId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
   logId: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>
         >,
         'initialData'
       >
@@ -10404,19 +10437,19 @@ export function useGetApiV1AssetsAssetIdLogsLogId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AssetsAssetIdLogsLogId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+export function useGetCoreV1AssetsAssetIdLogsLogId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
   logId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>
+          Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>
         >,
         'initialData'
       >
@@ -10424,14 +10457,14 @@ export function useGetApiV1AssetsAssetIdLogsLogId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1AssetsAssetIdLogsLogId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+export function useGetCoreV1AssetsAssetIdLogsLogId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
   logId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -10440,19 +10473,19 @@ export function useGetApiV1AssetsAssetIdLogsLogId<
  * @summary Get a single asset log entry by ID.
  */
 
-export function useGetApiV1AssetsAssetIdLogsLogId<
-  TData = Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>,
+export function useGetCoreV1AssetsAssetIdLogsLogId<
+  TData = Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   assetId: string,
   logId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1AssetsAssetIdLogsLogId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1AssetsAssetIdLogsLogId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AssetsAssetIdLogsLogIdQueryOptions(assetId, logId, options)
+  const queryOptions = getGetCoreV1AssetsAssetIdLogsLogIdQueryOptions(assetId, logId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -10464,39 +10497,39 @@ export function useGetApiV1AssetsAssetIdLogsLogId<
 /**
  * @summary Delete an asset log entry.
  */
-export const getDeleteApiV1AssetsAssetIdLogsLogIdUrl = (assetId: string, logId: string) => {
-  return `/api/v1/assets/${assetId}/logs/${logId}`
+export const getDeleteCoreV1AssetsAssetIdLogsLogIdUrl = (assetId: string, logId: string) => {
+  return `/core/v1/assets/${assetId}/logs/${logId}`
 }
 
-export const deleteApiV1AssetsAssetIdLogsLogId = async (
+export const deleteCoreV1AssetsAssetIdLogsLogId = async (
   assetId: string,
   logId: string,
   options?: RequestInit
 ): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1AssetsAssetIdLogsLogIdUrl(assetId, logId), {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1AssetsAssetIdLogsLogIdUrl(assetId, logId), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1AssetsAssetIdLogsLogIdMutationOptions = <
+export const getDeleteCoreV1AssetsAssetIdLogsLogIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1AssetsAssetIdLogsLogId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AssetsAssetIdLogsLogId>>,
     TError,
     { assetId: string; logId: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1AssetsAssetIdLogsLogId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AssetsAssetIdLogsLogId>>,
   TError,
   { assetId: string; logId: string },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1AssetsAssetIdLogsLogId']
+  const mutationKey = ['deleteCoreV1AssetsAssetIdLogsLogId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -10504,30 +10537,30 @@ export const getDeleteApiV1AssetsAssetIdLogsLogIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1AssetsAssetIdLogsLogId>>,
+    Awaited<ReturnType<typeof deleteCoreV1AssetsAssetIdLogsLogId>>,
     { assetId: string; logId: string }
   > = props => {
     const { assetId, logId } = props ?? {}
 
-    return deleteApiV1AssetsAssetIdLogsLogId(assetId, logId, requestOptions)
+    return deleteCoreV1AssetsAssetIdLogsLogId(assetId, logId, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AssetsAssetIdLogsLogIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1AssetsAssetIdLogsLogId>>
+export type DeleteCoreV1AssetsAssetIdLogsLogIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1AssetsAssetIdLogsLogId>>
 >
 
-export type DeleteApiV1AssetsAssetIdLogsLogIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1AssetsAssetIdLogsLogIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete an asset log entry.
  */
-export const useDeleteApiV1AssetsAssetIdLogsLogId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1AssetsAssetIdLogsLogId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AssetsAssetIdLogsLogId>>,
+      Awaited<ReturnType<typeof deleteCoreV1AssetsAssetIdLogsLogId>>,
       TError,
       { assetId: string; logId: string },
       TContext
@@ -10536,64 +10569,64 @@ export const useDeleteApiV1AssetsAssetIdLogsLogId = <TError = ErrorType<ApiError
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteApiV1AssetsAssetIdLogsLogId>>,
+  Awaited<ReturnType<typeof deleteCoreV1AssetsAssetIdLogsLogId>>,
   TError,
   { assetId: string; logId: string },
   TContext
 > => {
-  return useMutation(getDeleteApiV1AssetsAssetIdLogsLogIdMutationOptions(options), queryClient)
+  return useMutation(getDeleteCoreV1AssetsAssetIdLogsLogIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Upload a file and attach it to a target entity.
  */
-export const getPostApiV1AttachmentsUrl = () => {
-  return `/api/v1/attachments`
+export const getPostCoreV1AttachmentsUrl = () => {
+  return `/core/v1/attachments`
 }
 
-export const postApiV1Attachments = async (
-  postApiV1AttachmentsBody: PostApiV1AttachmentsBody,
+export const postCoreV1Attachments = async (
+  postCoreV1AttachmentsBody: PostCoreV1AttachmentsBody,
   options?: RequestInit
 ): Promise<AttachmentDtoApiResponse> => {
   const formData = new FormData()
-  if (postApiV1AttachmentsBody.file !== undefined) {
-    formData.append(`file`, postApiV1AttachmentsBody.file)
+  if (postCoreV1AttachmentsBody.file !== undefined) {
+    formData.append(`file`, postCoreV1AttachmentsBody.file)
   }
-  if (postApiV1AttachmentsBody.targetId !== undefined) {
-    formData.append(`targetId`, postApiV1AttachmentsBody.targetId)
+  if (postCoreV1AttachmentsBody.targetId !== undefined) {
+    formData.append(`targetId`, postCoreV1AttachmentsBody.targetId)
   }
-  if (postApiV1AttachmentsBody.targetType !== undefined) {
-    formData.append(`targetType`, postApiV1AttachmentsBody.targetType)
+  if (postCoreV1AttachmentsBody.targetType !== undefined) {
+    formData.append(`targetType`, postCoreV1AttachmentsBody.targetType)
   }
-  if (postApiV1AttachmentsBody.purpose !== undefined) {
-    formData.append(`purpose`, postApiV1AttachmentsBody.purpose)
+  if (postCoreV1AttachmentsBody.purpose !== undefined) {
+    formData.append(`purpose`, postCoreV1AttachmentsBody.purpose)
   }
 
-  return customFetch<AttachmentDtoApiResponse>(getPostApiV1AttachmentsUrl(), {
+  return customFetch<AttachmentDtoApiResponse>(getPostCoreV1AttachmentsUrl(), {
     ...options,
     method: 'POST',
     body: formData
   })
 }
 
-export const getPostApiV1AttachmentsMutationOptions = <
+export const getPostCoreV1AttachmentsMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1Attachments>>,
+    Awaited<ReturnType<typeof postCoreV1Attachments>>,
     TError,
-    { data: PostApiV1AttachmentsBody },
+    { data: PostCoreV1AttachmentsBody },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1Attachments>>,
+  Awaited<ReturnType<typeof postCoreV1Attachments>>,
   TError,
-  { data: PostApiV1AttachmentsBody },
+  { data: PostCoreV1AttachmentsBody },
   TContext
 > => {
-  const mutationKey = ['postApiV1Attachments']
+  const mutationKey = ['postCoreV1Attachments']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -10601,48 +10634,48 @@ export const getPostApiV1AttachmentsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1Attachments>>,
-    { data: PostApiV1AttachmentsBody }
+    Awaited<ReturnType<typeof postCoreV1Attachments>>,
+    { data: PostCoreV1AttachmentsBody }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1Attachments(data, requestOptions)
+    return postCoreV1Attachments(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1AttachmentsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Attachments>>>
-export type PostApiV1AttachmentsMutationBody = PostApiV1AttachmentsBody
-export type PostApiV1AttachmentsMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1AttachmentsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1Attachments>>>
+export type PostCoreV1AttachmentsMutationBody = PostCoreV1AttachmentsBody
+export type PostCoreV1AttachmentsMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Upload a file and attach it to a target entity.
  */
-export const usePostApiV1Attachments = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1Attachments = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1Attachments>>,
+      Awaited<ReturnType<typeof postCoreV1Attachments>>,
       TError,
-      { data: PostApiV1AttachmentsBody },
+      { data: PostCoreV1AttachmentsBody },
       TContext
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1Attachments>>,
+  Awaited<ReturnType<typeof postCoreV1Attachments>>,
   TError,
-  { data: PostApiV1AttachmentsBody },
+  { data: PostCoreV1AttachmentsBody },
   TContext
 > => {
-  return useMutation(getPostApiV1AttachmentsMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1AttachmentsMutationOptions(options), queryClient)
 }
 
 /**
  * @summary List all attachments for a target entity. URLs are presigned (time-limited).
  */
-export const getGetApiV1AttachmentsUrl = (params?: GetApiV1AttachmentsParams) => {
+export const getGetCoreV1AttachmentsUrl = (params?: GetCoreV1AttachmentsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -10653,62 +10686,62 @@ export const getGetApiV1AttachmentsUrl = (params?: GetApiV1AttachmentsParams) =>
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/attachments?${stringifiedParams}` : `/api/v1/attachments`
+  return stringifiedParams.length > 0 ? `/core/v1/attachments?${stringifiedParams}` : `/core/v1/attachments`
 }
 
-export const getApiV1Attachments = async (
-  params?: GetApiV1AttachmentsParams,
+export const getCoreV1Attachments = async (
+  params?: GetCoreV1AttachmentsParams,
   options?: RequestInit
 ): Promise<AttachmentDtoListApiResponse> => {
-  return customFetch<AttachmentDtoListApiResponse>(getGetApiV1AttachmentsUrl(params), {
+  return customFetch<AttachmentDtoListApiResponse>(getGetCoreV1AttachmentsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1AttachmentsQueryKey = (params?: GetApiV1AttachmentsParams) => {
-  return [`/api/v1/attachments`, ...(params ? [params] : [])] as const
+export const getGetCoreV1AttachmentsQueryKey = (params?: GetCoreV1AttachmentsParams) => {
+  return [`/core/v1/attachments`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1AttachmentsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+export const getGetCoreV1AttachmentsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1Attachments>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AttachmentsParams,
+  params?: GetCoreV1AttachmentsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Attachments>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1AttachmentsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1AttachmentsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Attachments>>> = ({ signal }) =>
-    getApiV1Attachments(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1Attachments>>> = ({ signal }) =>
+    getCoreV1Attachments(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1Attachments>>,
+    Awaited<ReturnType<typeof getCoreV1Attachments>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1AttachmentsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Attachments>>>
-export type GetApiV1AttachmentsQueryError = ErrorType<unknown>
+export type GetCoreV1AttachmentsQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1Attachments>>>
+export type GetCoreV1AttachmentsQueryError = ErrorType<unknown>
 
-export function useGetApiV1Attachments<
-  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+export function useGetCoreV1Attachments<
+  TData = Awaited<ReturnType<typeof getCoreV1Attachments>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1AttachmentsParams,
+  params: undefined | GetCoreV1AttachmentsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Attachments>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Attachments>>,
+          Awaited<ReturnType<typeof getCoreV1Attachments>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Attachments>>
+          Awaited<ReturnType<typeof getCoreV1Attachments>>
         >,
         'initialData'
       >
@@ -10716,18 +10749,18 @@ export function useGetApiV1Attachments<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Attachments<
-  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+export function useGetCoreV1Attachments<
+  TData = Awaited<ReturnType<typeof getCoreV1Attachments>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AttachmentsParams,
+  params?: GetCoreV1AttachmentsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Attachments>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Attachments>>,
+          Awaited<ReturnType<typeof getCoreV1Attachments>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Attachments>>
+          Awaited<ReturnType<typeof getCoreV1Attachments>>
         >,
         'initialData'
       >
@@ -10735,13 +10768,13 @@ export function useGetApiV1Attachments<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Attachments<
-  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+export function useGetCoreV1Attachments<
+  TData = Awaited<ReturnType<typeof getCoreV1Attachments>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AttachmentsParams,
+  params?: GetCoreV1AttachmentsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Attachments>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -10750,18 +10783,18 @@ export function useGetApiV1Attachments<
  * @summary List all attachments for a target entity. URLs are presigned (time-limited).
  */
 
-export function useGetApiV1Attachments<
-  TData = Awaited<ReturnType<typeof getApiV1Attachments>>,
+export function useGetCoreV1Attachments<
+  TData = Awaited<ReturnType<typeof getCoreV1Attachments>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1AttachmentsParams,
+  params?: GetCoreV1AttachmentsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Attachments>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Attachments>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1AttachmentsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1AttachmentsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -10773,51 +10806,51 @@ export function useGetApiV1Attachments<
 /**
  * @summary Delete an attachment (removes DB record and R2 object).
  */
-export const getDeleteApiV1AttachmentsIdUrl = (id: string) => {
-  return `/api/v1/attachments/${id}`
+export const getDeleteCoreV1AttachmentsIdUrl = (id: string) => {
+  return `/core/v1/attachments/${id}`
 }
 
-export const deleteApiV1AttachmentsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1AttachmentsIdUrl(id), {
+export const deleteCoreV1AttachmentsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1AttachmentsIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1AttachmentsIdMutationOptions = <
+export const getDeleteCoreV1AttachmentsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
-  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, TError, { id: string }, TContext>
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1AttachmentsId>>, TError, { id: string }, TContext>
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, TError, { id: string }, TContext> => {
-  const mutationKey = ['deleteApiV1AttachmentsId']
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1AttachmentsId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteCoreV1AttachmentsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, { id: string }> = props => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCoreV1AttachmentsId>>, { id: string }> = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1AttachmentsId(id, requestOptions)
+    return deleteCoreV1AttachmentsId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1AttachmentsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>>
+export type DeleteCoreV1AttachmentsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1AttachmentsId>>>
 
-export type DeleteApiV1AttachmentsIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1AttachmentsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete an attachment (removes DB record and R2 object).
  */
-export const useDeleteApiV1AttachmentsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1AttachmentsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>,
+      Awaited<ReturnType<typeof deleteCoreV1AttachmentsId>>,
       TError,
       { id: string },
       TContext
@@ -10825,14 +10858,14 @@ export const useDeleteApiV1AttachmentsId = <TError = ErrorType<ApiErrorResponse>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1AttachmentsId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1AttachmentsIdMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1AttachmentsId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteCoreV1AttachmentsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get paginated list of brands with optional sorting.
  */
-export const getGetApiV1BrandsUrl = (params?: GetApiV1BrandsParams) => {
+export const getGetCoreV1BrandsUrl = (params?: GetCoreV1BrandsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -10843,62 +10876,62 @@ export const getGetApiV1BrandsUrl = (params?: GetApiV1BrandsParams) => {
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/brands?${stringifiedParams}` : `/api/v1/brands`
+  return stringifiedParams.length > 0 ? `/core/v1/brands?${stringifiedParams}` : `/core/v1/brands`
 }
 
-export const getApiV1Brands = async (
-  params?: GetApiV1BrandsParams,
+export const getCoreV1Brands = async (
+  params?: GetCoreV1BrandsParams,
   options?: RequestInit
 ): Promise<BrandDtoApiPagedResponse> => {
-  return customFetch<BrandDtoApiPagedResponse>(getGetApiV1BrandsUrl(params), {
+  return customFetch<BrandDtoApiPagedResponse>(getGetCoreV1BrandsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1BrandsQueryKey = (params?: GetApiV1BrandsParams) => {
-  return [`/api/v1/brands`, ...(params ? [params] : [])] as const
+export const getGetCoreV1BrandsQueryKey = (params?: GetCoreV1BrandsParams) => {
+  return [`/core/v1/brands`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1BrandsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1Brands>>,
+export const getGetCoreV1BrandsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1Brands>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1BrandsParams,
+  params?: GetCoreV1BrandsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Brands>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Brands>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1BrandsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1BrandsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Brands>>> = ({ signal }) =>
-    getApiV1Brands(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1Brands>>> = ({ signal }) =>
+    getCoreV1Brands(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1Brands>>,
+    Awaited<ReturnType<typeof getCoreV1Brands>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1BrandsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Brands>>>
-export type GetApiV1BrandsQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1BrandsQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1Brands>>>
+export type GetCoreV1BrandsQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1Brands<
-  TData = Awaited<ReturnType<typeof getApiV1Brands>>,
+export function useGetCoreV1Brands<
+  TData = Awaited<ReturnType<typeof getCoreV1Brands>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetApiV1BrandsParams,
+  params: undefined | GetCoreV1BrandsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Brands>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Brands>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Brands>>,
+          Awaited<ReturnType<typeof getCoreV1Brands>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Brands>>
+          Awaited<ReturnType<typeof getCoreV1Brands>>
         >,
         'initialData'
       >
@@ -10906,18 +10939,18 @@ export function useGetApiV1Brands<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Brands<
-  TData = Awaited<ReturnType<typeof getApiV1Brands>>,
+export function useGetCoreV1Brands<
+  TData = Awaited<ReturnType<typeof getCoreV1Brands>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1BrandsParams,
+  params?: GetCoreV1BrandsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Brands>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Brands>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Brands>>,
+          Awaited<ReturnType<typeof getCoreV1Brands>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Brands>>
+          Awaited<ReturnType<typeof getCoreV1Brands>>
         >,
         'initialData'
       >
@@ -10925,13 +10958,13 @@ export function useGetApiV1Brands<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Brands<
-  TData = Awaited<ReturnType<typeof getApiV1Brands>>,
+export function useGetCoreV1Brands<
+  TData = Awaited<ReturnType<typeof getCoreV1Brands>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1BrandsParams,
+  params?: GetCoreV1BrandsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Brands>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Brands>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -10940,18 +10973,18 @@ export function useGetApiV1Brands<
  * @summary Get paginated list of brands with optional sorting.
  */
 
-export function useGetApiV1Brands<
-  TData = Awaited<ReturnType<typeof getApiV1Brands>>,
+export function useGetCoreV1Brands<
+  TData = Awaited<ReturnType<typeof getCoreV1Brands>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1BrandsParams,
+  params?: GetCoreV1BrandsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Brands>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Brands>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1BrandsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1BrandsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -10963,15 +10996,15 @@ export function useGetApiV1Brands<
 /**
  * @summary Create a new brand.
  */
-export const getPostApiV1BrandsUrl = () => {
-  return `/api/v1/brands`
+export const getPostCoreV1BrandsUrl = () => {
+  return `/core/v1/brands`
 }
 
-export const postApiV1Brands = async (
+export const postCoreV1Brands = async (
   createBrandRequest: CreateBrandRequest,
   options?: RequestInit
 ): Promise<BrandDtoApiResponse> => {
-  return customFetch<BrandDtoApiResponse>(getPostApiV1BrandsUrl(), {
+  return customFetch<BrandDtoApiResponse>(getPostCoreV1BrandsUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -10979,16 +11012,21 @@ export const postApiV1Brands = async (
   })
 }
 
-export const getPostApiV1BrandsMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPostCoreV1BrandsMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1Brands>>,
+    Awaited<ReturnType<typeof postCoreV1Brands>>,
     TError,
     { data: CreateBrandRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof postApiV1Brands>>, TError, { data: CreateBrandRequest }, TContext> => {
-  const mutationKey = ['postApiV1Brands']
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postCoreV1Brands>>,
+  TError,
+  { data: CreateBrandRequest },
+  TContext
+> => {
+  const mutationKey = ['postCoreV1Brands']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -10996,28 +11034,28 @@ export const getPostApiV1BrandsMutationOptions = <TError = ErrorType<ApiErrorRes
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1Brands>>,
+    Awaited<ReturnType<typeof postCoreV1Brands>>,
     { data: CreateBrandRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1Brands(data, requestOptions)
+    return postCoreV1Brands(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1BrandsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Brands>>>
-export type PostApiV1BrandsMutationBody = CreateBrandRequest
-export type PostApiV1BrandsMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1BrandsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1Brands>>>
+export type PostCoreV1BrandsMutationBody = CreateBrandRequest
+export type PostCoreV1BrandsMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Create a new brand.
  */
-export const usePostApiV1Brands = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1Brands = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1Brands>>,
+      Awaited<ReturnType<typeof postCoreV1Brands>>,
       TError,
       { data: CreateBrandRequest },
       TContext
@@ -11025,14 +11063,14 @@ export const usePostApiV1Brands = <TError = ErrorType<ApiErrorResponse>, TContex
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof postApiV1Brands>>, TError, { data: CreateBrandRequest }, TContext> => {
-  return useMutation(getPostApiV1BrandsMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof postCoreV1Brands>>, TError, { data: CreateBrandRequest }, TContext> => {
+  return useMutation(getPostCoreV1BrandsMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Search brands with JSON filter DSL.
  */
-export const getPostApiV1BrandsSearchUrl = (params?: PostApiV1BrandsSearchParams) => {
+export const getPostCoreV1BrandsSearchUrl = (params?: PostCoreV1BrandsSearchParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -11043,15 +11081,15 @@ export const getPostApiV1BrandsSearchUrl = (params?: PostApiV1BrandsSearchParams
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/brands/search?${stringifiedParams}` : `/api/v1/brands/search`
+  return stringifiedParams.length > 0 ? `/core/v1/brands/search?${stringifiedParams}` : `/core/v1/brands/search`
 }
 
-export const postApiV1BrandsSearch = async (
+export const postCoreV1BrandsSearch = async (
   brandFilterInputSearchRequest: BrandFilterInputSearchRequest,
-  params?: PostApiV1BrandsSearchParams,
+  params?: PostCoreV1BrandsSearchParams,
   options?: RequestInit
 ): Promise<BrandDtoApiPagedResponse> => {
-  return customFetch<BrandDtoApiPagedResponse>(getPostApiV1BrandsSearchUrl(params), {
+  return customFetch<BrandDtoApiPagedResponse>(getPostCoreV1BrandsSearchUrl(params), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -11059,21 +11097,21 @@ export const postApiV1BrandsSearch = async (
   })
 }
 
-export const getPostApiV1BrandsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+export const getPostCoreV1BrandsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1BrandsSearch>>,
     TError,
-    { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+    { data: BrandFilterInputSearchRequest; params?: PostCoreV1BrandsSearchParams },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1BrandsSearch>>,
   TError,
-  { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+  { data: BrandFilterInputSearchRequest; params?: PostCoreV1BrandsSearchParams },
   TContext
 > => {
-  const mutationKey = ['postApiV1BrandsSearch']
+  const mutationKey = ['postCoreV1BrandsSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -11081,101 +11119,101 @@ export const getPostApiV1BrandsSearchMutationOptions = <TError = ErrorType<unkno
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
-    { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams }
+    Awaited<ReturnType<typeof postCoreV1BrandsSearch>>,
+    { data: BrandFilterInputSearchRequest; params?: PostCoreV1BrandsSearchParams }
   > = props => {
     const { data, params } = props ?? {}
 
-    return postApiV1BrandsSearch(data, params, requestOptions)
+    return postCoreV1BrandsSearch(data, params, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1BrandsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1BrandsSearch>>>
-export type PostApiV1BrandsSearchMutationBody = BrandFilterInputSearchRequest
-export type PostApiV1BrandsSearchMutationError = ErrorType<unknown>
+export type PostCoreV1BrandsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1BrandsSearch>>>
+export type PostCoreV1BrandsSearchMutationBody = BrandFilterInputSearchRequest
+export type PostCoreV1BrandsSearchMutationError = ErrorType<unknown>
 
 /**
  * @summary Search brands with JSON filter DSL.
  */
-export const usePostApiV1BrandsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1BrandsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+      Awaited<ReturnType<typeof postCoreV1BrandsSearch>>,
       TError,
-      { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+      { data: BrandFilterInputSearchRequest; params?: PostCoreV1BrandsSearchParams },
       TContext
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1BrandsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1BrandsSearch>>,
   TError,
-  { data: BrandFilterInputSearchRequest; params?: PostApiV1BrandsSearchParams },
+  { data: BrandFilterInputSearchRequest; params?: PostCoreV1BrandsSearchParams },
   TContext
 > => {
-  return useMutation(getPostApiV1BrandsSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1BrandsSearchMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get a single brand by ID.
  */
-export const getGetApiV1BrandsIdUrl = (id: string) => {
-  return `/api/v1/brands/${id}`
+export const getGetCoreV1BrandsIdUrl = (id: string) => {
+  return `/core/v1/brands/${id}`
 }
 
-export const getApiV1BrandsId = async (id: string, options?: RequestInit): Promise<BrandDtoApiResponse> => {
-  return customFetch<BrandDtoApiResponse>(getGetApiV1BrandsIdUrl(id), {
+export const getCoreV1BrandsId = async (id: string, options?: RequestInit): Promise<BrandDtoApiResponse> => {
+  return customFetch<BrandDtoApiResponse>(getGetCoreV1BrandsIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1BrandsIdQueryKey = (id: string) => {
-  return [`/api/v1/brands/${id}`] as const
+export const getGetCoreV1BrandsIdQueryKey = (id: string) => {
+  return [`/core/v1/brands/${id}`] as const
 }
 
-export const getGetApiV1BrandsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1BrandsId>>,
+export const getGetCoreV1BrandsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1BrandsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1BrandsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1BrandsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1BrandsIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1BrandsIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1BrandsId>>> = ({ signal }) =>
-    getApiV1BrandsId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1BrandsId>>> = ({ signal }) =>
+    getCoreV1BrandsId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1BrandsId>>,
+    Awaited<ReturnType<typeof getCoreV1BrandsId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1BrandsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1BrandsId>>>
-export type GetApiV1BrandsIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1BrandsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1BrandsId>>>
+export type GetCoreV1BrandsIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1BrandsId<
-  TData = Awaited<ReturnType<typeof getApiV1BrandsId>>,
+export function useGetCoreV1BrandsId<
+  TData = Awaited<ReturnType<typeof getCoreV1BrandsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1BrandsId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1BrandsId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1BrandsId>>,
+          Awaited<ReturnType<typeof getCoreV1BrandsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1BrandsId>>
+          Awaited<ReturnType<typeof getCoreV1BrandsId>>
         >,
         'initialData'
       >
@@ -11183,18 +11221,18 @@ export function useGetApiV1BrandsId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1BrandsId<
-  TData = Awaited<ReturnType<typeof getApiV1BrandsId>>,
+export function useGetCoreV1BrandsId<
+  TData = Awaited<ReturnType<typeof getCoreV1BrandsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1BrandsId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1BrandsId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1BrandsId>>,
+          Awaited<ReturnType<typeof getCoreV1BrandsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1BrandsId>>
+          Awaited<ReturnType<typeof getCoreV1BrandsId>>
         >,
         'initialData'
       >
@@ -11202,13 +11240,13 @@ export function useGetApiV1BrandsId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1BrandsId<
-  TData = Awaited<ReturnType<typeof getApiV1BrandsId>>,
+export function useGetCoreV1BrandsId<
+  TData = Awaited<ReturnType<typeof getCoreV1BrandsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1BrandsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1BrandsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -11217,18 +11255,18 @@ export function useGetApiV1BrandsId<
  * @summary Get a single brand by ID.
  */
 
-export function useGetApiV1BrandsId<
-  TData = Awaited<ReturnType<typeof getApiV1BrandsId>>,
+export function useGetCoreV1BrandsId<
+  TData = Awaited<ReturnType<typeof getCoreV1BrandsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1BrandsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1BrandsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1BrandsIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1BrandsIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -11240,16 +11278,16 @@ export function useGetApiV1BrandsId<
 /**
  * @summary Update an existing brand.
  */
-export const getPatchApiV1BrandsIdUrl = (id: string) => {
-  return `/api/v1/brands/${id}`
+export const getPatchCoreV1BrandsIdUrl = (id: string) => {
+  return `/core/v1/brands/${id}`
 }
 
-export const patchApiV1BrandsId = async (
+export const patchCoreV1BrandsId = async (
   id: string,
   updateBrandRequest: UpdateBrandRequest,
   options?: RequestInit
 ): Promise<BrandDtoApiResponse> => {
-  return customFetch<BrandDtoApiResponse>(getPatchApiV1BrandsIdUrl(id), {
+  return customFetch<BrandDtoApiResponse>(getPatchCoreV1BrandsIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -11257,24 +11295,24 @@ export const patchApiV1BrandsId = async (
   })
 }
 
-export const getPatchApiV1BrandsIdMutationOptions = <
+export const getPatchCoreV1BrandsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1BrandsId>>,
+    Awaited<ReturnType<typeof patchCoreV1BrandsId>>,
     TError,
     { id: string; data: UpdateBrandRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1BrandsId>>,
+  Awaited<ReturnType<typeof patchCoreV1BrandsId>>,
   TError,
   { id: string; data: UpdateBrandRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1BrandsId']
+  const mutationKey = ['patchCoreV1BrandsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -11282,28 +11320,28 @@ export const getPatchApiV1BrandsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1BrandsId>>,
+    Awaited<ReturnType<typeof patchCoreV1BrandsId>>,
     { id: string; data: UpdateBrandRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1BrandsId(id, data, requestOptions)
+    return patchCoreV1BrandsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1BrandsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1BrandsId>>>
-export type PatchApiV1BrandsIdMutationBody = UpdateBrandRequest
-export type PatchApiV1BrandsIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchCoreV1BrandsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchCoreV1BrandsId>>>
+export type PatchCoreV1BrandsIdMutationBody = UpdateBrandRequest
+export type PatchCoreV1BrandsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing brand.
  */
-export const usePatchApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchCoreV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1BrandsId>>,
+      Awaited<ReturnType<typeof patchCoreV1BrandsId>>,
       TError,
       { id: string; data: UpdateBrandRequest },
       TContext
@@ -11312,72 +11350,72 @@ export const usePatchApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TCon
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1BrandsId>>,
+  Awaited<ReturnType<typeof patchCoreV1BrandsId>>,
   TError,
   { id: string; data: UpdateBrandRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1BrandsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1BrandsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete a brand by ID.
  */
-export const getDeleteApiV1BrandsIdUrl = (id: string) => {
-  return `/api/v1/brands/${id}`
+export const getDeleteCoreV1BrandsIdUrl = (id: string) => {
+  return `/core/v1/brands/${id}`
 }
 
-export const deleteApiV1BrandsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1BrandsIdUrl(id), {
+export const deleteCoreV1BrandsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1BrandsIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1BrandsIdMutationOptions = <
+export const getDeleteCoreV1BrandsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
-  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1BrandsId>>, TError, { id: string }, TContext>
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1BrandsId>>, TError, { id: string }, TContext>
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1BrandsId>>, TError, { id: string }, TContext> => {
-  const mutationKey = ['deleteApiV1BrandsId']
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1BrandsId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteCoreV1BrandsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1BrandsId>>, { id: string }> = props => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCoreV1BrandsId>>, { id: string }> = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1BrandsId(id, requestOptions)
+    return deleteCoreV1BrandsId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1BrandsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1BrandsId>>>
+export type DeleteCoreV1BrandsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1BrandsId>>>
 
-export type DeleteApiV1BrandsIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1BrandsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete a brand by ID.
  */
-export const useDeleteApiV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1BrandsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
-    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1BrandsId>>, TError, { id: string }, TContext>
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1BrandsId>>, TError, { id: string }, TContext>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1BrandsId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1BrandsIdMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1BrandsId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteCoreV1BrandsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get paginated list of categories with optional sorting.
  */
-export const getGetApiV1CategoriesUrl = (params?: GetApiV1CategoriesParams) => {
+export const getGetCoreV1CategoriesUrl = (params?: GetCoreV1CategoriesParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -11388,62 +11426,62 @@ export const getGetApiV1CategoriesUrl = (params?: GetApiV1CategoriesParams) => {
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/categories?${stringifiedParams}` : `/api/v1/categories`
+  return stringifiedParams.length > 0 ? `/core/v1/categories?${stringifiedParams}` : `/core/v1/categories`
 }
 
-export const getApiV1Categories = async (
-  params?: GetApiV1CategoriesParams,
+export const getCoreV1Categories = async (
+  params?: GetCoreV1CategoriesParams,
   options?: RequestInit
 ): Promise<CategoryDtoApiPagedResponse> => {
-  return customFetch<CategoryDtoApiPagedResponse>(getGetApiV1CategoriesUrl(params), {
+  return customFetch<CategoryDtoApiPagedResponse>(getGetCoreV1CategoriesUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CategoriesQueryKey = (params?: GetApiV1CategoriesParams) => {
-  return [`/api/v1/categories`, ...(params ? [params] : [])] as const
+export const getGetCoreV1CategoriesQueryKey = (params?: GetCoreV1CategoriesParams) => {
+  return [`/core/v1/categories`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1CategoriesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1Categories>>,
+export const getGetCoreV1CategoriesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1Categories>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CategoriesParams,
+  params?: GetCoreV1CategoriesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Categories>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Categories>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CategoriesQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CategoriesQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Categories>>> = ({ signal }) =>
-    getApiV1Categories(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1Categories>>> = ({ signal }) =>
+    getCoreV1Categories(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1Categories>>,
+    Awaited<ReturnType<typeof getCoreV1Categories>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CategoriesQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Categories>>>
-export type GetApiV1CategoriesQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1CategoriesQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1Categories>>>
+export type GetCoreV1CategoriesQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1Categories<
-  TData = Awaited<ReturnType<typeof getApiV1Categories>>,
+export function useGetCoreV1Categories<
+  TData = Awaited<ReturnType<typeof getCoreV1Categories>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetApiV1CategoriesParams,
+  params: undefined | GetCoreV1CategoriesParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Categories>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Categories>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Categories>>,
+          Awaited<ReturnType<typeof getCoreV1Categories>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Categories>>
+          Awaited<ReturnType<typeof getCoreV1Categories>>
         >,
         'initialData'
       >
@@ -11451,18 +11489,18 @@ export function useGetApiV1Categories<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Categories<
-  TData = Awaited<ReturnType<typeof getApiV1Categories>>,
+export function useGetCoreV1Categories<
+  TData = Awaited<ReturnType<typeof getCoreV1Categories>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CategoriesParams,
+  params?: GetCoreV1CategoriesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Categories>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Categories>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Categories>>,
+          Awaited<ReturnType<typeof getCoreV1Categories>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Categories>>
+          Awaited<ReturnType<typeof getCoreV1Categories>>
         >,
         'initialData'
       >
@@ -11470,13 +11508,13 @@ export function useGetApiV1Categories<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Categories<
-  TData = Awaited<ReturnType<typeof getApiV1Categories>>,
+export function useGetCoreV1Categories<
+  TData = Awaited<ReturnType<typeof getCoreV1Categories>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CategoriesParams,
+  params?: GetCoreV1CategoriesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Categories>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Categories>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -11485,18 +11523,18 @@ export function useGetApiV1Categories<
  * @summary Get paginated list of categories with optional sorting.
  */
 
-export function useGetApiV1Categories<
-  TData = Awaited<ReturnType<typeof getApiV1Categories>>,
+export function useGetCoreV1Categories<
+  TData = Awaited<ReturnType<typeof getCoreV1Categories>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CategoriesParams,
+  params?: GetCoreV1CategoriesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Categories>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Categories>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CategoriesQueryOptions(params, options)
+  const queryOptions = getGetCoreV1CategoriesQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -11508,15 +11546,15 @@ export function useGetApiV1Categories<
 /**
  * @summary Create a new category.
  */
-export const getPostApiV1CategoriesUrl = () => {
-  return `/api/v1/categories`
+export const getPostCoreV1CategoriesUrl = () => {
+  return `/core/v1/categories`
 }
 
-export const postApiV1Categories = async (
+export const postCoreV1Categories = async (
   createCategoryRequest: CreateCategoryRequest,
   options?: RequestInit
 ): Promise<CategoryDtoApiResponse> => {
-  return customFetch<CategoryDtoApiResponse>(getPostApiV1CategoriesUrl(), {
+  return customFetch<CategoryDtoApiResponse>(getPostCoreV1CategoriesUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -11524,24 +11562,24 @@ export const postApiV1Categories = async (
   })
 }
 
-export const getPostApiV1CategoriesMutationOptions = <
+export const getPostCoreV1CategoriesMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1Categories>>,
+    Awaited<ReturnType<typeof postCoreV1Categories>>,
     TError,
     { data: CreateCategoryRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1Categories>>,
+  Awaited<ReturnType<typeof postCoreV1Categories>>,
   TError,
   { data: CreateCategoryRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1Categories']
+  const mutationKey = ['postCoreV1Categories']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -11549,28 +11587,28 @@ export const getPostApiV1CategoriesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1Categories>>,
+    Awaited<ReturnType<typeof postCoreV1Categories>>,
     { data: CreateCategoryRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1Categories(data, requestOptions)
+    return postCoreV1Categories(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1CategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Categories>>>
-export type PostApiV1CategoriesMutationBody = CreateCategoryRequest
-export type PostApiV1CategoriesMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1CategoriesMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1Categories>>>
+export type PostCoreV1CategoriesMutationBody = CreateCategoryRequest
+export type PostCoreV1CategoriesMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Create a new category.
  */
-export const usePostApiV1Categories = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1Categories = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1Categories>>,
+      Awaited<ReturnType<typeof postCoreV1Categories>>,
       TError,
       { data: CreateCategoryRequest },
       TContext
@@ -11579,26 +11617,26 @@ export const usePostApiV1Categories = <TError = ErrorType<ApiErrorResponse>, TCo
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1Categories>>,
+  Awaited<ReturnType<typeof postCoreV1Categories>>,
   TError,
   { data: CreateCategoryRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1CategoriesMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1CategoriesMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Search categories with JSON filter DSL.
  */
-export const getPostApiV1CategoriesSearchUrl = () => {
-  return `/api/v1/categories/search`
+export const getPostCoreV1CategoriesSearchUrl = () => {
+  return `/core/v1/categories/search`
 }
 
-export const postApiV1CategoriesSearch = async (
+export const postCoreV1CategoriesSearch = async (
   categoryFilterInputSearchRequest: CategoryFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<CategoryDtoApiPagedResponse> => {
-  return customFetch<CategoryDtoApiPagedResponse>(getPostApiV1CategoriesSearchUrl(), {
+  return customFetch<CategoryDtoApiPagedResponse>(getPostCoreV1CategoriesSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -11606,21 +11644,24 @@ export const postApiV1CategoriesSearch = async (
   })
 }
 
-export const getPostApiV1CategoriesSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+export const getPostCoreV1CategoriesSearchMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown
+>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+    Awaited<ReturnType<typeof postCoreV1CategoriesSearch>>,
     TError,
     { data: CategoryFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+  Awaited<ReturnType<typeof postCoreV1CategoriesSearch>>,
   TError,
   { data: CategoryFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1CategoriesSearch']
+  const mutationKey = ['postCoreV1CategoriesSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -11628,28 +11669,30 @@ export const getPostApiV1CategoriesSearchMutationOptions = <TError = ErrorType<u
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+    Awaited<ReturnType<typeof postCoreV1CategoriesSearch>>,
     { data: CategoryFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1CategoriesSearch(data, requestOptions)
+    return postCoreV1CategoriesSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1CategoriesSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1CategoriesSearch>>>
-export type PostApiV1CategoriesSearchMutationBody = CategoryFilterInputSearchRequest
-export type PostApiV1CategoriesSearchMutationError = ErrorType<unknown>
+export type PostCoreV1CategoriesSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1CategoriesSearch>>
+>
+export type PostCoreV1CategoriesSearchMutationBody = CategoryFilterInputSearchRequest
+export type PostCoreV1CategoriesSearchMutationError = ErrorType<unknown>
 
 /**
  * @summary Search categories with JSON filter DSL.
  */
-export const usePostApiV1CategoriesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1CategoriesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+      Awaited<ReturnType<typeof postCoreV1CategoriesSearch>>,
       TError,
       { data: CategoryFilterInputSearchRequest },
       TContext
@@ -11658,18 +11701,18 @@ export const usePostApiV1CategoriesSearch = <TError = ErrorType<unknown>, TConte
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1CategoriesSearch>>,
+  Awaited<ReturnType<typeof postCoreV1CategoriesSearch>>,
   TError,
   { data: CategoryFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1CategoriesSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1CategoriesSearchMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get root-level categories (flat, with hasChildren flag), optionally filtered by type.
  */
-export const getGetApiV1CategoriesTreeUrl = (params?: GetApiV1CategoriesTreeParams) => {
+export const getGetCoreV1CategoriesTreeUrl = (params?: GetCoreV1CategoriesTreeParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -11680,62 +11723,62 @@ export const getGetApiV1CategoriesTreeUrl = (params?: GetApiV1CategoriesTreePara
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/categories/tree?${stringifiedParams}` : `/api/v1/categories/tree`
+  return stringifiedParams.length > 0 ? `/core/v1/categories/tree?${stringifiedParams}` : `/core/v1/categories/tree`
 }
 
-export const getApiV1CategoriesTree = async (
-  params?: GetApiV1CategoriesTreeParams,
+export const getCoreV1CategoriesTree = async (
+  params?: GetCoreV1CategoriesTreeParams,
   options?: RequestInit
 ): Promise<CategoryTreeNodeDtoApiPagedResponse> => {
-  return customFetch<CategoryTreeNodeDtoApiPagedResponse>(getGetApiV1CategoriesTreeUrl(params), {
+  return customFetch<CategoryTreeNodeDtoApiPagedResponse>(getGetCoreV1CategoriesTreeUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CategoriesTreeQueryKey = (params?: GetApiV1CategoriesTreeParams) => {
-  return [`/api/v1/categories/tree`, ...(params ? [params] : [])] as const
+export const getGetCoreV1CategoriesTreeQueryKey = (params?: GetCoreV1CategoriesTreeParams) => {
+  return [`/core/v1/categories/tree`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1CategoriesTreeQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+export const getGetCoreV1CategoriesTreeQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1CategoriesTreeParams,
+  params?: GetCoreV1CategoriesTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesTree>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CategoriesTreeQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CategoriesTreeQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CategoriesTree>>> = ({ signal }) =>
-    getApiV1CategoriesTree(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>> = ({ signal }) =>
+    getCoreV1CategoriesTree(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+    Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CategoriesTreeQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1CategoriesTree>>>
-export type GetApiV1CategoriesTreeQueryError = ErrorType<unknown>
+export type GetCoreV1CategoriesTreeQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>>
+export type GetCoreV1CategoriesTreeQueryError = ErrorType<unknown>
 
-export function useGetApiV1CategoriesTree<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+export function useGetCoreV1CategoriesTree<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1CategoriesTreeParams,
+  params: undefined | GetCoreV1CategoriesTreeParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesTree>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesTree>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesTree>>
         >,
         'initialData'
       >
@@ -11743,18 +11786,18 @@ export function useGetApiV1CategoriesTree<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesTree<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+export function useGetCoreV1CategoriesTree<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1CategoriesTreeParams,
+  params?: GetCoreV1CategoriesTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesTree>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesTree>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesTree>>
         >,
         'initialData'
       >
@@ -11762,13 +11805,13 @@ export function useGetApiV1CategoriesTree<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesTree<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+export function useGetCoreV1CategoriesTree<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1CategoriesTreeParams,
+  params?: GetCoreV1CategoriesTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesTree>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -11777,18 +11820,18 @@ export function useGetApiV1CategoriesTree<
  * @summary Get root-level categories (flat, with hasChildren flag), optionally filtered by type.
  */
 
-export function useGetApiV1CategoriesTree<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesTree>>,
+export function useGetCoreV1CategoriesTree<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1CategoriesTreeParams,
+  params?: GetCoreV1CategoriesTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesTree>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesTree>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CategoriesTreeQueryOptions(params, options)
+  const queryOptions = getGetCoreV1CategoriesTreeQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -11800,65 +11843,65 @@ export function useGetApiV1CategoriesTree<
 /**
  * @summary Get direct children of a category by parent ID.
  */
-export const getGetApiV1CategoriesParentIdChildrenUrl = (parentId: string) => {
-  return `/api/v1/categories/${parentId}/children`
+export const getGetCoreV1CategoriesParentIdChildrenUrl = (parentId: string) => {
+  return `/core/v1/categories/${parentId}/children`
 }
 
-export const getApiV1CategoriesParentIdChildren = async (
+export const getCoreV1CategoriesParentIdChildren = async (
   parentId: string,
   options?: RequestInit
 ): Promise<CategoryTreeNodeDtoListApiResponse> => {
-  return customFetch<CategoryTreeNodeDtoListApiResponse>(getGetApiV1CategoriesParentIdChildrenUrl(parentId), {
+  return customFetch<CategoryTreeNodeDtoListApiResponse>(getGetCoreV1CategoriesParentIdChildrenUrl(parentId), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CategoriesParentIdChildrenQueryKey = (parentId: string) => {
-  return [`/api/v1/categories/${parentId}/children`] as const
+export const getGetCoreV1CategoriesParentIdChildrenQueryKey = (parentId: string) => {
+  return [`/core/v1/categories/${parentId}/children`] as const
 }
 
-export const getGetApiV1CategoriesParentIdChildrenQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+export const getGetCoreV1CategoriesParentIdChildrenQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
   TError = ErrorType<unknown>
 >(
   parentId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CategoriesParentIdChildrenQueryKey(parentId)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CategoriesParentIdChildrenQueryKey(parentId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>> = ({ signal }) =>
-    getApiV1CategoriesParentIdChildren(parentId, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>> = ({ signal }) =>
+    getCoreV1CategoriesParentIdChildren(parentId, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!parentId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+    Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CategoriesParentIdChildrenQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>
+export type GetCoreV1CategoriesParentIdChildrenQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>
 >
-export type GetApiV1CategoriesParentIdChildrenQueryError = ErrorType<unknown>
+export type GetCoreV1CategoriesParentIdChildrenQueryError = ErrorType<unknown>
 
-export function useGetApiV1CategoriesParentIdChildren<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+export function useGetCoreV1CategoriesParentIdChildren<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
   TError = ErrorType<unknown>
 >(
   parentId: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>
         >,
         'initialData'
       >
@@ -11866,18 +11909,18 @@ export function useGetApiV1CategoriesParentIdChildren<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesParentIdChildren<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+export function useGetCoreV1CategoriesParentIdChildren<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
   TError = ErrorType<unknown>
 >(
   parentId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>
         >,
         'initialData'
       >
@@ -11885,13 +11928,13 @@ export function useGetApiV1CategoriesParentIdChildren<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesParentIdChildren<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+export function useGetCoreV1CategoriesParentIdChildren<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
   TError = ErrorType<unknown>
 >(
   parentId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -11900,18 +11943,18 @@ export function useGetApiV1CategoriesParentIdChildren<
  * @summary Get direct children of a category by parent ID.
  */
 
-export function useGetApiV1CategoriesParentIdChildren<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>,
+export function useGetCoreV1CategoriesParentIdChildren<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>,
   TError = ErrorType<unknown>
 >(
   parentId: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesParentIdChildren>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesParentIdChildren>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CategoriesParentIdChildrenQueryOptions(parentId, options)
+  const queryOptions = getGetCoreV1CategoriesParentIdChildrenQueryOptions(parentId, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -11923,60 +11966,60 @@ export function useGetApiV1CategoriesParentIdChildren<
 /**
  * @summary Get a single category by ID.
  */
-export const getGetApiV1CategoriesIdUrl = (id: string) => {
-  return `/api/v1/categories/${id}`
+export const getGetCoreV1CategoriesIdUrl = (id: string) => {
+  return `/core/v1/categories/${id}`
 }
 
-export const getApiV1CategoriesId = async (id: string, options?: RequestInit): Promise<CategoryDtoApiResponse> => {
-  return customFetch<CategoryDtoApiResponse>(getGetApiV1CategoriesIdUrl(id), {
+export const getCoreV1CategoriesId = async (id: string, options?: RequestInit): Promise<CategoryDtoApiResponse> => {
+  return customFetch<CategoryDtoApiResponse>(getGetCoreV1CategoriesIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CategoriesIdQueryKey = (id: string) => {
-  return [`/api/v1/categories/${id}`] as const
+export const getGetCoreV1CategoriesIdQueryKey = (id: string) => {
+  return [`/core/v1/categories/${id}`] as const
 }
 
-export const getGetApiV1CategoriesIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+export const getGetCoreV1CategoriesIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CategoriesIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CategoriesIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CategoriesId>>> = ({ signal }) =>
-    getApiV1CategoriesId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1CategoriesId>>> = ({ signal }) =>
+    getCoreV1CategoriesId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+    Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CategoriesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1CategoriesId>>>
-export type GetApiV1CategoriesIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1CategoriesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1CategoriesId>>>
+export type GetCoreV1CategoriesIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1CategoriesId<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+export function useGetCoreV1CategoriesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesId>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesId>>
         >,
         'initialData'
       >
@@ -11984,18 +12027,18 @@ export function useGetApiV1CategoriesId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesId<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+export function useGetCoreV1CategoriesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesId>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesId>>
         >,
         'initialData'
       >
@@ -12003,13 +12046,13 @@ export function useGetApiV1CategoriesId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesId<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+export function useGetCoreV1CategoriesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -12018,18 +12061,18 @@ export function useGetApiV1CategoriesId<
  * @summary Get a single category by ID.
  */
 
-export function useGetApiV1CategoriesId<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesId>>,
+export function useGetCoreV1CategoriesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CategoriesIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1CategoriesIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -12041,16 +12084,16 @@ export function useGetApiV1CategoriesId<
 /**
  * @summary Update an existing category.
  */
-export const getPatchApiV1CategoriesIdUrl = (id: string) => {
-  return `/api/v1/categories/${id}`
+export const getPatchCoreV1CategoriesIdUrl = (id: string) => {
+  return `/core/v1/categories/${id}`
 }
 
-export const patchApiV1CategoriesId = async (
+export const patchCoreV1CategoriesId = async (
   id: string,
   updateCategoryRequest: UpdateCategoryRequest,
   options?: RequestInit
 ): Promise<CategoryDtoApiResponse> => {
-  return customFetch<CategoryDtoApiResponse>(getPatchApiV1CategoriesIdUrl(id), {
+  return customFetch<CategoryDtoApiResponse>(getPatchCoreV1CategoriesIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -12058,24 +12101,24 @@ export const patchApiV1CategoriesId = async (
   })
 }
 
-export const getPatchApiV1CategoriesIdMutationOptions = <
+export const getPatchCoreV1CategoriesIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
+    Awaited<ReturnType<typeof patchCoreV1CategoriesId>>,
     TError,
     { id: string; data: UpdateCategoryRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
+  Awaited<ReturnType<typeof patchCoreV1CategoriesId>>,
   TError,
   { id: string; data: UpdateCategoryRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1CategoriesId']
+  const mutationKey = ['patchCoreV1CategoriesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -12083,28 +12126,28 @@ export const getPatchApiV1CategoriesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
+    Awaited<ReturnType<typeof patchCoreV1CategoriesId>>,
     { id: string; data: UpdateCategoryRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1CategoriesId(id, data, requestOptions)
+    return patchCoreV1CategoriesId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1CategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1CategoriesId>>>
-export type PatchApiV1CategoriesIdMutationBody = UpdateCategoryRequest
-export type PatchApiV1CategoriesIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchCoreV1CategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchCoreV1CategoriesId>>>
+export type PatchCoreV1CategoriesIdMutationBody = UpdateCategoryRequest
+export type PatchCoreV1CategoriesIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing category.
  */
-export const usePatchApiV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchCoreV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
+      Awaited<ReturnType<typeof patchCoreV1CategoriesId>>,
       TError,
       { id: string; data: UpdateCategoryRequest },
       TContext
@@ -12113,125 +12156,130 @@ export const usePatchApiV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, 
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1CategoriesId>>,
+  Awaited<ReturnType<typeof patchCoreV1CategoriesId>>,
   TError,
   { id: string; data: UpdateCategoryRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1CategoriesIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1CategoriesIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete a category by ID.
  */
-export const getDeleteApiV1CategoriesIdUrl = (id: string) => {
-  return `/api/v1/categories/${id}`
+export const getDeleteCoreV1CategoriesIdUrl = (id: string) => {
+  return `/core/v1/categories/${id}`
 }
 
-export const deleteApiV1CategoriesId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1CategoriesIdUrl(id), {
+export const deleteCoreV1CategoriesId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1CategoriesIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1CategoriesIdMutationOptions = <
+export const getDeleteCoreV1CategoriesIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
-  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CategoriesId>>, TError, { id: string }, TContext>
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1CategoriesId>>, TError, { id: string }, TContext>
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CategoriesId>>, TError, { id: string }, TContext> => {
-  const mutationKey = ['deleteApiV1CategoriesId']
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1CategoriesId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteCoreV1CategoriesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1CategoriesId>>, { id: string }> = props => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCoreV1CategoriesId>>, { id: string }> = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1CategoriesId(id, requestOptions)
+    return deleteCoreV1CategoriesId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1CategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1CategoriesId>>>
+export type DeleteCoreV1CategoriesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1CategoriesId>>>
 
-export type DeleteApiV1CategoriesIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1CategoriesIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete a category by ID.
  */
-export const useDeleteApiV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1CategoriesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
-    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CategoriesId>>, TError, { id: string }, TContext>
+    mutation?: UseMutationOptions<
+      Awaited<ReturnType<typeof deleteCoreV1CategoriesId>>,
+      TError,
+      { id: string },
+      TContext
+    >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1CategoriesId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1CategoriesIdMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1CategoriesId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteCoreV1CategoriesIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get the count of categories grouped by type.
  */
-export const getGetApiV1CategoriesCountsByTypeUrl = () => {
-  return `/api/v1/categories/counts-by-type`
+export const getGetCoreV1CategoriesCountsByTypeUrl = () => {
+  return `/core/v1/categories/counts-by-type`
 }
 
-export const getApiV1CategoriesCountsByType = async (
+export const getCoreV1CategoriesCountsByType = async (
   options?: RequestInit
 ): Promise<CategoryCountByTypeDtoListApiResponse> => {
-  return customFetch<CategoryCountByTypeDtoListApiResponse>(getGetApiV1CategoriesCountsByTypeUrl(), {
+  return customFetch<CategoryCountByTypeDtoListApiResponse>(getGetCoreV1CategoriesCountsByTypeUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CategoriesCountsByTypeQueryKey = () => {
-  return [`/api/v1/categories/counts-by-type`] as const
+export const getGetCoreV1CategoriesCountsByTypeQueryKey = () => {
+  return [`/core/v1/categories/counts-by-type`] as const
 }
 
-export const getGetApiV1CategoriesCountsByTypeQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+export const getGetCoreV1CategoriesCountsByTypeQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
   TError = ErrorType<unknown>
 >(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>, TError, TData>>
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>, TError, TData>>
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CategoriesCountsByTypeQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CategoriesCountsByTypeQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>> = ({ signal }) =>
-    getApiV1CategoriesCountsByType({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>> = ({ signal }) =>
+    getCoreV1CategoriesCountsByType({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+    Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CategoriesCountsByTypeQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>
+export type GetCoreV1CategoriesCountsByTypeQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>
 >
-export type GetApiV1CategoriesCountsByTypeQueryError = ErrorType<unknown>
+export type GetCoreV1CategoriesCountsByTypeQueryError = ErrorType<unknown>
 
-export function useGetApiV1CategoriesCountsByType<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+export function useGetCoreV1CategoriesCountsByType<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
   TError = ErrorType<unknown>
 >(
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>
         >,
         'initialData'
       >
@@ -12239,17 +12287,17 @@ export function useGetApiV1CategoriesCountsByType<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesCountsByType<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+export function useGetCoreV1CategoriesCountsByType<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+          Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>
+          Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>
         >,
         'initialData'
       >
@@ -12257,12 +12305,12 @@ export function useGetApiV1CategoriesCountsByType<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CategoriesCountsByType<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+export function useGetCoreV1CategoriesCountsByType<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -12271,17 +12319,17 @@ export function useGetApiV1CategoriesCountsByType<
  * @summary Get the count of categories grouped by type.
  */
 
-export function useGetApiV1CategoriesCountsByType<
-  TData = Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>,
+export function useGetCoreV1CategoriesCountsByType<
+  TData = Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CategoriesCountsByType>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CategoriesCountsByType>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CategoriesCountsByTypeQueryOptions(options)
+  const queryOptions = getGetCoreV1CategoriesCountsByTypeQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -12293,7 +12341,7 @@ export function useGetApiV1CategoriesCountsByType<
 /**
  * @summary Get paginated list of commodities with optional sorting.
  */
-export const getGetApiV1CommoditiesUrl = (params?: GetApiV1CommoditiesParams) => {
+export const getGetCoreV1CommoditiesUrl = (params?: GetCoreV1CommoditiesParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -12304,62 +12352,62 @@ export const getGetApiV1CommoditiesUrl = (params?: GetApiV1CommoditiesParams) =>
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/commodities?${stringifiedParams}` : `/api/v1/commodities`
+  return stringifiedParams.length > 0 ? `/core/v1/commodities?${stringifiedParams}` : `/core/v1/commodities`
 }
 
-export const getApiV1Commodities = async (
-  params?: GetApiV1CommoditiesParams,
+export const getCoreV1Commodities = async (
+  params?: GetCoreV1CommoditiesParams,
   options?: RequestInit
 ): Promise<CommodityDtoApiPagedResponse> => {
-  return customFetch<CommodityDtoApiPagedResponse>(getGetApiV1CommoditiesUrl(params), {
+  return customFetch<CommodityDtoApiPagedResponse>(getGetCoreV1CommoditiesUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CommoditiesQueryKey = (params?: GetApiV1CommoditiesParams) => {
-  return [`/api/v1/commodities`, ...(params ? [params] : [])] as const
+export const getGetCoreV1CommoditiesQueryKey = (params?: GetCoreV1CommoditiesParams) => {
+  return [`/core/v1/commodities`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1CommoditiesQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+export const getGetCoreV1CommoditiesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1Commodities>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CommoditiesParams,
+  params?: GetCoreV1CommoditiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Commodities>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CommoditiesQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CommoditiesQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Commodities>>> = ({ signal }) =>
-    getApiV1Commodities(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1Commodities>>> = ({ signal }) =>
+    getCoreV1Commodities(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1Commodities>>,
+    Awaited<ReturnType<typeof getCoreV1Commodities>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CommoditiesQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Commodities>>>
-export type GetApiV1CommoditiesQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1CommoditiesQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1Commodities>>>
+export type GetCoreV1CommoditiesQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1Commodities<
-  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+export function useGetCoreV1Commodities<
+  TData = Awaited<ReturnType<typeof getCoreV1Commodities>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetApiV1CommoditiesParams,
+  params: undefined | GetCoreV1CommoditiesParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Commodities>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Commodities>>,
+          Awaited<ReturnType<typeof getCoreV1Commodities>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Commodities>>
+          Awaited<ReturnType<typeof getCoreV1Commodities>>
         >,
         'initialData'
       >
@@ -12367,18 +12415,18 @@ export function useGetApiV1Commodities<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Commodities<
-  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+export function useGetCoreV1Commodities<
+  TData = Awaited<ReturnType<typeof getCoreV1Commodities>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CommoditiesParams,
+  params?: GetCoreV1CommoditiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Commodities>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Commodities>>,
+          Awaited<ReturnType<typeof getCoreV1Commodities>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Commodities>>
+          Awaited<ReturnType<typeof getCoreV1Commodities>>
         >,
         'initialData'
       >
@@ -12386,13 +12434,13 @@ export function useGetApiV1Commodities<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Commodities<
-  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+export function useGetCoreV1Commodities<
+  TData = Awaited<ReturnType<typeof getCoreV1Commodities>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CommoditiesParams,
+  params?: GetCoreV1CommoditiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Commodities>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -12401,18 +12449,18 @@ export function useGetApiV1Commodities<
  * @summary Get paginated list of commodities with optional sorting.
  */
 
-export function useGetApiV1Commodities<
-  TData = Awaited<ReturnType<typeof getApiV1Commodities>>,
+export function useGetCoreV1Commodities<
+  TData = Awaited<ReturnType<typeof getCoreV1Commodities>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1CommoditiesParams,
+  params?: GetCoreV1CommoditiesParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Commodities>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Commodities>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CommoditiesQueryOptions(params, options)
+  const queryOptions = getGetCoreV1CommoditiesQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -12424,15 +12472,15 @@ export function useGetApiV1Commodities<
 /**
  * @summary Create a new commodity.
  */
-export const getPostApiV1CommoditiesUrl = () => {
-  return `/api/v1/commodities`
+export const getPostCoreV1CommoditiesUrl = () => {
+  return `/core/v1/commodities`
 }
 
-export const postApiV1Commodities = async (
+export const postCoreV1Commodities = async (
   createCommodityRequest: CreateCommodityRequest,
   options?: RequestInit
 ): Promise<CommodityDtoApiResponse> => {
-  return customFetch<CommodityDtoApiResponse>(getPostApiV1CommoditiesUrl(), {
+  return customFetch<CommodityDtoApiResponse>(getPostCoreV1CommoditiesUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -12440,24 +12488,24 @@ export const postApiV1Commodities = async (
   })
 }
 
-export const getPostApiV1CommoditiesMutationOptions = <
+export const getPostCoreV1CommoditiesMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1Commodities>>,
+    Awaited<ReturnType<typeof postCoreV1Commodities>>,
     TError,
     { data: CreateCommodityRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1Commodities>>,
+  Awaited<ReturnType<typeof postCoreV1Commodities>>,
   TError,
   { data: CreateCommodityRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1Commodities']
+  const mutationKey = ['postCoreV1Commodities']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -12465,28 +12513,28 @@ export const getPostApiV1CommoditiesMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1Commodities>>,
+    Awaited<ReturnType<typeof postCoreV1Commodities>>,
     { data: CreateCommodityRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1Commodities(data, requestOptions)
+    return postCoreV1Commodities(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1CommoditiesMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Commodities>>>
-export type PostApiV1CommoditiesMutationBody = CreateCommodityRequest
-export type PostApiV1CommoditiesMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1CommoditiesMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1Commodities>>>
+export type PostCoreV1CommoditiesMutationBody = CreateCommodityRequest
+export type PostCoreV1CommoditiesMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Create a new commodity.
  */
-export const usePostApiV1Commodities = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1Commodities = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1Commodities>>,
+      Awaited<ReturnType<typeof postCoreV1Commodities>>,
       TError,
       { data: CreateCommodityRequest },
       TContext
@@ -12495,26 +12543,26 @@ export const usePostApiV1Commodities = <TError = ErrorType<ApiErrorResponse>, TC
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1Commodities>>,
+  Awaited<ReturnType<typeof postCoreV1Commodities>>,
   TError,
   { data: CreateCommodityRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1CommoditiesMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1CommoditiesMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Search commodities with JSON filter DSL.
  */
-export const getPostApiV1CommoditiesSearchUrl = () => {
-  return `/api/v1/commodities/search`
+export const getPostCoreV1CommoditiesSearchUrl = () => {
+  return `/core/v1/commodities/search`
 }
 
-export const postApiV1CommoditiesSearch = async (
+export const postCoreV1CommoditiesSearch = async (
   commodityFilterInputSearchRequest: CommodityFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<CommodityDtoApiPagedResponse> => {
-  return customFetch<CommodityDtoApiPagedResponse>(getPostApiV1CommoditiesSearchUrl(), {
+  return customFetch<CommodityDtoApiPagedResponse>(getPostCoreV1CommoditiesSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -12522,24 +12570,24 @@ export const postApiV1CommoditiesSearch = async (
   })
 }
 
-export const getPostApiV1CommoditiesSearchMutationOptions = <
+export const getPostCoreV1CommoditiesSearchMutationOptions = <
   TError = ErrorType<unknown>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+    Awaited<ReturnType<typeof postCoreV1CommoditiesSearch>>,
     TError,
     { data: CommodityFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+  Awaited<ReturnType<typeof postCoreV1CommoditiesSearch>>,
   TError,
   { data: CommodityFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1CommoditiesSearch']
+  const mutationKey = ['postCoreV1CommoditiesSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -12547,30 +12595,30 @@ export const getPostApiV1CommoditiesSearchMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+    Awaited<ReturnType<typeof postCoreV1CommoditiesSearch>>,
     { data: CommodityFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1CommoditiesSearch(data, requestOptions)
+    return postCoreV1CommoditiesSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1CommoditiesSearchMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>
+export type PostCoreV1CommoditiesSearchMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1CommoditiesSearch>>
 >
-export type PostApiV1CommoditiesSearchMutationBody = CommodityFilterInputSearchRequest
-export type PostApiV1CommoditiesSearchMutationError = ErrorType<unknown>
+export type PostCoreV1CommoditiesSearchMutationBody = CommodityFilterInputSearchRequest
+export type PostCoreV1CommoditiesSearchMutationError = ErrorType<unknown>
 
 /**
  * @summary Search commodities with JSON filter DSL.
  */
-export const usePostApiV1CommoditiesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1CommoditiesSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+      Awaited<ReturnType<typeof postCoreV1CommoditiesSearch>>,
       TError,
       { data: CommodityFilterInputSearchRequest },
       TContext
@@ -12579,71 +12627,71 @@ export const usePostApiV1CommoditiesSearch = <TError = ErrorType<unknown>, TCont
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1CommoditiesSearch>>,
+  Awaited<ReturnType<typeof postCoreV1CommoditiesSearch>>,
   TError,
   { data: CommodityFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1CommoditiesSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1CommoditiesSearchMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get a single commodity by ID.
  */
-export const getGetApiV1CommoditiesIdUrl = (id: string) => {
-  return `/api/v1/commodities/${id}`
+export const getGetCoreV1CommoditiesIdUrl = (id: string) => {
+  return `/core/v1/commodities/${id}`
 }
 
-export const getApiV1CommoditiesId = async (id: string, options?: RequestInit): Promise<CommodityDtoApiResponse> => {
-  return customFetch<CommodityDtoApiResponse>(getGetApiV1CommoditiesIdUrl(id), {
+export const getCoreV1CommoditiesId = async (id: string, options?: RequestInit): Promise<CommodityDtoApiResponse> => {
+  return customFetch<CommodityDtoApiResponse>(getGetCoreV1CommoditiesIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1CommoditiesIdQueryKey = (id: string) => {
-  return [`/api/v1/commodities/${id}`] as const
+export const getGetCoreV1CommoditiesIdQueryKey = (id: string) => {
+  return [`/core/v1/commodities/${id}`] as const
 }
 
-export const getGetApiV1CommoditiesIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+export const getGetCoreV1CommoditiesIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CommoditiesIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CommoditiesIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CommoditiesId>>> = ({ signal }) =>
-    getApiV1CommoditiesId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>> = ({ signal }) =>
+    getCoreV1CommoditiesId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+    Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CommoditiesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1CommoditiesId>>>
-export type GetApiV1CommoditiesIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1CommoditiesIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>>
+export type GetCoreV1CommoditiesIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1CommoditiesId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+export function useGetCoreV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+          Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CommoditiesId>>
+          Awaited<ReturnType<typeof getCoreV1CommoditiesId>>
         >,
         'initialData'
       >
@@ -12651,18 +12699,18 @@ export function useGetApiV1CommoditiesId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CommoditiesId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+export function useGetCoreV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+          Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CommoditiesId>>
+          Awaited<ReturnType<typeof getCoreV1CommoditiesId>>
         >,
         'initialData'
       >
@@ -12670,13 +12718,13 @@ export function useGetApiV1CommoditiesId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CommoditiesId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+export function useGetCoreV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -12685,18 +12733,18 @@ export function useGetApiV1CommoditiesId<
  * @summary Get a single commodity by ID.
  */
 
-export function useGetApiV1CommoditiesId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesId>>,
+export function useGetCoreV1CommoditiesId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CommoditiesIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1CommoditiesIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -12708,16 +12756,16 @@ export function useGetApiV1CommoditiesId<
 /**
  * @summary Update an existing commodity.
  */
-export const getPatchApiV1CommoditiesIdUrl = (id: string) => {
-  return `/api/v1/commodities/${id}`
+export const getPatchCoreV1CommoditiesIdUrl = (id: string) => {
+  return `/core/v1/commodities/${id}`
 }
 
-export const patchApiV1CommoditiesId = async (
+export const patchCoreV1CommoditiesId = async (
   id: string,
   updateCommodityRequest: UpdateCommodityRequest,
   options?: RequestInit
 ): Promise<CommodityDtoApiResponse> => {
-  return customFetch<CommodityDtoApiResponse>(getPatchApiV1CommoditiesIdUrl(id), {
+  return customFetch<CommodityDtoApiResponse>(getPatchCoreV1CommoditiesIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -12725,24 +12773,24 @@ export const patchApiV1CommoditiesId = async (
   })
 }
 
-export const getPatchApiV1CommoditiesIdMutationOptions = <
+export const getPatchCoreV1CommoditiesIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
+    Awaited<ReturnType<typeof patchCoreV1CommoditiesId>>,
     TError,
     { id: string; data: UpdateCommodityRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
+  Awaited<ReturnType<typeof patchCoreV1CommoditiesId>>,
   TError,
   { id: string; data: UpdateCommodityRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1CommoditiesId']
+  const mutationKey = ['patchCoreV1CommoditiesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -12750,28 +12798,28 @@ export const getPatchApiV1CommoditiesIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
+    Awaited<ReturnType<typeof patchCoreV1CommoditiesId>>,
     { id: string; data: UpdateCommodityRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1CommoditiesId(id, data, requestOptions)
+    return patchCoreV1CommoditiesId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1CommoditiesId>>>
-export type PatchApiV1CommoditiesIdMutationBody = UpdateCommodityRequest
-export type PatchApiV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchCoreV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchCoreV1CommoditiesId>>>
+export type PatchCoreV1CommoditiesIdMutationBody = UpdateCommodityRequest
+export type PatchCoreV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing commodity.
  */
-export const usePatchApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchCoreV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
+      Awaited<ReturnType<typeof patchCoreV1CommoditiesId>>,
       TError,
       { id: string; data: UpdateCommodityRequest },
       TContext
@@ -12780,62 +12828,62 @@ export const usePatchApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>,
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1CommoditiesId>>,
+  Awaited<ReturnType<typeof patchCoreV1CommoditiesId>>,
   TError,
   { id: string; data: UpdateCommodityRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1CommoditiesIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1CommoditiesIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete a commodity by ID.
  */
-export const getDeleteApiV1CommoditiesIdUrl = (id: string) => {
-  return `/api/v1/commodities/${id}`
+export const getDeleteCoreV1CommoditiesIdUrl = (id: string) => {
+  return `/core/v1/commodities/${id}`
 }
 
-export const deleteApiV1CommoditiesId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1CommoditiesIdUrl(id), {
+export const deleteCoreV1CommoditiesId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1CommoditiesIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1CommoditiesIdMutationOptions = <
+export const getDeleteCoreV1CommoditiesIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
-  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, TError, { id: string }, TContext>
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1CommoditiesId>>, TError, { id: string }, TContext>
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, TError, { id: string }, TContext> => {
-  const mutationKey = ['deleteApiV1CommoditiesId']
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1CommoditiesId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteCoreV1CommoditiesId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, { id: string }> = props => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCoreV1CommoditiesId>>, { id: string }> = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1CommoditiesId(id, requestOptions)
+    return deleteCoreV1CommoditiesId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>>
+export type DeleteCoreV1CommoditiesIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1CommoditiesId>>>
 
-export type DeleteApiV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1CommoditiesIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete a commodity by ID.
  */
-export const useDeleteApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>,
+      Awaited<ReturnType<typeof deleteCoreV1CommoditiesId>>,
       TError,
       { id: string },
       TContext
@@ -12843,16 +12891,16 @@ export const useDeleteApiV1CommoditiesId = <TError = ErrorType<ApiErrorResponse>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1CommoditiesId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1CommoditiesIdMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1CommoditiesId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteCoreV1CommoditiesIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get paginated list of investment transactions for a commodity.
  */
-export const getGetApiV1CommoditiesCommodityIdTransactionsUrl = (
+export const getGetCoreV1CommoditiesCommodityIdTransactionsUrl = (
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams
 ) => {
   const normalizedParams = new URLSearchParams()
 
@@ -12865,17 +12913,17 @@ export const getGetApiV1CommoditiesCommodityIdTransactionsUrl = (
   const stringifiedParams = normalizedParams.toString()
 
   return stringifiedParams.length > 0
-    ? `/api/v1/commodities/${commodityId}/transactions?${stringifiedParams}`
-    : `/api/v1/commodities/${commodityId}/transactions`
+    ? `/core/v1/commodities/${commodityId}/transactions?${stringifiedParams}`
+    : `/core/v1/commodities/${commodityId}/transactions`
 }
 
-export const getApiV1CommoditiesCommodityIdTransactions = async (
+export const getCoreV1CommoditiesCommodityIdTransactions = async (
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams,
   options?: RequestInit
 ): Promise<InvestmentTransactionDtoApiPagedResponse> => {
   return customFetch<InvestmentTransactionDtoApiPagedResponse>(
-    getGetApiV1CommoditiesCommodityIdTransactionsUrl(commodityId, params),
+    getGetCoreV1CommoditiesCommodityIdTransactionsUrl(commodityId, params),
     {
       ...options,
       method: 'GET'
@@ -12883,60 +12931,61 @@ export const getApiV1CommoditiesCommodityIdTransactions = async (
   )
 }
 
-export const getGetApiV1CommoditiesCommodityIdTransactionsQueryKey = (
+export const getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey = (
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams
 ) => {
-  return [`/api/v1/commodities/${commodityId}/transactions`, ...(params ? [params] : [])] as const
+  return [`/core/v1/commodities/${commodityId}/transactions`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1CommoditiesCommodityIdTransactionsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+export const getGetCoreV1CommoditiesCommodityIdTransactionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId, params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey(commodityId, params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>> = ({ signal }) =>
-    getApiV1CommoditiesCommodityIdTransactions(commodityId, params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>> = ({
+    signal
+  }) => getCoreV1CommoditiesCommodityIdTransactions(commodityId, params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!commodityId, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+    Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CommoditiesCommodityIdTransactionsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>
+export type GetCoreV1CommoditiesCommodityIdTransactionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>
 >
-export type GetApiV1CommoditiesCommodityIdTransactionsQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1CommoditiesCommodityIdTransactionsQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1CommoditiesCommodityIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
-  params: undefined | GetApiV1CommoditiesCommodityIdTransactionsParams,
+  params: undefined | GetCoreV1CommoditiesCommodityIdTransactionsParams,
   options: {
     query: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>, TError, TData>
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>
         >,
         'initialData'
       >
@@ -12944,21 +12993,21 @@ export function useGetApiV1CommoditiesCommodityIdTransactions<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CommoditiesCommodityIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>, TError, TData>
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>
         >,
         'initialData'
       >
@@ -12966,15 +13015,15 @@ export function useGetApiV1CommoditiesCommodityIdTransactions<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CommoditiesCommodityIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
@@ -12984,21 +13033,21 @@ export function useGetApiV1CommoditiesCommodityIdTransactions<
  * @summary Get paginated list of investment transactions for a commodity.
  */
 
-export function useGetApiV1CommoditiesCommodityIdTransactions<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactions<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
-  params?: GetApiV1CommoditiesCommodityIdTransactionsParams,
+  params?: GetCoreV1CommoditiesCommodityIdTransactionsParams,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactions>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactions>>, TError, TData>
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CommoditiesCommodityIdTransactionsQueryOptions(commodityId, params, options)
+  const queryOptions = getGetCoreV1CommoditiesCommodityIdTransactionsQueryOptions(commodityId, params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -13010,17 +13059,17 @@ export function useGetApiV1CommoditiesCommodityIdTransactions<
 /**
  * @summary Create a new investment transaction for a commodity.
  */
-export const getPostApiV1CommoditiesCommodityIdTransactionsUrl = (commodityId: string) => {
-  return `/api/v1/commodities/${commodityId}/transactions`
+export const getPostCoreV1CommoditiesCommodityIdTransactionsUrl = (commodityId: string) => {
+  return `/core/v1/commodities/${commodityId}/transactions`
 }
 
-export const postApiV1CommoditiesCommodityIdTransactions = async (
+export const postCoreV1CommoditiesCommodityIdTransactions = async (
   commodityId: string,
   createInvestmentTransactionRequest: CreateInvestmentTransactionRequest,
   options?: RequestInit
 ): Promise<InvestmentTransactionDtoApiResponse> => {
   return customFetch<InvestmentTransactionDtoApiResponse>(
-    getPostApiV1CommoditiesCommodityIdTransactionsUrl(commodityId),
+    getPostCoreV1CommoditiesCommodityIdTransactionsUrl(commodityId),
     {
       ...options,
       method: 'POST',
@@ -13030,24 +13079,24 @@ export const postApiV1CommoditiesCommodityIdTransactions = async (
   )
 }
 
-export const getPostApiV1CommoditiesCommodityIdTransactionsMutationOptions = <
+export const getPostCoreV1CommoditiesCommodityIdTransactionsMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+    Awaited<ReturnType<typeof postCoreV1CommoditiesCommodityIdTransactions>>,
     TError,
     { commodityId: string; data: CreateInvestmentTransactionRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+  Awaited<ReturnType<typeof postCoreV1CommoditiesCommodityIdTransactions>>,
   TError,
   { commodityId: string; data: CreateInvestmentTransactionRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1CommoditiesCommodityIdTransactions']
+  const mutationKey = ['postCoreV1CommoditiesCommodityIdTransactions']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13055,33 +13104,33 @@ export const getPostApiV1CommoditiesCommodityIdTransactionsMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+    Awaited<ReturnType<typeof postCoreV1CommoditiesCommodityIdTransactions>>,
     { commodityId: string; data: CreateInvestmentTransactionRequest }
   > = props => {
     const { commodityId, data } = props ?? {}
 
-    return postApiV1CommoditiesCommodityIdTransactions(commodityId, data, requestOptions)
+    return postCoreV1CommoditiesCommodityIdTransactions(commodityId, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1CommoditiesCommodityIdTransactionsMutationResult = NonNullable<
-  Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>
+export type PostCoreV1CommoditiesCommodityIdTransactionsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1CommoditiesCommodityIdTransactions>>
 >
-export type PostApiV1CommoditiesCommodityIdTransactionsMutationBody = CreateInvestmentTransactionRequest
-export type PostApiV1CommoditiesCommodityIdTransactionsMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1CommoditiesCommodityIdTransactionsMutationBody = CreateInvestmentTransactionRequest
+export type PostCoreV1CommoditiesCommodityIdTransactionsMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Create a new investment transaction for a commodity.
  */
-export const usePostApiV1CommoditiesCommodityIdTransactions = <
+export const usePostCoreV1CommoditiesCommodityIdTransactions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+      Awaited<ReturnType<typeof postCoreV1CommoditiesCommodityIdTransactions>>,
       TError,
       { commodityId: string; data: CreateInvestmentTransactionRequest },
       TContext
@@ -13090,31 +13139,31 @@ export const usePostApiV1CommoditiesCommodityIdTransactions = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1CommoditiesCommodityIdTransactions>>,
+  Awaited<ReturnType<typeof postCoreV1CommoditiesCommodityIdTransactions>>,
   TError,
   { commodityId: string; data: CreateInvestmentTransactionRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1CommoditiesCommodityIdTransactionsMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1CommoditiesCommodityIdTransactionsMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get a single investment transaction by ID.
  */
-export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl = (
+export const getGetCoreV1CommoditiesCommodityIdTransactionsTransactionIdUrl = (
   commodityId: string,
   transactionId: string
 ) => {
-  return `/api/v1/commodities/${commodityId}/transactions/${transactionId}`
+  return `/core/v1/commodities/${commodityId}/transactions/${transactionId}`
 }
 
-export const getApiV1CommoditiesCommodityIdTransactionsTransactionId = async (
+export const getCoreV1CommoditiesCommodityIdTransactionsTransactionId = async (
   commodityId: string,
   transactionId: string,
   options?: RequestInit
 ): Promise<InvestmentTransactionDtoApiResponse> => {
   return customFetch<InvestmentTransactionDtoApiResponse>(
-    getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl(commodityId, transactionId),
+    getGetCoreV1CommoditiesCommodityIdTransactionsTransactionIdUrl(commodityId, transactionId),
     {
       ...options,
       method: 'GET'
@@ -13122,15 +13171,15 @@ export const getApiV1CommoditiesCommodityIdTransactionsTransactionId = async (
   )
 }
 
-export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryKey = (
+export const getGetCoreV1CommoditiesCommodityIdTransactionsTransactionIdQueryKey = (
   commodityId: string,
   transactionId: string
 ) => {
-  return [`/api/v1/commodities/${commodityId}/transactions/${transactionId}`] as const
+  return [`/core/v1/commodities/${commodityId}/transactions/${transactionId}`] as const
 }
 
-export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+export const getGetCoreV1CommoditiesCommodityIdTransactionsTransactionIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
@@ -13138,7 +13187,7 @@ export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOpti
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
         TError,
         TData
       >
@@ -13150,12 +13199,12 @@ export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOpti
 
   const queryKey =
     queryOptions?.queryKey ??
-    getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryKey(commodityId, transactionId)
+    getGetCoreV1CommoditiesCommodityIdTransactionsTransactionIdQueryKey(commodityId, transactionId)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>> = ({
-    signal
-  }) =>
-    getApiV1CommoditiesCommodityIdTransactionsTransactionId(commodityId, transactionId, { signal, ...requestOptions })
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>
+  > = ({ signal }) =>
+    getCoreV1CommoditiesCommodityIdTransactionsTransactionId(commodityId, transactionId, { signal, ...requestOptions })
 
   return {
     queryKey,
@@ -13164,19 +13213,19 @@ export const getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOpti
     staleTime: 10000,
     ...queryOptions
   } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+    Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+export type GetCoreV1CommoditiesCommodityIdTransactionsTransactionIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>
 >
-export type GetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1CommoditiesCommodityIdTransactionsTransactionIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
@@ -13184,16 +13233,16 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   options: {
     query: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
         TError,
         TData
       >
     > &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>
         >,
         'initialData'
       >
@@ -13201,8 +13250,8 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
@@ -13210,16 +13259,16 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
         TError,
         TData
       >
     > &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+          Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>
         >,
         'initialData'
       >
@@ -13227,8 +13276,8 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
@@ -13236,7 +13285,7 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
         TError,
         TData
       >
@@ -13249,8 +13298,8 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
  * @summary Get a single investment transaction by ID.
  */
 
-export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
-  TData = Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+export function useGetCoreV1CommoditiesCommodityIdTransactionsTransactionId<
+  TData = Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   commodityId: string,
@@ -13258,7 +13307,7 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   options?: {
     query?: Partial<
       UseQueryOptions<
-        Awaited<ReturnType<typeof getApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+        Awaited<ReturnType<typeof getCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
         TError,
         TData
       >
@@ -13267,7 +13316,7 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1CommoditiesCommodityIdTransactionsTransactionIdQueryOptions(
+  const queryOptions = getGetCoreV1CommoditiesCommodityIdTransactionsTransactionIdQueryOptions(
     commodityId,
     transactionId,
     options
@@ -13283,20 +13332,20 @@ export function useGetApiV1CommoditiesCommodityIdTransactionsTransactionId<
 /**
  * @summary Delete an investment transaction by ID.
  */
-export const getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl = (
+export const getDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionIdUrl = (
   commodityId: string,
   transactionId: string
 ) => {
-  return `/api/v1/commodities/${commodityId}/transactions/${transactionId}`
+  return `/core/v1/commodities/${commodityId}/transactions/${transactionId}`
 }
 
-export const deleteApiV1CommoditiesCommodityIdTransactionsTransactionId = async (
+export const deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId = async (
   commodityId: string,
   transactionId: string,
   options?: RequestInit
 ): Promise<ObjectApiResponse> => {
   return customFetch<ObjectApiResponse>(
-    getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdUrl(commodityId, transactionId),
+    getDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionIdUrl(commodityId, transactionId),
     {
       ...options,
       method: 'DELETE'
@@ -13304,24 +13353,24 @@ export const deleteApiV1CommoditiesCommodityIdTransactionsTransactionId = async 
   )
 }
 
-export const getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationOptions = <
+export const getDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+    Awaited<ReturnType<typeof deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
     TError,
     { commodityId: string; transactionId: string },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  Awaited<ReturnType<typeof deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError,
   { commodityId: string; transactionId: string },
   TContext
 > => {
-  const mutationKey = ['deleteApiV1CommoditiesCommodityIdTransactionsTransactionId']
+  const mutationKey = ['deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13329,33 +13378,33 @@ export const getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutati
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+    Awaited<ReturnType<typeof deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
     { commodityId: string; transactionId: string }
   > = props => {
     const { commodityId, transactionId } = props ?? {}
 
-    return deleteApiV1CommoditiesCommodityIdTransactionsTransactionId(commodityId, transactionId, requestOptions)
+    return deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId(commodityId, transactionId, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationResult = NonNullable<
-  Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>
+export type DeleteCoreV1CommoditiesCommodityIdTransactionsTransactionIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId>>
 >
 
-export type DeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1CommoditiesCommodityIdTransactionsTransactionIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete an investment transaction by ID.
  */
-export const useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId = <
+export const useDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionId = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+      Awaited<ReturnType<typeof deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
       TError,
       { commodityId: string; transactionId: string },
       TContext
@@ -13364,27 +13413,30 @@ export const useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId = <
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof deleteApiV1CommoditiesCommodityIdTransactionsTransactionId>>,
+  Awaited<ReturnType<typeof deleteCoreV1CommoditiesCommodityIdTransactionsTransactionId>>,
   TError,
   { commodityId: string; transactionId: string },
   TContext
 > => {
-  return useMutation(getDeleteApiV1CommoditiesCommodityIdTransactionsTransactionIdMutationOptions(options), queryClient)
+  return useMutation(
+    getDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionIdMutationOptions(options),
+    queryClient
+  )
 }
 
 /**
  * @summary Generate a presigned URL for direct file upload to Cloudflare R2.
 Flow: FE calls this → gets presigned URL → FE PUTs file directly to R2.
  */
-export const getPostApiV1FilesUploadUrlUrl = () => {
-  return `/api/v1/files/upload-url`
+export const getPostCoreV1FilesUploadUrlUrl = () => {
+  return `/core/v1/files/upload-url`
 }
 
-export const postApiV1FilesUploadUrl = async (
+export const postCoreV1FilesUploadUrl = async (
   generateUploadUrlRequest: GenerateUploadUrlRequest,
   options?: RequestInit
 ): Promise<UploadUrlResultDtoApiResponse> => {
-  return customFetch<UploadUrlResultDtoApiResponse>(getPostApiV1FilesUploadUrlUrl(), {
+  return customFetch<UploadUrlResultDtoApiResponse>(getPostCoreV1FilesUploadUrlUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -13392,24 +13444,24 @@ export const postApiV1FilesUploadUrl = async (
   })
 }
 
-export const getPostApiV1FilesUploadUrlMutationOptions = <
+export const getPostCoreV1FilesUploadUrlMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1FilesUploadUrl>>,
+    Awaited<ReturnType<typeof postCoreV1FilesUploadUrl>>,
     TError,
     { data: GenerateUploadUrlRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1FilesUploadUrl>>,
+  Awaited<ReturnType<typeof postCoreV1FilesUploadUrl>>,
   TError,
   { data: GenerateUploadUrlRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1FilesUploadUrl']
+  const mutationKey = ['postCoreV1FilesUploadUrl']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13417,29 +13469,29 @@ export const getPostApiV1FilesUploadUrlMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1FilesUploadUrl>>,
+    Awaited<ReturnType<typeof postCoreV1FilesUploadUrl>>,
     { data: GenerateUploadUrlRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1FilesUploadUrl(data, requestOptions)
+    return postCoreV1FilesUploadUrl(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1FilesUploadUrlMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1FilesUploadUrl>>>
-export type PostApiV1FilesUploadUrlMutationBody = GenerateUploadUrlRequest
-export type PostApiV1FilesUploadUrlMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1FilesUploadUrlMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1FilesUploadUrl>>>
+export type PostCoreV1FilesUploadUrlMutationBody = GenerateUploadUrlRequest
+export type PostCoreV1FilesUploadUrlMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Generate a presigned URL for direct file upload to Cloudflare R2.
 Flow: FE calls this → gets presigned URL → FE PUTs file directly to R2.
  */
-export const usePostApiV1FilesUploadUrl = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1FilesUploadUrl = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1FilesUploadUrl>>,
+      Awaited<ReturnType<typeof postCoreV1FilesUploadUrl>>,
       TError,
       { data: GenerateUploadUrlRequest },
       TContext
@@ -13448,26 +13500,26 @@ export const usePostApiV1FilesUploadUrl = <TError = ErrorType<ApiErrorResponse>,
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1FilesUploadUrl>>,
+  Awaited<ReturnType<typeof postCoreV1FilesUploadUrl>>,
   TError,
   { data: GenerateUploadUrlRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1FilesUploadUrlMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1FilesUploadUrlMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Generate a presigned URL for downloading/viewing a file from R2.
  */
-export const getPostApiV1FilesDownloadUrlUrl = () => {
-  return `/api/v1/files/download-url`
+export const getPostCoreV1FilesDownloadUrlUrl = () => {
+  return `/core/v1/files/download-url`
 }
 
-export const postApiV1FilesDownloadUrl = async (
+export const postCoreV1FilesDownloadUrl = async (
   generateDownloadUrlRequest: GenerateDownloadUrlRequest,
   options?: RequestInit
 ): Promise<DownloadUrlResultDtoApiResponse> => {
-  return customFetch<DownloadUrlResultDtoApiResponse>(getPostApiV1FilesDownloadUrlUrl(), {
+  return customFetch<DownloadUrlResultDtoApiResponse>(getPostCoreV1FilesDownloadUrlUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -13475,24 +13527,24 @@ export const postApiV1FilesDownloadUrl = async (
   })
 }
 
-export const getPostApiV1FilesDownloadUrlMutationOptions = <
+export const getPostCoreV1FilesDownloadUrlMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1FilesDownloadUrl>>,
+    Awaited<ReturnType<typeof postCoreV1FilesDownloadUrl>>,
     TError,
     { data: GenerateDownloadUrlRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1FilesDownloadUrl>>,
+  Awaited<ReturnType<typeof postCoreV1FilesDownloadUrl>>,
   TError,
   { data: GenerateDownloadUrlRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1FilesDownloadUrl']
+  const mutationKey = ['postCoreV1FilesDownloadUrl']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13500,28 +13552,30 @@ export const getPostApiV1FilesDownloadUrlMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1FilesDownloadUrl>>,
+    Awaited<ReturnType<typeof postCoreV1FilesDownloadUrl>>,
     { data: GenerateDownloadUrlRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1FilesDownloadUrl(data, requestOptions)
+    return postCoreV1FilesDownloadUrl(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1FilesDownloadUrlMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1FilesDownloadUrl>>>
-export type PostApiV1FilesDownloadUrlMutationBody = GenerateDownloadUrlRequest
-export type PostApiV1FilesDownloadUrlMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1FilesDownloadUrlMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postCoreV1FilesDownloadUrl>>
+>
+export type PostCoreV1FilesDownloadUrlMutationBody = GenerateDownloadUrlRequest
+export type PostCoreV1FilesDownloadUrlMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Generate a presigned URL for downloading/viewing a file from R2.
  */
-export const usePostApiV1FilesDownloadUrl = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1FilesDownloadUrl = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1FilesDownloadUrl>>,
+      Awaited<ReturnType<typeof postCoreV1FilesDownloadUrl>>,
       TError,
       { data: GenerateDownloadUrlRequest },
       TContext
@@ -13530,26 +13584,26 @@ export const usePostApiV1FilesDownloadUrl = <TError = ErrorType<ApiErrorResponse
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1FilesDownloadUrl>>,
+  Awaited<ReturnType<typeof postCoreV1FilesDownloadUrl>>,
   TError,
   { data: GenerateDownloadUrlRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1FilesDownloadUrlMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1FilesDownloadUrlMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete a file from R2 storage.
  */
-export const getDeleteApiV1FilesUrl = () => {
-  return `/api/v1/files`
+export const getDeleteCoreV1FilesUrl = () => {
+  return `/core/v1/files`
 }
 
-export const deleteApiV1Files = async (
+export const deleteCoreV1Files = async (
   deleteFileRequest: DeleteFileRequest,
   options?: RequestInit
 ): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1FilesUrl(), {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1FilesUrl(), {
     ...options,
     method: 'DELETE',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -13557,16 +13611,24 @@ export const deleteApiV1Files = async (
   })
 }
 
-export const getDeleteApiV1FilesMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getDeleteCoreV1FilesMutationOptions = <
+  TError = ErrorType<ApiErrorResponse>,
+  TContext = unknown
+>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof deleteApiV1Files>>,
+    Awaited<ReturnType<typeof deleteCoreV1Files>>,
     TError,
     { data: DeleteFileRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1Files>>, TError, { data: DeleteFileRequest }, TContext> => {
-  const mutationKey = ['deleteApiV1Files']
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteCoreV1Files>>,
+  TError,
+  { data: DeleteFileRequest },
+  TContext
+> => {
+  const mutationKey = ['deleteCoreV1Files']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13574,28 +13636,28 @@ export const getDeleteApiV1FilesMutationOptions = <TError = ErrorType<ApiErrorRe
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof deleteApiV1Files>>,
+    Awaited<ReturnType<typeof deleteCoreV1Files>>,
     { data: DeleteFileRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return deleteApiV1Files(data, requestOptions)
+    return deleteCoreV1Files(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1FilesMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1Files>>>
-export type DeleteApiV1FilesMutationBody = DeleteFileRequest
-export type DeleteApiV1FilesMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1FilesMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1Files>>>
+export type DeleteCoreV1FilesMutationBody = DeleteFileRequest
+export type DeleteCoreV1FilesMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete a file from R2 storage.
  */
-export const useDeleteApiV1Files = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1Files = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof deleteApiV1Files>>,
+      Awaited<ReturnType<typeof deleteCoreV1Files>>,
       TError,
       { data: DeleteFileRequest },
       TContext
@@ -13603,55 +13665,55 @@ export const useDeleteApiV1Files = <TError = ErrorType<ApiErrorResponse>, TConte
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1Files>>, TError, { data: DeleteFileRequest }, TContext> => {
-  return useMutation(getDeleteApiV1FilesMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1Files>>, TError, { data: DeleteFileRequest }, TContext> => {
+  return useMutation(getDeleteCoreV1FilesMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Upload a file to R2 via server-side proxy (avoids browser CORS on direct R2 uploads).
 Accepts multipart/form-data with a 'file' field and optional 'folder' field.
  */
-export const getPostApiV1FilesUploadUrl = () => {
-  return `/api/v1/files/upload`
+export const getPostCoreV1FilesUploadUrl = () => {
+  return `/core/v1/files/upload`
 }
 
-export const postApiV1FilesUpload = async (
-  postApiV1FilesUploadBody: PostApiV1FilesUploadBody,
+export const postCoreV1FilesUpload = async (
+  postCoreV1FilesUploadBody: PostCoreV1FilesUploadBody,
   options?: RequestInit
 ): Promise<FileUploadResultDtoApiResponse> => {
   const formData = new FormData()
-  if (postApiV1FilesUploadBody.file !== undefined) {
-    formData.append(`file`, postApiV1FilesUploadBody.file)
+  if (postCoreV1FilesUploadBody.file !== undefined) {
+    formData.append(`file`, postCoreV1FilesUploadBody.file)
   }
-  if (postApiV1FilesUploadBody.folder !== undefined) {
-    formData.append(`folder`, postApiV1FilesUploadBody.folder)
+  if (postCoreV1FilesUploadBody.folder !== undefined) {
+    formData.append(`folder`, postCoreV1FilesUploadBody.folder)
   }
 
-  return customFetch<FileUploadResultDtoApiResponse>(getPostApiV1FilesUploadUrl(), {
+  return customFetch<FileUploadResultDtoApiResponse>(getPostCoreV1FilesUploadUrl(), {
     ...options,
     method: 'POST',
     body: formData
   })
 }
 
-export const getPostApiV1FilesUploadMutationOptions = <
+export const getPostCoreV1FilesUploadMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+    Awaited<ReturnType<typeof postCoreV1FilesUpload>>,
     TError,
-    { data: PostApiV1FilesUploadBody },
+    { data: PostCoreV1FilesUploadBody },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+  Awaited<ReturnType<typeof postCoreV1FilesUpload>>,
   TError,
-  { data: PostApiV1FilesUploadBody },
+  { data: PostCoreV1FilesUploadBody },
   TContext
 > => {
-  const mutationKey = ['postApiV1FilesUpload']
+  const mutationKey = ['postCoreV1FilesUpload']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13659,49 +13721,49 @@ export const getPostApiV1FilesUploadMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1FilesUpload>>,
-    { data: PostApiV1FilesUploadBody }
+    Awaited<ReturnType<typeof postCoreV1FilesUpload>>,
+    { data: PostCoreV1FilesUploadBody }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1FilesUpload(data, requestOptions)
+    return postCoreV1FilesUpload(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1FilesUploadMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1FilesUpload>>>
-export type PostApiV1FilesUploadMutationBody = PostApiV1FilesUploadBody
-export type PostApiV1FilesUploadMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1FilesUploadMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1FilesUpload>>>
+export type PostCoreV1FilesUploadMutationBody = PostCoreV1FilesUploadBody
+export type PostCoreV1FilesUploadMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Upload a file to R2 via server-side proxy (avoids browser CORS on direct R2 uploads).
 Accepts multipart/form-data with a 'file' field and optional 'folder' field.
  */
-export const usePostApiV1FilesUpload = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1FilesUpload = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+      Awaited<ReturnType<typeof postCoreV1FilesUpload>>,
       TError,
-      { data: PostApiV1FilesUploadBody },
+      { data: PostCoreV1FilesUploadBody },
       TContext
     >
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1FilesUpload>>,
+  Awaited<ReturnType<typeof postCoreV1FilesUpload>>,
   TError,
-  { data: PostApiV1FilesUploadBody },
+  { data: PostCoreV1FilesUploadBody },
   TContext
 > => {
-  return useMutation(getPostApiV1FilesUploadMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1FilesUploadMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get paginated list of units with optional sorting.
  */
-export const getGetApiV1UnitsUrl = (params?: GetApiV1UnitsParams) => {
+export const getGetCoreV1UnitsUrl = (params?: GetCoreV1UnitsParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -13712,62 +13774,62 @@ export const getGetApiV1UnitsUrl = (params?: GetApiV1UnitsParams) => {
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/units?${stringifiedParams}` : `/api/v1/units`
+  return stringifiedParams.length > 0 ? `/core/v1/units?${stringifiedParams}` : `/core/v1/units`
 }
 
-export const getApiV1Units = async (
-  params?: GetApiV1UnitsParams,
+export const getCoreV1Units = async (
+  params?: GetCoreV1UnitsParams,
   options?: RequestInit
 ): Promise<UnitDtoApiPagedResponse> => {
-  return customFetch<UnitDtoApiPagedResponse>(getGetApiV1UnitsUrl(params), {
+  return customFetch<UnitDtoApiPagedResponse>(getGetCoreV1UnitsUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1UnitsQueryKey = (params?: GetApiV1UnitsParams) => {
-  return [`/api/v1/units`, ...(params ? [params] : [])] as const
+export const getGetCoreV1UnitsQueryKey = (params?: GetCoreV1UnitsParams) => {
+  return [`/core/v1/units`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1UnitsQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1Units>>,
+export const getGetCoreV1UnitsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1Units>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsParams,
+  params?: GetCoreV1UnitsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Units>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Units>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1UnitsQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1UnitsQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1Units>>> = ({ signal }) =>
-    getApiV1Units(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1Units>>> = ({ signal }) =>
+    getCoreV1Units(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1Units>>,
+    Awaited<ReturnType<typeof getCoreV1Units>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1UnitsQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1Units>>>
-export type GetApiV1UnitsQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1UnitsQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1Units>>>
+export type GetCoreV1UnitsQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1Units<
-  TData = Awaited<ReturnType<typeof getApiV1Units>>,
+export function useGetCoreV1Units<
+  TData = Awaited<ReturnType<typeof getCoreV1Units>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetApiV1UnitsParams,
+  params: undefined | GetCoreV1UnitsParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Units>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Units>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Units>>,
+          Awaited<ReturnType<typeof getCoreV1Units>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Units>>
+          Awaited<ReturnType<typeof getCoreV1Units>>
         >,
         'initialData'
       >
@@ -13775,18 +13837,18 @@ export function useGetApiV1Units<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Units<
-  TData = Awaited<ReturnType<typeof getApiV1Units>>,
+export function useGetCoreV1Units<
+  TData = Awaited<ReturnType<typeof getCoreV1Units>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsParams,
+  params?: GetCoreV1UnitsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Units>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Units>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1Units>>,
+          Awaited<ReturnType<typeof getCoreV1Units>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1Units>>
+          Awaited<ReturnType<typeof getCoreV1Units>>
         >,
         'initialData'
       >
@@ -13794,13 +13856,13 @@ export function useGetApiV1Units<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1Units<
-  TData = Awaited<ReturnType<typeof getApiV1Units>>,
+export function useGetCoreV1Units<
+  TData = Awaited<ReturnType<typeof getCoreV1Units>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsParams,
+  params?: GetCoreV1UnitsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Units>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Units>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -13809,18 +13871,18 @@ export function useGetApiV1Units<
  * @summary Get paginated list of units with optional sorting.
  */
 
-export function useGetApiV1Units<
-  TData = Awaited<ReturnType<typeof getApiV1Units>>,
+export function useGetCoreV1Units<
+  TData = Awaited<ReturnType<typeof getCoreV1Units>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsParams,
+  params?: GetCoreV1UnitsParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1Units>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1Units>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1UnitsQueryOptions(params, options)
+  const queryOptions = getGetCoreV1UnitsQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -13832,15 +13894,15 @@ export function useGetApiV1Units<
 /**
  * @summary Create a new unit.
  */
-export const getPostApiV1UnitsUrl = () => {
-  return `/api/v1/units`
+export const getPostCoreV1UnitsUrl = () => {
+  return `/core/v1/units`
 }
 
-export const postApiV1Units = async (
+export const postCoreV1Units = async (
   createUnitRequest: CreateUnitRequest,
   options?: RequestInit
 ): Promise<UnitDtoApiResponse> => {
-  return customFetch<UnitDtoApiResponse>(getPostApiV1UnitsUrl(), {
+  return customFetch<UnitDtoApiResponse>(getPostCoreV1UnitsUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -13848,16 +13910,16 @@ export const postApiV1Units = async (
   })
 }
 
-export const getPostApiV1UnitsMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
+export const getPostCoreV1UnitsMutationOptions = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1Units>>,
+    Awaited<ReturnType<typeof postCoreV1Units>>,
     TError,
     { data: CreateUnitRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof postApiV1Units>>, TError, { data: CreateUnitRequest }, TContext> => {
-  const mutationKey = ['postApiV1Units']
+}): UseMutationOptions<Awaited<ReturnType<typeof postCoreV1Units>>, TError, { data: CreateUnitRequest }, TContext> => {
+  const mutationKey = ['postCoreV1Units']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13865,28 +13927,28 @@ export const getPostApiV1UnitsMutationOptions = <TError = ErrorType<ApiErrorResp
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1Units>>,
+    Awaited<ReturnType<typeof postCoreV1Units>>,
     { data: CreateUnitRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1Units(data, requestOptions)
+    return postCoreV1Units(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1UnitsMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1Units>>>
-export type PostApiV1UnitsMutationBody = CreateUnitRequest
-export type PostApiV1UnitsMutationError = ErrorType<ApiErrorResponse>
+export type PostCoreV1UnitsMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1Units>>>
+export type PostCoreV1UnitsMutationBody = CreateUnitRequest
+export type PostCoreV1UnitsMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Create a new unit.
  */
-export const usePostApiV1Units = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePostCoreV1Units = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1Units>>,
+      Awaited<ReturnType<typeof postCoreV1Units>>,
       TError,
       { data: CreateUnitRequest },
       TContext
@@ -13894,22 +13956,22 @@ export const usePostApiV1Units = <TError = ErrorType<ApiErrorResponse>, TContext
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof postApiV1Units>>, TError, { data: CreateUnitRequest }, TContext> => {
-  return useMutation(getPostApiV1UnitsMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof postCoreV1Units>>, TError, { data: CreateUnitRequest }, TContext> => {
+  return useMutation(getPostCoreV1UnitsMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Search units with JSON filter DSL.
  */
-export const getPostApiV1UnitsSearchUrl = () => {
-  return `/api/v1/units/search`
+export const getPostCoreV1UnitsSearchUrl = () => {
+  return `/core/v1/units/search`
 }
 
-export const postApiV1UnitsSearch = async (
+export const postCoreV1UnitsSearch = async (
   unitFilterInputSearchRequest: UnitFilterInputSearchRequest,
   options?: RequestInit
 ): Promise<UnitDtoApiPagedResponse> => {
-  return customFetch<UnitDtoApiPagedResponse>(getPostApiV1UnitsSearchUrl(), {
+  return customFetch<UnitDtoApiPagedResponse>(getPostCoreV1UnitsSearchUrl(), {
     ...options,
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -13917,21 +13979,21 @@ export const postApiV1UnitsSearch = async (
   })
 }
 
-export const getPostApiV1UnitsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
+export const getPostCoreV1UnitsSearchMutationOptions = <TError = ErrorType<unknown>, TContext = unknown>(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1UnitsSearch>>,
     TError,
     { data: UnitFilterInputSearchRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1UnitsSearch>>,
   TError,
   { data: UnitFilterInputSearchRequest },
   TContext
 > => {
-  const mutationKey = ['postApiV1UnitsSearch']
+  const mutationKey = ['postCoreV1UnitsSearch']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -13939,28 +14001,28 @@ export const getPostApiV1UnitsSearchMutationOptions = <TError = ErrorType<unknow
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+    Awaited<ReturnType<typeof postCoreV1UnitsSearch>>,
     { data: UnitFilterInputSearchRequest }
   > = props => {
     const { data } = props ?? {}
 
-    return postApiV1UnitsSearch(data, requestOptions)
+    return postCoreV1UnitsSearch(data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PostApiV1UnitsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postApiV1UnitsSearch>>>
-export type PostApiV1UnitsSearchMutationBody = UnitFilterInputSearchRequest
-export type PostApiV1UnitsSearchMutationError = ErrorType<unknown>
+export type PostCoreV1UnitsSearchMutationResult = NonNullable<Awaited<ReturnType<typeof postCoreV1UnitsSearch>>>
+export type PostCoreV1UnitsSearchMutationBody = UnitFilterInputSearchRequest
+export type PostCoreV1UnitsSearchMutationError = ErrorType<unknown>
 
 /**
  * @summary Search units with JSON filter DSL.
  */
-export const usePostApiV1UnitsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
+export const usePostCoreV1UnitsSearch = <TError = ErrorType<unknown>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+      Awaited<ReturnType<typeof postCoreV1UnitsSearch>>,
       TError,
       { data: UnitFilterInputSearchRequest },
       TContext
@@ -13969,71 +14031,71 @@ export const usePostApiV1UnitsSearch = <TError = ErrorType<unknown>, TContext = 
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof postApiV1UnitsSearch>>,
+  Awaited<ReturnType<typeof postCoreV1UnitsSearch>>,
   TError,
   { data: UnitFilterInputSearchRequest },
   TContext
 > => {
-  return useMutation(getPostApiV1UnitsSearchMutationOptions(options), queryClient)
+  return useMutation(getPostCoreV1UnitsSearchMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get a single unit by ID.
  */
-export const getGetApiV1UnitsIdUrl = (id: string) => {
-  return `/api/v1/units/${id}`
+export const getGetCoreV1UnitsIdUrl = (id: string) => {
+  return `/core/v1/units/${id}`
 }
 
-export const getApiV1UnitsId = async (id: string, options?: RequestInit): Promise<UnitDtoApiResponse> => {
-  return customFetch<UnitDtoApiResponse>(getGetApiV1UnitsIdUrl(id), {
+export const getCoreV1UnitsId = async (id: string, options?: RequestInit): Promise<UnitDtoApiResponse> => {
+  return customFetch<UnitDtoApiResponse>(getGetCoreV1UnitsIdUrl(id), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1UnitsIdQueryKey = (id: string) => {
-  return [`/api/v1/units/${id}`] as const
+export const getGetCoreV1UnitsIdQueryKey = (id: string) => {
+  return [`/core/v1/units/${id}`] as const
 }
 
-export const getGetApiV1UnitsIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1UnitsId>>,
+export const getGetCoreV1UnitsIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1UnitsIdQueryKey(id)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1UnitsIdQueryKey(id)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1UnitsId>>> = ({ signal }) =>
-    getApiV1UnitsId(id, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1UnitsId>>> = ({ signal }) =>
+    getCoreV1UnitsId(id, { signal, ...requestOptions })
 
   return { queryKey, queryFn, enabled: !!id, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1UnitsId>>,
+    Awaited<ReturnType<typeof getCoreV1UnitsId>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1UnitsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1UnitsId>>>
-export type GetApiV1UnitsIdQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1UnitsIdQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1UnitsId>>>
+export type GetCoreV1UnitsIdQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1UnitsId<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsId>>,
+export function useGetCoreV1UnitsId<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsId>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsId>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsId>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsId>>
+          Awaited<ReturnType<typeof getCoreV1UnitsId>>
         >,
         'initialData'
       >
@@ -14041,18 +14103,18 @@ export function useGetApiV1UnitsId<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsId<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsId>>,
+export function useGetCoreV1UnitsId<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsId>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsId>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsId>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsId>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsId>>
+          Awaited<ReturnType<typeof getCoreV1UnitsId>>
         >,
         'initialData'
       >
@@ -14060,13 +14122,13 @@ export function useGetApiV1UnitsId<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsId<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsId>>,
+export function useGetCoreV1UnitsId<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -14075,18 +14137,18 @@ export function useGetApiV1UnitsId<
  * @summary Get a single unit by ID.
  */
 
-export function useGetApiV1UnitsId<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsId>>,
+export function useGetCoreV1UnitsId<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsId>>,
   TError = ErrorType<ApiErrorResponse>
 >(
   id: string,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsId>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsId>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1UnitsIdQueryOptions(id, options)
+  const queryOptions = getGetCoreV1UnitsIdQueryOptions(id, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -14098,16 +14160,16 @@ export function useGetApiV1UnitsId<
 /**
  * @summary Update an existing unit.
  */
-export const getPatchApiV1UnitsIdUrl = (id: string) => {
-  return `/api/v1/units/${id}`
+export const getPatchCoreV1UnitsIdUrl = (id: string) => {
+  return `/core/v1/units/${id}`
 }
 
-export const patchApiV1UnitsId = async (
+export const patchCoreV1UnitsId = async (
   id: string,
   updateUnitRequest: UpdateUnitRequest,
   options?: RequestInit
 ): Promise<UnitDtoApiResponse> => {
-  return customFetch<UnitDtoApiResponse>(getPatchApiV1UnitsIdUrl(id), {
+  return customFetch<UnitDtoApiResponse>(getPatchCoreV1UnitsIdUrl(id), {
     ...options,
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json', ...options?.headers },
@@ -14115,24 +14177,24 @@ export const patchApiV1UnitsId = async (
   })
 }
 
-export const getPatchApiV1UnitsIdMutationOptions = <
+export const getPatchCoreV1UnitsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
   mutation?: UseMutationOptions<
-    Awaited<ReturnType<typeof patchApiV1UnitsId>>,
+    Awaited<ReturnType<typeof patchCoreV1UnitsId>>,
     TError,
     { id: string; data: UpdateUnitRequest },
     TContext
   >
   request?: SecondParameter<typeof customFetch>
 }): UseMutationOptions<
-  Awaited<ReturnType<typeof patchApiV1UnitsId>>,
+  Awaited<ReturnType<typeof patchCoreV1UnitsId>>,
   TError,
   { id: string; data: UpdateUnitRequest },
   TContext
 > => {
-  const mutationKey = ['patchApiV1UnitsId']
+  const mutationKey = ['patchCoreV1UnitsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
@@ -14140,28 +14202,28 @@ export const getPatchApiV1UnitsIdMutationOptions = <
     : { mutation: { mutationKey }, request: undefined }
 
   const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof patchApiV1UnitsId>>,
+    Awaited<ReturnType<typeof patchCoreV1UnitsId>>,
     { id: string; data: UpdateUnitRequest }
   > = props => {
     const { id, data } = props ?? {}
 
-    return patchApiV1UnitsId(id, data, requestOptions)
+    return patchCoreV1UnitsId(id, data, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type PatchApiV1UnitsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchApiV1UnitsId>>>
-export type PatchApiV1UnitsIdMutationBody = UpdateUnitRequest
-export type PatchApiV1UnitsIdMutationError = ErrorType<ApiErrorResponse>
+export type PatchCoreV1UnitsIdMutationResult = NonNullable<Awaited<ReturnType<typeof patchCoreV1UnitsId>>>
+export type PatchCoreV1UnitsIdMutationBody = UpdateUnitRequest
+export type PatchCoreV1UnitsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Update an existing unit.
  */
-export const usePatchApiV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const usePatchCoreV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
     mutation?: UseMutationOptions<
-      Awaited<ReturnType<typeof patchApiV1UnitsId>>,
+      Awaited<ReturnType<typeof patchCoreV1UnitsId>>,
       TError,
       { id: string; data: UpdateUnitRequest },
       TContext
@@ -14170,72 +14232,72 @@ export const usePatchApiV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TCont
   },
   queryClient?: QueryClient
 ): UseMutationResult<
-  Awaited<ReturnType<typeof patchApiV1UnitsId>>,
+  Awaited<ReturnType<typeof patchCoreV1UnitsId>>,
   TError,
   { id: string; data: UpdateUnitRequest },
   TContext
 > => {
-  return useMutation(getPatchApiV1UnitsIdMutationOptions(options), queryClient)
+  return useMutation(getPatchCoreV1UnitsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Delete a unit by ID.
  */
-export const getDeleteApiV1UnitsIdUrl = (id: string) => {
-  return `/api/v1/units/${id}`
+export const getDeleteCoreV1UnitsIdUrl = (id: string) => {
+  return `/core/v1/units/${id}`
 }
 
-export const deleteApiV1UnitsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
-  return customFetch<ObjectApiResponse>(getDeleteApiV1UnitsIdUrl(id), {
+export const deleteCoreV1UnitsId = async (id: string, options?: RequestInit): Promise<ObjectApiResponse> => {
+  return customFetch<ObjectApiResponse>(getDeleteCoreV1UnitsIdUrl(id), {
     ...options,
     method: 'DELETE'
   })
 }
 
-export const getDeleteApiV1UnitsIdMutationOptions = <
+export const getDeleteCoreV1UnitsIdMutationOptions = <
   TError = ErrorType<ApiErrorResponse>,
   TContext = unknown
 >(options?: {
-  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1UnitsId>>, TError, { id: string }, TContext>
+  mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1UnitsId>>, TError, { id: string }, TContext>
   request?: SecondParameter<typeof customFetch>
-}): UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1UnitsId>>, TError, { id: string }, TContext> => {
-  const mutationKey = ['deleteApiV1UnitsId']
+}): UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1UnitsId>>, TError, { id: string }, TContext> => {
+  const mutationKey = ['deleteCoreV1UnitsId']
   const { mutation: mutationOptions, request: requestOptions } = options
     ? options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey
       ? options
       : { ...options, mutation: { ...options.mutation, mutationKey } }
     : { mutation: { mutationKey }, request: undefined }
 
-  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteApiV1UnitsId>>, { id: string }> = props => {
+  const mutationFn: MutationFunction<Awaited<ReturnType<typeof deleteCoreV1UnitsId>>, { id: string }> = props => {
     const { id } = props ?? {}
 
-    return deleteApiV1UnitsId(id, requestOptions)
+    return deleteCoreV1UnitsId(id, requestOptions)
   }
 
   return { mutationFn, ...mutationOptions }
 }
 
-export type DeleteApiV1UnitsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteApiV1UnitsId>>>
+export type DeleteCoreV1UnitsIdMutationResult = NonNullable<Awaited<ReturnType<typeof deleteCoreV1UnitsId>>>
 
-export type DeleteApiV1UnitsIdMutationError = ErrorType<ApiErrorResponse>
+export type DeleteCoreV1UnitsIdMutationError = ErrorType<ApiErrorResponse>
 
 /**
  * @summary Delete a unit by ID.
  */
-export const useDeleteApiV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
+export const useDeleteCoreV1UnitsId = <TError = ErrorType<ApiErrorResponse>, TContext = unknown>(
   options?: {
-    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteApiV1UnitsId>>, TError, { id: string }, TContext>
+    mutation?: UseMutationOptions<Awaited<ReturnType<typeof deleteCoreV1UnitsId>>, TError, { id: string }, TContext>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
-): UseMutationResult<Awaited<ReturnType<typeof deleteApiV1UnitsId>>, TError, { id: string }, TContext> => {
-  return useMutation(getDeleteApiV1UnitsIdMutationOptions(options), queryClient)
+): UseMutationResult<Awaited<ReturnType<typeof deleteCoreV1UnitsId>>, TError, { id: string }, TContext> => {
+  return useMutation(getDeleteCoreV1UnitsIdMutationOptions(options), queryClient)
 }
 
 /**
  * @summary Get base unit tree with derived units nested, optionally filtered by category.
  */
-export const getGetApiV1UnitsTreeUrl = (params?: GetApiV1UnitsTreeParams) => {
+export const getGetCoreV1UnitsTreeUrl = (params?: GetCoreV1UnitsTreeParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -14246,62 +14308,62 @@ export const getGetApiV1UnitsTreeUrl = (params?: GetApiV1UnitsTreeParams) => {
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/units/tree?${stringifiedParams}` : `/api/v1/units/tree`
+  return stringifiedParams.length > 0 ? `/core/v1/units/tree?${stringifiedParams}` : `/core/v1/units/tree`
 }
 
-export const getApiV1UnitsTree = async (
-  params?: GetApiV1UnitsTreeParams,
+export const getCoreV1UnitsTree = async (
+  params?: GetCoreV1UnitsTreeParams,
   options?: RequestInit
 ): Promise<UnitTreeNodeDtoListApiResponse> => {
-  return customFetch<UnitTreeNodeDtoListApiResponse>(getGetApiV1UnitsTreeUrl(params), {
+  return customFetch<UnitTreeNodeDtoListApiResponse>(getGetCoreV1UnitsTreeUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1UnitsTreeQueryKey = (params?: GetApiV1UnitsTreeParams) => {
-  return [`/api/v1/units/tree`, ...(params ? [params] : [])] as const
+export const getGetCoreV1UnitsTreeQueryKey = (params?: GetCoreV1UnitsTreeParams) => {
+  return [`/core/v1/units/tree`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1UnitsTreeQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+export const getGetCoreV1UnitsTreeQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1UnitsTreeParams,
+  params?: GetCoreV1UnitsTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsTree>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsTree>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1UnitsTreeQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1UnitsTreeQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1UnitsTree>>> = ({ signal }) =>
-    getApiV1UnitsTree(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1UnitsTree>>> = ({ signal }) =>
+    getCoreV1UnitsTree(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+    Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1UnitsTreeQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1UnitsTree>>>
-export type GetApiV1UnitsTreeQueryError = ErrorType<unknown>
+export type GetCoreV1UnitsTreeQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1UnitsTree>>>
+export type GetCoreV1UnitsTreeQueryError = ErrorType<unknown>
 
-export function useGetApiV1UnitsTree<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+export function useGetCoreV1UnitsTree<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
   TError = ErrorType<unknown>
 >(
-  params: undefined | GetApiV1UnitsTreeParams,
+  params: undefined | GetCoreV1UnitsTreeParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsTree>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsTree>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsTree>>
+          Awaited<ReturnType<typeof getCoreV1UnitsTree>>
         >,
         'initialData'
       >
@@ -14309,18 +14371,18 @@ export function useGetApiV1UnitsTree<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsTree<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+export function useGetCoreV1UnitsTree<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1UnitsTreeParams,
+  params?: GetCoreV1UnitsTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsTree>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsTree>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsTree>>
+          Awaited<ReturnType<typeof getCoreV1UnitsTree>>
         >,
         'initialData'
       >
@@ -14328,13 +14390,13 @@ export function useGetApiV1UnitsTree<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsTree<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+export function useGetCoreV1UnitsTree<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1UnitsTreeParams,
+  params?: GetCoreV1UnitsTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsTree>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsTree>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -14343,18 +14405,18 @@ export function useGetApiV1UnitsTree<
  * @summary Get base unit tree with derived units nested, optionally filtered by category.
  */
 
-export function useGetApiV1UnitsTree<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsTree>>,
+export function useGetCoreV1UnitsTree<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsTree>>,
   TError = ErrorType<unknown>
 >(
-  params?: GetApiV1UnitsTreeParams,
+  params?: GetCoreV1UnitsTreeParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsTree>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsTree>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1UnitsTreeQueryOptions(params, options)
+  const queryOptions = getGetCoreV1UnitsTreeQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -14366,60 +14428,60 @@ export function useGetApiV1UnitsTree<
 /**
  * @summary Get the count of units grouped by status.
  */
-export const getGetApiV1UnitsCountsByStatusUrl = () => {
-  return `/api/v1/units/counts-by-status`
+export const getGetCoreV1UnitsCountsByStatusUrl = () => {
+  return `/core/v1/units/counts-by-status`
 }
 
-export const getApiV1UnitsCountsByStatus = async (
+export const getCoreV1UnitsCountsByStatus = async (
   options?: RequestInit
 ): Promise<UnitCountByStatusDtoListApiResponse> => {
-  return customFetch<UnitCountByStatusDtoListApiResponse>(getGetApiV1UnitsCountsByStatusUrl(), {
+  return customFetch<UnitCountByStatusDtoListApiResponse>(getGetCoreV1UnitsCountsByStatusUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1UnitsCountsByStatusQueryKey = () => {
-  return [`/api/v1/units/counts-by-status`] as const
+export const getGetCoreV1UnitsCountsByStatusQueryKey = () => {
+  return [`/core/v1/units/counts-by-status`] as const
 }
 
-export const getGetApiV1UnitsCountsByStatusQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+export const getGetCoreV1UnitsCountsByStatusQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
   TError = ErrorType<unknown>
 >(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>, TError, TData>>
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>, TError, TData>>
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1UnitsCountsByStatusQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1UnitsCountsByStatusQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>> = ({ signal }) =>
-    getApiV1UnitsCountsByStatus({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>> = ({ signal }) =>
+    getCoreV1UnitsCountsByStatus({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+    Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1UnitsCountsByStatusQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>
+export type GetCoreV1UnitsCountsByStatusQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>
 >
-export type GetApiV1UnitsCountsByStatusQueryError = ErrorType<unknown>
+export type GetCoreV1UnitsCountsByStatusQueryError = ErrorType<unknown>
 
-export function useGetApiV1UnitsCountsByStatus<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+export function useGetCoreV1UnitsCountsByStatus<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
   TError = ErrorType<unknown>
 >(
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>
         >,
         'initialData'
       >
@@ -14427,17 +14489,17 @@ export function useGetApiV1UnitsCountsByStatus<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsCountsByStatus<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+export function useGetCoreV1UnitsCountsByStatus<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>
         >,
         'initialData'
       >
@@ -14445,12 +14507,12 @@ export function useGetApiV1UnitsCountsByStatus<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsCountsByStatus<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+export function useGetCoreV1UnitsCountsByStatus<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -14459,17 +14521,17 @@ export function useGetApiV1UnitsCountsByStatus<
  * @summary Get the count of units grouped by status.
  */
 
-export function useGetApiV1UnitsCountsByStatus<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>,
+export function useGetCoreV1UnitsCountsByStatus<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByStatus>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByStatus>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1UnitsCountsByStatusQueryOptions(options)
+  const queryOptions = getGetCoreV1UnitsCountsByStatusQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -14481,60 +14543,60 @@ export function useGetApiV1UnitsCountsByStatus<
 /**
  * @summary Get the count of units grouped by category.
  */
-export const getGetApiV1UnitsCountsByCategoryUrl = () => {
-  return `/api/v1/units/counts-by-category`
+export const getGetCoreV1UnitsCountsByCategoryUrl = () => {
+  return `/core/v1/units/counts-by-category`
 }
 
-export const getApiV1UnitsCountsByCategory = async (
+export const getCoreV1UnitsCountsByCategory = async (
   options?: RequestInit
 ): Promise<UnitCountByCategoryDtoListApiResponse> => {
-  return customFetch<UnitCountByCategoryDtoListApiResponse>(getGetApiV1UnitsCountsByCategoryUrl(), {
+  return customFetch<UnitCountByCategoryDtoListApiResponse>(getGetCoreV1UnitsCountsByCategoryUrl(), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1UnitsCountsByCategoryQueryKey = () => {
-  return [`/api/v1/units/counts-by-category`] as const
+export const getGetCoreV1UnitsCountsByCategoryQueryKey = () => {
+  return [`/core/v1/units/counts-by-category`] as const
 }
 
-export const getGetApiV1UnitsCountsByCategoryQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+export const getGetCoreV1UnitsCountsByCategoryQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
   TError = ErrorType<unknown>
 >(options?: {
-  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>, TError, TData>>
+  query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>, TError, TData>>
   request?: SecondParameter<typeof customFetch>
 }) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1UnitsCountsByCategoryQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1UnitsCountsByCategoryQueryKey()
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>> = ({ signal }) =>
-    getApiV1UnitsCountsByCategory({ signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>> = ({ signal }) =>
+    getCoreV1UnitsCountsByCategory({ signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+    Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1UnitsCountsByCategoryQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>
+export type GetCoreV1UnitsCountsByCategoryQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>
 >
-export type GetApiV1UnitsCountsByCategoryQueryError = ErrorType<unknown>
+export type GetCoreV1UnitsCountsByCategoryQueryError = ErrorType<unknown>
 
-export function useGetApiV1UnitsCountsByCategory<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+export function useGetCoreV1UnitsCountsByCategory<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
   TError = ErrorType<unknown>
 >(
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>
         >,
         'initialData'
       >
@@ -14542,17 +14604,17 @@ export function useGetApiV1UnitsCountsByCategory<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsCountsByCategory<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+export function useGetCoreV1UnitsCountsByCategory<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>
+          Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>
         >,
         'initialData'
       >
@@ -14560,12 +14622,12 @@ export function useGetApiV1UnitsCountsByCategory<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsCountsByCategory<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+export function useGetCoreV1UnitsCountsByCategory<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -14574,17 +14636,17 @@ export function useGetApiV1UnitsCountsByCategory<
  * @summary Get the count of units grouped by category.
  */
 
-export function useGetApiV1UnitsCountsByCategory<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>,
+export function useGetCoreV1UnitsCountsByCategory<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>,
   TError = ErrorType<unknown>
 >(
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsCountsByCategory>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsCountsByCategory>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1UnitsCountsByCategoryQueryOptions(options)
+  const queryOptions = getGetCoreV1UnitsCountsByCategoryQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>
@@ -14596,7 +14658,7 @@ export function useGetApiV1UnitsCountsByCategory<
 /**
  * @summary Convert a value from one unit to another.
  */
-export const getGetApiV1UnitsConvertUrl = (params?: GetApiV1UnitsConvertParams) => {
+export const getGetCoreV1UnitsConvertUrl = (params?: GetCoreV1UnitsConvertParams) => {
   const normalizedParams = new URLSearchParams()
 
   Object.entries(params || {}).forEach(([key, value]) => {
@@ -14607,62 +14669,62 @@ export const getGetApiV1UnitsConvertUrl = (params?: GetApiV1UnitsConvertParams) 
 
   const stringifiedParams = normalizedParams.toString()
 
-  return stringifiedParams.length > 0 ? `/api/v1/units/convert?${stringifiedParams}` : `/api/v1/units/convert`
+  return stringifiedParams.length > 0 ? `/core/v1/units/convert?${stringifiedParams}` : `/core/v1/units/convert`
 }
 
-export const getApiV1UnitsConvert = async (
-  params?: GetApiV1UnitsConvertParams,
+export const getCoreV1UnitsConvert = async (
+  params?: GetCoreV1UnitsConvertParams,
   options?: RequestInit
 ): Promise<ConvertResultDtoApiResponse> => {
-  return customFetch<ConvertResultDtoApiResponse>(getGetApiV1UnitsConvertUrl(params), {
+  return customFetch<ConvertResultDtoApiResponse>(getGetCoreV1UnitsConvertUrl(params), {
     ...options,
     method: 'GET'
   })
 }
 
-export const getGetApiV1UnitsConvertQueryKey = (params?: GetApiV1UnitsConvertParams) => {
-  return [`/api/v1/units/convert`, ...(params ? [params] : [])] as const
+export const getGetCoreV1UnitsConvertQueryKey = (params?: GetCoreV1UnitsConvertParams) => {
+  return [`/core/v1/units/convert`, ...(params ? [params] : [])] as const
 }
 
-export const getGetApiV1UnitsConvertQueryOptions = <
-  TData = Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+export const getGetCoreV1UnitsConvertQueryOptions = <
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsConvertParams,
+  params?: GetCoreV1UnitsConvertParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsConvert>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   }
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {}
 
-  const queryKey = queryOptions?.queryKey ?? getGetApiV1UnitsConvertQueryKey(params)
+  const queryKey = queryOptions?.queryKey ?? getGetCoreV1UnitsConvertQueryKey(params)
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getApiV1UnitsConvert>>> = ({ signal }) =>
-    getApiV1UnitsConvert(params, { signal, ...requestOptions })
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>> = ({ signal }) =>
+    getCoreV1UnitsConvert(params, { signal, ...requestOptions })
 
   return { queryKey, queryFn, staleTime: 10000, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+    Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
-export type GetApiV1UnitsConvertQueryResult = NonNullable<Awaited<ReturnType<typeof getApiV1UnitsConvert>>>
-export type GetApiV1UnitsConvertQueryError = ErrorType<ApiErrorResponse>
+export type GetCoreV1UnitsConvertQueryResult = NonNullable<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>>
+export type GetCoreV1UnitsConvertQueryError = ErrorType<ApiErrorResponse>
 
-export function useGetApiV1UnitsConvert<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+export function useGetCoreV1UnitsConvert<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params: undefined | GetApiV1UnitsConvertParams,
+  params: undefined | GetCoreV1UnitsConvertParams,
   options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsConvert>>, TError, TData>> &
+    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>, TError, TData>> &
       Pick<
         DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsConvert>>
+          Awaited<ReturnType<typeof getCoreV1UnitsConvert>>
         >,
         'initialData'
       >
@@ -14670,18 +14732,18 @@ export function useGetApiV1UnitsConvert<
   },
   queryClient?: QueryClient
 ): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsConvert<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+export function useGetCoreV1UnitsConvert<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsConvertParams,
+  params?: GetCoreV1UnitsConvertParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsConvert>>, TError, TData>> &
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>, TError, TData>> &
       Pick<
         UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+          Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
           TError,
-          Awaited<ReturnType<typeof getApiV1UnitsConvert>>
+          Awaited<ReturnType<typeof getCoreV1UnitsConvert>>
         >,
         'initialData'
       >
@@ -14689,13 +14751,13 @@ export function useGetApiV1UnitsConvert<
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useGetApiV1UnitsConvert<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+export function useGetCoreV1UnitsConvert<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsConvertParams,
+  params?: GetCoreV1UnitsConvertParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsConvert>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
@@ -14704,18 +14766,18 @@ export function useGetApiV1UnitsConvert<
  * @summary Convert a value from one unit to another.
  */
 
-export function useGetApiV1UnitsConvert<
-  TData = Awaited<ReturnType<typeof getApiV1UnitsConvert>>,
+export function useGetCoreV1UnitsConvert<
+  TData = Awaited<ReturnType<typeof getCoreV1UnitsConvert>>,
   TError = ErrorType<ApiErrorResponse>
 >(
-  params?: GetApiV1UnitsConvertParams,
+  params?: GetCoreV1UnitsConvertParams,
   options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getApiV1UnitsConvert>>, TError, TData>>
+    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof getCoreV1UnitsConvert>>, TError, TData>>
     request?: SecondParameter<typeof customFetch>
   },
   queryClient?: QueryClient
 ): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-  const queryOptions = getGetApiV1UnitsConvertQueryOptions(params, options)
+  const queryOptions = getGetCoreV1UnitsConvertQueryOptions(params, options)
 
   const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & {
     queryKey: DataTag<QueryKey, TData, TError>

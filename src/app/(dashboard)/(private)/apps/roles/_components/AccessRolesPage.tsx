@@ -11,7 +11,7 @@ import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import RoleList from './RoleList'
 import RolePermissionsDetail from './RolePermissionsDetail'
 import RoleDialog from './RoleDialog'
-import { deleteApiV1AccessControlRolesId, getApiV1AccessControlRoles } from '@/generated/core-api'
+import { deleteCoreV1AccessControlRolesId, getCoreV1AccessControlRoles } from '@/generated/core-api'
 import type { AccessRoleDto, ApiErrorResponse } from '@/generated/core-api'
 
 const AccessRolesPage = () => {
@@ -65,7 +65,7 @@ const AccessRolesPage = () => {
     queryKey: ['access-control', 'roles'],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
-      return getApiV1AccessControlRoles({
+      return getCoreV1AccessControlRoles({
         page: pageParam as number,
         pageSize: 20,
         view: 'detail'
@@ -109,7 +109,7 @@ const AccessRolesPage = () => {
   }, [roles, selectedRoleId])
 
   const { mutate: deleteRole, isPending: isDeleting } = useMutation({
-    mutationFn: async (roleId: string) => deleteApiV1AccessControlRolesId(roleId),
+    mutationFn: async (roleId: string) => deleteCoreV1AccessControlRolesId(roleId),
     onSuccess: data => {
       if (data.success) {
         toast.success('Role deleted successfully')

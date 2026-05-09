@@ -19,7 +19,7 @@ import {
 import { toast } from 'react-toastify'
 import { useQuery } from '@tanstack/react-query'
 
-import { postApiV1AccessControlPermissionsSearch } from '@/generated/core-api'
+import { postCoreV1AccessControlPermissionsSearch } from '@/generated/core-api'
 import type { ApiErrorResponse } from '@/generated/core-api'
 
 const PAGE_SIZE = 20
@@ -52,7 +52,7 @@ const AccessPermissionsPage = () => {
 
   const permissionsQuery = useQuery({
     queryKey: ['core', 'permissions', 'search', searchRequest],
-    queryFn: () => postApiV1AccessControlPermissionsSearch(searchRequest)
+    queryFn: () => postCoreV1AccessControlPermissionsSearch(searchRequest)
   })
 
   const permissions = permissionsQuery.data?.success ? (permissionsQuery.data.result?.items ?? []) : []

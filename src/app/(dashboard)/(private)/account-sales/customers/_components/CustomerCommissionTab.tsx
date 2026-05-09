@@ -24,10 +24,10 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import {
-  getGetApiV1AccountSalesCommissionsMemberIdQueryKey,
-  useGetApiV1AccountSalesCommissionsMemberId,
-  useGetApiV1AccountSalesCommissionsMemberIdTransactions,
-  usePostApiV1AccountSalesCommissionsPayout,
+  getGetCoreV1AccountSalesCommissionsMemberIdQueryKey,
+  useGetCoreV1AccountSalesCommissionsMemberId,
+  useGetCoreV1AccountSalesCommissionsMemberIdTransactions,
+  usePostCoreV1AccountSalesCommissionsPayout,
   CommissionTransactionType
 } from '@/generated/core-api'
 import type { CommissionTransactionDto, PayoutCommissionRequest } from '@/generated/core-api'
@@ -54,15 +54,15 @@ const CustomerCommissionTab = ({ memberId }: CustomerCommissionTabProps) => {
   const [payoutNote, setPayoutNote] = useState('')
   const [payoutEvidenceKey, setPayoutEvidenceKey] = useState('')
 
-  const commissionQuery = useGetApiV1AccountSalesCommissionsMemberId(memberId ?? '', {
+  const commissionQuery = useGetCoreV1AccountSalesCommissionsMemberId(memberId ?? '', {
     query: { enabled: !!memberId, retry: false, throwOnError: false }
   })
 
-  const txQuery = useGetApiV1AccountSalesCommissionsMemberIdTransactions(memberId ?? '', {
+  const txQuery = useGetCoreV1AccountSalesCommissionsMemberIdTransactions(memberId ?? '', {
     query: { enabled: !!memberId }
   })
 
-  const payoutMutation = usePostApiV1AccountSalesCommissionsPayout({
+  const payoutMutation = usePostCoreV1AccountSalesCommissionsPayout({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -75,7 +75,7 @@ const CustomerCommissionTab = ({ memberId }: CustomerCommissionTabProps) => {
 
         if (memberId) {
           await queryClient.invalidateQueries({
-            queryKey: getGetApiV1AccountSalesCommissionsMemberIdQueryKey(memberId)
+            queryKey: getGetCoreV1AccountSalesCommissionsMemberIdQueryKey(memberId)
           })
         }
 

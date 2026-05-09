@@ -20,9 +20,9 @@ import { toast } from 'react-toastify'
 
 import {
   AccountProductType,
-  getApiV1AccountSalesWarrantyGithubUsersUsername,
-  usePatchApiV1AccountSalesAccountClonesAccountCloneIdStatus,
-  usePatchApiV1AccountSalesAccountClonesAccountCloneId
+  getCoreV1AccountSalesWarrantyGithubUsersUsername,
+  usePatchCoreV1AccountSalesAccountClonesAccountCloneIdStatus,
+  usePatchCoreV1AccountSalesAccountClonesAccountCloneId
 } from '@/generated/core-api'
 import type {
   AccountCloneDto,
@@ -92,7 +92,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
     }
   }, [open, editTarget])
 
-  const updateCloneStatusMutation = usePatchApiV1AccountSalesAccountClonesAccountCloneIdStatus({
+  const updateCloneStatusMutation = usePatchCoreV1AccountSalesAccountClonesAccountCloneIdStatus({
     mutation: {
       onSuccess: response => {
         if (!response.success || !response.result) {
@@ -107,7 +107,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
     }
   })
 
-  const updateCloneMutation = usePatchApiV1AccountSalesAccountClonesAccountCloneId({
+  const updateCloneMutation = usePatchCoreV1AccountSalesAccountClonesAccountCloneId({
     mutation: {
       onSuccess: async response => {
         if (!response.success || !response.result) {
@@ -141,7 +141,7 @@ export const AccountCloneEditModal = ({ open, onClose, onSuccess, editTarget, pr
     setIsGithubLoading(true)
 
     try {
-      const response = await getApiV1AccountSalesWarrantyGithubUsersUsername(encodeURIComponent(username))
+      const response = await getCoreV1AccountSalesWarrantyGithubUsersUsername(encodeURIComponent(username))
 
       if (!response.success || !response.result) {
         toast.error(response.errors?.[0]?.message || 'Failed to fetch GitHub profile')

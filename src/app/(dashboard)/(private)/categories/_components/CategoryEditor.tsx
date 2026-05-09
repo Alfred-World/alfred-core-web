@@ -29,13 +29,13 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import * as v from 'valibot'
 
 import {
-  getGetApiV1CategoriesCountsByTypeQueryKey,
-  getGetApiV1CategoriesQueryKey,
-  getGetApiV1CategoriesTreeQueryKey,
-  postApiV1CategoriesSearch,
-  useGetApiV1CategoriesId,
-  usePostApiV1Categories,
-  usePatchApiV1CategoriesId
+  getGetCoreV1CategoriesCountsByTypeQueryKey,
+  getGetCoreV1CategoriesQueryKey,
+  getGetCoreV1CategoriesTreeQueryKey,
+  postCoreV1CategoriesSearch,
+  useGetCoreV1CategoriesId,
+  usePostCoreV1Categories,
+  usePatchCoreV1CategoriesId
 } from '@generated/core-api'
 import type { CategoryDto } from '@generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
@@ -96,10 +96,10 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
   const [parentSearch, setParentSearch] = useState('')
   const [selectedParent, setSelectedParent] = useState<CategoryDto | null>(null)
 
-  const { data: catData } = useGetApiV1CategoriesId(categoryId!, { query: { enabled: isEditMode } })
+  const { data: catData } = useGetCoreV1CategoriesId(categoryId!, { query: { enabled: isEditMode } })
 
-  const createMutation = usePostApiV1Categories()
-  const updateMutation = usePatchApiV1CategoriesId()
+  const createMutation = usePostCoreV1Categories()
+  const updateMutation = usePatchCoreV1CategoriesId()
   const category = catData?.result
 
   const {
@@ -142,7 +142,7 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
 
   const { data: parentData, isLoading: parentLoading } = useQuery({
     queryKey: ['core', 'categories', 'parent-search', parentSearchRequest],
-    queryFn: () => postApiV1CategoriesSearch(parentSearchRequest),
+    queryFn: () => postCoreV1CategoriesSearch(parentSearchRequest),
     staleTime: 10_000
   })
 
@@ -249,9 +249,9 @@ const CategoryEditor = ({ categoryId, onSaved }: CategoryEditorProps) => {
         savedId = result?.result?.id ?? undefined
       }
 
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1CategoriesQueryKey() })
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1CategoriesTreeQueryKey() })
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1CategoriesCountsByTypeQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1CategoriesQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1CategoriesTreeQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1CategoriesCountsByTypeQueryKey() })
       onSaved?.(savedId)
     } catch {
       /* handled by mutation state */

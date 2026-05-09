@@ -43,12 +43,12 @@ import { toast } from 'react-toastify'
 
 import {
   AccountProductType,
-  getGetApiV1AccountSalesSourceAccountsQueryKey,
-  useDeleteApiV1AccountSalesSourceAccountsId,
-  useGetApiV1AccountSalesSourceAccounts,
-  usePatchApiV1AccountSalesSourceAccountsIdActive,
-  usePostApiV1AccountSalesSourceAccounts,
-  usePatchApiV1AccountSalesSourceAccountsId
+  getGetCoreV1AccountSalesSourceAccountsQueryKey,
+  useDeleteCoreV1AccountSalesSourceAccountsId,
+  useGetCoreV1AccountSalesSourceAccounts,
+  usePatchCoreV1AccountSalesSourceAccountsIdActive,
+  usePostCoreV1AccountSalesSourceAccounts,
+  usePatchCoreV1AccountSalesSourceAccountsId
 } from '@/generated/core-api'
 import type { CreateSourceAccountRequest, SourceAccountDto, UpdateSourceAccountRequest } from '@/generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
@@ -589,12 +589,12 @@ export default function AccountSalesSourceAccounts() {
   }, [tabValue])
 
   // TODO: Tab-based isActive filtering requires POST search endpoint or dedicated query param
-  const listQuery = useGetApiV1AccountSalesSourceAccounts(
+  const listQuery = useGetCoreV1AccountSalesSourceAccounts(
     { page, pageSize: PAGE_SIZE, sort: '-createdAt' },
     { query: { refetchOnWindowFocus: false } }
   )
 
-  const createMutation = usePostApiV1AccountSalesSourceAccounts({
+  const createMutation = usePostCoreV1AccountSalesSourceAccounts({
     mutation: {
       onSuccess: async data => {
         if (!data.success) {
@@ -605,13 +605,13 @@ export default function AccountSalesSourceAccounts() {
 
         toast.success('Source account created successfully')
         setOpenCreate(false)
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesSourceAccountsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesSourceAccountsQueryKey() })
       },
       onError: () => toast.error('Failed to create source account')
     }
   })
 
-  const updateMutation = usePatchApiV1AccountSalesSourceAccountsId({
+  const updateMutation = usePatchCoreV1AccountSalesSourceAccountsId({
     mutation: {
       onSuccess: async data => {
         if (!data.success) {
@@ -622,13 +622,13 @@ export default function AccountSalesSourceAccounts() {
 
         toast.success('Source account updated')
         setEditTarget(null)
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesSourceAccountsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesSourceAccountsQueryKey() })
       },
       onError: () => toast.error('Failed to update source account')
     }
   })
 
-  const toggleActiveMutation = usePatchApiV1AccountSalesSourceAccountsIdActive({
+  const toggleActiveMutation = usePatchCoreV1AccountSalesSourceAccountsIdActive({
     mutation: {
       onSuccess: async data => {
         if (!data.success) {
@@ -637,13 +637,13 @@ export default function AccountSalesSourceAccounts() {
           return
         }
 
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesSourceAccountsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesSourceAccountsQueryKey() })
       },
       onError: () => toast.error('Failed to toggle status')
     }
   })
 
-  const deleteMutation = useDeleteApiV1AccountSalesSourceAccountsId({
+  const deleteMutation = useDeleteCoreV1AccountSalesSourceAccountsId({
     mutation: {
       onSuccess: async data => {
         if (!data.success) {
@@ -654,7 +654,7 @@ export default function AccountSalesSourceAccounts() {
 
         toast.success('Source account deleted')
         setDeleteTarget(null)
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesSourceAccountsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesSourceAccountsQueryKey() })
       },
       onError: () => toast.error('Failed to delete source account')
     }

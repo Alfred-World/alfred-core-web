@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 
 import type { ActionResultEntry, ChatMessageEntry } from '@/generated/core-api'
-import { usePostApiV1AiChat } from '@/generated/core-api'
+import { usePostCoreV1AiChat } from '@/generated/core-api'
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 
@@ -291,7 +291,7 @@ export default function AiChatPanel() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { mutateAsync: sendChat, isPending } = usePostApiV1AiChat()
+  const { mutateAsync: sendChat, isPending } = usePostCoreV1AiChat()
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })

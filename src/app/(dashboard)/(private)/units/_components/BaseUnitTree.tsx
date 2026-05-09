@@ -6,7 +6,7 @@ import Chip from '@mui/material/Chip'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 
-import { useGetApiV1UnitsTree } from '@generated/core-api'
+import { useGetCoreV1UnitsTree } from '@generated/core-api'
 import type { UnitTreeNodeDto, UnitCategory } from '@generated/core-api'
 import { UNIT_CATEGORY_META } from '@/constants/unitType'
 
@@ -17,7 +17,7 @@ interface BaseUnitTreeProps {
 
 // ─── Component ─────────────────────────────────────────────────────────────────
 const BaseUnitTree = ({ categoryFilter }: BaseUnitTreeProps) => {
-  const { data, isLoading } = useGetApiV1UnitsTree(categoryFilter ? { category: categoryFilter } : undefined)
+  const { data, isLoading } = useGetCoreV1UnitsTree(categoryFilter ? { category: categoryFilter } : undefined)
 
   const trees = data?.result ?? []
 

@@ -20,17 +20,17 @@ import { toast } from 'react-toastify'
 import { customFetch } from '@/libs/custom-instance'
 
 import {
-  getGetApiV1AccountSalesMembersQueryKey,
-  useGetApiV1AccountSalesMembers,
-  useGetApiV1AccountSalesOrders,
-  useGetApiV1AccountSalesMembersSearch,
-  usePostApiV1AccountSalesMembers,
-  usePatchApiV1AccountSalesMembersId,
-  useGetApiV1AccountSalesBonusProgressSoldByMemberId,
-  useGetApiV1AccountSalesBonusTransactionsSoldByMemberId,
-  usePostApiV1AccountSalesBonusTransactionsTransactionIdPay,
-  usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel,
-  usePostApiV1AccountSalesBonusTransactionsSettleTier
+  getGetCoreV1AccountSalesMembersQueryKey,
+  useGetCoreV1AccountSalesMembers,
+  useGetCoreV1AccountSalesOrders,
+  useGetCoreV1AccountSalesMembersSearch,
+  usePostCoreV1AccountSalesMembers,
+  usePatchCoreV1AccountSalesMembersId,
+  useGetCoreV1AccountSalesBonusProgressSoldByMemberId,
+  useGetCoreV1AccountSalesBonusTransactionsSoldByMemberId,
+  usePostCoreV1AccountSalesBonusTransactionsTransactionIdPay,
+  usePostCoreV1AccountSalesBonusTransactionsTransactionIdCancel,
+  usePostCoreV1AccountSalesBonusTransactionsSettleTier
 } from '@/generated/core-api'
 import type {
   ApiErrorResponse,
@@ -118,9 +118,9 @@ const AccountSalesCustomers = () => {
   } | null>(null)
 
   // TODO: member list filtering requires POST search endpoint (GET no longer supports filter)
-  const membersQuery = useGetApiV1AccountSalesMembers({ page, pageSize: 12, sort: '-createdAt' })
+  const membersQuery = useGetCoreV1AccountSalesMembers({ page, pageSize: 12, sort: '-createdAt' })
 
-  const searchQuery = useGetApiV1AccountSalesMembersSearch(
+  const searchQuery = useGetCoreV1AccountSalesMembersSearch(
     { keyword: search, take: 20 },
     { query: { enabled: search.trim().length >= 2 } }
   )
@@ -162,7 +162,7 @@ const AccountSalesCustomers = () => {
 
   const memberDetailQuery = useQuery<MemberDetailResult>({
     queryKey: ['account-sales', 'members', selectedMemberId, 'detail'],
-    queryFn: () => customFetch<MemberDetailResult>(`/api/v1/account-sales/members/${selectedMemberId}/detail`),
+    queryFn: () => customFetch<MemberDetailResult>(`/core/v1/account-sales/members/${selectedMemberId}/detail`),
     enabled: !!selectedMemberId
   })
 
@@ -172,7 +172,7 @@ const AccountSalesCustomers = () => {
 
   // TODO: order filtering by memberId requires POST search endpoint or dedicated API
   // Always-enabled count queries — load stats when member is opened, regardless of active tab
-  const orderCountQuery = useGetApiV1AccountSalesOrders(
+  const orderCountQuery = useGetCoreV1AccountSalesOrders(
     {
       page: 1,
       pageSize: 1,
@@ -182,7 +182,7 @@ const AccountSalesCustomers = () => {
     { query: { enabled: !!selectedMemberId } }
   )
 
-  const referralCountQuery = useGetApiV1AccountSalesOrders(
+  const referralCountQuery = useGetCoreV1AccountSalesOrders(
     {
       page: 1,
       pageSize: 1,
@@ -193,7 +193,7 @@ const AccountSalesCustomers = () => {
   )
 
   // Tab-gated full list queries — only load when on the respective tab
-  const ordersQuery = useGetApiV1AccountSalesOrders(
+  const ordersQuery = useGetCoreV1AccountSalesOrders(
     {
       page: ordersPage,
       pageSize: 10,
@@ -203,7 +203,7 @@ const AccountSalesCustomers = () => {
     { query: { enabled: !!selectedMemberId && detailTab === 'purchased' } }
   )
 
-  const referralOrdersQuery = useGetApiV1AccountSalesOrders(
+  const referralOrdersQuery = useGetCoreV1AccountSalesOrders(
     {
       page: referralsPage,
       pageSize: 10,
@@ -213,19 +213,19 @@ const AccountSalesCustomers = () => {
     { query: { enabled: !!selectedMemberId && detailTab === 'referrals' } }
   )
 
-  const bonusProgressQuery = useGetApiV1AccountSalesBonusProgressSoldByMemberId(selectedMemberId!, {
+  const bonusProgressQuery = useGetCoreV1AccountSalesBonusProgressSoldByMemberId(selectedMemberId!, {
     query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' }
   })
 
-  const bonusTxQuery = useGetApiV1AccountSalesBonusTransactionsSoldByMemberId(selectedMemberId!, {
+  const bonusTxQuery = useGetCoreV1AccountSalesBonusTransactionsSoldByMemberId(selectedMemberId!, {
     query: { enabled: !!selectedMemberId && detailTab === 'bonus-progress' }
   })
 
-  const payBonus = usePostApiV1AccountSalesBonusTransactionsTransactionIdPay()
-  const cancelBonus = usePostApiV1AccountSalesBonusTransactionsTransactionIdCancel()
-  const settleTier = usePostApiV1AccountSalesBonusTransactionsSettleTier()
+  const payBonus = usePostCoreV1AccountSalesBonusTransactionsTransactionIdPay()
+  const cancelBonus = usePostCoreV1AccountSalesBonusTransactionsTransactionIdCancel()
+  const settleTier = usePostCoreV1AccountSalesBonusTransactionsSettleTier()
 
-  const createMember = usePostApiV1AccountSalesMembers({
+  const createMember = usePostCoreV1AccountSalesMembers({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -236,12 +236,12 @@ const AccountSalesCustomers = () => {
 
         setOpenCreate(false)
         setForm({ source: 'Zalo' })
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesMembersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesMembersQueryKey() })
       }
     }
   })
 
-  const updateMember = usePatchApiV1AccountSalesMembersId({
+  const updateMember = usePatchCoreV1AccountSalesMembersId({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -252,7 +252,7 @@ const AccountSalesCustomers = () => {
 
         toast.success('Member updated successfully')
         setOpenEdit(false)
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesMembersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesMembersQueryKey() })
         await queryClient.invalidateQueries({ queryKey: ['account-sales', 'members', selectedMemberId, 'detail'] })
       }
     }

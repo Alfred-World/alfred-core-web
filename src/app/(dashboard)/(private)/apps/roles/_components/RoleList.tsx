@@ -218,6 +218,7 @@ const RoleList = ({
               const isSelected = role.id === selectedRoleId
               const icon = getRoleIcon(role)
               const accessType = getAccessDescription(role.name || '')
+              const showAccessType = !(role.isImmutable && accessType === 'Read-only')
 
               return (
                 <ListItemButton
@@ -228,6 +229,7 @@ const RoleList = ({
                     mb: 2,
                     borderRadius: 1,
                     p: 2,
+                    alignItems: 'flex-start',
                     border: '1px solid',
                     borderColor: isSelected ? 'primary.main' : 'divider',
                     bgcolor: isSelected ? alpha(theme.palette.primary.main, 0.08) : 'transparent',
@@ -244,22 +246,26 @@ const RoleList = ({
                   <ListItemIcon
                     sx={{
                       minWidth: 40,
+                      width: 40,
+                      height: 40,
                       color: isSelected ? 'primary.main' : 'text.secondary',
                       bgcolor: isSelected
                         ? alpha(theme.palette.primary.main, 0.1)
                         : alpha(theme.palette.secondary.main, 0.05),
-                      p: 1.5,
-                      borderRadius: 1,
+                      borderRadius: 1.5,
                       mr: 2,
+                      alignSelf: 'center',
                       display: 'flex',
                       justifyContent: 'center',
-                      alignItems: 'center'
+                      alignItems: 'center',
+                      flexShrink: 0
                     }}
                   >
                     <i className={icon} style={{ fontSize: '1.25rem' }} />
                   </ListItemIcon>
 
                   <ListItemText
+                    sx={{ minWidth: 0, my: 0 }}
                     slotProps={{
                       primary: { component: 'div' },
                       secondary: { component: 'div' }
@@ -269,28 +275,39 @@ const RoleList = ({
                         variant='body1'
                         fontWeight={isSelected ? 600 : 500}
                         color={isSelected ? 'primary.main' : 'text.primary'}
+                        sx={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', pr: 1 }}
                       >
                         {role.name}
                       </Typography>
                     }
                     secondary={
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 0.5 }}>
-                        <Typography variant='caption' color='text.secondary'>
-                          {accessType}
-                        </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.75, flexWrap: 'wrap' }}>
+                        {showAccessType && (
+                          <Chip
+                            label={accessType}
+                            size='small'
+                            variant='outlined'
+                            sx={{ height: 22, fontSize: '0.6875rem', maxWidth: '100%' }}
+                          />
+                        )}
+                        {role.isImmutable && (
+                          <Chip
+                            size='small'
+                            color='warning'
+                            variant='tonal'
+                            icon={<i className='tabler-lock' style={{ fontSize: 13 }} />}
+                            label='Read-only'
+                            sx={{ height: 22, fontSize: '0.6875rem' }}
+                          />
+                        )}
                         {role.isSystem && (
                           <Chip
                             label='System'
                             size='small'
                             variant='tonal'
                             color='info'
-                            sx={{ height: 18, fontSize: '0.625rem' }}
+                            sx={{ height: 22, fontSize: '0.6875rem' }}
                           />
-                        )}
-                        {role.isImmutable && (
-                          <Box sx={{ display: 'flex', alignItems: 'center', color: 'warning.main' }}>
-                            <i className='tabler-lock' style={{ fontSize: '0.875rem' }} />
-                          </Box>
                         )}
                       </Box>
                     }
@@ -301,6 +318,7 @@ const RoleList = ({
                     sx={{
                       display: 'flex',
                       gap: 0.5,
+                      flexShrink: 0,
                       opacity: isSelected ? 1 : 0,
                       transition: 'opacity 0.2s'
                     }}

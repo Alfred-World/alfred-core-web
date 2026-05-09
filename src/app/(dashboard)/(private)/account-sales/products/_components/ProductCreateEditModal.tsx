@@ -21,9 +21,9 @@ import { toast } from 'react-toastify'
 
 import {
   AccountProductType,
-  getGetApiV1AccountSalesProductsQueryKey,
-  usePostApiV1AccountSalesProducts,
-  usePatchApiV1AccountSalesProductsId
+  getGetCoreV1AccountSalesProductsQueryKey,
+  usePostCoreV1AccountSalesProducts,
+  usePatchCoreV1AccountSalesProductsId
 } from '@/generated/core-api'
 import type {
   CreateProductRequest,
@@ -89,7 +89,7 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
     }
   }, [open, editTarget])
 
-  const createMutation = usePostApiV1AccountSalesProducts({
+  const createMutation = usePostCoreV1AccountSalesProducts({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -99,13 +99,13 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
         }
 
         toast.success('Product created successfully')
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesProductsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesProductsQueryKey() })
         handleClose()
       }
     }
   })
 
-  const updateMutation = usePatchApiV1AccountSalesProductsId({
+  const updateMutation = usePatchCoreV1AccountSalesProductsId({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -115,7 +115,7 @@ const ProductCreateEditModal = ({ open, onClose, editTarget }: ProductCreateEdit
         }
 
         toast.success('Product updated successfully')
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesProductsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesProductsQueryKey() })
         handleClose()
       }
     }

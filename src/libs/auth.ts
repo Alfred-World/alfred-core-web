@@ -1,5 +1,4 @@
 // Third-party Imports
-import CredentialsProvider from 'next-auth/providers/credentials'
 import type { NextAuthOptions } from 'next-auth'
 
 // No generated API imports needed here — token refresh is handled by the BFF proxy.
@@ -17,6 +16,9 @@ function parseJwt(token: string) {
     return null
   }
 }
+
+const USE_SECURE_COOKIES =
+  (process.env.NEXTAUTH_URL || process.env.NEXT_PUBLIC_APP_URL || '').startsWith('https://')
 
 // NOTE: Token refresh is handled exclusively by the BFF proxy (route.ts).
 // getServerSession() is read-only — it processes callbacks but never writes
@@ -60,30 +62,6 @@ export const authOptions: NextAuthOptions = {
         }
       }
     },
-
-    // Credentials provider for SSO session-based silent authentication
-    CredentialsProvider({
-      id: 'sso-session',
-      name: 'SSO Session',
-      credentials: {
-        userId: { label: 'User ID', type: 'text' },
-        email: { label: 'Email', type: 'text' },
-        name: { label: 'Name', type: 'text' }
-      },
-      async authorize(credentials) {
-        // This is called when we have a valid SSO session from Gateway
-        // We trust the session data since it was validated server-side
-        if (!credentials?.userId || !credentials?.email) {
-          return null
-        }
-
-        return {
-          id: credentials.userId,
-          email: credentials.email,
-          name: credentials.name || credentials.email
-        }
-      }
-    })
   ],
 
   session: {
@@ -91,14 +69,16 @@ export const authOptions: NextAuthOptions = {
     maxAge: 30 * 24 * 60 * 60 // 30 days
   },
 
-  // Use custom login page that auto-redirects to SSO
+  // Use custom login page that can auto-start the OAuth round-trip for protected routes.
   pages: {
     signIn: '/login',
+    error: '/auth/error',
     signOut: '/signout'
   },
 
-  // Use secure cookies for HTTPS
-  useSecureCookies: true,
+  // Internal deployments may terminate TLS upstream and serve the app over plain HTTP.
+  // Only force secure cookie prefixes when the public app URL is actually HTTPS.
+  useSecureCookies: USE_SECURE_COOKIES,
 
   callbacks: {
     async jwt({ token, account }) {

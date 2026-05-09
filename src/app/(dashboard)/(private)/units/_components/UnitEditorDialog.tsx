@@ -24,14 +24,14 @@ import { Controller, useForm } from 'react-hook-form'
 import * as v from 'valibot'
 
 import {
-  getGetApiV1UnitsCountsByCategoryQueryKey,
-  getGetApiV1UnitsCountsByStatusQueryKey,
-  getGetApiV1UnitsQueryKey,
-  getGetApiV1UnitsTreeQueryKey,
-  useGetApiV1Units,
-  useGetApiV1UnitsId,
-  usePostApiV1Units,
-  usePatchApiV1UnitsId
+  getGetCoreV1UnitsCountsByCategoryQueryKey,
+  getGetCoreV1UnitsCountsByStatusQueryKey,
+  getGetCoreV1UnitsQueryKey,
+  getGetCoreV1UnitsTreeQueryKey,
+  useGetCoreV1Units,
+  useGetCoreV1UnitsId,
+  usePostCoreV1Units,
+  usePatchCoreV1UnitsId
 } from '@generated/core-api'
 import type { UnitDto } from '@generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
@@ -64,12 +64,12 @@ const UnitEditorDialog = ({ open, unitId, onClose }: UnitEditorDialogProps) => {
   const isEditMode = Boolean(unitId)
 
   // Fetch unit data for editing
-  const { data: unitData, isLoading: loadingUnit } = useGetApiV1UnitsId(unitId!, {
+  const { data: unitData, isLoading: loadingUnit } = useGetCoreV1UnitsId(unitId!, {
     query: { enabled: isEditMode && open }
   })
 
   // Fetch all units for base unit selector
-  const { data: allUnitsData } = useGetApiV1Units({ pageSize: 200 }, { query: { enabled: open } })
+  const { data: allUnitsData } = useGetCoreV1Units({ pageSize: 200 }, { query: { enabled: open } })
   const allUnits = useMemo(() => allUnitsData?.result?.items ?? [], [allUnitsData])
 
   const unit = unitData?.result
@@ -132,14 +132,14 @@ const UnitEditorDialog = ({ open, unitId, onClose }: UnitEditorDialogProps) => {
   }, [isEditMode, unit, open, reset])
 
   // Mutations
-  const { mutateAsync: createUnit } = usePostApiV1Units()
-  const { mutateAsync: updateUnit } = usePatchApiV1UnitsId()
+  const { mutateAsync: createUnit } = usePostCoreV1Units()
+  const { mutateAsync: updateUnit } = usePatchCoreV1UnitsId()
 
   const invalidateAll = () => {
-    queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsQueryKey() })
-    queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsTreeQueryKey() })
-    queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsCountsByStatusQueryKey() })
-    queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsCountsByCategoryQueryKey() })
+    queryClient.invalidateQueries({ queryKey: getGetCoreV1UnitsQueryKey() })
+    queryClient.invalidateQueries({ queryKey: getGetCoreV1UnitsTreeQueryKey() })
+    queryClient.invalidateQueries({ queryKey: getGetCoreV1UnitsCountsByStatusQueryKey() })
+    queryClient.invalidateQueries({ queryKey: getGetCoreV1UnitsCountsByCategoryQueryKey() })
   }
 
   const onSubmit = async (data: UnitFormData) => {

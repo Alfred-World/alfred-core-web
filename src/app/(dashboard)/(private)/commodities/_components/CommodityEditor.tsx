@@ -33,15 +33,15 @@ import { Controller, useForm } from 'react-hook-form'
 import * as v from 'valibot'
 
 import {
-  getGetApiV1CommoditiesQueryKey,
-  getGetApiV1CommoditiesCommodityIdTransactionsQueryKey,
-  useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId,
-  useGetApiV1CommoditiesCommodityIdTransactions,
-  useGetApiV1CommoditiesId,
-  useGetApiV1Units,
-  usePostApiV1Commodities,
-  usePostApiV1CommoditiesCommodityIdTransactions,
-  usePatchApiV1CommoditiesId
+  getGetCoreV1CommoditiesQueryKey,
+  getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey,
+  useDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionId,
+  useGetCoreV1CommoditiesCommodityIdTransactions,
+  useGetCoreV1CommoditiesId,
+  useGetCoreV1Units,
+  usePostCoreV1Commodities,
+  usePostCoreV1CommoditiesCommodityIdTransactions,
+  usePatchCoreV1CommoditiesId
 } from '@generated/core-api'
 import type { InvestmentTransactionDto, UnitDto } from '@generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
@@ -111,16 +111,16 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
   const [txnOpen, setTxnOpen] = useState(false)
 
   // ─── Fetch data ────────────────────────────────────────────────────────────
-  const { data: commodityData } = useGetApiV1CommoditiesId(commodityId!, {
+  const { data: commodityData } = useGetCoreV1CommoditiesId(commodityId!, {
     query: { enabled: isEditMode }
   })
 
   const commodity = commodityData?.result
 
-  const { data: unitsData } = useGetApiV1Units({ pageSize: 200 })
+  const { data: unitsData } = useGetCoreV1Units({ pageSize: 200 })
   const units: UnitDto[] = useMemo(() => unitsData?.result?.items ?? [], [unitsData])
 
-  const { data: txnData } = useGetApiV1CommoditiesCommodityIdTransactions(
+  const { data: txnData } = useGetCoreV1CommoditiesCommodityIdTransactions(
     commodityId!,
     { sort: '-transactionDate', pageSize: 50 },
     { query: { enabled: isEditMode } }
@@ -129,10 +129,10 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
   const transactions = useMemo(() => txnData?.result?.items ?? [], [txnData?.result?.items])
 
   // ─── Mutations ─────────────────────────────────────────────────────────────
-  const createMutation = usePostApiV1Commodities()
-  const updateMutation = usePatchApiV1CommoditiesId()
-  const createTxnMutation = usePostApiV1CommoditiesCommodityIdTransactions()
-  const deleteTxnMutation = useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId()
+  const createMutation = usePostCoreV1Commodities()
+  const updateMutation = usePatchCoreV1CommoditiesId()
+  const createTxnMutation = usePostCoreV1CommoditiesCommodityIdTransactions()
+  const deleteTxnMutation = useDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionId()
 
   // ─── Commodity form ────────────────────────────────────────────────────────
   const {
@@ -198,12 +198,12 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
         await updateMutation.mutateAsync({ id: commodityId, data: changes })
       }
 
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1CommoditiesQueryKey() })
       router.push(`/commodities/${commodityId}`)
     } else {
       const res = await createMutation.mutateAsync({ data: payload })
 
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1CommoditiesQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1CommoditiesQueryKey() })
       const newId = res?.result?.id
 
       router.push(newId ? `/commodities/${newId}` : '/commodities')
@@ -267,7 +267,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
     })
 
     await queryClient.invalidateQueries({
-      queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
+      queryKey: getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
     })
 
     setTxnOpen(false)
@@ -280,7 +280,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
     await deleteTxnMutation.mutateAsync({ commodityId, transactionId })
 
     await queryClient.invalidateQueries({
-      queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
+      queryKey: getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
     })
   }
 
@@ -331,7 +331,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
             {isEditMode ? `Edit: ${commodity?.name ?? '...'}` : 'New Commodity'}
           </Typography>
           <Typography variant='body2' color='text.secondary' sx={{ mt: 0.25 }}>
-            {isEditMode ? `Editing ${commodity?.code ?? ''}` : 'Add a new investment commodity to your portfolio'}
+            {isEditMode ? `Editing ${commodity?.code ?? ''}` : 'Add a shared investment commodity'}
           </Typography>
         </Box>
         {isEditMode && commodity?.assetClass && (
@@ -594,7 +594,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
           </Card>
         </Grid>
 
-        {/* ── Right: Holdings + Transactions (edit only) ────────────────────── */}
+        {/* ── Right: Holdings + My Transactions (edit only) ────────────────────── */}
         {isEditMode && (
           <Grid size={{ xs: 12, md: 7 }}>
             {/* Holdings summary */}
@@ -612,7 +612,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
               >
                 <i className='tabler-wallet' style={{ fontSize: 18, color: cfg.hex }} />
                 <Typography variant='subtitle1' fontWeight={700}>
-                  Holdings Summary
+                  My Holdings Summary
                 </Typography>
               </Box>
               <Box sx={{ p: 3, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 2 }}>
@@ -634,7 +634,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
               </Box>
             </Card>
 
-            {/* Transactions */}
+            {/* My Transactions */}
             <Card sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
               <Box
                 sx={{
@@ -650,7 +650,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <i className='tabler-history' style={{ fontSize: 18, color: 'var(--mui-palette-primary-main)' }} />
                   <Typography variant='subtitle1' fontWeight={700}>
-                    Transactions
+                    My Transactions
                   </Typography>
                   {transactions.length > 0 && (
                     <Box sx={{ px: 1, py: 0.2, borderRadius: 1, bgcolor: 'action.selected' }}>
@@ -698,7 +698,7 @@ const CommodityEditor = ({ commodityId }: CommodityEditorProps) => {
                           <Box sx={{ opacity: 0.4 }}>
                             <i className='tabler-inbox' style={{ fontSize: 32 }} />
                             <Typography variant='body2' sx={{ mt: 1 }}>
-                              No transactions yet.
+                              No personal transactions yet.
                             </Typography>
                           </Box>
                         </TableCell>

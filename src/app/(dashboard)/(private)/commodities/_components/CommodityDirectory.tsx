@@ -27,8 +27,8 @@ import Typography from '@mui/material/Typography'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
-  postApiV1CommoditiesSearch,
-  useDeleteApiV1CommoditiesId
+  postCoreV1CommoditiesSearch,
+  useDeleteCoreV1CommoditiesId
 } from '@generated/core-api'
 import type { ApiErrorResponse, CommodityDto } from '@generated/core-api'
 
@@ -148,7 +148,7 @@ const CommodityDirectory = () => {
     error: metalError
   } = useQuery({
     queryKey: ['core', 'commodities', 'search', 'stats-metal'],
-    queryFn: () => postApiV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Metal' } } })
+    queryFn: () => postCoreV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Metal' } } })
   })
 
   const {
@@ -157,7 +157,7 @@ const CommodityDirectory = () => {
     error: forexError
   } = useQuery({
     queryKey: ['core', 'commodities', 'search', 'stats-forex'],
-    queryFn: () => postApiV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Forex' } } })
+    queryFn: () => postCoreV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Forex' } } })
   })
 
   const {
@@ -166,7 +166,7 @@ const CommodityDirectory = () => {
     error: stockError
   } = useQuery({
     queryKey: ['core', 'commodities', 'search', 'stats-stock'],
-    queryFn: () => postApiV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Stock' } } })
+    queryFn: () => postCoreV1CommoditiesSearch({ page: 1, pageSize: 1, filter: { assetClass: { eq: 'Stock' } } })
   })
 
   const classCounts: Record<string, number> = {
@@ -203,10 +203,10 @@ const CommodityDirectory = () => {
     error: dataError
   } = useQuery({
     queryKey: ['core', 'commodities', 'search', mainRequest],
-    queryFn: () => postApiV1CommoditiesSearch(mainRequest)
+    queryFn: () => postCoreV1CommoditiesSearch(mainRequest)
   })
 
-  const deleteMutation = useDeleteApiV1CommoditiesId()
+  const deleteMutation = useDeleteCoreV1CommoditiesId()
 
   const commodities = data?.result?.items ?? []
   const total = data?.result?.total ?? 0
@@ -248,10 +248,10 @@ const CommodityDirectory = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant='h4' fontWeight={800} letterSpacing={-0.5}>
-            Commodities Portfolio
+            Commodity Catalog
           </Typography>
           <Typography variant='body2' color='text.secondary' sx={{ mt: 0.5 }}>
-            Manage investment instruments — precious metals, forex pairs, and stocks.
+            Browse shared investment instruments; your transactions stay scoped to your account.
           </Typography>
         </Box>
         <Button
@@ -353,7 +353,7 @@ const CommodityDirectory = () => {
         </Box>
       </Card>
 
-      {/* ─── Market Watchlist Table ───────────────────────────────────── */}
+      {/* ─── Shared Market Watchlist Table ───────────────────────────────────── */}
       <Card sx={{ border: '1px solid', borderColor: 'divider', overflow: 'hidden' }}>
         <Box
           sx={{
@@ -368,7 +368,7 @@ const CommodityDirectory = () => {
         >
           <i className='tabler-list-details' style={{ fontSize: 18, opacity: 0.5 }} />
           <Typography variant='subtitle1' fontWeight={700}>
-            Market Watchlist
+            Shared Market Watchlist
           </Typography>
           <Chip label={`${total} instruments`} size='small' sx={{ ml: 'auto', fontWeight: 600 }} />
         </Box>
@@ -429,7 +429,7 @@ const CommodityDirectory = () => {
                         No instruments found
                       </Typography>
                       <Typography variant='body2' color='text.disabled'>
-                        Add commodities to start tracking your portfolio.
+                        Add a shared commodity, then record your own portfolio transactions.
                       </Typography>
                       <Button
                         variant='outlined'

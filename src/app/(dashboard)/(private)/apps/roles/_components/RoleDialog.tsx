@@ -22,7 +22,7 @@ import { object, string, minLength, pipe, optional, boolean } from 'valibot'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
-import { postApiV1AccessControlRoles, patchApiV1AccessControlRolesId } from '@/generated/core-api'
+import { postCoreV1AccessControlRoles, patchCoreV1AccessControlRolesId } from '@/generated/core-api'
 import type { AccessRoleDto, CreateAccessRoleRequest, UpdateAccessRoleRequest } from '@/generated/core-api'
 
 import RoleIconPicker from './RoleIconPicker'
@@ -53,14 +53,12 @@ const CustomCloseButton = styled(IconButton)(({ theme }) => ({
 const schema = object({
   name: pipe(string(), minLength(1, 'Role name is required')),
   icon: optional(string()),
-  isImmutable: optional(boolean()),
   isSystem: optional(boolean())
 })
 
 type FormData = {
   name: string
   icon?: string
-  isImmutable?: boolean
   isSystem?: boolean
 }
 
@@ -68,7 +66,6 @@ const toRequest = (data: FormData): CreateAccessRoleRequest => {
   return {
     name: data.name,
     icon: data.icon,
-    isImmutable: data.isImmutable,
     isSystem: data.isSystem
   }
 }
@@ -85,7 +82,6 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
     defaultValues: {
       name: '',
       icon: '',
-      isImmutable: false,
       isSystem: false
     },
     resolver: valibotResolver(schema)
@@ -96,14 +92,13 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
       reset({
         name: role?.name || '',
         icon: role?.icon || '',
-        isImmutable: role?.isImmutable || false,
         isSystem: role?.isSystem || false
       })
     }
   }, [open, role, reset])
 
   const { mutate: createRole, isPending: isCreating } = useMutation({
-    mutationFn: async (payload: CreateAccessRoleRequest) => postApiV1AccessControlRoles(payload),
+    mutationFn: async (payload: CreateAccessRoleRequest) => postCoreV1AccessControlRoles(payload),
     onSuccess: data => {
       if (data.success) {
         toast.success('Role created successfully')
@@ -117,7 +112,7 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
 
   const { mutate: updateRole, isPending: isUpdating } = useMutation({
     mutationFn: async ({ roleId, payload }: { roleId: string; payload: UpdateAccessRoleRequest }) =>
-      patchApiV1AccessControlRolesId(roleId, payload),
+      patchCoreV1AccessControlRolesId(roleId, payload),
     onSuccess: data => {
       if (data.success) {
         toast.success('Role updated successfully')
@@ -136,14 +131,12 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
       const original: UpdateAccessRoleRequest = {
         name: role.name || '',
         icon: role.icon || undefined,
-        isImmutable: role.isImmutable || false,
         isSystem: role.isSystem || false
       }
 
       const current: UpdateAccessRoleRequest = {
         name: data.name,
         icon: data.icon || undefined,
-        isImmutable: data.isImmutable || false,
         isSystem: data.isSystem || false
       }
 
@@ -221,25 +214,32 @@ const RoleDialog = ({ open, onClose, role, onSuccess }: RoleDialogProps) => {
             />
           </Box>
 
-          <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Controller
-              name='isImmutable'
-              control={control}
-              render={({ field }) => (
-                <FormControlLabel
-                  control={<Switch {...field} checked={field.value} onChange={e => field.onChange(e.target.checked)} />}
-                  label='Immutable (Cannot be deleted or modified)'
-                />
-              )}
-            />
-
+          <Box
+            sx={{
+              mb: 4,
+              p: 2,
+              border: '1px solid',
+              borderColor: 'divider',
+              borderRadius: 1.5,
+              bgcolor: 'action.hover'
+            }}
+          >
             <Controller
               name='isSystem'
               control={control}
               render={({ field }) => (
                 <FormControlLabel
-                  control={<Switch {...field} checked={field.value} onChange={e => field.onChange(e.target.checked)} />}
-                  label='System Role'
+                  control={<Switch {...field} checked={!!field.value} onChange={e => field.onChange(e.target.checked)} />}
+                  label={
+                    <Box>
+                      <Typography variant='body2' fontWeight={600}>
+                        System Role
+                      </Typography>
+                      <Typography variant='caption' color='text.secondary'>
+                        Mark this role as part of the system permission catalog.
+                      </Typography>
+                    </Box>
+                  }
                 />
               )}
             />

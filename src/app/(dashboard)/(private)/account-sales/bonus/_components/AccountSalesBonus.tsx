@@ -17,12 +17,12 @@ import { toast } from 'react-toastify'
 import { keyframes } from '@mui/system'
 
 import {
-  getGetApiV1AccountSalesBonusTiersQueryKey,
-  useGetApiV1AccountSalesBonusTiers,
-  usePostApiV1AccountSalesBonusTiers,
-  usePatchApiV1AccountSalesBonusTiersTierId,
-  useDeleteApiV1AccountSalesBonusTiersTierId,
-  useGetApiV1AccountSalesOrdersRevenueBySeller
+  getGetCoreV1AccountSalesBonusTiersQueryKey,
+  useGetCoreV1AccountSalesBonusTiers,
+  usePostCoreV1AccountSalesBonusTiers,
+  usePatchCoreV1AccountSalesBonusTiersTierId,
+  useDeleteCoreV1AccountSalesBonusTiersTierId,
+  useGetCoreV1AccountSalesOrdersRevenueBySeller
 } from '@/generated/core-api'
 
 const gradientFlow = keyframes`
@@ -43,8 +43,8 @@ const TiersTab = () => {
   const theme = useTheme()
   const queryClient = useQueryClient()
 
-  const tiersQuery = useGetApiV1AccountSalesBonusTiers()
-  const sellerRevenueQuery = useGetApiV1AccountSalesOrdersRevenueBySeller()
+  const tiersQuery = useGetCoreV1AccountSalesBonusTiers()
+  const sellerRevenueQuery = useGetCoreV1AccountSalesOrdersRevenueBySeller()
 
   const originalTiers = useMemo(
     () => [...(tiersQuery.data?.result ?? [])].sort((a, b) => (a.orderThreshold ?? 0) - (b.orderThreshold ?? 0)),
@@ -63,9 +63,9 @@ const TiersTab = () => {
     }
   }, [tiersQuery.isSuccess, originalTiers])
 
-  const createMutation = usePostApiV1AccountSalesBonusTiers()
-  const updateMutation = usePatchApiV1AccountSalesBonusTiersTierId()
-  const deleteMutation = useDeleteApiV1AccountSalesBonusTiersTierId()
+  const createMutation = usePostCoreV1AccountSalesBonusTiers()
+  const updateMutation = usePatchCoreV1AccountSalesBonusTiersTierId()
+  const deleteMutation = useDeleteCoreV1AccountSalesBonusTiersTierId()
 
   const handleSave = async () => {
     setIsSaving(true)
@@ -98,7 +98,7 @@ const TiersTab = () => {
         await deleteMutation.mutateAsync({ tierId: id })
       }
 
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesBonusTiersQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesBonusTiersQueryKey() })
       toast.success('Bonus campaign updated and launched!')
 
       // Reset drafts to sync with new DB state (this will be overridden by the useEffect above once query refetches)

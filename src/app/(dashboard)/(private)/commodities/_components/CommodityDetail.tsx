@@ -34,12 +34,12 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import * as v from 'valibot'
 
 import {
-  getGetApiV1CommoditiesCommodityIdTransactionsQueryKey,
-  useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId,
-  useGetApiV1CommoditiesCommodityIdTransactions,
-  useGetApiV1CommoditiesId,
-  useGetApiV1Units,
-  usePostApiV1CommoditiesCommodityIdTransactions
+  getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey,
+  useDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionId,
+  useGetCoreV1CommoditiesCommodityIdTransactions,
+  useGetCoreV1CommoditiesId,
+  useGetCoreV1Units,
+  usePostCoreV1CommoditiesCommodityIdTransactions
 } from '@generated/core-api'
 import type { InvestmentTransactionDto } from '@generated/core-api'
 
@@ -102,7 +102,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
   const pageSize = 15
 
   // ─── Queries ─────────────────────────────────────────────────────────────────
-  const { data: commodityData, isLoading: commodityLoading } = useGetApiV1CommoditiesId(commodityId, {
+  const { data: commodityData, isLoading: commodityLoading } = useGetCoreV1CommoditiesId(commodityId, {
     query: { staleTime: 5 * 60 * 1000 }
   })
 
@@ -115,7 +115,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
     ...(typeFilter !== 'All' ? { filter: `transactionType == '${typeFilter}'` } : {})
   }
 
-  const { data: txnData, isLoading: txnLoading } = useGetApiV1CommoditiesCommodityIdTransactions(
+  const { data: txnData, isLoading: txnLoading } = useGetCoreV1CommoditiesCommodityIdTransactions(
     commodityId,
     txnParams,
     { query: { staleTime: 60_000 } }
@@ -126,7 +126,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
   const totalPages = txnData?.result?.totalPages ?? 1
 
   // All transactions for KPI (page 1 large page just for stats)
-  const { data: allTxnData } = useGetApiV1CommoditiesCommodityIdTransactions(
+  const { data: allTxnData } = useGetCoreV1CommoditiesCommodityIdTransactions(
     commodityId,
     { page: 1, pageSize: 999, sort: '-transactionDate' },
     { query: { staleTime: 60_000 } }
@@ -134,7 +134,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
 
   const allTxns = useMemo(() => allTxnData?.result?.items ?? [], [allTxnData?.result?.items])
 
-  const { data: unitsData } = useGetApiV1Units({ pageSize: 200, sort: 'name' })
+  const { data: unitsData } = useGetCoreV1Units({ pageSize: 200, sort: 'name' })
   const units = useMemo(() => unitsData?.result?.items ?? [], [unitsData])
 
   // ─── KPI Calculations ─────────────────────────────────────────────────────────
@@ -157,8 +157,8 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
   }, [allTxns, totalCount])
 
   // ─── Mutations ───────────────────────────────────────────────────────────────
-  const createTxn = usePostApiV1CommoditiesCommodityIdTransactions()
-  const deleteTxn = useDeleteApiV1CommoditiesCommodityIdTransactionsTransactionId()
+  const createTxn = usePostCoreV1CommoditiesCommodityIdTransactions()
+  const deleteTxn = useDeleteCoreV1CommoditiesCommodityIdTransactionsTransactionId()
 
   const {
     control,
@@ -204,7 +204,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
       }
     })
     await queryClient.invalidateQueries({
-      queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
+      queryKey: getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
     })
     setTxnDialogOpen(false)
     reset()
@@ -214,7 +214,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
     if (!txn.id) return
     await deleteTxn.mutateAsync({ commodityId, transactionId: txn.id })
     await queryClient.invalidateQueries({
-      queryKey: getGetApiV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
+      queryKey: getGetCoreV1CommoditiesCommodityIdTransactionsQueryKey(commodityId)
     })
   }
 
@@ -348,7 +348,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
         >
           <i className='tabler-chart-bar' style={{ fontSize: 20, color: cfg.hex }} />
           <Typography variant='subtitle1' fontWeight={700}>
-            Portfolio Overview
+            My Portfolio Overview
           </Typography>
         </Box>
         <Box sx={{ p: 3, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
@@ -405,7 +405,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
               {formatCurrency(kpi.totalFees, true)}
             </Typography>
             <Typography variant='caption' color='text.disabled'>
-              All-time transaction fees
+              Your all-time transaction fees
             </Typography>
           </Box>
 
@@ -421,7 +421,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
               {kpi.monthlyTxns}
             </Typography>
             <Typography variant='caption' color='text.disabled'>
-              {kpi.totalCount} all-time transactions
+              {kpi.totalCount} your all-time transactions
             </Typography>
           </Box>
         </Box>
@@ -446,7 +446,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
             <i className='tabler-history' style={{ fontSize: 20, color: 'var(--mui-palette-primary-main)' }} />
             <Typography variant='subtitle1' fontWeight={700}>
-              Transaction History
+              My Transaction History
             </Typography>
             {totalCount > 0 && (
               <Box sx={{ px: 1, py: 0.25, borderRadius: 1, bgcolor: 'action.selected' }}>
@@ -524,7 +524,7 @@ const CommodityDetail = ({ commodityId }: CommodityDetailProps) => {
                     <Box sx={{ opacity: 0.4 }}>
                       <i className='tabler-inbox' style={{ fontSize: 36 }} />
                       <Typography variant='body2' sx={{ mt: 1 }}>
-                        No transactions yet.
+                        No personal transactions yet.
                       </Typography>
                     </Box>
                   </TableCell>

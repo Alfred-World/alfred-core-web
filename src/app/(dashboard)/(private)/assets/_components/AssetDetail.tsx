@@ -19,7 +19,7 @@ import IconButton from '@mui/material/IconButton'
 import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
 
-import { AssetStatus, useGetApiV1AssetsId, useGetApiV1Attachments } from '@generated/core-api'
+import { AssetStatus, useGetCoreV1AssetsId, useGetCoreV1Attachments } from '@generated/core-api'
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 const formatDate = (s?: string | null) =>
@@ -88,14 +88,14 @@ const AssetDetail = ({ assetId }: AssetDetailProps) => {
     setPreviewOpen(true)
   }
 
-  const { data, isLoading } = useGetApiV1AssetsId(assetId, {
+  const { data, isLoading } = useGetCoreV1AssetsId(assetId, {
     query: { staleTime: 5 * 60 * 1000 } // 5 min cache — significantly reduces API calls
   })
 
   const asset = data?.result
 
   // Attachments query with caching
-  const { data: attachmentsData } = useGetApiV1Attachments(
+  const { data: attachmentsData } = useGetCoreV1Attachments(
     { targetId: assetId, targetType: 'Asset' },
     {
       query: { staleTime: 5 * 60 * 1000 } // 5 min cache

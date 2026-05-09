@@ -18,7 +18,7 @@ import { toast } from 'react-toastify'
 
 import { useQuery } from '@tanstack/react-query'
 
-import { postApiV1BrandsSearch, postApiV1CategoriesSearch } from '@generated/core-api'
+import { postCoreV1BrandsSearch, postCoreV1CategoriesSearch } from '@generated/core-api'
 import type { ApiErrorResponse, CategoryDto } from '@generated/core-api'
 
 import BrandCard from './BrandCard'
@@ -54,7 +54,7 @@ const BrandDirectory = () => {
     error: categoriesError
   } = useQuery({
     queryKey: ['core', 'categories', 'search', categoriesRequest],
-    queryFn: () => postApiV1CategoriesSearch(categoriesRequest)
+    queryFn: () => postCoreV1CategoriesSearch(categoriesRequest)
   })
 
   const categories = useMemo<CategoryDto[]>(() => categoriesData?.result?.items ?? [], [categoriesData])
@@ -80,7 +80,7 @@ const BrandDirectory = () => {
     error: brandsError
   } = useQuery({
     queryKey: ['core', 'brands', 'search', brandsRequest, activeCategoryId],
-    queryFn: () => postApiV1BrandsSearch(brandsRequest, activeCategoryId ? { categoryId: activeCategoryId } : undefined)
+    queryFn: () => postCoreV1BrandsSearch(brandsRequest, activeCategoryId ? { categoryId: activeCategoryId } : undefined)
   })
 
   const brands = data?.result?.items ?? []

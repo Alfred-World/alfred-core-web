@@ -16,11 +16,11 @@ import { BarChart, Bar, XAxis, Tooltip as RechartsTooltip, ResponsiveContainer, 
 import Avatar from '@mui/material/Avatar'
 
 import {
-  useGetApiV1AccountSalesOrders,
-  useGetApiV1AccountSalesSettingsReferralCommission,
-  useGetApiV1AccountSalesProducts,
-  usePatchApiV1AccountSalesSettingsReferralCommission,
-  useGetApiV1AccountSalesMembers
+  useGetCoreV1AccountSalesOrders,
+  useGetCoreV1AccountSalesSettingsReferralCommission,
+  useGetCoreV1AccountSalesProducts,
+  usePatchCoreV1AccountSalesSettingsReferralCommission,
+  useGetCoreV1AccountSalesMembers
 } from '@/generated/core-api'
 import type { ApiErrorResponse, UpdateReferralCommissionSettingRequest } from '@/generated/core-api'
 import { MemberSource } from '@/generated/core-api'
@@ -133,14 +133,14 @@ const AccountSalesDashboard = () => {
     data: productData,
     isError: isProductsError,
     error: productsError
-  } = useGetApiV1AccountSalesProducts({ page: 1, pageSize: 1 })
+  } = useGetCoreV1AccountSalesProducts({ page: 1, pageSize: 1 })
 
-  const { data: memberData } = useGetApiV1AccountSalesMembers({ page: 1, pageSize: 1 })
+  const { data: memberData } = useGetCoreV1AccountSalesMembers({ page: 1, pageSize: 1 })
 
-  const ordersQuery = useGetApiV1AccountSalesOrders({ page: 1, pageSize: 10, sort: '-createdAt', view: 'list' })
-  const commissionSettingQuery = useGetApiV1AccountSalesSettingsReferralCommission()
+  const ordersQuery = useGetCoreV1AccountSalesOrders({ page: 1, pageSize: 10, sort: '-createdAt', view: 'list' })
+  const commissionSettingQuery = useGetCoreV1AccountSalesSettingsReferralCommission()
 
-  const updateCommissionMutation = usePatchApiV1AccountSalesSettingsReferralCommission({
+  const updateCommissionMutation = usePatchCoreV1AccountSalesSettingsReferralCommission({
     mutation: {
       onSuccess: response => {
         if (!response.success || !response.result) {

@@ -3,6 +3,10 @@ import { signOut } from 'next-auth/react'
 import { NEXT_PUBLIC_GATEWAY_URL } from './env'
 import type { ApiErrorResponse } from '@/generated/core-api'
 
+const INVALID_RESPONSE_MESSAGE = 'The server returned an invalid response. Please try again.'
+
+type ApiFailureEnvelope = ApiErrorResponse & { message?: string }
+
 const isApiEnvelopeFailure = (payload: unknown): payload is ApiErrorResponse => {
   if (!payload || typeof payload !== 'object') {
     return false
@@ -13,6 +17,78 @@ const isApiEnvelopeFailure = (payload: unknown): payload is ApiErrorResponse => 
   return candidate.success === false && Array.isArray(candidate.errors)
 }
 
+function buildFallbackApiFailure(status: number): ApiFailureEnvelope {
+  if (status === 401) {
+    const message = 'Your session has expired. Please sign in again.'
+
+    return { success: false, message, errors: [{ message, code: 'UNAUTHORIZED' }] }
+  }
+
+  if (status === 403) {
+    const message = 'You do not have permission to perform this action.'
+
+    return { success: false, message, errors: [{ message, code: 'FORBIDDEN' }] }
+  }
+
+  if (status === 404) {
+    const message = 'The requested resource could not be found.'
+
+    return { success: false, message, errors: [{ message, code: 'NOT_FOUND' }] }
+  }
+
+  if (status === 502 || status === 503 || status === 504) {
+    const message = 'The server is temporarily unavailable. Please try again.'
+
+    return { success: false, message, errors: [{ message, code: 'BAD_GATEWAY' }] }
+  }
+
+  const message = 'The request could not be completed. Please try again.'
+
+  return { success: false, message, errors: [{ message, code: 'REQUEST_FAILED' }] }
+}
+
+async function parseResponseBody<T>(response: Response): Promise<T> {
+  if (response.status === 204 || response.status === 205) {
+    return undefined as T
+  }
+
+  const rawBody = await response.text()
+  const trimmedBody = rawBody.trim()
+
+  if (trimmedBody.length === 0) {
+    if (!response.ok) {
+      return buildFallbackApiFailure(response.status) as T
+    }
+
+    return undefined as T
+  }
+
+  const contentType = response.headers.get('content-type') ?? ''
+  const looksLikeJson =
+    contentType.includes('application/json') ||
+    contentType.includes('+json') ||
+    trimmedBody.startsWith('{') ||
+    trimmedBody.startsWith('[')
+
+  if (!looksLikeJson) {
+    if (!response.ok) {
+      return buildFallbackApiFailure(response.status) as T
+    }
+
+    throw new Error(INVALID_RESPONSE_MESSAGE)
+  }
+
+  try {
+    return JSON.parse(trimmedBody) as T
+  } catch {
+    if (!response.ok) {
+      return buildFallbackApiFailure(response.status) as T
+    }
+
+    throw new Error(INVALID_RESPONSE_MESSAGE)
+  }
+}
+
 // ============================================================
 // Global redirect guard — prevents multiple redirect attempts
 // and keeps react-query in "loading" state during navigation
@@ -20,7 +96,7 @@ const isApiEnvelopeFailure = (payload: unknown): payload is ApiErrorResponse => 
 let isRedirectingToLogin = false
 
 /**
- * Sign out and redirect to login, returning a never-resolving promise.
+ * Sign out and redirect to auth error, returning a never-resolving promise.
  * This keeps react-query in a "loading" state so AuthGuard/AuthRedirect
  * won't fire while the browser is navigating away.
  */
@@ -37,9 +113,45 @@ async function redirectToLogin(): Promise<never> {
     // signOut failure is non-critical, continue with redirect
   }
 
-  window.location.href = '/login?error=session_expired'
+  window.location.href = `/auth/error?error=session_expired&returnUrl=${encodeURIComponent(window.location.href)}`
 
   return new Promise<never>(() => {})
+}
+
+/**
+ * Expands comma-joined integer array query params into repeated params.
+ *
+ * Orval's fetch client serializes array params via `.toString()`:
+ *   userIds=1,2,3  →  userIds=1&userIds=2&userIds=3
+ *
+ * Only integer-only comma-separated values are expanded to avoid
+ * false positives on legitimate string params.
+ */
+function expandArrayQueryParams(url: string): string {
+  const [base, queryString] = url.split('?')
+
+  if (!queryString) return url
+
+  const expanded = queryString
+    .split('&')
+    .flatMap(part => {
+      const eqIdx = part.indexOf('=')
+
+      if (eqIdx === -1) return [part]
+
+      const key = part.slice(0, eqIdx)
+      const value = decodeURIComponent(part.slice(eqIdx + 1))
+      const segments = value.split(',')
+
+      if (segments.length > 1 && segments.every(s => /^\d+$/.test(s.trim()))) {
+        return segments.map(s => `${key}=${encodeURIComponent(s.trim())}`)
+      }
+
+      return [part]
+    })
+    .join('&')
+
+  return `${base}?${expanded}`
 }
 
 /**
@@ -51,37 +163,23 @@ export const GATEWAY_URL = NEXT_PUBLIC_GATEWAY_URL
 
 /**
  * Custom fetch mutator for Orval — BFF Proxy pattern.
- *
- * Authentication flow (2 legs):
- *   Leg 1: Browser → Next.js proxy — HttpOnly session cookie (automatic, anti-XSS)
- *   Leg 2: Next.js proxy → Gateway — JWT Authorization header (server-side only)
- *
- * The browser NEVER sees the JWT access token. It is kept inside the
- * encrypted NextAuth session cookie (HttpOnly, Secure).
- *
- * The proxy handles token refresh server-side. If the proxy returns 401,
- * the token is truly invalid (refresh also failed) — redirect to login.
- *
- * @example
- * const response = await postApiAuthLogin({ identity, password })
- *
- * if (!response.success) {
- *   console.log(response.errors[0].message)
- *   return
- * }
- * console.log(response.result)
  */
 export const customFetch = async <T>(url: string, options?: RequestInit): Promise<T> => {
+  const normalizedUrl = expandArrayQueryParams(url)
   const requestMethod = (options?.method ?? 'GET').toUpperCase()
   const shouldThrowHookError = requestMethod === 'GET'
 
   // Server-side (NextAuth callbacks, SSR): call gateway directly — no proxy needed
   if (typeof window === 'undefined') {
     const serverGatewayUrl = process.env.INTERNAL_GATEWAY_URL || GATEWAY_URL
-    const fullUrl = url.startsWith('http') ? url : `${serverGatewayUrl}${url}`
 
+    if (!serverGatewayUrl) {
+      throw new Error('[API] Missing INTERNAL_GATEWAY_URL or NEXT_PUBLIC_GATEWAY_URL')
+    }
+
+    const fullUrl = normalizedUrl.startsWith('http') ? normalizedUrl : `${serverGatewayUrl}${normalizedUrl}`
     const response = await fetch(fullUrl, { ...options })
-    const body = (await response.json()) as T
+    const body = await parseResponseBody<T>(response)
 
     if (shouldThrowHookError && (!response.ok || isApiEnvelopeFailure(body))) {
       throw body
@@ -95,7 +193,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
   }
 
   // Client-side: route through BFF proxy — converts /core/users → /api/gateway/core/users
-  const proxyUrl = url.startsWith('http') ? url : `/api/gateway${url}`
+  const proxyUrl = normalizedUrl.startsWith('http') ? normalizedUrl : `/api/gateway${normalizedUrl}`
 
   const response = await fetch(proxyUrl, {
     ...options,
@@ -110,11 +208,11 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     const isAuthEndpoint = url.includes('/auth/sso-login') || url.includes('/auth/token')
 
     if (isAuthEndpoint) {
-      return response.json() as Promise<T>
+      return parseResponseBody<T>(response)
     }
 
     // Check if the response body indicates a permission error (vs session expired)
-    const body = (await response.json()) as T
+    const body = await parseResponseBody<T>(response)
     const apiBody = body as { errors?: Array<{ code?: string }> }
     const isPermissionError = apiBody.errors?.some(e => e.code !== 'UNAUTHORIZED')
 
@@ -129,7 +227,7 @@ export const customFetch = async <T>(url: string, options?: RequestInit): Promis
     return redirectToLogin()
   }
 
-  const body = (await response.json()) as T
+  const body = await parseResponseBody<T>(response)
 
   if (shouldThrowHookError && (!response.ok || isApiEnvelopeFailure(body))) {
     throw body

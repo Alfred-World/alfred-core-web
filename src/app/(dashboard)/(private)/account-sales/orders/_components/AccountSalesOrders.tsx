@@ -37,19 +37,19 @@ import { QRCodeSVG } from 'qrcode.react'
 import { toast } from 'react-toastify'
 
 import {
-  getApiV1AccountSalesAccountClones,
-  getGetApiV1AccountSalesOrdersQueryKey,
-  useGetApiV1AccountSalesAccountClones,
-  getGetApiV1AccountSalesProductsQueryKey,
-  useGetApiV1AccountSalesMembers,
-  useGetApiV1AccountSalesOrders,
-  useGetApiV1AccountSalesProducts,
-  usePostApiV1AccountSalesProducts,
-  usePostApiV1AccountSalesWarrantyCheck,
-  usePostApiV1AccountSalesOrdersOrderIdReplace,
-  usePostApiV1AccountSalesOrdersSell,
-  usePostApiV1AccountSalesOrdersOrderIdConfirmPayment,
-  usePostApiV1AccountSalesOrdersOrderIdRefund,
+  getCoreV1AccountSalesAccountClones,
+  getGetCoreV1AccountSalesOrdersQueryKey,
+  useGetCoreV1AccountSalesAccountClones,
+  getGetCoreV1AccountSalesProductsQueryKey,
+  useGetCoreV1AccountSalesMembers,
+  useGetCoreV1AccountSalesOrders,
+  useGetCoreV1AccountSalesProducts,
+  usePostCoreV1AccountSalesProducts,
+  usePostCoreV1AccountSalesWarrantyCheck,
+  usePostCoreV1AccountSalesOrdersOrderIdReplace,
+  usePostCoreV1AccountSalesOrdersSell,
+  usePostCoreV1AccountSalesOrdersOrderIdConfirmPayment,
+  usePostCoreV1AccountSalesOrdersOrderIdRefund,
   AccountProductType,
   PaymentStatus
 } from '@/generated/core-api'
@@ -263,7 +263,7 @@ const AccountSalesOrders = () => {
     staleTime: 30_000,
     queryFn: async () => {
       // TODO: Filtering by clone id requires POST search endpoint or dedicated GET-by-id
-      const res = await getApiV1AccountSalesAccountClones({
+      const res = await getCoreV1AccountSalesAccountClones({
         pageSize: 500,
         view: 'detail'
       })
@@ -272,9 +272,9 @@ const AccountSalesOrders = () => {
     }
   })
 
-  const membersQuery = useGetApiV1AccountSalesMembers({ page: 1, pageSize: 200, sort: '-createdAt' })
-  const productsQuery = useGetApiV1AccountSalesProducts({ page: 1, pageSize: 200, sort: 'name' })
-  const clonesQuery = useGetApiV1AccountSalesAccountClones({ page: 1, pageSize: 500, sort: '-createdAt' })
+  const membersQuery = useGetCoreV1AccountSalesMembers({ page: 1, pageSize: 200, sort: '-createdAt' })
+  const productsQuery = useGetCoreV1AccountSalesProducts({ page: 1, pageSize: 200, sort: 'name' })
+  const clonesQuery = useGetCoreV1AccountSalesAccountClones({ page: 1, pageSize: 500, sort: '-createdAt' })
 
   const members = useMemo(() => membersQuery.data?.result?.items ?? [], [membersQuery.data?.result?.items])
   const products = useMemo(() => productsQuery.data?.result?.items ?? [], [productsQuery.data?.result?.items])
@@ -339,14 +339,14 @@ const AccountSalesOrders = () => {
   }, [cloneDetailQuery.data?.twoFaSecret, cloneDetailQuery.data?.username, selectedOrder?.productName, otpView.valid])
 
   // TODO: Order search by member/orderCode requires POST search endpoint
-  const ordersQuery = useGetApiV1AccountSalesOrders({
+  const ordersQuery = useGetCoreV1AccountSalesOrders({
     page,
     pageSize: 10,
     sort: '-purchaseDate',
     view: 'list'
   })
 
-  const sellMutation = usePostApiV1AccountSalesOrdersSell({
+  const sellMutation = usePostCoreV1AccountSalesOrdersSell({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -355,14 +355,14 @@ const AccountSalesOrders = () => {
           return
         }
 
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesOrdersQueryKey() })
 
         setOpenSell(false)
       }
     }
   })
 
-  const replaceMutation = usePostApiV1AccountSalesOrdersOrderIdReplace({
+  const replaceMutation = usePostCoreV1AccountSalesOrdersOrderIdReplace({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -371,14 +371,14 @@ const AccountSalesOrders = () => {
           return
         }
 
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesOrdersQueryKey() })
 
         setReplaceOrderId(null)
       }
     }
   })
 
-  const createProductMutation = usePostApiV1AccountSalesProducts({
+  const createProductMutation = usePostCoreV1AccountSalesProducts({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -387,7 +387,7 @@ const AccountSalesOrders = () => {
           return
         }
 
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesProductsQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesProductsQueryKey() })
 
         const createdProduct = response.result
 
@@ -411,9 +411,9 @@ const AccountSalesOrders = () => {
     }
   })
 
-  const checkWarrantyMutation = usePostApiV1AccountSalesWarrantyCheck()
+  const checkWarrantyMutation = usePostCoreV1AccountSalesWarrantyCheck()
 
-  const confirmPaymentMutation = usePostApiV1AccountSalesOrdersOrderIdConfirmPayment({
+  const confirmPaymentMutation = usePostCoreV1AccountSalesOrdersOrderIdConfirmPayment({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -422,14 +422,14 @@ const AccountSalesOrders = () => {
           return
         }
 
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesOrdersQueryKey() })
         toast.success('Payment confirmed successfully')
         setConfirmPaymentOrderId(null)
       }
     }
   })
 
-  const refundMutation = usePostApiV1AccountSalesOrdersOrderIdRefund({
+  const refundMutation = usePostCoreV1AccountSalesOrdersOrderIdRefund({
     mutation: {
       onSuccess: async response => {
         if (!response.success) {
@@ -440,7 +440,7 @@ const AccountSalesOrders = () => {
 
         const result = response.result
 
-        await queryClient.invalidateQueries({ queryKey: getGetApiV1AccountSalesOrdersQueryKey() })
+        await queryClient.invalidateQueries({ queryKey: getGetCoreV1AccountSalesOrdersQueryKey() })
         toast.success(
           `Refunded ${result?.refundAmount?.toLocaleString('vi-VN')} ₫ | Clawback commission: ${result?.commissionClawback?.toLocaleString('vi-VN')} ₫`
         )

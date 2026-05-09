@@ -29,10 +29,10 @@ import Typography from '@mui/material/Typography'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
-  getGetApiV1UnitsCountsByCategoryQueryKey,
-  getGetApiV1UnitsCountsByStatusQueryKey,
-  postApiV1UnitsSearch,
-  useDeleteApiV1UnitsId
+  getGetCoreV1UnitsCountsByCategoryQueryKey,
+  getGetCoreV1UnitsCountsByStatusQueryKey,
+  postCoreV1UnitsSearch,
+  useDeleteCoreV1UnitsId
 } from '@generated/core-api'
 import type { UnitDto } from '@generated/core-api'
 import { UNIT_CATEGORY_META, UNIT_CATEGORY_TABS, UNIT_STATUS_META } from '@/constants/unitType'
@@ -88,19 +88,19 @@ const UnitTable = ({ categoryFilter, onCategoryFilterChange, onCreateNew, onEdit
 
   const { data, isLoading } = useQuery({
     queryKey: ['core', 'units', 'search', searchRequest],
-    queryFn: () => postApiV1UnitsSearch(searchRequest)
+    queryFn: () => postCoreV1UnitsSearch(searchRequest)
   })
 
   const units = data?.result?.items ?? []
   const totalCount = data?.result?.total ?? 0
 
   // Delete mutation
-  const { mutate: deleteUnit } = useDeleteApiV1UnitsId({
+  const { mutate: deleteUnit } = useDeleteCoreV1UnitsId({
     mutation: {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['core', 'units'] })
-        queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsCountsByStatusQueryKey() })
-        queryClient.invalidateQueries({ queryKey: getGetApiV1UnitsCountsByCategoryQueryKey() })
+        queryClient.invalidateQueries({ queryKey: getGetCoreV1UnitsCountsByStatusQueryKey() })
+        queryClient.invalidateQueries({ queryKey: getGetCoreV1UnitsCountsByCategoryQueryKey() })
       }
     }
   })

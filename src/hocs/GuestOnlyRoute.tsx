@@ -1,27 +1,68 @@
-// Next Imports
-import { redirect } from 'next/navigation'
+'use client'
 
-// Third-party Imports
-import { getServerSession } from 'next-auth'
+import { useEffect } from 'react'
 
-// Type Imports
+import { useRouter, useSearchParams } from 'next/navigation'
+
+import { useSession } from 'next-auth/react'
+
 import type { ChildrenType } from '@core/types'
 
-// Config Imports
 import themeConfig from '@configs/themeConfig'
 
-// Lib Imports
-import { authOptions } from '@/libs/auth'
+function isAuthorizeReturnUrl(value: string | null): value is string {
+  return Boolean(value?.includes('/connect/authorize'))
+}
 
-const GuestOnlyRoute = async ({ children }: ChildrenType) => {
-  const session = await getServerSession(authOptions)
+function toFirstPartySsoUrl(value: string): string {
+  try {
+    const parsed = new URL(value, window.location.origin)
 
-  // Only redirect to home if session is valid AND has no error.
-  // When refresh token is invalid, session.error = 'RefreshAccessTokenError'
-  // — in that case, allow the user to see the login page.
-  if (session && !session.error) {
-    redirect(themeConfig.homePageUrl)
+    if (parsed.pathname === '/connect/authorize') {
+      return `${window.location.origin}${parsed.pathname}${parsed.search}${parsed.hash}`
+    }
+  } catch {
+    // Keep the original value if it is not a URL.
   }
+
+  return value
+}
+
+const GuestOnlyRoute = ({ children }: ChildrenType) => {
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    if (status === 'loading') return
+
+    const returnUrl =
+      searchParams.get('returnUrl') || searchParams.get('callbackUrl') || searchParams.get('redirectTo')
+
+    const hasAuthError = Boolean(
+      searchParams.get('error') ||
+        searchParams.get('error_description') ||
+        searchParams.get('sso_error') ||
+        searchParams.get('sso_error_description')
+    )
+
+    const hasSsoFlowParam = Boolean(returnUrl || searchParams.get('sso_token') || searchParams.get('start_oauth'))
+
+    // Keep user on login/guest pages while OAuth/SSO flow params are being handled.
+    if (session && !session.error && !hasAuthError) {
+      if (isAuthorizeReturnUrl(returnUrl)) {
+        window.location.href = toFirstPartySsoUrl(returnUrl)
+
+        return
+      }
+
+      if (hasSsoFlowParam) {
+        return
+      }
+
+      router.replace(themeConfig.homePageUrl)
+    }
+  }, [status, session, router, searchParams])
 
   return <>{children}</>
 }

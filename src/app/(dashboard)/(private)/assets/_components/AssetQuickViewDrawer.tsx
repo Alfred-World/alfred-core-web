@@ -10,7 +10,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 import Skeleton from '@mui/material/Skeleton'
 import Typography from '@mui/material/Typography'
 
-import { useGetApiV1AssetsId } from '@generated/core-api'
+import { useGetCoreV1AssetsId } from '@generated/core-api'
 
 // ─── Config ────────────────────────────────────────────────────────────────────
 const statusConfig: Record<string, { label: string; hex: string }> = {
@@ -72,7 +72,7 @@ interface AssetQuickViewDrawerProps {
 
 // ─── Component ─────────────────────────────────────────────────────────────────
 const AssetQuickViewDrawer = ({ assetId, onClose, onViewDetail, onEdit }: AssetQuickViewDrawerProps) => {
-  const { data, isLoading } = useGetApiV1AssetsId(assetId!, {
+  const { data, isLoading } = useGetCoreV1AssetsId(assetId!, {
     query: { enabled: Boolean(assetId) }
   })
 

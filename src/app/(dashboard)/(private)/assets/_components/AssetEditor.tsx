@@ -31,21 +31,21 @@ import { Controller, useForm } from 'react-hook-form'
 import * as v from 'valibot'
 
 import {
-  getGetApiV1AssetsQueryKey,
-  getGetApiV1AssetsAssetIdLogsQueryKey,
-  getGetApiV1AttachmentsQueryKey,
-  useGetApiV1AssetsId,
-  useGetApiV1AssetsAssetIdLogs,
-  usePostApiV1AssetsAssetIdLogs,
-  useDeleteApiV1AssetsAssetIdLogsLogId,
-  useGetApiV1Brands,
-  useGetApiV1CategoriesId,
-  useGetApiV1CategoriesTree,
-  usePostApiV1Assets,
-  usePatchApiV1AssetsId,
-  useGetApiV1Attachments,
-  usePostApiV1Attachments,
-  useDeleteApiV1AttachmentsId,
+  getGetCoreV1AssetsQueryKey,
+  getGetCoreV1AssetsAssetIdLogsQueryKey,
+  getGetCoreV1AttachmentsQueryKey,
+  useGetCoreV1AssetsId,
+  useGetCoreV1AssetsAssetIdLogs,
+  usePostCoreV1AssetsAssetIdLogs,
+  useDeleteCoreV1AssetsAssetIdLogsLogId,
+  useGetCoreV1Brands,
+  useGetCoreV1CategoriesId,
+  useGetCoreV1CategoriesTree,
+  usePostCoreV1Assets,
+  usePatchCoreV1AssetsId,
+  useGetCoreV1Attachments,
+  usePostCoreV1Attachments,
+  useDeleteCoreV1AttachmentsId,
   CategoryType,
   AssetLogEventType,
   AssetStatus
@@ -139,7 +139,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
   }
 
   // Fetch categories (Asset type)
-  const { data: categoryTreeData } = useGetApiV1CategoriesTree({ type: CategoryType.Asset, pageSize: 200 })
+  const { data: categoryTreeData } = useGetCoreV1CategoriesTree({ type: CategoryType.Asset, pageSize: 200 })
 
   const categories = useMemo(
     () => (categoryTreeData?.result?.items ? flattenTree(categoryTreeData.result.items) : []),
@@ -147,7 +147,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
   )
 
   // Fetch selected category details (for formSchema)
-  const { data: categoryDetailData } = useGetApiV1CategoriesId(selectedCategoryId!, {
+  const { data: categoryDetailData } = useGetCoreV1CategoriesId(selectedCategoryId!, {
     query: { enabled: Boolean(selectedCategoryId) }
   })
 
@@ -162,27 +162,27 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
   }, [categoryDetailData])
 
   // Fetch brands
-  const { data: brandsData } = useGetApiV1Brands({ pageSize: 200, sort: 'name' })
+  const { data: brandsData } = useGetCoreV1Brands({ pageSize: 200, sort: 'name' })
   const brands = useMemo(() => brandsData?.result?.items ?? [], [brandsData])
 
   // Lazy-load logs tab state
   const [showLogs, setShowLogs] = useState(false)
 
   // Fetch existing asset for edit mode (with caching)
-  const { data: assetData } = useGetApiV1AssetsId(assetId!, {
+  const { data: assetData } = useGetCoreV1AssetsId(assetId!, {
     query: { enabled: isEditMode, staleTime: 5 * 60 * 1000 } // 5 min cache
   })
 
   const asset = assetData?.result
 
   // Mutations
-  const createMutation = usePostApiV1Assets()
-  const updateMutation = usePatchApiV1AssetsId()
+  const createMutation = usePostCoreV1Assets()
+  const updateMutation = usePatchCoreV1AssetsId()
 
   // Attachment hooks (with caching)
   const attachmentParams = { targetId: assetId ?? '', targetType: 'Asset' }
 
-  const { data: attachmentsData } = useGetApiV1Attachments(attachmentParams, {
+  const { data: attachmentsData } = useGetCoreV1Attachments(attachmentParams, {
     query: { enabled: isEditMode && !!assetId, staleTime: 5 * 60 * 1000 }
   })
 
@@ -192,19 +192,19 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
 
   const attachments = useMemo(() => allAttachments.filter(a => a.purpose !== 'PrimaryImage'), [allAttachments])
 
-  const uploadAttachment = usePostApiV1Attachments()
-  const deleteAttachment = useDeleteApiV1AttachmentsId()
+  const uploadAttachment = usePostCoreV1Attachments()
+  const deleteAttachment = useDeleteCoreV1AttachmentsId()
 
   // Asset Log hooks (lazy-loaded only when timeline is visible)
-  const { data: logsData, isLoading: logsLoading } = useGetApiV1AssetsAssetIdLogs(
+  const { data: logsData, isLoading: logsLoading } = useGetCoreV1AssetsAssetIdLogs(
     assetId ?? '',
     { pageSize: 50, sort: '-performedAt' },
     { query: { enabled: isEditMode && !!assetId && showLogs, staleTime: 3 * 60 * 1000 } }
   )
 
   const logs = useMemo(() => logsData?.result?.items ?? [], [logsData])
-  const createLogMutation = usePostApiV1AssetsAssetIdLogs()
-  const deleteLogMutation = useDeleteApiV1AssetsAssetIdLogsLogId()
+  const createLogMutation = usePostCoreV1AssetsAssetIdLogs()
+  const deleteLogMutation = useDeleteCoreV1AssetsAssetIdLogsLogId()
 
   const {
     control,
@@ -321,7 +321,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
         })
       }
 
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1AssetsQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1AssetsQueryKey() })
       router.push('/assets')
     } catch {
       // Error handled by React Query
@@ -346,7 +346,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
       })
 
       await queryClient.invalidateQueries({
-        queryKey: getGetApiV1AssetsAssetIdLogsQueryKey(assetId)
+        queryKey: getGetCoreV1AssetsAssetIdLogsQueryKey(assetId)
       })
       setLogDialogOpen(false)
       setLogForm({
@@ -369,7 +369,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
       await deleteLogMutation.mutateAsync({ assetId, logId })
 
       await queryClient.invalidateQueries({
-        queryKey: getGetApiV1AssetsAssetIdLogsQueryKey(assetId)
+        queryKey: getGetCoreV1AssetsAssetIdLogsQueryKey(assetId)
       })
     } catch {
       /* handled by React Query */
@@ -380,7 +380,7 @@ const AssetEditor = ({ assetId }: AssetEditorProps) => {
   const invalidateAttachments = useCallback(() => {
     if (assetId) {
       queryClient.invalidateQueries({
-        queryKey: getGetApiV1AttachmentsQueryKey({ targetId: assetId, targetType: 'Asset' })
+        queryKey: getGetCoreV1AttachmentsQueryKey({ targetId: assetId, targetType: 'Asset' })
       })
     }
   }, [assetId, queryClient])

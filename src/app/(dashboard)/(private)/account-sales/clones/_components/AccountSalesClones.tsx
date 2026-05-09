@@ -25,9 +25,9 @@ import dayjs from 'dayjs'
 
 import {
   AccountCloneStatus,
-  useGetApiV1AccountSalesAccountClones,
-  useGetApiV1AccountSalesProducts,
-  useGetApiV1AccountSalesSourceAccounts
+  useGetCoreV1AccountSalesAccountClones,
+  useGetCoreV1AccountSalesProducts,
+  useGetCoreV1AccountSalesSourceAccounts
 } from '@/generated/core-api'
 import type { AccountCloneDto, ApiErrorResponse, SourceAccountDto } from '@/generated/core-api'
 
@@ -78,8 +78,8 @@ const AccountSalesClones = () => {
     return () => window.clearInterval(timer)
   }, [])
 
-  const productsQuery = useGetApiV1AccountSalesProducts({ page: 1, pageSize: 200, sort: 'name' })
-  const sourceAccountsQuery = useGetApiV1AccountSalesSourceAccounts({ page: 1, pageSize: 200, sort: 'username' })
+  const productsQuery = useGetCoreV1AccountSalesProducts({ page: 1, pageSize: 200, sort: 'name' })
+  const sourceAccountsQuery = useGetCoreV1AccountSalesSourceAccounts({ page: 1, pageSize: 200, sort: 'username' })
 
   const sourceAccounts = useMemo<SourceAccountDto[]>(
     () => sourceAccountsQuery.data?.result?.items ?? [],
@@ -88,7 +88,7 @@ const AccountSalesClones = () => {
 
   const products = useMemo(() => productsQuery.data?.result?.items ?? [], [productsQuery.data?.result?.items])
 
-  const clonesQuery = useGetApiV1AccountSalesAccountClones({
+  const clonesQuery = useGetCoreV1AccountSalesAccountClones({
     page,
     pageSize: PAGE_SIZE,
     sort: '-createdAt'

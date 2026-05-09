@@ -27,7 +27,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { postApiV1AssetsSearch, useDeleteApiV1AssetsId } from '@generated/core-api'
+import { postCoreV1AssetsSearch, useDeleteCoreV1AssetsId } from '@generated/core-api'
 import type { ApiErrorResponse, AssetDto } from '@generated/core-api'
 import AssetQuickViewDrawer from './AssetQuickViewDrawer'
 
@@ -140,7 +140,7 @@ const AssetDirectory = () => {
   // ─── Stats queries ─────────────────────────────────────────────────────────
   const { data: totalData, isError: isTotalError, error: totalError } = useQuery({
     queryKey: ['core', 'assets', 'search', 'stats-total'],
-    queryFn: () => postApiV1AssetsSearch({ page: 1, pageSize: 1 })
+    queryFn: () => postCoreV1AssetsSearch({ page: 1, pageSize: 1 })
   })
 
   const {
@@ -149,7 +149,7 @@ const AssetDirectory = () => {
     error: activeError
   } = useQuery({
     queryKey: ['core', 'assets', 'search', 'stats-active'],
-    queryFn: () => postApiV1AssetsSearch({ page: 1, pageSize: 1, filter: { status: { eq: 'Active' } } })
+    queryFn: () => postCoreV1AssetsSearch({ page: 1, pageSize: 1, filter: { status: { eq: 'Active' } } })
   })
 
   const {
@@ -158,7 +158,7 @@ const AssetDirectory = () => {
     error: brokenError
   } = useQuery({
     queryKey: ['core', 'assets', 'search', 'stats-broken'],
-    queryFn: () => postApiV1AssetsSearch({ page: 1, pageSize: 1, filter: { status: { eq: 'Broken' } } })
+    queryFn: () => postCoreV1AssetsSearch({ page: 1, pageSize: 1, filter: { status: { eq: 'Broken' } } })
   })
 
   const statsTotal = totalData?.result?.total ?? 0
@@ -180,10 +180,10 @@ const AssetDirectory = () => {
     error: dataError
   } = useQuery({
     queryKey: ['core', 'assets', 'search', mainRequest],
-    queryFn: () => postApiV1AssetsSearch(mainRequest)
+    queryFn: () => postCoreV1AssetsSearch(mainRequest)
   })
 
-  const deleteMutation = useDeleteApiV1AssetsId()
+  const deleteMutation = useDeleteCoreV1AssetsId()
 
   const assets = useMemo(() => data?.result?.items ?? [], [data?.result?.items])
   const total = data?.result?.total ?? 0
@@ -236,10 +236,10 @@ const AssetDirectory = () => {
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <Box>
           <Typography variant='h4' fontWeight={800} letterSpacing={-0.5}>
-            Physical Asset Inventory
+            My Physical Assets
           </Typography>
           <Typography variant='body2' color='text.secondary' sx={{ mt: 0.5 }}>
-            Track, manage and maintain all physical assets and equipment.
+            Track, manage and maintain your own physical assets and equipment.
           </Typography>
         </Box>
         <Button
@@ -254,7 +254,7 @@ const AssetDirectory = () => {
 
       {/* ─── Stats Cards ─────────────────────────────────────────────── */}
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
-        <StatCard label='Total Assets' value={statsTotal.toLocaleString()} icon='tabler-package' color='#7367f0' />
+        <StatCard label='My Assets' value={statsTotal.toLocaleString()} icon='tabler-package' color='#7367f0' />
         <StatCard
           label='Active'
           value={statsActive.toLocaleString()}
@@ -405,10 +405,10 @@ const AssetDirectory = () => {
                         <i className='tabler-package-off' style={{ fontSize: 40, opacity: 0.35 }} />
                       </Box>
                       <Typography variant='h6' fontWeight={600} color='text.secondary'>
-                        No assets found
+                        No personal assets found
                       </Typography>
                       <Typography variant='body2' color='text.disabled'>
-                        Try adjusting your filters or add a new asset.
+                        Try adjusting your filters or add a new asset to your inventory.
                       </Typography>
                       <Button
                         variant='outlined'

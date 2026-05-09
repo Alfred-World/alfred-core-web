@@ -27,11 +27,11 @@ import * as v from 'valibot'
 
 import {
   CategoryType,
-  getGetApiV1BrandsQueryKey,
-  useGetApiV1BrandsId,
-  useGetApiV1CategoriesTree,
-  usePostApiV1Brands,
-  usePatchApiV1BrandsId
+  getGetCoreV1BrandsQueryKey,
+  useGetCoreV1BrandsId,
+  useGetCoreV1CategoriesTree,
+  usePostCoreV1Brands,
+  usePatchCoreV1BrandsId
 } from '@generated/core-api'
 import type { CategoryTreeNodeDto, UpdateBrandRequest } from '@generated/core-api'
 import { getChangedFields } from '@/utils/getChangedFields'
@@ -64,20 +64,20 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
   const isEditMode = Boolean(brandId)
 
   // Fetch brand categories from API
-  const { data: categoryTreeData } = useGetApiV1CategoriesTree({ type: CategoryType.Brand })
+  const { data: categoryTreeData } = useGetCoreV1CategoriesTree({ type: CategoryType.Brand })
 
   const brandCategories = categoryTreeData?.result?.items ? flattenTree(categoryTreeData.result.items) : []
 
   // Fetch existing brand for edit mode
-  const { data: brandData } = useGetApiV1BrandsId(brandId!, {
+  const { data: brandData } = useGetCoreV1BrandsId(brandId!, {
     query: { enabled: isEditMode }
   })
 
   const brand = brandData?.result
 
   // Mutations
-  const createMutation = usePostApiV1Brands()
-  const updateMutation = usePatchApiV1BrandsId()
+  const createMutation = usePostCoreV1Brands()
+  const updateMutation = usePatchCoreV1BrandsId()
 
   const {
     control,
@@ -156,7 +156,7 @@ const BrandEditor = ({ brandId }: BrandEditorProps) => {
       }
 
       // Invalidate brand list queries
-      await queryClient.invalidateQueries({ queryKey: getGetApiV1BrandsQueryKey() })
+      await queryClient.invalidateQueries({ queryKey: getGetCoreV1BrandsQueryKey() })
       router.push('/brands')
     } catch {
       // Error is handled by React Query / mutation state

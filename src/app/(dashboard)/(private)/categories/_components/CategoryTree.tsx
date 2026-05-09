@@ -19,9 +19,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'react-toastify'
 
 import {
-  getApiV1CategoriesParentIdChildren,
-  useGetApiV1CategoriesCountsByType,
-  useGetApiV1CategoriesTree
+  getCoreV1CategoriesParentIdChildren,
+  useGetCoreV1CategoriesCountsByType,
+  useGetCoreV1CategoriesTree
 } from '@generated/core-api'
 import type { ApiErrorResponse, CategoryTreeNodeDto } from '@generated/core-api'
 import { CATEGORY_TYPE_TABS, TYPE_DOT_COLORS } from '@/constants/categoryType'
@@ -88,7 +88,7 @@ const CategoryTree = ({ selectedId, onSelect, onCreateNew }: CategoryTreeProps) 
   const observerRef = useRef<HTMLDivElement>(null)
 
   // Category counts by type
-  const { data: countsData, isError: isCountsError, error: countsError } = useGetApiV1CategoriesCountsByType()
+  const { data: countsData, isError: isCountsError, error: countsError } = useGetCoreV1CategoriesCountsByType()
 
   const countsByType = useMemo(() => {
     const map: Record<string, number> = {}
@@ -112,7 +112,7 @@ const CategoryTree = ({ selectedId, onSelect, onCreateNew }: CategoryTreeProps) 
     isLoading,
     isError: isTreeError,
     error: treeError
-  } = useGetApiV1CategoriesTree({ ...(typeFilter ? { type: typeFilter } : {}), page, pageSize: TREE_PAGE_SIZE })
+  } = useGetCoreV1CategoriesTree({ ...(typeFilter ? { type: typeFilter } : {}), page, pageSize: TREE_PAGE_SIZE })
 
   const totalCount = data?.result?.total ?? 0
   const hasMore = (data?.result?.items?.length ?? 0) > 0 && accumulatedRoots.length < totalCount
@@ -195,7 +195,7 @@ const CategoryTree = ({ selectedId, onSelect, onCreateNew }: CategoryTreeProps) 
           try {
             const response = await queryClient.fetchQuery({
               queryKey: ['categories', 'children', nodeId],
-              queryFn: () => getApiV1CategoriesParentIdChildren(nodeId),
+              queryFn: () => getCoreV1CategoriesParentIdChildren(nodeId),
               staleTime: 30_000
             })
 

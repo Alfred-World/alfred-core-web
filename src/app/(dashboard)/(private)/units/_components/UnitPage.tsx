@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 
-import { useGetApiV1UnitsCountsByCategory, useGetApiV1UnitsCountsByStatus } from '@generated/core-api'
+import { useGetCoreV1UnitsCountsByCategory, useGetCoreV1UnitsCountsByStatus } from '@generated/core-api'
 import type { ApiErrorResponse } from '@generated/core-api'
 import type { UnitCategoryValue } from '@/constants/unitType'
 
@@ -24,8 +24,8 @@ const UnitPage = () => {
   const [categoryFilter, setCategoryFilter] = useState<UnitCategoryValue | ''>('')
 
   // Counts data for stats cards
-  const { data: statusCounts, isError: isStatusError, error: statusError } = useGetApiV1UnitsCountsByStatus()
-  const { data: categoryCounts, isError: isCategoryError, error: categoryError } = useGetApiV1UnitsCountsByCategory()
+  const { data: statusCounts, isError: isStatusError, error: statusError } = useGetCoreV1UnitsCountsByStatus()
+  const { data: categoryCounts, isError: isCategoryError, error: categoryError } = useGetCoreV1UnitsCountsByCategory()
 
   const stats = useMemo(() => {
     const statusItems = statusCounts?.result ?? []

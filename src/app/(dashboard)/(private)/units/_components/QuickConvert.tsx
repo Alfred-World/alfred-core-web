@@ -13,7 +13,7 @@ import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
-import { useGetApiV1Units, useGetApiV1UnitsConvert } from '@generated/core-api'
+import { useGetCoreV1Units, useGetCoreV1UnitsConvert } from '@generated/core-api'
 import type { UnitDto } from '@generated/core-api'
 
 // ─── Component ─────────────────────────────────────────────────────────────────
@@ -24,11 +24,11 @@ const QuickConvert = () => {
   const [doConvert, setDoConvert] = useState(false)
 
   // Fetch all units for selectors (lightweight)
-  const { data: unitsData } = useGetApiV1Units({ pageSize: 200 })
+  const { data: unitsData } = useGetCoreV1Units({ pageSize: 200 })
   const units = useMemo(() => unitsData?.result?.items ?? [], [unitsData])
 
   // Conversion result
-  const { data: convertData, isFetching } = useGetApiV1UnitsConvert(
+  const { data: convertData, isFetching } = useGetCoreV1UnitsConvert(
     { fromUnitId, toUnitId, value: parseFloat(value) || 0 },
     { query: { enabled: doConvert && !!fromUnitId && !!toUnitId && !!value } }
   )

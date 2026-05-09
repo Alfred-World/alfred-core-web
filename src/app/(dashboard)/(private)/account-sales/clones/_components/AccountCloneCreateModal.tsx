@@ -20,8 +20,8 @@ import { toast } from 'react-toastify'
 
 import {
   AccountProductType,
-  getApiV1AccountSalesWarrantyGithubUsersUsername,
-  usePostApiV1AccountSalesAccountClones
+  getCoreV1AccountSalesWarrantyGithubUsersUsername,
+  usePostCoreV1AccountSalesAccountClones
 } from '@/generated/core-api'
 import type {
   ApiErrorResponse,
@@ -68,7 +68,7 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
     }
   }, [open, form.productId, products])
 
-  const createCloneMutation = usePostApiV1AccountSalesAccountClones({
+  const createCloneMutation = usePostCoreV1AccountSalesAccountClones({
     mutation: {
       onSuccess: response => {
         if (!response.success) {
@@ -96,7 +96,7 @@ export const AccountCloneCreateModal = ({ open, onClose, onSuccess, products, so
     setIsGithubLoading(true)
 
     try {
-      const response = await getApiV1AccountSalesWarrantyGithubUsersUsername(encodeURIComponent(username))
+      const response = await getCoreV1AccountSalesWarrantyGithubUsersUsername(encodeURIComponent(username))
 
       if (!response.success || !response.result) {
         toast.error(response.errors?.[0]?.message || 'Failed to fetch GitHub profile')
