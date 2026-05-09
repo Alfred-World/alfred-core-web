@@ -31,7 +31,8 @@ ENV NEXT_PUBLIC_OIDC_CLIENT_ID=$NEXT_PUBLIC_OIDC_CLIENT_ID
 # Alias for backwards-compat with sso-config.ts
 ENV NEXT_PUBLIC_OAUTH_CLIENT_ID=$NEXT_PUBLIC_OIDC_CLIENT_ID
 
-RUN pnpm build
+RUN --mount=type=cache,id=next-cache-alfred-core-web,target=/app/.next/cache \
+    pnpm build
 
 # ============================================
 # Production Stage (standalone output)
